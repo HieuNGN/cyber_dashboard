@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberSec Intel | Tactical Workspace</title>
+    <style>
+        :root {
+            --bg: #050505;
+            --card-bg: #0f0f0f;
+            --accent: #ff0000;
+            --text: #d1d1d1;
+            --text-dim: #666;
+            --border: #222;
+            --glow: rgba(255, 0, 0, 0.15);
+            --pane-bg: #0a0a0a;
+        }
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            line-height: 1.5;
+        }
+
+        /* Scanline Overlay */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+            z-index: 1000;
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none;
+        }
+
+        /* Main Workspace */
+        .workspace {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+            overflow-y: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            margin-bottom: 3rem;
+            border-left: 8px solid var(--accent);
+            padding-left: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #fff;
+        }
+
+        .status-indicator {
+            font-size: 0.9rem;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .blink {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: blinker 1s linear infinite;
+        }
+
+        @keyframes blinker { 50% { opacity: 0; } }
+
+        /* Grid System */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px var(--glow);
+            transform: translateY(-4px);
+        }
+
+        .card-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(255, 0, 0, 0.03);
+        }
+
+        .icon-box {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1a1a1a;
+            border: 1px solid var(--border);
+            color: var(--accent);
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .tag {
+            font-size: 0.65rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 0.2rem 0.5rem;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 0 0 0.5rem 0;
+            color: #fff;
+        }
+
+        .description {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+        }
+
+        /* Intelligence Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 2rem;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 2px solid var(--accent);
+            width: 100%;
+            max-width: 900px;
+            max-height: 90vh;
+            border-radius: 8px;
+            position: relative;
+            overflow-y: auto;
+            animation: modalPop 0.3s ease-out;
+        }
+
+        @keyframes modalPop {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 2rem;
+            border-bottom: 1px solid var(--border);
+            background: rgba(255,0,0,0.05);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .intel-section {
+            margin-bottom: 2rem;
+        }
+
+        .intel-label {
+            color: var(--accent);
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+            display: block;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.2rem;
+        }
+
+        .intel-text {
+            color: var(--text);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem; right: 1rem;
+            background: none; border: 1px solid var(--border);
+            color: var(--text); cursor: pointer;
+            padding: 0.5rem 1rem;
+            font-family: inherit;
+        }
+
+        .close-btn:hover { background: var(--accent); color: #000; }
+
+        /* Side Pane */
+        .side-pane {
+            width: 400px;
+            background: var(--pane-bg);
+            border-left: 2px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+        }
+
+        .pane-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .pane-toolbar {
+            padding: 0.5rem 1.5rem;
+            background: #111;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .tool-btn {
+            background: #1a1a1a;
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 0.7rem;
+            padding: 0.3rem 0.6rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .tool-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+        #notes-editor {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            padding: 1.5rem;
+            font-family: inherit;
+            font-size: 0.9rem;
+            resize: none;
+            outline: none;
+            line-height: 1.6;
+        }
+
+        .pane-footer {
+            padding: 1rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .export-btn {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .export-btn:hover { background: #cc0000; }
+
+    </style>
+</head>
+<body>
+
+    <div class="workspace">
+        <h1>
+            CyberSec Intel
+            <div class="status-indicator">
+                <div class="blink"></div>
+                System Live
+            </div>
+        </h1>
+
+        <div class="grid" id="intelGrid">
+            <!-- Cards injected by JS -->
+        </div>
+
+        <footer style="margin-top: 5rem; color: #333; font-size: 0.8rem; text-align: center; text-transform: uppercase; letter-spacing: 2px;">
+            TARS Intelligence System // Cycle: 2026.04.23 // Sector: 0x8080
+        </footer>
+    </div>
+
+    <div class="side-pane">
+        <div class="pane-header">
+            <span>Obsidian Notes</span>
+            <span style="font-size: 0.7rem; color: var(--text-dim);">LOCAL_STORAGE</span>
+        </div>
+        <div class="pane-toolbar">
+            <button class="tool-btn" onclick="insertText('**', '**')">Bold</button>
+            <button class="tool-btn" onclick="insertText('*', '*')">Italic</button>
+            <button class="tool-btn" onclick="insertText('[', ']()')">Link</button>
+            <button class="tool-btn" onclick="insertText('- [ ] ', '')">Todo</button>
+        </div>
+        <textarea id="notes-editor" placeholder="Log your analysis here..."></textarea>
+        <div class="pane-footer">
+            <button class="export-btn" onclick="exportToObsidian()">Export .MD</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">CLOSE [X]</button>
+            <div class="modal-header">
+                <span id="modalTag" class="tag">TAG</span>
+                <h2 id="modalTitle" style="color: #fff; margin: 1rem 0 0 0; font-size: 2rem;">TITLE</h2>
+            </div>
+            <div class="modal-body">
+                <div class="intel-section">
+                    <span class="intel-label">Summary & Analysis</span>
+                    <div id="modalSummary" class="intel-text"></div>
+                </div>
+                <div class="intel-section">
+                    <span class="intel-label">Engineering Importance</span>
+                    <div id="modalImportance" class="intel-text"></div>
+                </div>
+                <div class="intel-section">
+                    <span class="intel-label">Noteworthy / Indicators</span>
+                    <div id="modalNoteworthy" class="intel-text"></div>
+                </div>
+                <div style="margin-top: 2rem; text-align: right;">
+                    <a id="modalLink" href="#" target="_blank" class="export-btn" style="text-decoration: none; display: inline-block;">Source Intelligence &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const intelData = [
+            {
+                title: "RedSun Zero-Day Leak",
+                tag: "Critical / No Patch",
+                desc: "LPE to SYSTEM in Microsoft Defender. Active exploitation.",
+                summary: "A critical zero-day vulnerability in Microsoft Defender allows a low-privileged user to escalate privileges to SYSTEM. This bypasses the primary endpoint protection mechanism, making the machine's a security shell.",
+                importance: "For NetOps/HomeLab owners: This means an attacker who gains a foothold via a simple user account can immediately take over the entire OS. Standard AV is effectively useless here.",
+                noteworthy: "Check for unexpected SYSTEM-level processes. Use Qualys mitigation guides until a patch is released. Monitor for CVE-2026-33825.",
+                link: "https://blog.qualys.com/qualys-insights/2026/04/22/dont-wait-for-a-patch-mitigate-redsun-risk-in-microsoft-defender-today"
+            },
+            {
+                title: "Agentic AI Attacks",
+                tag: "New Vector",
+                desc: "Frontier AI models acting as autonomous agents for breach cycles.",
+                summary: "Attackers are deploying AI agents that can perform reconnaissance, find vulnerabilities, and execute payloads without human intervention, significantly increasing the speed of attack cycles.",
+                importance: "Shift from 'human-speed' to 'machine-speed' attacks. Traditional SOC response times are now too slow. Requires automated, agentic defense systems.",
+                noteworthy: "Look for high-frequency API probes with logical patterns. Audit AI-facing endpoints and internal LLM integrations.",
+                link: "https://mb.com.ph/2026/04/23/ibm-announces-new-cybersecurity-measures-to-help-enterprises-confront-agentic-attacks"
+            },
+            {
+                title: "Serial-to-Ethernet Flaws",
+                tag: "Industrial/OT",
+                desc: "Critical flaws in converters endanger PLCs and medical monitors.",
+                summary: "Vulnerabilities in hardware bridges that convert serial RS-232/485 to Ethernet. These devices often lack authentication and are used to manage critical infrastructure.",
+                importance: "If your home lab or industrial setup uses serial converters for networking gear or IoT, these are 'open doors' for attackers to reach the hardware layer.",
+                noteworthy: "Isolate OT hardware on a separate VLAN. Disable remote management on converters if not strictly necessary.",
+                link: "https://www.csoonline.com/article/4162289/riddled-with-flaws-serial-to-ethernet-converters-endanger-critical-infrastructure.html"
+            },
+            {
+                title: "Google's 8th-Gen TPUs",
+                tag: "Strategic Hardware",
+                desc: "Disrupting Nvidia's compute monopoly via Agentic AI hardware.",
+                summary: "Google Cloud's release of 8th-Gen TPUs is designed to optimize the 'Agentic' loop (thinking-acting-observing) rather than just token generation.",
+                importance: "The compute landscape is shifting. Future security tools will likely leverage this specific hardware for real-time threat hunting at scale.",
+                noteworthy: "Monitor Google Cloud Next 2026 updates on 'Agent Platform' for potential integration with security monitoring.",
+                link: "https://www.moneycontrol.com/artificial-intelligence/google-expands-enterprise-ai-push-with-agent-platform-tpus-and-security-at-cloud-next-2026-article-13896530.html"
+            }
+        ];
+
+        function initGrid() {
+            const grid = document.getElementById('intelGrid');
+            intelData.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.onclick = () => openModal(index);
+                card.innerHTML = `
+                    <div class="card-header">
+                        <div class="icon-box">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        </div>
+                        <span style="font-weight: bold; color: #fff; font-size: 0.8rem;">INTEL_UNIT_${index + 1}</span>
+                    </div>
+                    <div class="card-content">
+                        <span class="tag">${item.tag}</span>
+                        <div class="title">${item.title}</div>
+                        <div class="description">${item.desc}</div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function openModal(index) {
+            const item = intelData[index];
+            document.getElementById('modalTag').innerText = item.tag;
+            document.getElementById('modalTitle').innerText = item.title;
+            document.getElementById('modalSummary').innerText = item.summary;
+            document.getElementById('modalImportance').innerText = item.importance;
+            document.getElementById('modalNoteworthy').innerText = item.noteworthy;
+            document.getElementById('modalLink').href = item.link;
+            document.getElementById('modalOverlay').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+        }
+
+        // Notes System
+        const editor = document.getElementById('notes-editor');
+        
+        function loadNotes() {
+            const saved = localStorage.getItem('tars_obsidian_notes');
+            if (saved) editor.value = saved;
+        }
+
+        function saveNotes() {
+            localStorage.setItem('tars_obsidian_notes', editor.value);
+        }
+
+        function insertText(before, after) {
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            const text = editor.value;
+            editor.value = text.slice(0, start) + before + text.slice(start, end) + after + text.slice(end);
+            editor.focus();
+            editor.setSelectionRange(start + before.length, start + before.length);
+            saveNotes();
+        }
+
+        function exportToObsidian() {
+            const text = editor.value;
+            const timestamp = new Date().toISOString().split('T')[0];
+            const filename = `Intel_Notes_${timestamp}.md`;
+            const content = `---\ndate: ${timestamp}\ntags: [cybersec, intelligence, tars]\nsource: http://192.168.2.188:8080\n---\n\n${text}`;
+            
+            const blob = new Blob([content], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        window.onload = () => {
+            initGrid();
+            loadNotes();
+            editor.addEventListener('input', saveNotes);
+            
+            // Close modal on overlay click
+            document.getElementById('modalOverlay').onclick = (e) => {
+                if (e.target.id === 'modalOverlay') closeModal();
+            };
+        };
+    </script>
+</body>
+</html>
