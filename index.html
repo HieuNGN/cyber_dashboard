@@ -1,507 +1,318 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News Dashboard | Tactical Workspace</title>
-    <style>
-        :root {
-            --bg: #050505;
-            --card-bg: #0f0f0f;
-            --accent: #ff0000;
-            --text: #d1d1d1;
-            --text-dim: #666;
-            --border: #222;
-            --glow: rgba(255, 0, 0, 0.15);
-            --pane-bg: #0a0a0a;
-        }
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
-            margin: 0;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-            line-height: 1.5;
-        }
-
-        /* Scanline Overlay */
-        body::before {
-            content: " ";
-            display: block;
-            position: fixed;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
-            z-index: 1000;
-            background-size: 100% 4px, 3px 100%;
-            pointer-events: none;
-        }
-
-        /* Main Workspace */
-        .workspace {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            padding: 2rem;
-            overflow-y: auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: -1px;
-            margin-bottom: 3rem;
-            border-left: 8px solid var(--accent);
-            padding-left: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: #fff;
-        }
-
-        .status-indicator {
-            font-size: 0.9rem;
-            color: var(--accent);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            text-transform: uppercase;
-        }
-
-        .blink {
-            width: 8px;
-            height: 8px;
-            background: var(--accent);
-            border-radius: 50%;
-            animation: blinker 1s linear infinite;
-        }
-
-        @keyframes blinker { 50% { opacity: 0; } }
-
-        /* Grid System */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        .card:hover {
-            border-color: var(--accent);
-            box-shadow: 0 0 20px var(--glow);
-            transform: translateY(-4px);
-        }
-
-        .card-header {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            background: rgba(255, 0, 0, 0.03);
-        }
-
-        .icon-box {
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #1a1a1a;
-            border: 1px solid var(--border);
-            color: var(--accent);
-        }
-
-        .card-content {
-            padding: 1.5rem;
-        }
-
-        .tag {
-            font-size: 0.65rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            padding: 0.2rem 0.5rem;
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            margin-bottom: 1rem;
-            display: inline-block;
-        }
-
-        .title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin: 0 0 0.5rem 0;
-            color: #fff;
-        }
-
-        .description {
-            font-size: 0.95rem;
-            color: var(--text-dim);
-        }
-
-        /* Intelligence Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(5px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            padding: 2rem;
-        }
-
-        .modal-content {
-            background: var(--card-bg);
-            border: 2px solid var(--accent);
-            width: 100%;
-            max-width: 900px;
-            max-height: 90vh;
-            border-radius: 8px;
-            position: relative;
-            overflow-y: auto;
-            animation: modalPop 0.3s ease-out;
-        }
-
-        @keyframes modalPop {
-            from { transform: scale(0.9); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        .modal-header {
-            padding: 2rem;
-            border-bottom: 1px solid var(--border);
-            background: rgba(255,0,0,0.05);
-        }
-
-        .modal-body {
-            padding: 2rem;
-        }
-
-        .intel-section {
-            margin-bottom: 2rem;
-        }
-
-        .intel-label {
-            color: var(--accent);
-            font-weight: bold;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            margin-bottom: 0.5rem;
-            display: block;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 0.2rem;
-        }
-
-        .intel-text {
-            color: var(--text);
-            font-size: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 1rem; right: 1rem;
-            background: none; border: 1px solid var(--border);
-            color: var(--text); cursor: pointer;
-            padding: 0.5rem 1rem;
-            font-family: inherit;
-        }
-
-        .close-btn:hover { background: var(--accent); color: #000; }
-
-        /* Side Pane */
-        .side-pane {
-            width: 400px;
-            background: var(--pane-bg);
-            border-left: 2px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            z-index: 10;
-        }
-
-        .pane-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #fff;
-            font-weight: bold;
-        }
-
-        .pane-toolbar {
-            padding: 0.5rem 1.5rem;
-            background: #111;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .tool-btn {
-            background: #1a1a1a;
-            border: 1px solid var(--border);
-            color: var(--text);
-            font-size: 0.7rem;
-            padding: 0.3rem 0.6rem;
-            cursor: pointer;
-            font-family: inherit;
-        }
-
-        .tool-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-        #notes-editor {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: var(--text);
-            padding: 1.5rem;
-            font-family: inherit;
-            font-size: 0.9rem;
-            resize: none;
-            outline: none;
-            line-height: 1.6;
-        }
-
-        .pane-footer {
-            padding: 1rem;
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .export-btn {
-            background: var(--accent);
-            color: #000;
-            border: none;
-            padding: 0.6rem 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-        }
-
-        .export-btn:hover { background: #cc0000; }
-
-        /* Network Status Bar */
-        .net-status {
-            font-size: 0.7rem;
-            color: var(--text-dim);
-            margin-top: 0.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .last-updated {
-            color: var(--text-dim);
-        }
-
-        .loading {
-            color: var(--accent);
-            font-size: 0.8rem;
-            padding: 2rem 0;
-            text-align: center;
-            text-transform: uppercase;
-        }
-
-    </style>
+<meta charset='UTF-8'>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>News Dashboard | Tactical Workspace</title>
+<style>
+:root {
+  --bg:#050505; --card-bg:#0f0f0f; --accent:#ff0000; --text:#d1d1d1; --text-dim:#666; --border:#222;
+  --glow:rgba(255,0,0,.15); --pane-bg:#0a0a0a; --green:#00ff41; --cyan:#00d4ff; --yellow:#ffd700;
+}
+body { background:var(--bg); color:var(--text); font-family:'JetBrains Mono','Fira Code','Courier New',monospace; margin:0; display:flex; height:100vh; overflow:hidden; line-height:1.5; }
+body::before { content:" "; display:block; position:fixed; top:0; left:0; bottom:0; right:0; background:linear-gradient(rgba(18,16,16,0) 50%,rgba(0,0,0,.1) 50%),linear-gradient(90deg,rgba(255,0,0,.02),rgba(0,255,0,.01),rgba(0,0,255,.02)); z-index:1000; background-size:100% 4px,3px 100%; pointer-events:none; }
+.workspace { flex:1; display:flex; flex-direction:column; padding:1.5rem 2rem; overflow-y:auto; position:relative; z-index:1; }
+h1 { font-size:2.2rem; font-weight:800; text-transform:uppercase; letter-spacing:-1px; margin-bottom:1.5rem; border-left:8px solid var(--accent); padding-left:1.5rem; display:flex; align-items:center; justify-content:space-between; color:#fff; }
+.status-indicator { font-size:.9rem; color:var(--accent); display:flex; align-items:center; gap:.5rem; text-transform:uppercase; }
+.blink { width:8px; height:8px; background:var(--accent); border-radius:50%; animation:blinker 1s linear infinite; }
+@keyframes blinker{50%{opacity:0}}
+.net-stats { font-size:.7rem; color:var(--text-dim); display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:.5rem; }
+/* Date tabs */
+.date-tabs { display:flex; gap:.5rem; margin-bottom:1.5rem; border-bottom:1px solid var(--border); }
+.date-tab { background:transparent; border:none; color:var(--text-dim); font-family:inherit; font-size:.85rem; padding:.6rem 1.2rem; cursor:pointer; text-transform:uppercase; letter-spacing:1px; border-bottom:2px solid transparent; transition:.2s; }
+.date-tab:hover { color:#fff; }
+.date-tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+/* Grid */
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.2rem; }
+.card { background:var(--card-bg); border:1px solid var(--border); border-radius:4px; cursor:pointer; transition:all .3s cubic-bezier(.4,0,.2,1); display:flex; flex-direction:column; position:relative; }
+.card:hover { border-color:var(--accent); box-shadow:0 0 20px var(--glow); transform:translateY(-4px); }
+.card-header { padding:1rem; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:1rem; background:rgba(255,0,0,.03); }
+.icon-box { width:30px; height:30px; display:flex; align-items:center; justify-content:center; background:#1a1a1a; border:1px solid var(--border); color:var(--accent); font-size:.8rem; font-weight:700; }
+.card-content { padding:1.2rem; }
+.tag { font-size:.65rem; font-weight:700; text-transform:uppercase; padding:.2rem .5rem; border:1px solid var(--accent); color:var(--accent); margin-bottom:.8rem; display:inline-block; }
+.title { font-size:1.15rem; font-weight:700; margin:0 0 .4rem 0; color:#fff; }
+.description { font-size:.9rem; color:var(--text-dim); }
+.loading { color:var(--accent); font-size:.8rem; padding:2rem 0; text-align:center; text-transform:uppercase; }
+/* Modal */
+.modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.85); backdrop-filter:blur(5px); display:none; justify-content:center; align-items:center; z-index:2000; padding:2rem; }
+.modal-content { background:var(--card-bg); border:2px solid var(--accent); width:100%; max-width:900px; max-height:90vh; border-radius:8px; position:relative; overflow-y:auto; animation:modalPop .3s ease-out; }
+@keyframes modalPop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-header { padding:2rem; border-bottom:1px solid var(--border); background:rgba(255,0,0,.05); }
+.modal-body { padding:2rem; }
+.intel-section { margin-bottom:2rem; }
+.intel-label { color:var(--accent); font-weight:700; text-transform:uppercase; font-size:.8rem; margin-bottom:.5rem; display:block; border-bottom:1px solid var(--border); padding-bottom:.2rem; }
+.intel-text { color:var(--text); font-size:1rem; margin-bottom:1rem; }
+.close-btn { position:absolute; top:1rem; right:1rem; background:none; border:1px solid var(--border); color:var(--text); cursor:pointer; padding:.5rem 1rem; font-family:inherit; }
+.close-btn:hover { background:var(--accent); color:#000; }
+/* Side pane system */
+.side-pane { width:420px; background:var(--pane-bg); border-left:2px solid var(--border); display:flex; flex-direction:column; z-index:10; }
+.pane-tabs { display:flex; border-bottom:1px solid var(--border); }
+.pane-tab { flex:1; background:transparent; border:none; color:var(--text-dim); font-family:inherit; font-size:.75rem; padding:.6rem; cursor:pointer; text-transform:uppercase; letter-spacing:.5px; border-bottom:2px solid transparent; transition:.2s; }
+.pane-tab:hover { color:#fff; }
+.pane-tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+.pane-body { flex:1; overflow-y:auto; display:none; padding:1rem; }
+.pane-body.active { display:flex; flex-direction:column; }
+/* Notes */
+#notes-editor { width:100%;flex:1; background:transparent; border:1px solid var(--border); color:var(--text); padding:1rem; font-family:inherit; font-size:.85rem; resize:none; outline:none; line-height:1.6; min-height:120px; }
+.toolbar { display:flex; flex-wrap:wrap; gap:.3rem; padding:.5rem 0; }
+.tool-btn { background:#1a1a1a; border:1px solid var(--border); color:var(--text); font-size:1rem; width:34px;height:34px; display:flex;align-items:center;justify-content:center; cursor:pointer; font-family:inherit; border-radius:3px; }
+.tool-btn:hover { border-color:var(--accent); color:var(--accent); }
+.pane-footer { padding:.8rem 0 0 0; display:flex; justify-content:flex-end; }
+.export-btn { background:var(--accent); color:#000; border:none; padding:.6rem 1.2rem; font-weight:700; cursor:pointer; font-family:inherit; font-size:.75rem; text-transform:uppercase; }
+.export-btn:hover { background:#cc0000; }
+.export-msg { font-size:.7rem; color:var(--green); margin-top:.5rem; text-align:right; }
+/* YouTube pane */
+.yt-item { display:flex; align-items:flex-start; gap:.8rem; padding:.8rem 0; border-bottom:1px solid var(--border); }
+.yt-item:last-child { border-bottom:none; }
+.yt-icon { width:40px; height:40px; background:#1a1a1a; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; color:var(--red); font-size:1.2rem; }
+.yt-name { font-weight:700; color:#fff; font-size:.9rem; margin-bottom:.2rem; }
+.yt-desc { font-size:.75rem; color:var(--text-dim); }
+.yt-link { font-size:.7rem; color:var(--accent); word-break:break-all; }
+/* Fun facts pane */
+.fun-card { background:#0f0f0f; border:1px solid var(--border); border-left:3px solid var(--green); padding:1rem; margin-bottom:1rem; border-radius:0 4px 4px 0; }
+.fun-title { font-weight:700; color:var(--green); font-size:.85rem; margin-bottom:.4rem; }
+.fun-text { font-size:.8rem; color:var(--text); line-height:1.5; }
+.fun-src { font-size:.7rem; color:var(--text-dim); margin-top:.4rem; }
+/* Modal link */
+.source-link { display:inline-block; background:var(--accent); color:#000; border:none; padding:.6rem 1.2rem; font-weight:700; text-decoration:none; font-size:.75rem; text-transform:uppercase; margin-top:1rem; }
+.footer-text { margin-top:4rem; color:#333; font-size:.75rem; text-align:center; text-transform:uppercase; letter-spacing:2px; }
+</style>
 </head>
 <body>
 
-    <div class="workspace">
-        <h1>
-            News Dashboard
-            <div class="status-indicator">
-                <div class="blink"></div>
-                System Live
-            </div>
-        </h1>
+<div class="workspace">
+  <h1>
+    News Dashboard
+    <div class="status-indicator"><div class="blink"></div>System Live</div>
+  </h1>
+  <div class="net-stats"><span id="lastUpdated">Waiting for data…</span><span id="itemCount">0 items loaded</span></div>
+  <div class="date-tabs" id="dateTabs"><button class="date-tab active" data-day="today">Today — <span id="tabToday">…</span></button><button class="date-tab" data-day="yesterday">Yesterday — <span id="tabYesterday">…</span></button></div>
+  <div class="grid" id="intelGrid"><div class="loading">// INITIALIZING DATA STREAM…</div></div>
+  <div class="footer-text">Project Dashboard // Node: P14s-AMD // Sector: ~/projs</div>
+</div>
 
-        <div class="net-status">
-            <span id="lastUpdated">Waiting for data...</span>
-            <span id="itemCount">0 items loaded</span>
-        </div>
+<div class="side-pane">
+  <div class="pane-tabs">
+    <button class="pane-tab active" data-pane="notes">Obsidian Notes</button>
+    <button class="pane-tab" data-pane="youtube">YouTube</button>
+    <button class="pane-tab" data-pane="funfacts">Fun Facts</button>
+  </div>
 
-        <div class="grid" id="intelGrid">
-            <div class="loading">// INITIALIZING DATA STREAM...</div>
-        </div>
-
-        <footer style="margin-top: 5rem; color: #333; font-size: 0.8rem; text-align: center; text-transform: uppercase; letter-spacing: 2px;">
-            Project Dashboard // Node: P14s-AMD // Sector: ~/projs
-        </footer>
+  <div class="pane-body active" id="pane-notes">
+    <div class="toolbar">
+      <button class="tool-btn" onclick="insertText('**','**')" title="Bold"><b>B</b></button>
+      <button class="tool-btn" onclick="insertText('*','*')" title="Italic"><i>I</i></button>
+      <button class="tool-btn" onclick="insertText('~~','~~')" title="Strikethrough"><s>S</s></button>
+      <button class="tool-btn" onclick="insertText('`','`')" title="Inline Code">&lt;/&gt;</button>
+      <button class="tool-btn" onclick="insertText('[',']()')" title="Link">🔗</button>
+      <button class="tool-btn" onclick="insertText('\n- ','')" title="Bullet">•</button>
+      <button class="tool-btn" onclick="insertText('\n- [ ] ','')" title="Checkbox">☐</button>
+      <button class="tool-btn" onclick="insertText('\n1. ','')" title="Numbered List">#</button>
+      </div>
+      <div class="toolbar">
+      <button class="tool-btn" onclick="insertText('\n> ','')" title="Quote">❝</button>
+      <button class="tool-btn" onclick="insertText('###### ','')" title="Heading 6">H</button>
+      <button class="tool-btn" onclick="insertText('---\n','')" title="Horizontal Rule">—</button>
+      <button class="tool-btn" onclick="insertText('||','||')" title="Spoiler">||</button>
+      <button class="tool-btn" onclick="insertText('%','%')" title="Highlight">==</button>
+      <button class="tool-btn" onclick="insertText('\n```\n','\n```\n')" title="Code Block">{}</button>
+      <button class="tool-btn" onclick="insertText('~~','~~')" title="Highlight Yellow" style="color:var(--yellow)">🟡</button>
+      <button class="tool-btn" onclick="clearNotes()" title="Clear All">✕</button>
     </div>
+    <textarea id="notes-editor" placeholder="Log your analysis here…"></textarea>
+    <div class="pane-footer"><button class="export-btn" onclick="exportToObsidian()">Export .md</button></div>
+    <div id="exportMsg" class="export-msg"></div>
+  </div>
 
-    <div class="side-pane">
-        <div class="pane-header">
-            <span>Obsidian Notes</span>
-            <span style="font-size: 0.7rem; color: var(--text-dim);">LOCAL_STORAGE</span>
-        </div>
-        <div class="pane-toolbar">
-            <button class="tool-btn" onclick="insertText('**', '**')">Bold</button>
-            <button class="tool-btn" onclick="insertText('*', '*')">Italic</button>
-            <button class="tool-btn" onclick="insertText('[', ']()')">Link</button>
-            <button class="tool-btn" onclick="insertText('- [ ] ', '')">Todo</button>
-        </div>
-        <textarea id="notes-editor" placeholder="Log your analysis here..."></textarea>
-        <div class="pane-footer">
-            <button class="export-btn" onclick="exportToObsidian()">Export .MD</button>
-        </div>
+  <div class="pane-body" id="pane-youtube">
+    <div class="yt-item"><div class="yt-icon">📺</div><div><div class="yt-name">David Bombal</div><div class="yt-desc">IT, Networking, Security Tools (Wireshark, Flipper Zero, CCNA). 3.05M subs.</div><a class="yt-link" href="https://www.youtube.com/@davidbombal" target="_blank">youtube.com/@davidbombal</a></div></div>
+    <div class="yt-item"><div class="yt-icon">📺</div><div><div class="yt-name">NetworkChuck</div><div class="yt-desc">Linux, CCNA, Virtualization, Cybersecurity, Python. 5.23M subs.</div><a class="yt-link" href="https://www.youtube.com/@NetworkChuck" target="_blank">youtube.com/@NetworkChuck</a></div></div>
+    <div class="yt-item"><div class="yt-icon">📺</div><div><div class="yt-name">John Hammond</div><div class="yt-desc">Ethical Hacking, Malware Analysis, CTFs, Threat Hunting. 2.13M subs.</div><a class="yt-link" href="https://www.youtube.com/@_JohnHammond" target="_blank">youtube.com/@_JohnHammond</a></div></div>
+    <div class="yt-item"><div class="yt-icon">📺</div><div><div class="yt-name">HackerSploit</div><div class="yt-desc">Free Infosec Training, Pentesting, Red Team Operations. 1.01M subs.</div><a class="yt-link" href="https://www.youtube.com/@HackerSploit" target="_blank">youtube.com/@HackerSploit</a></div></div>
+    <div class="yt-item"><div class="yt-icon">📺</div><div><div class="yt-name">Null Byte</div><div class="yt-desc">Ethical Hacking, Raspberry Pi, Wi-Fi Security, Pentesting Tools. 956K subs.</div><a class="yt-link" href="https://www.youtube.com/@NullByteWHT" target="_blank">youtube.com/@NullByteWHT</a></div></div>
+    <div class="yt-item"><div class="yt-icon">📺</div><div><div class="yt-name">LiveOverflow</div><div class="yt-desc">Binary Exploitation, Reverse Engineering, CTF write-ups. 2M subs.</div><a class="yt-link" href="https://www.youtube.com/@LiveOverflow" target="_blank">youtube.com/@LiveOverflow</a></div></div>
+  </div>
+
+  <div class="pane-body" id="pane-funfacts">
+    <div class="fun-card">
+      <div class="fun-title">USB Rubber Ducky → HID Attack</div>
+      <div class="fun-text">Darlene drops USB drives in a parking lot. Victims plug them in, thinking they're harmless. The device registers as a HID keyboard and types a payload at superhuman speed, installing a reverse shell before anyone realizes it's not a regular flash drive. Real-world data: 45%–98% of dropped USB drives get plugged in.</div>
+      <div class="fun-src">Mr. Robot S1E09 // <a href="https://joasantonio.com/mrrobot.html" target="_blank" style="color:var(--green)">source</a></div>
     </div>
-
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal()">CLOSE [X]</button>
-            <div class="modal-header">
-                <span id="modalTag" class="tag">TAG</span>
-                <h2 id="modalTitle" style="color: #fff; margin: 1rem 0 0 0; font-size: 2rem;">TITLE</h2>
-            </div>
-            <div class="modal-body">
-                <div class="intel-section">
-                    <span class="intel-label">Summary & Analysis</span>
-                    <div id="modalSummary" class="intel-text"></div>
-                </div>
-                <div class="intel-section">
-                    <span class="intel-label">Engineering Importance</span>
-                    <div id="modalImportance" class="intel-text"></div>
-                </div>
-                <div class="intel-section">
-                    <span class="intel-label">Noteworthy / Indicators</span>
-                    <div id="modalNoteworthy" class="intel-text"></div>
-                </div>
-                <div style="margin-top: 2rem; text-align: right;">
-                    <a id="modalLink" href="#" target="_blank" class="export-btn" style="text-decoration: none; display: inline-block;">Source Intelligence &rarr;</a>
-                </div>
-            </div>
-        </div>
+    <div class="fun-card">
+      <div class="fun-title">Raspberry Pi in HVAC → Physical Infiltration</div>
+      <div class="fun-text">Elliot hides a Raspberry Pi with a 3G/4G cellular modem behind a thermostat at Steel Mountain data center. It provides out-of-band remote access to the Building Management System, bypassing the facility's network monitoring entirely. The autossh reverse tunnel on port 2222 connects back to a Tor hidden service.</div>
+      <div class="fun-src">Mr. Robot S1E04 // <a href="https://joasantonio.com/mrrobot.html" target="_blank" style="color:var(--green)">source</a></div>
     </div>
+    <div class="fun-card">
+      <div class="fun-title">Tor Exit Node Sniffing</div>
+      <div class="fun-text">Elliot runs a Tor exit node to read unencrypted traffic (HTTP, FTP) leaving the onion network. Tor hides the source IP, but the exit node sees the plaintext. He catches a coffee-shop owner hosting illegal material because the traffic hits his exit node unencrypted. Tool: Wireshark + tcpdump at the exit node.</div>
+      <div class="fun-src">Mr. Robot S1E01 // <a href="https://joasantonio.com/mrrobot.html" target="_blank" style="color:var(--green)">source</a></div>
+    </div>
+    <div class="fun-card">
+      <div class="fun-title">Social Engineering + CUPP Wordlist</div>
+      <div class="fun-text">Elliot cracks a password by scraping social media for personal details (pet names, birthdays, favorite bands) then generating a targeted wordlist with CUPP or CeWL. The password was based on a pet's name—a classic weak pattern. He then uses Hashcat or John the Ripper for offline cracking.</div>
+      <div class="fun-src">Mr. Robot S1E01 // <a href="https://joasantonio.com/mrrobot.html" target="_blank" style="color:var(--green)">source</a></div>
+    </div>
+    <div class="fun-card">
+      <div class="fun-title">Shellshock (CVE-2014-6271)</div>
+      <div class="fun-text">Referenced in the show's second episode: a critical bug in the GNU Bash shell allowing RCE through malformed environment variables. Discovered in 2014, it affected millions of servers running CGI scripts, DHCP clients, and SSH with ForceCommand. Still relevant today for forgotten legacy systems.</div>
+      <div class="fun-src">Mr. Robot S1E02 // <a href="https://joasantonio.com/mrrobot.html" target="_blank" style="color:var(--green)">source</a></div>
+    </div>
+    <div class="fun-card">
+      <div class="fun-title">Bluetooth Hacking: BlueBorne & Bluesnarfing</div>
+      <div class="fun-text">Elliot exploits a Bluetooth vulnerability on Tyrell Wellick's phone using Kali Linux tools (hcitool, btscanner, bluesnarfer). Commands: hcitool scan → sdptool browse → l2ping. The real-world BlueBorne (2017) affected 5.3 billion devices across Android, iOS, Windows, and Linux.</div>
+      <div class="fun-src">Mr. Robot S1E03 // <a href="https://joasantonio.com/mrrobot.html" target="_blank" style="color:var(--green)">source</a></div>
+    </div>
+    <div class="fun-card">
+      <div class="fun-title">DeepSound Steganography &amp; Femtocell</div>
+      <div class="fun-text">Elliot hides stolen data inside WAV/FLAC files using DeepSound (real software). Audio plays normally, but contains hidden AES-256 encrypted payloads. fsociety also deploys a rogue femtocell (cellular base station) to intercept IMSI numbers and SMS data near a target facility.</div>
+      <div class="fun-src">Mr. Robot S1E06 // <a href="https://joasantonio.com/mrrobot.html" target="_blank" style="color:var(--green)">source</a></div>
+    </div>
+    <div class="fun-card">
+      <div class="fun-title">RUDY Slow HTTP POST DDoS</div>
+      <div class="fun-text">Allsafe detects a Layer 7 DDoS against E Corp using RUDY—slow HTTP POST with abnormally long Content-Length, sending body at 1 byte/sec. RUDY exhausts server threads without massive bandwidth. Similar tools: SlowLoris, Slow Read Attack.</div>
+      <div class="fun-src">Mr. Robot S1E04 // <a href="https://joasantonio.com/mrrobot.html" target="_blank" style="color:var(--green)">source</a></div>
+    </div>
+  </div>
+</div>
 
-    <script>
-        let intelData = [];
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeModal()">CLOSE [X]</button>
+    <div class="modal-header">
+      <span id="modalTag" class="tag">TAG</span>
+      <h2 id="modalTitle" style="color:#fff; margin:1rem 0 0 0; font-size:1.8rem;">TITLE</h2>
+    </div>
+    <div class="modal-body">
+      <div class="intel-section"><span class="intel-label">Summary &amp; Analysis</span><div id="modalSummary" class="intel-text"></div></div>
+      <div class="intel-section"><span class="intel-label">Engineering Importance</span><div id="modalImportance" class="intel-text"></div></div>
+      <div class="intel-section"><span class="intel-label">Noteworthy / Indicators</span><div id="modalNoteworthy" class="intel-text"></div></div>
+      <div><a id="modalLink" href="#" target="_blank" class="source-link">Source Intelligence →</a></div>
+    </div>
+  </div>
+</div>
 
-        async function fetchNews() {
-            try {
-                const resp = await fetch('/api/news');
-                const data = await resp.json();
-                if (data.items) {
-                    intelData = data.items;
-                    document.getElementById('lastUpdated').innerText = 
-                        'Last Update: ' + (data.last_updated || 'Unknown');
-                    document.getElementById('itemCount').innerText = intelData.length + ' items loaded';
-                    initGrid();
-                } else {
-                    document.getElementById('intelGrid').innerHTML = 
-                        '<div class="loading">// NO DATA AVAILABLE</div>';
-                }
-            } catch (err) {
-                console.error('Failed to fetch news:', err);
-                document.getElementById('intelGrid').innerHTML = 
-                    '<div class="loading">// CONNECTION ERROR // CHECK API ENDPOINT</div>';
-            }
-        }
+<script>
+let newsData = { today: { date: '', items: [] }, yesterday: { date: '', items: [] } };
+let currentDay = 'today';
 
-        function initGrid() {
-            const grid = document.getElementById('intelGrid');
-            grid.innerHTML = '';
-            intelData.forEach((item, index) => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.onclick = () => openModal(index);
-                card.innerHTML = `
-                    <div class="card-header">
-                        <div class="icon-box">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                        </div>
-                        <span style="font-weight: bold; color: #fff; font-size: 0.8rem;">UNIT_${String(index + 1).padStart(2, '0')}</span>
-                    </div>
-                    <div class="card-content">
-                        <span class="tag">${item.tag}</span>
-                        <div class="title">${item.title}</div>
-                        <div class="description">${item.desc}</div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
+async function fetchNews() {
+  try {
+    const res = await fetch('/api/news');
+    const json = await res.json();
+    newsData = json;
+    const itemCount = (json.today?.items?.length || 0) + (json.yesterday?.items?.length || 0);
+    document.getElementById('itemCount').textContent = itemCount + ' items loaded';
+    const todayDate = json.today?.date || 'today';
+    const yestDate = json.yesterday?.date || 'yesterday';
+    document.getElementById('tabToday').textContent = todayDate;
+    document.getElementById('tabYesterday').textContent = yestDate;
+    document.getElementById('lastUpdated').textContent = 'Last Update: ' + todayDate;
+    initGrid(currentDay);
+  } catch (e) {
+    document.getElementById('intelGrid').innerHTML = '<div class="loading">// CONNECTION ERROR // CHECK API ENDPOINT</div>';
+  }
+}
+function initGrid(day) {
+  const grid = document.getElementById('intelGrid');
+  const items = newsData[day]?.items || [];
+  grid.innerHTML = '';
+  items.forEach((item, idx) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.onclick = () => openModal(day, idx);
+    card.innerHTML = `
+      <div class="card-header">
+        <div class="icon-box">${String(idx + 1).padStart(2, '0')}</div>
+        <span style="font-weight:700; color:#fff; font-size:.75rem;">${day.toUpperCase()} — UNIT_${String(idx + 1).padStart(2, '0')}</span>
+      </div>
+      <div class="card-content">
+        <span class="tag">${item.tag}</span>
+        <div class="title">${item.title}</div>
+        <div class="description">${item.desc}</div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+function openModal(day, idx) {
+  const item = newsData[day].items[idx];
+  document.getElementById('modalTag').textContent = item.tag;
+  document.getElementById('modalTitle').textContent = item.title;
+  document.getElementById('modalSummary').textContent = item.summary;
+  document.getElementById('modalImportance').textContent = item.importance;
+  document.getElementById('modalNoteworthy').textContent = item.noteworthy;
+  document.getElementById('modalLink').href = item.link;
+  document.getElementById('modalOverlay').style.display = 'flex';
+}
+function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
 
-        function openModal(index) {
-            const item = intelData[index];
-            document.getElementById('modalTag').innerText = item.tag;
-            document.getElementById('modalTitle').innerText = item.title;
-            document.getElementById('modalSummary').innerText = item.summary;
-            document.getElementById('modalImportance').innerText = item.importance;
-            document.getElementById('modalNoteworthy').innerText = item.noteworthy;
-            document.getElementById('modalLink').href = item.link;
-            document.getElementById('modalOverlay').style.display = 'flex';
-        }
+// Date tabs
+document.getElementById('dateTabs').addEventListener('click', e => {
+  if(e.target.classList.contains('date-tab')) {
+    document.querySelectorAll('.date-tab').forEach(t => t.classList.remove('active'));
+    e.target.classList.add('active');
+    currentDay = e.target.dataset.day;
+    initGrid(currentDay);
+  }
+});
 
-        function closeModal() {
-            document.getElementById('modalOverlay').style.display = 'none';
-        }
+// Side pane tabs
+document.querySelector('.pane-tabs').addEventListener('click', e => {
+  if(e.target.classList.contains('pane-tab')) {
+    document.querySelectorAll('.pane-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.pane-body').forEach(p => p.classList.remove('active'));
+    e.target.classList.add('active');
+    document.getElementById('pane-' + e.target.dataset.pane).classList.add('active');
+  }
+});
 
-        // Notes System
-        const editor = document.getElementById('notes-editor');
+// Notes system
+const editor = document.getElementById('notes-editor');
+function loadNotes() { const s = localStorage.getItem('dash_notes_v2'); if (s) editor.value = s; }
+function saveNotes() { localStorage.setItem('dash_notes_v2', editor.value); }
+function clearNotes() { if(confirm('Clear all notes?')) { editor.value = ''; saveNotes(); } }
+function insertText(before, after) {
+  const s = editor.selectionStart, e = editor.selectionEnd, t = editor.value;
+  editor.value = t.slice(0, s) + before + t.slice(s, e) + after + t.slice(e);
+  editor.focus();
+  editor.setSelectionRange(s + before.length, s + before.length);
+  saveNotes();
+}
+async function exportToObsidian() {
+  const text = editor.value;
+  const now = new Date();
+  const dateStamp = now.toISOString().split('T')[0];
+  const content = `---\ndate: ${dateStamp}\ntags: [daily-digest, intelligence, dashboard]\nsource: ${window.location.origin}\n---\n\n${text}`;
+  try {
+    const res = await fetch('/api/export', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({content}) });
+    const json = await res.json();
+    const msg = document.getElementById('exportMsg');
+    if(json.success) { msg.textContent = 'Saved: ' + json.file.split('/').pop(); msg.style.color = 'var(--green)'; }
+    else { msg.textContent = 'Export failed'; msg.style.color = 'var(--accent)'; }
+    setTimeout(() => msg.textContent = '', 5000);
+  } catch(err) {
+    const msg = document.getElementById('exportMsg');
+    msg.textContent = 'Server error — falling back to download';
+    msg.style.color = 'var(--yellow)';
+    const blob = new Blob([content], {type:'text/markdown'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'daily-digest-'+dateStamp+'.md'; a.click();
+    URL.revokeObjectURL(url);
+    setTimeout(() => msg.textContent = '', 5000);
+  }
+}
 
-        function loadNotes() {
-            const saved = localStorage.getItem('dashboard_notes');
-            if (saved) editor.value = saved;
-        }
+// Modal close on overlay click
+document.getElementById('modalOverlay').addEventListener('click', e => { if(e.target.id === 'modalOverlay') closeModal(); });
 
-        function saveNotes() {
-            localStorage.setItem('dashboard_notes', editor.value);
-        }
-
-        function insertText(before, after) {
-            const start = editor.selectionStart;
-            const end = editor.selectionEnd;
-            const text = editor.value;
-            editor.value = text.slice(0, start) + before + text.slice(start, end) + after + text.slice(end);
-            editor.focus();
-            editor.setSelectionRange(start + before.length, start + before.length);
-            saveNotes();
-        }
-
-        function exportToObsidian() {
-            const text = editor.value;
-            const timestamp = new Date().toISOString().split('T')[0];
-            const filename = `Dashboard_Notes_${timestamp}.md`;
-            const content = `---\ndate: ${timestamp}\ntags: [intelligence, dashboard, notes]\nsource: window.location.origin\n---\n\n${text}`;
-
-            const blob = new Blob([content], { type: 'text/markdown' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        window.onload = () => {
-            fetchNews();
-            loadNotes();
-            editor.addEventListener('input', saveNotes);
-
-            // Close modal on overlay click
-            document.getElementById('modalOverlay').onclick = (e) => {
-                if (e.target.id === 'modalOverlay') closeModal();
-            };
-        };
-    </script>
+window.onload = () => {
+  fetchNews();
+  loadNotes();
+  editor.addEventListener('input', saveNotes);
+};
+</script>
 </body>
 </html>
