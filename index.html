@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberSec Intel | Tactical Workspace</title>
+    <title>News Dashboard | Tactical Workspace</title>
     <style>
         :root {
             --bg: #050505;
@@ -299,25 +299,52 @@
 
         .export-btn:hover { background: #cc0000; }
 
+        /* Network Status Bar */
+        .net-status {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            margin-top: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .last-updated {
+            color: var(--text-dim);
+        }
+
+        .loading {
+            color: var(--accent);
+            font-size: 0.8rem;
+            padding: 2rem 0;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
     </style>
 </head>
 <body>
 
     <div class="workspace">
         <h1>
-            CyberSec Intel
+            News Dashboard
             <div class="status-indicator">
                 <div class="blink"></div>
                 System Live
             </div>
         </h1>
 
+        <div class="net-status">
+            <span id="lastUpdated">Waiting for data...</span>
+            <span id="itemCount">0 items loaded</span>
+        </div>
+
         <div class="grid" id="intelGrid">
-            <!-- Cards injected by JS -->
+            <div class="loading">// INITIALIZING DATA STREAM...</div>
         </div>
 
         <footer style="margin-top: 5rem; color: #333; font-size: 0.8rem; text-align: center; text-transform: uppercase; letter-spacing: 2px;">
-            TARS Intelligence System // Cycle: 2026.04.23 // Sector: 0x8080
+            Project Dashboard // Node: P14s-AMD // Sector: ~/projs
         </footer>
     </div>
 
@@ -366,47 +393,32 @@
     </div>
 
     <script>
-        const intelData = [
-            {
-                title: "RedSun Zero-Day Leak",
-                tag: "Critical / No Patch",
-                desc: "LPE to SYSTEM in Microsoft Defender. Active exploitation.",
-                summary: "A critical zero-day vulnerability in Microsoft Defender allows a low-privileged user to escalate privileges to SYSTEM. This bypasses the primary endpoint protection mechanism, making the machine's a security shell.",
-                importance: "For NetOps/HomeLab owners: This means an attacker who gains a foothold via a simple user account can immediately take over the entire OS. Standard AV is effectively useless here.",
-                noteworthy: "Check for unexpected SYSTEM-level processes. Use Qualys mitigation guides until a patch is released. Monitor for CVE-2026-33825.",
-                link: "https://blog.qualys.com/qualys-insights/2026/04/22/dont-wait-for-a-patch-mitigate-redsun-risk-in-microsoft-defender-today"
-            },
-            {
-                title: "Agentic AI Attacks",
-                tag: "New Vector",
-                desc: "Frontier AI models acting as autonomous agents for breach cycles.",
-                summary: "Attackers are deploying AI agents that can perform reconnaissance, find vulnerabilities, and execute payloads without human intervention, significantly increasing the speed of attack cycles.",
-                importance: "Shift from 'human-speed' to 'machine-speed' attacks. Traditional SOC response times are now too slow. Requires automated, agentic defense systems.",
-                noteworthy: "Look for high-frequency API probes with logical patterns. Audit AI-facing endpoints and internal LLM integrations.",
-                link: "https://mb.com.ph/2026/04/23/ibm-announces-new-cybersecurity-measures-to-help-enterprises-confront-agentic-attacks"
-            },
-            {
-                title: "Serial-to-Ethernet Flaws",
-                tag: "Industrial/OT",
-                desc: "Critical flaws in converters endanger PLCs and medical monitors.",
-                summary: "Vulnerabilities in hardware bridges that convert serial RS-232/485 to Ethernet. These devices often lack authentication and are used to manage critical infrastructure.",
-                importance: "If your home lab or industrial setup uses serial converters for networking gear or IoT, these are 'open doors' for attackers to reach the hardware layer.",
-                noteworthy: "Isolate OT hardware on a separate VLAN. Disable remote management on converters if not strictly necessary.",
-                link: "https://www.csoonline.com/article/4162289/riddled-with-flaws-serial-to-ethernet-converters-endanger-critical-infrastructure.html"
-            },
-            {
-                title: "Google's 8th-Gen TPUs",
-                tag: "Strategic Hardware",
-                desc: "Disrupting Nvidia's compute monopoly via Agentic AI hardware.",
-                summary: "Google Cloud's release of 8th-Gen TPUs is designed to optimize the 'Agentic' loop (thinking-acting-observing) rather than just token generation.",
-                importance: "The compute landscape is shifting. Future security tools will likely leverage this specific hardware for real-time threat hunting at scale.",
-                noteworthy: "Monitor Google Cloud Next 2026 updates on 'Agent Platform' for potential integration with security monitoring.",
-                link: "https://www.moneycontrol.com/artificial-intelligence/google-expands-enterprise-ai-push-with-agent-platform-tpus-and-security-at-cloud-next-2026-article-13896530.html"
+        let intelData = [];
+
+        async function fetchNews() {
+            try {
+                const resp = await fetch('/api/news');
+                const data = await resp.json();
+                if (data.items) {
+                    intelData = data.items;
+                    document.getElementById('lastUpdated').innerText = 
+                        'Last Update: ' + (data.last_updated || 'Unknown');
+                    document.getElementById('itemCount').innerText = intelData.length + ' items loaded';
+                    initGrid();
+                } else {
+                    document.getElementById('intelGrid').innerHTML = 
+                        '<div class="loading">// NO DATA AVAILABLE</div>';
+                }
+            } catch (err) {
+                console.error('Failed to fetch news:', err);
+                document.getElementById('intelGrid').innerHTML = 
+                    '<div class="loading">// CONNECTION ERROR // CHECK API ENDPOINT</div>';
             }
-        ];
+        }
 
         function initGrid() {
             const grid = document.getElementById('intelGrid');
+            grid.innerHTML = '';
             intelData.forEach((item, index) => {
                 const card = document.createElement('div');
                 card.className = 'card';
@@ -416,7 +428,7 @@
                         <div class="icon-box">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                         </div>
-                        <span style="font-weight: bold; color: #fff; font-size: 0.8rem;">INTEL_UNIT_${index + 1}</span>
+                        <span style="font-weight: bold; color: #fff; font-size: 0.8rem;">UNIT_${String(index + 1).padStart(2, '0')}</span>
                     </div>
                     <div class="card-content">
                         <span class="tag">${item.tag}</span>
@@ -445,14 +457,14 @@
 
         // Notes System
         const editor = document.getElementById('notes-editor');
-        
+
         function loadNotes() {
-            const saved = localStorage.getItem('tars_obsidian_notes');
+            const saved = localStorage.getItem('dashboard_notes');
             if (saved) editor.value = saved;
         }
 
         function saveNotes() {
-            localStorage.setItem('tars_obsidian_notes', editor.value);
+            localStorage.setItem('dashboard_notes', editor.value);
         }
 
         function insertText(before, after) {
@@ -468,9 +480,9 @@
         function exportToObsidian() {
             const text = editor.value;
             const timestamp = new Date().toISOString().split('T')[0];
-            const filename = `Intel_Notes_${timestamp}.md`;
-            const content = `---\ndate: ${timestamp}\ntags: [cybersec, intelligence, tars]\nsource: http://192.168.2.188:8080\n---\n\n${text}`;
-            
+            const filename = `Dashboard_Notes_${timestamp}.md`;
+            const content = `---\ndate: ${timestamp}\ntags: [intelligence, dashboard, notes]\nsource: window.location.origin\n---\n\n${text}`;
+
             const blob = new Blob([content], { type: 'text/markdown' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -481,10 +493,10 @@
         }
 
         window.onload = () => {
-            initGrid();
+            fetchNews();
             loadNotes();
             editor.addEventListener('input', saveNotes);
-            
+
             // Close modal on overlay click
             document.getElementById('modalOverlay').onclick = (e) => {
                 if (e.target.id === 'modalOverlay') closeModal();

@@ -1,0 +1,45 @@
+{
+  "last_updated": "2026-04-25T20:00:00Z",
+  "items": [
+    {
+      "id": 1,
+      "title": "GopherWhisper APT",
+      "tag": "State-Sponsor / China",
+      "desc": "Stealthy Go-based backdoors infecting government networks in Mongolia.",
+      "summary": "A China-linked APT campaign using 'GopherWhisper'—a sophisticated malware written in Go—to target government systems. It abuses legitimate collaboration tools like Discord, Slack, and M365 for command-and-control (C2) and exfiltration.",
+      "importance": "Demonstrates a shift toward Go for malware development (cross-platform, harder to reverse) and the use of 'living-off-the-cloud' techniques. Traditional firewall rules against known C2 IPs are useless if the traffic is disguised as Slack/Discord API calls.",
+      "noteworthy": "Monitor for unusual outbound traffic to Discord/Slack APIs from non-dev machines. Analyze Go-binary artifacts for specific obfuscation patterns.",
+      "link": "https://securereading.com/gopherwhisper-apt-go-backdoor-attack-mongolia/"
+    },
+    {
+      "id": 2,
+      "title": "Vercel Third-Party Leak",
+      "tag": "Cloud Security",
+      "desc": "AI integration loophole leading to internal system exposure.",
+      "summary": "A security incident at Vercel exposed internal systems after an attacker used malware (Lumma Stealer) disguised as Roblox cheats to steal credentials, then pivoted through internal AI integrations to escalate access.",
+      "importance": "The 'AI Integration' gap. Adding AI capabilities to a platform often introduces new, unvetted paths into internal systems. Trusting a third-party AI agent to have internal access can be a catastrophic failure point.",
+      "noteworthy": "Audit all 'AI-enabled' internal tools. Verify that internal API keys used by AI agents have strictly scoped permissions (Least Privilege).",
+      "link": "https://hawk-eye.io/2026/04/the-vercel-breach-how-a-third-party-ai-integration-turned-into-a-data-exposure-problem/"
+    },
+    {
+      "id": 3,
+      "title": "Trump: Truce Extension",
+      "tag": "Geopolitical",
+      "desc": "3-week ceasefire extension for Israel-Lebanon talks.",
+      "summary": "President Trump announced a three-week extension of the ceasefire between Israel and Lebanon. However, tensions remain high as the US continues to seize Iranian-linked oil tankers in the Hormuz strait.",
+      "importance": "The 'Fragile Peace' phase. High volatility for logistics and supply chains in the Middle East. Any collapse in the truce triggers immediate spikes in energy prices and cyber-warfare activity (wiper attacks).",
+      "noteworthy": "Watch for 'false flag' cyber attacks coinciding with truce expiration dates.",
+      "link": "https://www.timesofisrael.com/trump-declares-3-week-truce-extension-after-hosting-2nd-round-of-israel-lebanon-talks/"
+    },
+    {
+      "id": 4,
+      "title": "BTC: $79K Geopolitical Spike",
+      "tag": "Financial / Crypto",
+      "desc": "BTC hits highest price since Feb following truce optimism.",
+      "summary": "Bitcoin surged 4% to hit $79K following the truce extension. BTC is behaving as a dual-asset: a 'risk-on' bet on stability and a 'safe-haven' hedge against the ongoing US-Iran conflict.",
+      "importance": "BTC is now a real-time geopolitical sentiment indicator. A sudden drop in BTC price often precedes a shift in regional conflicts or a sudden escalation in 'Digital Gold' hedging.",
+      "noteworthy": "Correlation check: Compare BTC price volatility against the news cycle of Hormuz strait tanker seizures.",
+      "link": "https://www.weex.com/news/detail/trump-extends-ceasefire-bitcoin-hits-79k-what-crypto-traders-need-to-know-right-now-704492"
+    }
+  ]
+}
