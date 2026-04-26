@@ -8,3 +8,4 @@ server.log
 *.swp
 *.swo
 *~
+.venv/
