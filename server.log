@@ -1,1 +1,23 @@
-
+INFO:     Started server process [161425]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+INFO:     127.0.0.1:46542 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59556 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59556 - "GET /api/news HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59556 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:38784 - "GET /api/v1/check HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:44652 - "GET /api/v1/check HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49102 - "GET /api/v1/check HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:43798 - "GET /api/v1/check HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:35486 - "GET /api/v1/check HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:33662 - "GET /api/v1/check HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49252 - "GET /api/v1/check HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:33388 - "GET /api/v1/check HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51018 - "GET /api/v1/check HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57266 - "GET /api/v1/check HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:36746 - "GET /api/v1/check HTTP/1.1" 404 Not Found
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [161425]
