@@ -1,69 +1,184 @@
 {
   "today": {
-    "date": "25/04/26",
+    "date": "29/04/26",
     "items": [
       {
         "id": 1,
-        "title": "GopherWhisper APT",
-        "tag": "State-Sponsor / China",
-        "desc": "Stealthy Go-based backdoors infecting government networks in Mongolia.",
-        "summary": "A China-linked APT campaign using 'GopherWhisper'—a sophisticated malware written in Go—to target government systems. It abuses legitimate collaboration tools like Discord, Slack, and M365 for command-and-control (C2) and exfiltration.",
-        "importance": "Demonstrates a shift toward Go for malware development (cross-platform, harder to reverse) and the use of 'living-off-the-cloud' techniques. Traditional firewall rules against known C2 IPs are useless if the traffic is disguised as Slack/Discord API calls.",
-        "noteworthy": "Monitor for unusual outbound traffic to Discord/Slack APIs from non-dev machines. Analyze Go-binary artifacts for specific obfuscation patterns.",
-        "link": "https://securereading.com/gopherwhisper-apt-go-backdoor-attack-mongolia/"
+        "title": "GitHub RCE: CVE-2026-3854 — One Git Push, Full Server Compromise",
+        "tag": "Critical Vulnerability / Supply Chain",
+        "desc": "Wiz uncovers critical RCE in GitHub's git infrastructure — exploitable by any authenticated user via a single git push.",
+        "summary": "Wiz Research disclosed CVE-2026-3854, a critical remote code execution vulnerability in GitHub's internal git pipeline. Any authenticated user could execute arbitrary commands on GitHub's backend servers with a single 'git push' using a standard git client. On GitHub.com, this allowed RCE on shared storage nodes where millions of public and private repositories were accessible. On GitHub Enterprise Server, the same flaw grants full server compromise including access to all repos and internal secrets. Notably, this was one of the first critical vulnerabilities found in closed-source binaries using AI-augmented reverse engineering (IDA MCP). GitHub mitigated GitHub.com within 6 hours, but 88% of GHES instances remain unpatched.",
+        "importance": "This is a supply chain nuclear bomb. GitHub hosts hundreds of millions of repos — a single RCE in the git pipeline means an attacker could poison builds, inject backdoors, or exfiltrate source code across the entire platform. The AI-assisted discovery method signals that closed-source binary security is now trivially auditable.",
+        "noteworthy": "Patch GHES immediately to 3.14.24+, 3.15.19+, 3.16.15+, 3.17.12+, 3.18.6+, or 3.19.3+. Audit git push logs for anomalous payloads. Rotate all repository secrets. Run 'ghe-repl-status' and verify cluster integrity.",
+        "link": "https://www.wiz.io/blog/github-rce-vulnerability-cve-2026-3854"
       },
       {
         "id": 2,
-        "title": "MAD Bugs: Claude Found FreeBSD Kernel RCE",
-        "tag": "AI-Assisted Research",
-        "desc": "First remote kernel exploit both discovered and exploited by an AI (CVE-2026-4747).",
-        "summary": "blog.calif.io reports the first remote kernel exploit fully discovered and weaponized by Claude. The bug was in the FreeBSD kernel network stack, reachable from unprivileged userland via crafted socket options. Proof of concept achieved in under 24 hours.",
-        "importance": "AI can now autonomously find and exploit kernel vulnerabilities at a speed no human team can match. Offensive security teams need AI-assisted fuzzing and formal verification to keep up.",
-        "noteworthy": "Watch for CVE-2026-4747 patches. If you're running FreeBSD with untrusted local users, assume compromise until patched.",
-        "link": "https://blog.calif.io/p/mad-bugs-claude-freebsd-kernel-rce"
+        "title": "CPanel Critical Auth Bypass — Update Immediately",
+        "tag": "Infrastructure Security",
+        "desc": "Critical authentication vulnerability in cPanel allows unauthorized access to server management interfaces.",
+        "summary": "A critical authentication bypass vulnerability has been identified in cPanel, one of the most widely used web hosting control panels. The flaw could allow attackers to bypass authentication and gain unauthorized access to server management interfaces, potentially leading to full server compromise across shared hosting environments.",
+        "importance": "cPanel powers millions of hosting environments worldwide. An auth bypass here means attackers can take over web servers, intercept email, and pivot into databases — all without credentials. Shared hosting providers are especially exposed.",
+        "noteworthy": "Update cPanel immediately. Audit access logs for unauthorized login attempts. Review cPanel service tokens and reset any that look suspicious.",
+        "link": "https://thehackernews.com/2026/04/critical-cpanel-authentication.html"
       },
       {
         "id": 3,
-        "title": "Claude Audited qmail → RCE in 101 Minutes",
-        "tag": "AI-Assisted Research",
-        "desc": "One prompt to Claude found a working exploit for qmail in 101 minutes.",
-        "summary": "Researchers at Calif showed that a single, carefully crafted prompt to Claude Code found a buffer overflow in qmail's 'alloc.c' and produced a working exploit in roughly 101 minutes. The vulnerability had survived 30+ years of manual audit.",
-        "importance": "Legacy codebases that were 'secure enough' for decades are now trivial targets for AI-assisted analysis. Assumed-safe infrastructure (qmail, sendmail, bind) needs urgent AI-audit.",
-        "noteworthy": "Run AI-static-analysis (SAST) on your oldest dependencies. If qmail fell in 101 minutes, your custom 1990s daemon won't last.",
-        "link": "https://blog.calif.io/p/we-asked-claude-to-audit-sagredos-qmail"
+        "title": "CISA KEV Update: ConnectWise & Windows Flaws Actively Exploited",
+        "tag": "Infrastructure Security / CISA",
+        "desc": "CISA adds actively exploited ConnectWise and Windows vulnerabilities to its Known Exploited Vulnerabilities catalog.",
+        "summary": "CISA has added newly confirmed actively exploited vulnerabilities in ConnectWise and Microsoft Windows to its Known Exploited Vulnerabilities (KEV) catalog. Federal agencies face binding remediation deadlines, but the active exploitation status means private-sector organizations are equally at risk.",
+        "importance": "CISA only adds to KEV when exploitation is confirmed in the wild. ConnectWise remote access tools are ubiquitous in MSP environments — compromise here cascades to every managed client. Windows flaws hitting KEV mean threat actors are actively weaponizing them.",
+        "noteworthy": "Patch ConnectWise and Windows immediately per CISA directives. If you're an MSP, assume lateral movement to all client environments. Check ConnectWise audit logs for unauthorized sessions.",
+        "link": "https://thehackernews.com/2026/04/cisa-adds-actively-exploited.html"
       },
       {
         "id": 4,
-        "title": "Vercel Attack Fallout Expands",
-        "tag": "Cloud Security",
-        "desc": "OAuth token abuse. Company analyzed ~1 PB of logs.",
-        "summary": "CyberScoop reports the Vercel breach is worse than initially disclosed. Attackers abused OAuth tokens from a compromised internal tool to pivot into customer environments. ShinyHunters claimed responsibility. Downstream blast radius is still being mapped.",
-        "importance": "The 'trusted SaaS' model is showing cracks. If a deployment platform can be breached, every site on it is potentially compromised. Supply-chain resilience now demands multi-provider redundancy.",
-        "noteworthy": "Audit OAuth scopes granted to Vercel and any deployment SaaS. Review recent commits for injected build artifacts.",
-        "link": "https://cyberscoop.com/vercel-attack-fallout-expands/"
+        "title": "LiteLLM SQL Injection Exploited Within 36 Hours",
+        "tag": "AI Security / Vulnerabilities",
+        "desc": "CVE-2026-42208 in LiteLLM — SQL injection weaponized just 36 hours after disclosure.",
+        "summary": "A SQL injection vulnerability (CVE-2026-42208) in LiteLLM, a popular LLM gateway/proxy used to manage API calls across multiple AI providers, was exploited in the wild within 36 hours of disclosure. The speed from disclosure to mass exploitation demonstrates how quickly AI-adjacent infrastructure is targeted.",
+        "importance": "LiteLLM sits in front of LLM API keys for many organizations — a SQL injection here means attackers can exfiltrate API keys, manipulate model routing, or inject responses. The 36-hour weaponization window shows AI infra is a priority target.",
+        "noteworthy": "Update LiteLLM immediately. Rotate all LLM API keys that passed through the gateway. Audit query logs for SQL injection patterns.",
+        "link": "https://thehackernews.com/2026/04/litellm-cve-2026-42208-sql-injection.html"
       },
       {
         "id": 5,
-        "title": "Researchers Uncover Pre-Stuxnet fast16 Malware",
-        "tag": "Cyberwarfare",
-        "desc": "Lua-based malware from 2005 predates Stuxnet by 5+ years.",
-        "summary": "SentinelOne discovered 'fast16'—a Lua-based malware from 2005 that targeted engineering calculation software to produce inaccurate results. It predates Stuxnet by half a decade and is the first known digital weapon engineered for destructive rather than espionage objectives.",
-        "importance": "Rewrites the timeline of cyberwarfare. If 'fast16' was deployed in 2005, nation-state destructive capabilities are ~20 years old, not 15. Industrial control and critical infrastructure have been under threat far longer than assumed.",
-        "noteworthy": "Check engineering/ICS software in your environment for historical compromise. 'Engineering miscalculations' could be stealth sabotage.",
-        "link": "https://thehackernews.com/2026/04/researchers-uncover-pre-stuxnet-fast16.html"
+        "title": "VECT 2.0 Ransomware: Destructive Wiper Disguised as Ransomware",
+        "tag": "Malware / Ransomware",
+        "desc": "New VECT 2.0 ransomware irreversibly destroys files over 131KB — no decryption possible.",
+        "summary": "VECT 2.0 ransomware has been identified targeting Windows, Linux, and ESXi environments. Unlike traditional ransomware, files over 131KB are irreversibly destroyed rather than encrypted — making recovery impossible even if a ransom is paid. This positions VECT 2.0 as a wiper with ransomware camouflage, likely intended for disruption rather than profit.",
+        "importance": "When ransomware destroys instead of encrypts, backups are your only recovery path — and threat actors know this. VECT 2.0 suggests a shift toward purely destructive campaigns, possibly nation-state aligned, where the ransom note is just a distraction.",
+        "noteworthy": "Verify offline/immutable backups are intact. EDR rules targeting VECT 2.0 IOCs. Segment ESXi management networks. If hit, do not pay — decryption is impossible.",
+        "link": "https://thehackernews.com/2026/04/vect-20-ransomware-irreversibly.html"
       },
       {
         "id": 6,
-        "title": "CISA Adds 4 Exploited Flaws to KEV",
-        "tag": "Infrastructure Security",
-        "desc": "Federal deadline May 2026. CVSS up to 9.9.",
-        "summary": "CISA added four actively exploited vulnerabilities to its Known Exploited Vulnerabilities catalog: SimpleHelp remote code execution, Samsung MagicINFO 9 path traversal, D-Link zip-slip code injection, plus an unpatched legacy D-Link vuln. Federal agencies must remediate by May 2026.",
-        "importance": "These aren't theoretical. CISA only adds to KEV when active exploitation is confirmed in the wild. If you're running SimpleHelp remote support or D-Link consumer routers, you are in the crosshairs.",
-        "noteworthy": "CVE-2024-57726 (CVSS 9.9). Upgrade SimpleHelp immediately. Remove D-Link consumer routers from any corporate network.",
-        "link": "https://thehackernews.com/2026/04/cisa-adds-4-exploited-flaws-to-kev.html"
+        "title": "Intel Arc Pro B70: 32GB VRAM AI Workstation GPU Launches",
+        "tag": "Hardware / GPU",
+        "desc": "Intel doubles down on AI GPU market with Arc Pro B70 featuring 32GB VRAM and Xe2 architecture.",
+        "summary": "Intel launched the Arc Pro B70, a new professional GPU built on the Xe2 architecture with 32GB of VRAM — double the cores and memory of the B50. Unlike AMD's approach of retrofitting gaming GPUs with extra VRAM (Radeon AI PRO R9700), Intel built an entirely new die. The B70 features ECC memory, dual media engines (8K 10-bit encode/decode), certified pro drivers for Adobe/Autodesk/Dassault, and targets the AI workstation market alongside NVIDIA's 72GB RTX PRO 5000 Blackwell.",
+        "importance": "The AI workstation GPU market is now a three-horse race. Intel's aggressive pricing and full-die approach could disrupt NVIDIA's margins in the mid-range AI workstation tier. 32GB VRAM at this price point makes local LLM inference accessible to smaller teams.",
+        "noteworthy": "Evaluate the B70 for local AI inference workloads if you're budget-constrained vs NVIDIA's 72GB Blackwell. Check driver maturity for your specific apps — Intel's pro driver certification program is still catching up to NVIDIA's.",
+        "link": "https://www.pugetsystems.com/labs/articles/intel-arc-pro-b70-review/"
       },
       {
         "id": 7,
+        "title": "Gallium Oxide Semiconductors Withstand Near-Absolute-Zero Cold",
+        "tag": "Hardware / Semiconductors",
+        "desc": "KAUST research shows gallium oxide electronics operate reliably near absolute zero — enabling space and quantum computing applications.",
+        "summary": "Researchers at KAUST demonstrated that gallium oxide (Ga₂O₃) semiconductor devices maintain robust operation at cryogenic temperatures close to absolute zero. This is a breakthrough for space missions and quantum computing control electronics, where traditional silicon devices fail at extreme cold. Ga₂O₃'s ultra-wide bandgap provides inherent radiation hardness and thermal stability.",
+        "importance": "Quantum computing requires control electronics that function at cryogenic temperatures — current solutions need complex room-temperature wiring to quantum processors. Ga₂O₃ could enable co-located control circuits, drastically reducing latency and complexity. Space and defense applications are immediate beneficiaries.",
+        "noteworthy": "Monitor Ga₂O₃ foundry partnerships. If your org runs HPC in extreme environments or quantum R&D, this semiconductor could reduce cooling and wiring overhead within 3-5 years.",
+        "link": "https://discovery.kaust.edu.sa/en/article/26858/gallium-oxide-electronics-withstand-extreme-cold/"
+      },
+      {
+        "id": 8,
+        "title": "ASML: The Chokepoint for Cutting-Edge Chips",
+        "tag": "Hardware / Semiconductor Supply Chain",
+        "desc": "By betting on EUV lithography before it worked, ASML became the single bottleneck for advanced chipmaking worldwide.",
+        "summary": "A deep analysis of ASML's position as the sole manufacturer of extreme ultraviolet (EUV) lithography machines — the only equipment capable of producing sub-5nm chips. ASML's decades-long bet on EUV, when the rest of the industry doubted it, made them the gatekeeper of advanced semiconductor manufacturing. No foundry (TSMC, Samsung, Intel) can produce cutting-edge chips without ASML's machines.",
+        "importance": "Geopolitical control over ASML's export decisions directly determines which countries can manufacture advanced chips. US restrictions on ASML exports to China are effectively a semiconductor embargo. Any disruption to ASML (supply chain, sabotage, regulation) would halt global advanced chip production.",
+        "noteworthy": "Factor ASML export restrictions into long-term hardware procurement planning. If you rely on TSMC-fabbed chips, any ASML disruption cascades to your supply within 6-18 months.",
+        "link": "https://worksinprogress.co/issue/the-worlds-most-complex-machine/"
+      },
+      {
+        "id": 9,
+        "title": "BTC at $76.6K — Fed Chair Warsh Signals Mixed for Risk Assets",
+        "tag": "Financial / Crypto",
+        "desc": "Bitcoin holds $76.6K as new Fed chair Kevin Warsh takes helm; historical pattern suggests 'months of losses.'",
+        "summary": "Bitcoin trades at $76,596 with a modest +0.6% 24h change, but under pressure as Kevin Warsh becomes the new Federal Reserve chair. Historical data shows BTC fell after each new Fed chair began their term. The Coinbase Premium Index turned negative for the first time in three weeks, signaling weakening US spot demand. Weekly liquidations topped $829M, adding to bearish momentum even as long-term holders accumulate.",
+        "importance": "A new Fed chair historically brings policy uncertainty that compresses risk assets. Warsh's mixed signals on rate policy mean BTC could face a multi-month drawdown. The negative Coinbase Premium confirms institutional US buyers are stepping back.",
+        "noteworthy": "Monitor the Fed chair transition window — if historical pattern holds, BTC may trend lower for 2-4 months before recovering. Negative Coinbase Premium = weak US demand. Watch for accumulation by long-term holders as a contrarian bottom signal.",
+        "link": "https://cointelegraph.com/markets/bitcoin-stocks-face-months-of-losses-as-kevin-warsh-becomes-fed-chair"
+      },
+      {
+        "id": 10,
+        "title": "Canada Proposes Crypto ATM Ban Over Money Laundering",
+        "tag": "Regulation / Crypto",
+        "desc": "Ottawa moves to ban Bitcoin ATMs, citing their role as a key tool for scammers and money laundering.",
+        "summary": "The Canadian government proposed banning crypto ATMs entirely, arguing they have become a primary instrument for scammers and money launderers. The ban is part of broader regulatory tightening targeting high-risk segments of the crypto sector, following increasing reports of fraud facilitated through physical crypto ATMs.",
+        "importance": "If Canada bans crypto ATMs, other jurisdictions may follow. This directly impacts on-ramp accessibility for retail users and could set a precedent for physical crypto infrastructure regulation worldwide.",
+        "noteworthy": "If you operate or use crypto ATMs in Canada, prepare for shutdown. Monitor US and EU regulators for similar proposals. The trend is clear: physical crypto access points are being regulated like traditional financial infrastructure.",
+        "link": "https://cointelegraph.com/news/canada-proposes-crypto-atm-ban-over-scams-and-money-laundering"
+      },
+      {
+        "id": 11,
+        "title": "Hugging Face LeRobot Open to Unauthenticated RCE",
+        "tag": "AI Security / Critical Vulnerability",
+        "desc": "Critical unpatched CVE-2026-25874 in Hugging Face's LeRobot framework allows unauthenticated remote code execution.",
+        "summary": "A critical unpatched vulnerability (CVE-2026-25874) in Hugging Face's LeRobot — a popular open-source robotics/AI framework — allows unauthenticated remote code execution. With no patch available at time of disclosure, any system running LeRobot exposed to the network is vulnerable to full takeover.",
+        "importance": "LeRobot is used in AI/robotics research and prototyping environments — often on under-protected lab networks. An unauthenticated RCE with no patch means researchers' machines and potentially connected robotics hardware are at immediate risk of compromise.",
+        "noteworthy": "Isolate LeRobot instances from the internet immediately. Network-segment any robotics lab environments. Monitor for patches from Hugging Face. Do not expose LeRobot ports publicly.",
+        "link": "https://thehackernews.com/2026/04/critical-cve-2026-25874-leaves-hugging.html"
+      },
+      {
+        "id": 12,
+        "title": "Microsoft: Windows Shell CVE-2026-32202 Actively Exploited",
+        "tag": "Vulnerabilities / Active Exploitation",
+        "desc": "Microsoft confirms Windows Shell vulnerability is being actively exploited in the wild.",
+        "summary": "Microsoft confirmed that CVE-2026-32202, a vulnerability in Windows Shell, is being actively exploited. The flaw allows attackers to execute code through malicious file handling in the Windows Shell. Active exploitation confirmation means threat actors are already using this in campaigns, making patching an immediate priority.",
+        "importance": "Windows Shell vulnerabilities are high-impact because they affect virtually every Windows machine and often require minimal user interaction. Active exploitation + broad attack surface = urgent patching required.",
+        "noteworthy": "Deploy Microsoft's patch immediately via WSUS/Intune. Monitor for suspicious Shell process spawns. BlockKnown exploit vectors via ASR rules if patching is delayed.",
+        "link": "https://thehackernews.com/2026/04/microsoft-confirms-active-exploitation.html"
+      }
+    ]
+  },
+  "yesterday": {
+    "date": "27/04/26",
+    "items": [
+      {
+        "id": 13,
+        "title": "Pack2TheRoot: 12-Year Linux Privilege Escalation Flaw",
+        "tag": "Infrastructure Security",
+        "desc": "A 12-year-old vulnerability lets local Linux users gain root privileges.",
+        "summary": "Security researchers disclosed 'Pack2TheRoot,' a privilege escalation vulnerability present in the Linux kernel's pack2fs implementation for over 12 years. It allows unprivileged local users to escalate to root, affecting a wide range of distributions still running unpatched kernels.",
+        "importance": "Any Linux server with local user access — shared hosting, CI runners, container breakout scenarios — is exposed. This is the kind of bug that persistence actors love: old, widespread, and quietly devastating.",
+        "noteworthy": "Patch kernel immediately. Audit for unexpected setuid binaries and privilege escalation artifacts. Check container escape paths if running unpatched hosts.",
+        "link": "https://securityaffairs.co/164272/security/pack2theroot-linux-privilege-escalation.html"
+      },
+      {
+        "id": 14,
+        "title": "CrowdStrike LogScale Critical Bug Exposes Files",
+        "tag": "Hacking / Enterprise Security",
+        "desc": "Critical vulnerability in CrowdStrike's SIEM lets attackers access sensitive files.",
+        "summary": "A critical vulnerability in CrowdStrike's LogScale platform could allow attackers to access sensitive files stored within the SIEM. LogScale is widely deployed as the central logging and observability layer in enterprise environments, making this a high-impact target.",
+        "importance": "Compromising a SIEM gives attackers the exact playbook — they can see what you're monitoring, what alerts fire, and where the blind spots are. This turns detection into evasion.",
+        "noteworthy": "Apply CrowdStrike patches immediately. Rotate LogScale API keys and review access logs for unauthorized file access since the vuln window opened.",
+        "link": "https://securityaffairs.co/164272/hacking/crowdstrike-logscale-critical-bug.html"
+      },
+      {
+        "id": 15,
+        "title": "400K+ WordPress Sites Exposed via Breeze Cache Flaw",
+        "tag": "Vulnerabilities / Web Security",
+        "desc": "Actively exploited CVE-2026-3844 in Breeze Cache plugin puts over 400,000 sites at risk.",
+        "summary": "A critical vulnerability (CVE-2026-3844) in the popular Breeze Cache WordPress plugin is being actively exploited in the wild. Over 400,000 websites running the plugin are at risk of complete compromise, including data theft and defacement.",
+        "importance": "WordPress plugins remain the #1 attack surface for small-to-mid businesses. A single unpatched caching plugin can give full site compromise — and most site owners never update plugins.",
+        "noteworthy": "Update Breeze Cache immediately. Check web server access logs for POST requests to plugin endpoints. Consider Web Application Firewall rules blocking cache plugin exploit patterns.",
+        "link": "https://securityaffairs.co/164272/vulnerabilities/breeze-cache-plugin-flaw.html"
+      },
+      {
+        "id": 16,
+        "title": "China-Linked APTs Build Covert Networks from Consumer Routers",
+        "tag": "APT / Nation-State",
+        "desc": "UK and 12 allied agencies warn China is weaponizing everyday consumer routers as covert C2 infrastructure.",
+        "summary": "The UK's NCSC and a dozen allied intelligence agencies issued a joint advisory warning that China-linked threat actors are building covert hacker networks from compromised consumer routers and IoT devices. These botnets are used for C2 relay, data exfiltration, and proxying attacks — all while evading traditional detection that monitors known bad IPs.",
+        "importance": "Consumer devices are the new perimeter breach point. You can't firewall what you don't manage. These router botnets make attribution nearly impossible and give APTs a 'living off the land' C2 layer.",
+        "noteworthy": "Audit home/branch office routers for unauthorized firmware images. Monitor outbound connections from IoT segments. Consider network segmentation isolating consumer devices from critical paths.",
+        "link": "https://cyberscoop.com/china-covert-hacker-networks-consumer-routers/"
+      },
+      {
+        "id": 17,
+        "title": "FIRESTARTER Backdoor Persists on Cisco ASA in Federal Network",
+        "tag": "Infrastructure Security",
+        "desc": "Persistent backdoor on a Cisco ASA firewall inside a US federal network survives patching.",
+        "summary": "CISA reported that a persistent backdoor dubbed 'FIRESTARTER' was found on a Cisco ASA device within a federal network. The implant survived standard patching and firmware upgrades, indicating a sophisticated firmware-level compromise that renders 'patch and forget' ineffective.",
+        "importance": "If border firewalls in federal networks carry persistent firmware implants, the perimeter defense model is theater. 'Patch and forget' is dead when attackers own the firmware layer.",
+        "noteworthy": "Conduct secure boot attestation on all Cisco ASA/FTD devices. Plan for clean reimage of border firewalls if compromise is suspected. Run 'verify /all' and check for unauthorized boot images.",
+        "link": "https://securityaffairs.co/164272/security/cisa-firestarter-cisco-asa.html"
+      },
+      {
+        "id": 18,
         "title": "BTC Hits $79K on Truce Optimism",
         "tag": "Financial / Crypto",
         "desc": "Bitcoin surges 4% to highest price since February.",
@@ -73,59 +188,24 @@
         "link": "https://www.weex.com/news/detail/trump-extends-ceasefire-bitcoin-hits-79k-what-crypto-traders-need-to-know-right-now-704492"
       },
       {
-        "id": 8,
-        "title": "Artemis II Moon Photos Released",
-        "tag": "Space Tech",
-        "desc": "Astronauts' shots taken with 10-year-old camera + 20 hours training.",
-        "summary": "GENK reports that Artemis II astronauts released extraordinary lunar photographs using a decade-old modified Hasselblad camera after just 20 hours of EVA photography training. The images show unprecedented resolution of the far-side terrain.",
-        "importance": "Space imaging tech trickles down to commercial satellites and drone optics. Understanding low-weight, high-durability sensor design matters for industrial/IoT edge imaging.",
-        "noteworthy": "Watch for NASA开源 imaging pipelines—potential application to low-cost ISR (intelligence, surveillance, reconnaissance) platforms.",
-        "link": "https://genk.vn/bo-anh-mat-trang-cua-phi-hanh-doan-artemis-ii-chi-voi-20-gio-huan-luyen-va-chiec-may-anh-10-nam-tuoi-20260425"
-      }
-    ]
-  },
-  "yesterday": {
-    "date": "24/04/26",
-    "items": [
-      {
-        "id": 9,
-        "title": "Vercel Third-Party AI Integration Leak",
-        "tag": "Cloud Security",
-        "desc": "Lumma Stealer → internal AI tool → data exposure.",
-        "summary": "Attackers used Lumma Stealer (distributed as Roblox cheats) to harvest Vercel employee credentials, then pivoted through the internal AI-powered code review tool to escalate privileges and access customer deployment configs.",
-        "importance": "The 'AI Integration' gap. Adding AI to platforms introduces new, unvetted paths. Trusting third-party AI agents with internal access is a catastrophic single point of failure.",
-        "noteworthy": "Audit all AI-enabled internal tools. Verify API keys used by AI agents have strictly scoped permissions and zero 'write' access to production.",
-        "link": "https://hawk-eye.io/2026/04/the-vercel-breach-how-a-third-party-ai-integration-turned-into-a-data-exposure-problem/"
+        "id": 19,
+        "title": "Claude Audited qmail → RCE in 101 Minutes",
+        "tag": "AI-Assisted Research",
+        "desc": "One prompt to Claude found a working exploit for qmail in 101 minutes.",
+        "summary": "Researchers at Calif showed that a single, carefully crafted prompt to Claude Code found a buffer overflow in qmail's 'alloc.c' and produced a working exploit in roughly 101 minutes. The vulnerability had survived 30+ years of manual audit.",
+        "importance": "Legacy codebases that were 'secure enough' for decades are now trivial targets for AI-assisted analysis. Assumed-safe infrastructure (qmail, sendmail, bind) needs urgent AI-audit.",
+        "noteworthy": "Run AI-static-analysis (SAST) on your oldest dependencies. If qmail fell in 101 minutes, your custom 1990s daemon won't last.",
+        "link": "https://blog.calif.io/p/we-asked-claude-to-audit-sagredos-qmail"
       },
       {
-        "id": 10,
-        "title": "Trump: Israel-Lebanon Truce Extended",
-        "tag": "Geopolitical",
-        "desc": "3-week ceasefire extension. Hormuz tensions persist.",
-        "summary": "President Trump announced a three-week extension of the Israel-Lebanon ceasefire. However, US seizure of Iranian-linked oil tankers in the Hormuz strait continues, keeping regional tension high.",
-        "importance": "'Fragile Peace' phase = high volatility for Middle East logistics and supply chains. Truce collapse triggers immediate energy price spikes and wiper/cyberattack campaigns.",
-        "noteworthy": "Watch for false-flag cyber attacks coinciding with truce expiration dates. Expect Iranian APT activity against energy/ ports / shipping.",
-        "link": "https://www.timesofisrael.com/trump-declares-3-week-truce-extension-after-hosting-2nd-round-of-israel-lebanon-talks/"
-      },
-      {
-        "id": 11,
-        "title": "Pre-Stuxnet 'fast16': 2005 Origins",
-        "tag": "Cyberwarfare",
-        "desc": "Rewriting the cyberwarfare timeline.",
-        "summary": "Further analysis of 'fast16' reveals it was deployed against engineering workstations in Eastern European energy facilities as early as 2005, making it the first known nation-state destructive malware—predating Stuxnet by 5 years.",
-        "importance": "Industrial sabotage isn't a 2010s phenomenon. Any facility with engineering software from the mid-2000s should assume it could have been targeted in that era.",
-        "noteworthy": "Search historic malware databases (VirusTotal retrohunt) for similar Lua-based ICS trojans from 2005–2010.",
-        "link": "https://thehackernews.com/2026/04/researchers-uncover-pre-stuxnet-fast16.html"
-      },
-      {
-        "id": 12,
-        "title": "US, UK: Hackers Persist on Cisco Firewalls",
-        "tag": "Infrastructure Security",
-        "desc": "Backdoors survive standard patching on ASA/FTD devices.",
-        "summary": "Joint US-UK advisory warns that threat actors maintain persistent access on Cisco ASA and FTD firewalls even after security patches. They deploy custom firmware implants that remain active post-upgrade.",
-        "importance": "'Patch and forget' doesn't work when the attacker owns the firmware. Border firewalls are the most critical trust boundary—if they're compromised, your entire network is exposed.",
-        "noteworthy": "Plan for clean reimage of all Cisco firewalls if compromise is suspected. Check for unauthorized boot images with verify /all and secure boot attestation.",
-        "link": "https://cyberscoop.com/us-uk-cisco-firewall-hackers-patches/"
+        "id": 20,
+        "title": "Microsoft Out-of-Band ASP.NET Core Privilege Escalation Fix",
+        "tag": "Vulnerabilities",
+        "desc": "Critical privilege escalation flaw in ASP.NET Core patched via emergency update.",
+        "summary": "Microsoft released out-of-band security updates fixing a critical privilege escalation vulnerability in ASP.NET Core. The flaw could allow attackers to elevate privileges in web applications, potentially leading to full system compromise.",
+        "importance": "Out-of-band updates from Microsoft signal active exploitation or imminent risk. ASP.NET Core powers a massive portion of enterprise web applications.",
+        "noteworthy": "Apply the out-of-band update immediately. Review ASP.NET Core application logs for privilege escalation indicators.",
+        "link": "https://securityaffairs.co/164272/vulnerabilities/microsoft-aspnet-core-privilege-escalation.html"
       }
     ]
   }
