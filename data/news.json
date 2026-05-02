@@ -1,9 +1,134 @@
 {
   "today": {
-    "date": "29/04/26",
+    "date": "02/05/26",
     "items": [
       {
         "id": 1,
+        "title": "Trellix Confirms Source Code Breach — Unauthorized Repo Access",
+        "tag": "Data Breach / Enterprise Security",
+        "desc": "Cybersecurity giant Trellix (ex-McAfee/FireEye) confirms attackers accessed a portion of its source code repository.",
+        "summary": "Trellix disclosed that it 'recently identified' a compromise of its source code repository and engaged forensic experts. The company stated it found no evidence the source code release process was affected or that code has been exploited, but did not disclose attacker identity, access duration, or data exfiltrated. Trellix was formed in 2022 from McAfee Enterprise and FireEye assets; Mandiant was spun off to Google for $5.4B.",
+        "importance": "Source code access at a major security vendor is a worst-case scenario. Attackers with repository access could identify zero-days in Trellix's detection engine, craft evasions, or plant backdoors — undermining trust across thousands of enterprise deployments.",
+        "noteworthy": "Audit Trellix endpoint deployments for unusual behavior. Rotate any API keys or integration tokens. Monitor for Trellix-specific bypasses appearing in threat actor tooling.",
+        "link": "https://thehackernews.com/2026/05/trellix-confirms-source-code-breach.html"
+      },
+      {
+        "id": 2,
+        "title": "AccountDumpling: 30K Facebook Accounts Hacked via Google AppSheet Phishing",
+        "tag": "Phishing / Social Engineering",
+        "desc": "Vietnamese-linked op uses Google AppSheet as phishing relay to steal 30,000 Facebook Business accounts, selling them back via illicit storefront.",
+        "summary": "Guardio codenamed the operation 'AccountDumpling,' tracing it to a Vietnamese individual (PHẠM TÀI TÂN). Phishing emails sent from 'noreply@appsheet.com' bypass spam filters, claiming to be Meta Support. Four distinct clusters use Netlify, Vercel, Google Drive PDFs (generated via free Canva), and fake job offers luring victims. Stolen credentials, 2FA codes, and government ID photos are exfiltrated to Telegram channels. Most victims are in the US, Italy, Canada, and the Philippines.",
+        "importance": "Google AppSheet's trusted sender reputation turns it into a perfect phishing relay. This pattern — trusted platforms repurposed as delivery, hosting, and monetization layers — is now the dominant phishing model and near-impossible for users to spot.",
+        "noteworthy": "Block or flag emails from 'noreply@appsheet.com' with Facebook/Meta-themed content. Educate Facebook Business admins: Meta will never threaten immediate deletion. Review Facebook login logs for unrecognized sessions.",
+        "link": "https://thehackernews.com/2026/05/30000-facebook-accounts-hacked-via.html"
+      },
+      {
+        "id": 3,
+        "title": "SHADOW-EARTH-053: China-Linked APT Hits 7 Asian Govs + NATO Member",
+        "tag": "APT / Nation-State",
+        "desc": "China-aligned espionage group exploits N-day Exchange/IIS flaws to deploy ShadowPad across South/SE Asia and Poland.",
+        "summary": "Trend Micro tracks the cluster as SHADOW-EARTH-053, active since December 2024, overlapping with CL-STA-0049 and Earth Alux. Targets include Pakistan, Thailand, Malaysia, India, Myanmar, Sri Lanka, Taiwan, and Poland (NATO). The group exploits ProxyLogon chain and React2Shell (CVE-2025-55182) on unpatched Exchange/IIS servers, drops Godzilla webshells, and deploys ShadowPad via AnyDesk DLL sideloading. Linux Noodle RAT variants observed. Uses IOX, GOST, Wstunnel tunneling and Mimikatz for credential theft.",
+        "importance": "Poland's inclusion signals Chinese APTs are now actively targeting NATO member states, not just regional neighbors. N-day exploitation means unpatched Exchange/IIS servers remain the primary entry vector — and there are thousands.",
+        "noteworthy": "Patch Exchange and IIS immediately. Deploy IPS/WAF rules for ProxyLogon, ProxyShell, and React2Shell exploit patterns. Hunt for Godzilla webshell IOCs. Segment IIS servers from internal networks.",
+        "link": "https://thehackernews.com/2026/05/china-linked-hackers-target-asian.html"
+      },
+      {
+        "id": 4,
+        "title": "Vishing-to-SaaS: Cordial Spider & Snarky Spider in Rapid Extortion Blitz",
+        "tag": "Malware / Social Engineering",
+        "desc": "Two cybercrime groups use vishing + SSO AiTM to compromise entire SaaS ecosystems in hours, leaving minimal forensic trace.",
+        "summary": "CrowdStrike identified Cordial Spider (aka BlackFile, UNC6671) and Snarky Spider (aka UNC6661, tied to 'The Com' e-crime ecosystem), active since October 2025. Attackers call targets impersonating IT support, direct them to SSO-themed AiTM phishing pages, capture credentials + MFA, and register new devices to maintain access while deleting MFA notifications via inbox rules. Pivot to scraping employee directories for high-privilege accounts, then exfiltrate from Google Workspace, HubSpot, SharePoint, and Salesforce.",
+        "importance": "This is extortion at SaaS speed. By staying entirely within trusted SaaS environments and using residential proxies, these groups are nearly invisible to traditional network detection. The IdP becomes a single point of compromise for every connected SaaS app.",
+        "noteworthy": "Enable device registration alerts that can't be auto-deleted by inbox rules. Monitor for new device registrations followed by mass file downloads. Implement FIDO2/WebAuthn to defeat AiTM phishing. Train help desk to verify caller identity out-of-band.",
+        "link": "https://thehackernews.com/2026/05/cybercrime-groups-using-vishing-and-sso.html"
+      },
+      {
+        "id": 5,
+        "title": "BufferZoneCorp: Poisoned Ruby Gems & Go Modules Exploit CI Pipelines",
+        "tag": "Supply Chain Attack / Malware",
+        "desc": "Sleepers in RubyGems and Go proxy registries harvest AWS keys, SSH creds, and GitHub Actions tokens from CI runners.",
+        "summary": "Socket uncovered a campaign by GitHub account 'BufferZoneCorp' publishing malicious Ruby gems (masquerading as activesupport-logger, devise-jwt) and Go modules (go-retryablehttp, grpc-client). Ruby gems harvest environment variables, SSH keys, AWS secrets, .npmrc, and GitHub CLI config at install time, exfiltrating to Webhook.site. Go modules tamper with GitHub Actions workflows via a fake go binary wrapper, append attacker SSH keys to authorized_keys, and steal developer data.",
+        "importance": "CI pipelines hold the keys to the kingdom — cloud creds, signing keys, deployment tokens. A single poisoned dependency in a CI runner can compromise every artifact that pipeline produces, making this a force-multiplier supply chain attack.",
+        "noteworthy": "Audit RubyGems and Go module dependencies for suspicious packages. Check ~/.ssh/authorized_keys for unknown entries. Rotate all CI/CD secrets if any suspicious package was installed. Review GitHub Actions run logs for unexpected go binary paths.",
+        "link": "https://thehackernews.com/2026/05/poisoned-ruby-gems-and-go-modules.html"
+      },
+      {
+        "id": 6,
+        "title": "Copy Fail: CVE-2026-31431 — 2017 Kernel Bug Gives Root on All Linux Distros",
+        "tag": "Linux / Critical Vulnerability",
+        "desc": "732-byte Python script exploits 9-year-old kernel crypto flaw for instant root on Amazon Linux, RHEL, SUSE, Ubuntu.",
+        "summary": "Xint.io and Theori disclosed CVE-2026-31431 (CVSS 7.8), a local privilege escalation in the Linux kernel's algif_aead crypto module, introduced in August 2017. An unprivileged user can write 4 controlled bytes into the page cache of any readable file—including setuid binaries. The exploit is portable, tiny, reliable (no race condition), and works cross-container since the page cache is shared. Major distros have released patched kernels.",
+        "importance": "This is Dirty Pipe 2.0 — same class of page-cache corruption primitive, different subsystem. A reliable, single-script LPE on every Linux server shipped since 2017 is a pentester's dream and a defender's nightmare. Cross-container impact means container escapes are trivial.",
+        "noteworthy": "Patch kernel immediately per your distro's advisory (Amazon Linux, Arch, Debian, RHEL, SUSE, Ubuntu all have fixes). Audit for unexpected setuid binaries. In containerized environments, assume any container compromise = host compromise until patched.",
+        "link": "https://thehackernews.com/2026/04/new-linux-copy-fail-vulnerability.html"
+      },
+      {
+        "id": 7,
+        "title": "PromptMink: DPRK Used Claude Opus to Inject Malware into npm Package",
+        "tag": "AI Security / Nation-State",
+        "desc": "North Korea's Famous Chollima group had Claude Opus commit a malicious npm dependency into an autonomous crypto trading agent.",
+        "summary": "ReversingLabs codenamed the campaign 'PromptMink,' linking it to DPRK's Famous Chollima (aka Shifty Corsair, behind Contagious Interview). Claude Opus co-authored a commit on Feb 28 that added '@validate-sdk/v2' as a dependency to 'openpaw-graveyard' — an autonomous Solana trading agent. The package was a cryptocurrency stealer, part of a two-layer supply chain with benign first-layer packages (e.g., @solana-launchpad/sdk) importing malicious second-layer ones. The campaign has evolved to target PyPI and use SSH persistence + Rust-compiled payloads for full project exfiltration.",
+        "importance": "AI-assisted supply chain attacks are no longer theoretical. A nation-state actor literally had an LLM write and commit malware into a project. This blurs the line between 'vibe-coding accident' and intentional backdoor, making attribution and detection vastly harder.",
+        "noteworthy": "Audit all AI-generated commits and pull requests — especially package additions. Scan for the listed malicious npm packages. Verify npm audit/CI passes. Treat AI-authored code with the same scrutiny as untrusted external contributions.",
+        "link": "https://thehackernews.com/2026/04/new-wave-of-dprk-attacks-uses-ai.html"
+      },
+      {
+        "id": 8,
+        "title": "Two Ransomware Negotiators Get 4 Years for BlackCat Attacks",
+        "tag": "Cybercrime / Law Enforcement",
+        "desc": "US sentences two cybersecurity professionals who flipped from defenders to BlackCat ransomware affiliates.",
+        "summary": "Two individuals who previously worked as ransomware negotiators were sentenced to 4 years in US federal prison for their roles in BlackCat (ALPHV) ransomware attacks. The case highlights the insider threat risk within the incident response ecosystem, where professionals with intimate knowledge of negotiation tactics and victim psychology repurposed their skills for criminal gain.",
+        "importance": "When the people you hire to negotiate with ransomware gangs are themselves working for those gangs, the entire IR trust model collapses. This case should prompt every org to vet their IR vendors more aggressively.",
+        "noteworthy": "Vet incident response firms and individual consultants. Ask vendors about employee background checks and insider threat programs. Review any past BlackCat negotiations for signs of collusion.",
+        "link": "https://www.bleepingcomputer.com/news/security/us-ransomware-negotiators-get-4-years-in-prison-over-blackcat-attacks/"
+      },
+      {
+        "id": 9,
+        "title": "Deep#Door RAT: New Stealthy Backdoor Targets Windows with Kernel Tricks",
+        "tag": "Malware / Threat Intelligence",
+        "desc": "Newly discovered Deep#Door RAT combines kernel-level stealth, persistence mechanisms, and multi-stage payload delivery.",
+        "summary": "Security researchers disclosed Deep#Door, a new Remote Access Trojan targeting Windows systems with advanced stealth and persistence. The malware uses kernel-level techniques to hide its presence, deploys through multi-stage delivery chains, and maintains persistence via multiple redundant mechanisms, making removal difficult even for experienced defenders.",
+        "importance": "Kernel-level stealth in commodity RATs signals a democratization of advanced techniques previously reserved for nation-state APTs. As detection tools improve, malware authors are pushing deeper into the stack to evade them.",
+        "noteworthy": "Update EDR signatures for Deep#Door IOCs. Monitor for unusual kernel driver loads. Hunt for the multi-stage delivery chain indicators. If found, assume full system compromise — reimage affected machines.",
+        "link": "https://securityaffairs.com/191567/malware/new-deepdoor-rat-uses-stealth-and-persistence-to-target-windows.html"
+      },
+      {
+        "id": 10,
+        "title": "BTC at $78.3K — 100-EMA Holds, Options Market Pricing 25% $84K Odds",
+        "tag": "Financial / Crypto",
+        "desc": "Bitcoin rebounds from 100-day EMA support at $78.3K; futures OI rises 6.6% to 257K BTC as traders position for upside.",
+        "summary": "Bitcoin gained 2.5% to trade at $78,300, rebounding off the 100-day exponential moving average. Spot market buy volumes strengthened and cumulative volume delta turned positive. BTC futures open interest rose 6.64% to 257,000 BTC, indicating fresh positioning. Options markets price only a 25% probability of BTC hitting $84K in May. Ethereum trades at $2,304 (+1%), Solana at $83.97 (flat).",
+        "importance": "The 100-EMA hold is technically significant — it's been reliable support. But options pricing 25% $84K odds shows the market isn't convinced the rally has legs. The rising OI without price acceleration could mean shorts are building.",
+        "noteworthy": "Watch $78K (100-EMA) as key support — a breakdown targets $74K. Break above $80.5K resistance needed for bullish confirmation. OI surge without price follow-through = caution. Monitor Coinbase Premium for US demand signals.",
+        "link": "https://cointelegraph.com/markets/3-bitcoin-data-points-suggest-rally-to-80k-is-imminent"
+      },
+      {
+        "id": 11,
+        "title": "CLARITY Act Stablecoin Yield Rules Finalized — 55% Odds of 2026 Passage",
+        "tag": "Regulation / Crypto",
+        "desc": "US Senate Banking Committee finalizes stablecoin yield provisions; Polymarket odds jump 9% as Coinbase calls for markup.",
+        "summary": "Senators Tillis and Alsobrooks published the final stablecoin yield provisions for the CLARITY Act. The text (SEC 404) bans interest/yield on stablecoins akin to bank deposits but allows rewards tied to 'bona fide activities.' Banks won additional restrictions on rewards. Coinbase CLO Faryar Shirzad called it 'go time' and CEO Brian Armstrong urged markup. Polymarket odds for 2026 passage rose 9% to 55%. Galaxy Digital's Alex Thorn expects Senate Banking markup as soon as May 11.",
+        "importance": "CLARITY is the most consequential US crypto bill since the FIT21 framework. The stablecoin yield compromise unblocks the biggest legislative logjam. If passed, it creates a federal regulatory floor for crypto — the end of regulation-by-enforcement.",
+        "noteworthy": "Track Senate Banking Committee schedule for week of May 11. Position crypto holdings for regulatory tailwinds if markup proceeds. Stablecoin issuers: begin preparing compliance frameworks for yield restrictions.",
+        "link": "https://cointelegraph.com/news/go-time-after-clarity-act-stablecoin-yield-compromise-finalized"
+      },
+      {
+        "id": 12,
+        "title": "Ethereum Foundation Sells Another 10K ETH to BitMine in 3rd OTC Deal",
+        "tag": "Financial / Crypto",
+        "desc": "Ethereum Foundation executes third OTC sale of 10,000 ETH to BitMine, continuing pattern of large strategic liquidations.",
+        "summary": "The Ethereum Foundation sold another 10,000 ETH (~$23M) to institutional miner BitMine in the third such OTC transaction. The pattern of regular large sales by the Foundation, while likely part of a treasury management strategy, creates consistent sell pressure on ETH price. ETH trades at $2,304, underperforming BTC during the current rally.",
+        "importance": "The Foundation's continued selling at $2.3K ETH signals they see this as an acceptable liquidation price. If the pattern continues, it creates a de facto ceiling on ETH rallies — institutional buyers know more supply is coming.",
+        "noteworthy": "Monitor Ethereum Foundation wallet addresses for the next scheduled sale. Consider ETH/BTC ratio as a signal — persistent underperformance likely continues while Foundation selling persists. BTC remains the stronger relative bet.",
+        "link": "https://cointelegraph.com/news/ethereum-foundation-sells-another-10000-eth-to-bitmine-in-third-otc-deal"
+      }
+    ]
+  },
+  "yesterday": {
+    "date": "29/04/26",
+    "items": [
+      {
+        "id": 13,
         "title": "GitHub RCE: CVE-2026-3854 — One Git Push, Full Server Compromise",
         "tag": "Critical Vulnerability / Supply Chain",
         "desc": "Wiz uncovers critical RCE in GitHub's git infrastructure — exploitable by any authenticated user via a single git push.",
@@ -13,7 +138,7 @@
         "link": "https://www.wiz.io/blog/github-rce-vulnerability-cve-2026-3854"
       },
       {
-        "id": 2,
+        "id": 14,
         "title": "CPanel Critical Auth Bypass — Update Immediately",
         "tag": "Infrastructure Security",
         "desc": "Critical authentication vulnerability in cPanel allows unauthorized access to server management interfaces.",
@@ -23,7 +148,7 @@
         "link": "https://thehackernews.com/2026/04/critical-cpanel-authentication.html"
       },
       {
-        "id": 3,
+        "id": 15,
         "title": "CISA KEV Update: ConnectWise & Windows Flaws Actively Exploited",
         "tag": "Infrastructure Security / CISA",
         "desc": "CISA adds actively exploited ConnectWise and Windows vulnerabilities to its Known Exploited Vulnerabilities catalog.",
@@ -33,7 +158,7 @@
         "link": "https://thehackernews.com/2026/04/cisa-adds-actively-exploited.html"
       },
       {
-        "id": 4,
+        "id": 16,
         "title": "LiteLLM SQL Injection Exploited Within 36 Hours",
         "tag": "AI Security / Vulnerabilities",
         "desc": "CVE-2026-42208 in LiteLLM — SQL injection weaponized just 36 hours after disclosure.",
@@ -43,7 +168,7 @@
         "link": "https://thehackernews.com/2026/04/litellm-cve-2026-42208-sql-injection.html"
       },
       {
-        "id": 5,
+        "id": 17,
         "title": "VECT 2.0 Ransomware: Destructive Wiper Disguised as Ransomware",
         "tag": "Malware / Ransomware",
         "desc": "New VECT 2.0 ransomware irreversibly destroys files over 131KB — no decryption possible.",
@@ -53,7 +178,7 @@
         "link": "https://thehackernews.com/2026/04/vect-20-ransomware-irreversibly.html"
       },
       {
-        "id": 6,
+        "id": 18,
         "title": "Intel Arc Pro B70: 32GB VRAM AI Workstation GPU Launches",
         "tag": "Hardware / GPU",
         "desc": "Intel doubles down on AI GPU market with Arc Pro B70 featuring 32GB VRAM and Xe2 architecture.",
@@ -63,7 +188,7 @@
         "link": "https://www.pugetsystems.com/labs/articles/intel-arc-pro-b70-review/"
       },
       {
-        "id": 7,
+        "id": 19,
         "title": "Gallium Oxide Semiconductors Withstand Near-Absolute-Zero Cold",
         "tag": "Hardware / Semiconductors",
         "desc": "KAUST research shows gallium oxide electronics operate reliably near absolute zero — enabling space and quantum computing applications.",
@@ -73,7 +198,7 @@
         "link": "https://discovery.kaust.edu.sa/en/article/26858/gallium-oxide-electronics-withstand-extreme-cold/"
       },
       {
-        "id": 8,
+        "id": 20,
         "title": "ASML: The Chokepoint for Cutting-Edge Chips",
         "tag": "Hardware / Semiconductor Supply Chain",
         "desc": "By betting on EUV lithography before it worked, ASML became the single bottleneck for advanced chipmaking worldwide.",
@@ -83,7 +208,7 @@
         "link": "https://worksinprogress.co/issue/the-worlds-most-complex-machine/"
       },
       {
-        "id": 9,
+        "id": 21,
         "title": "BTC at $76.6K — Fed Chair Warsh Signals Mixed for Risk Assets",
         "tag": "Financial / Crypto",
         "desc": "Bitcoin holds $76.6K as new Fed chair Kevin Warsh takes helm; historical pattern suggests 'months of losses.'",
@@ -93,7 +218,7 @@
         "link": "https://cointelegraph.com/markets/bitcoin-stocks-face-months-of-losses-as-kevin-warsh-becomes-fed-chair"
       },
       {
-        "id": 10,
+        "id": 22,
         "title": "Canada Proposes Crypto ATM Ban Over Money Laundering",
         "tag": "Regulation / Crypto",
         "desc": "Ottawa moves to ban Bitcoin ATMs, citing their role as a key tool for scammers and money laundering.",
@@ -103,7 +228,7 @@
         "link": "https://cointelegraph.com/news/canada-proposes-crypto-atm-ban-over-scams-and-money-laundering"
       },
       {
-        "id": 11,
+        "id": 23,
         "title": "Hugging Face LeRobot Open to Unauthenticated RCE",
         "tag": "AI Security / Critical Vulnerability",
         "desc": "Critical unpatched CVE-2026-25874 in Hugging Face's LeRobot framework allows unauthenticated remote code execution.",
@@ -113,7 +238,7 @@
         "link": "https://thehackernews.com/2026/04/critical-cve-2026-25874-leaves-hugging.html"
       },
       {
-        "id": 12,
+        "id": 24,
         "title": "Microsoft: Windows Shell CVE-2026-32202 Actively Exploited",
         "tag": "Vulnerabilities / Active Exploitation",
         "desc": "Microsoft confirms Windows Shell vulnerability is being actively exploited in the wild.",
@@ -121,91 +246,6 @@
         "importance": "Windows Shell vulnerabilities are high-impact because they affect virtually every Windows machine and often require minimal user interaction. Active exploitation + broad attack surface = urgent patching required.",
         "noteworthy": "Deploy Microsoft's patch immediately via WSUS/Intune. Monitor for suspicious Shell process spawns. BlockKnown exploit vectors via ASR rules if patching is delayed.",
         "link": "https://thehackernews.com/2026/04/microsoft-confirms-active-exploitation.html"
-      }
-    ]
-  },
-  "yesterday": {
-    "date": "27/04/26",
-    "items": [
-      {
-        "id": 13,
-        "title": "Pack2TheRoot: 12-Year Linux Privilege Escalation Flaw",
-        "tag": "Infrastructure Security",
-        "desc": "A 12-year-old vulnerability lets local Linux users gain root privileges.",
-        "summary": "Security researchers disclosed 'Pack2TheRoot,' a privilege escalation vulnerability present in the Linux kernel's pack2fs implementation for over 12 years. It allows unprivileged local users to escalate to root, affecting a wide range of distributions still running unpatched kernels.",
-        "importance": "Any Linux server with local user access — shared hosting, CI runners, container breakout scenarios — is exposed. This is the kind of bug that persistence actors love: old, widespread, and quietly devastating.",
-        "noteworthy": "Patch kernel immediately. Audit for unexpected setuid binaries and privilege escalation artifacts. Check container escape paths if running unpatched hosts.",
-        "link": "https://securityaffairs.co/164272/security/pack2theroot-linux-privilege-escalation.html"
-      },
-      {
-        "id": 14,
-        "title": "CrowdStrike LogScale Critical Bug Exposes Files",
-        "tag": "Hacking / Enterprise Security",
-        "desc": "Critical vulnerability in CrowdStrike's SIEM lets attackers access sensitive files.",
-        "summary": "A critical vulnerability in CrowdStrike's LogScale platform could allow attackers to access sensitive files stored within the SIEM. LogScale is widely deployed as the central logging and observability layer in enterprise environments, making this a high-impact target.",
-        "importance": "Compromising a SIEM gives attackers the exact playbook — they can see what you're monitoring, what alerts fire, and where the blind spots are. This turns detection into evasion.",
-        "noteworthy": "Apply CrowdStrike patches immediately. Rotate LogScale API keys and review access logs for unauthorized file access since the vuln window opened.",
-        "link": "https://securityaffairs.co/164272/hacking/crowdstrike-logscale-critical-bug.html"
-      },
-      {
-        "id": 15,
-        "title": "400K+ WordPress Sites Exposed via Breeze Cache Flaw",
-        "tag": "Vulnerabilities / Web Security",
-        "desc": "Actively exploited CVE-2026-3844 in Breeze Cache plugin puts over 400,000 sites at risk.",
-        "summary": "A critical vulnerability (CVE-2026-3844) in the popular Breeze Cache WordPress plugin is being actively exploited in the wild. Over 400,000 websites running the plugin are at risk of complete compromise, including data theft and defacement.",
-        "importance": "WordPress plugins remain the #1 attack surface for small-to-mid businesses. A single unpatched caching plugin can give full site compromise — and most site owners never update plugins.",
-        "noteworthy": "Update Breeze Cache immediately. Check web server access logs for POST requests to plugin endpoints. Consider Web Application Firewall rules blocking cache plugin exploit patterns.",
-        "link": "https://securityaffairs.co/164272/vulnerabilities/breeze-cache-plugin-flaw.html"
-      },
-      {
-        "id": 16,
-        "title": "China-Linked APTs Build Covert Networks from Consumer Routers",
-        "tag": "APT / Nation-State",
-        "desc": "UK and 12 allied agencies warn China is weaponizing everyday consumer routers as covert C2 infrastructure.",
-        "summary": "The UK's NCSC and a dozen allied intelligence agencies issued a joint advisory warning that China-linked threat actors are building covert hacker networks from compromised consumer routers and IoT devices. These botnets are used for C2 relay, data exfiltration, and proxying attacks — all while evading traditional detection that monitors known bad IPs.",
-        "importance": "Consumer devices are the new perimeter breach point. You can't firewall what you don't manage. These router botnets make attribution nearly impossible and give APTs a 'living off the land' C2 layer.",
-        "noteworthy": "Audit home/branch office routers for unauthorized firmware images. Monitor outbound connections from IoT segments. Consider network segmentation isolating consumer devices from critical paths.",
-        "link": "https://cyberscoop.com/china-covert-hacker-networks-consumer-routers/"
-      },
-      {
-        "id": 17,
-        "title": "FIRESTARTER Backdoor Persists on Cisco ASA in Federal Network",
-        "tag": "Infrastructure Security",
-        "desc": "Persistent backdoor on a Cisco ASA firewall inside a US federal network survives patching.",
-        "summary": "CISA reported that a persistent backdoor dubbed 'FIRESTARTER' was found on a Cisco ASA device within a federal network. The implant survived standard patching and firmware upgrades, indicating a sophisticated firmware-level compromise that renders 'patch and forget' ineffective.",
-        "importance": "If border firewalls in federal networks carry persistent firmware implants, the perimeter defense model is theater. 'Patch and forget' is dead when attackers own the firmware layer.",
-        "noteworthy": "Conduct secure boot attestation on all Cisco ASA/FTD devices. Plan for clean reimage of border firewalls if compromise is suspected. Run 'verify /all' and check for unauthorized boot images.",
-        "link": "https://securityaffairs.co/164272/security/cisa-firestarter-cisco-asa.html"
-      },
-      {
-        "id": 18,
-        "title": "BTC Hits $79K on Truce Optimism",
-        "tag": "Financial / Crypto",
-        "desc": "Bitcoin surges 4% to highest price since February.",
-        "summary": "Bitcoin surged to $79K following the Israel-Lebanon truce extension. BTC is now behaving as a dual-asset: a 'risk-on' stability bet and a 'safe-haven' hedge against ongoing US-Iran tensions in the Hormuz strait.",
-        "importance": "BTC is a real-time geopolitical sentiment indicator. Sudden drops signal imminent regional conflict escalation or 'Digital Gold' hedging spikes.",
-        "noteworthy": "Correlate BTC volatility against Hormuz strait tanker seizure news cycles. Use as an early warning signal.",
-        "link": "https://www.weex.com/news/detail/trump-extends-ceasefire-bitcoin-hits-79k-what-crypto-traders-need-to-know-right-now-704492"
-      },
-      {
-        "id": 19,
-        "title": "Claude Audited qmail → RCE in 101 Minutes",
-        "tag": "AI-Assisted Research",
-        "desc": "One prompt to Claude found a working exploit for qmail in 101 minutes.",
-        "summary": "Researchers at Calif showed that a single, carefully crafted prompt to Claude Code found a buffer overflow in qmail's 'alloc.c' and produced a working exploit in roughly 101 minutes. The vulnerability had survived 30+ years of manual audit.",
-        "importance": "Legacy codebases that were 'secure enough' for decades are now trivial targets for AI-assisted analysis. Assumed-safe infrastructure (qmail, sendmail, bind) needs urgent AI-audit.",
-        "noteworthy": "Run AI-static-analysis (SAST) on your oldest dependencies. If qmail fell in 101 minutes, your custom 1990s daemon won't last.",
-        "link": "https://blog.calif.io/p/we-asked-claude-to-audit-sagredos-qmail"
-      },
-      {
-        "id": 20,
-        "title": "Microsoft Out-of-Band ASP.NET Core Privilege Escalation Fix",
-        "tag": "Vulnerabilities",
-        "desc": "Critical privilege escalation flaw in ASP.NET Core patched via emergency update.",
-        "summary": "Microsoft released out-of-band security updates fixing a critical privilege escalation vulnerability in ASP.NET Core. The flaw could allow attackers to elevate privileges in web applications, potentially leading to full system compromise.",
-        "importance": "Out-of-band updates from Microsoft signal active exploitation or imminent risk. ASP.NET Core powers a massive portion of enterprise web applications.",
-        "noteworthy": "Apply the out-of-band update immediately. Review ASP.NET Core application logs for privilege escalation indicators.",
-        "link": "https://securityaffairs.co/164272/vulnerabilities/microsoft-aspnet-core-privilege-escalation.html"
       }
     ]
   }
