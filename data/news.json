@@ -1,9 +1,134 @@
 {
   "today": {
-    "date": "02/05/26",
+    "date": "05/05/26",
     "items": [
       {
         "id": 1,
+        "title": "CVE-2026-23918: Apache HTTP/2 Double-Free Enables DoS + RCE",
+        "tag": "Critical Vulnerability / Server Security",
+        "desc": "CVSS 8.8 flaw in Apache httpd 2.4.66 mod_http2 — one TCP connection crashes a worker, and with APR mmap (Debian/Docker default) RCE is achievable.",
+        "summary": "Striga.ai and ISEC.pl researchers disclosed CVE-2026-23918, a double-free in Apache HTTP Server 2.4.66's mod_http2 stream cleanup path. When a client sends an HTTP/2 HEADERS frame followed immediately by RST_STREAM on the same stream before the multiplexer registers it, two nghttp2 callbacks both push the same h2_stream pointer onto the cleanup array, causing a double-free on pool destruction. DoS is trivial — one connection, two frames, no auth, worker crashes. RCE requires APR with the mmap allocator (default on Debian-derived systems and official httpd Docker image), using scoreboard memory as a stable container for fake structures pointing to system(). Fixed in Apache 2.4.67. MPM prefork is not affected.",
+        "importance": "mod_http2 ships in default Apache builds and HTTP/2 is widely enabled. The DoS vector works on any default deployment with multi-threaded MPM — trivially automatable. The RCE path, while requiring an info leak, was demonstrated working in lab conditions within minutes. Apache hosts the majority of the web.",
+        "noteworthy": "Upgrade Apache to 2.4.67 immediately. If unable, switch to MPM prefork as a temporary mitigation. Audit Apache logs for HTTP/2 RST_STREAM patterns. On Debian/Docker deployments, assume RCE is achievable — rotate server secrets post-patch.",
+        "link": "https://thehackernews.com/2026/05/critical-apache-http2-flaw-cve-2026.html"
+      },
+      {
+        "id": 2,
+        "title": "DAEMON Tools Supply Chain: Signed Installers Trojanized for a Month",
+        "tag": "Supply Chain Attack / Endpoint Security",
+        "desc": "Kaspersky finds DAEMON Tools Windows installers trojanized since April 8 with signed binaries — backdoor deployed to targeted subset of hosts.",
+        "summary": "Kaspersky uncovered a supply chain attack where DAEMON Tools official Windows installers (versions 12.5.0.2421–12.5.0.2434) have been trojanized since April 8, 2026 with developer-signed digital certificates. Three binaries (DTHelper.exe, DiscSoftBusServiceLite.exe, DTShellHlp.exe) activate an implant at startup that contacts env-check.daemontools[.]cc for shell commands. The chain downloads envchk.exe (system recon), then cdg.exe (shellcode loader) decrypting a minimalist backdoor. Thousands of infection attempts across 100+ countries, but the next-stage backdoor was delivered to only ~12 hosts in retail, scientific, government, and manufacturing orgs in Russia, Belarus, and Thailand. QUIC RAT was delivered to one educational institution in Russia. Evidence points to a Chinese-speaking adversary.",
+        "importance": "A digitally signed, official-vendor supply chain compromise that went undetected for nearly a month. The targeted follow-on delivery (12 out of thousands) indicates a sophisticated actor performing quality control on victims — classic espionage or big-game hunting behavior. The multi-protocol C2 (HTTP, UDP, TCP, WSS, QUIC, DNS, HTTP/3) makes detection and blocking extremely difficult.",
+        "noteworthy": "Isolate any machine with DAEMON Tools installed immediately. Conduct security sweeps for DTHelper.exe, DiscSoftBusServiceLite.exe, DTShellHlp.exe modifications. Block env-check.daemontools[.]cc at DNS/proxy level. Check for QUIC RAT indicators on Russian/Belarusian/Thai networks.",
+        "link": "https://thehackernews.com/2026/05/daemon-tools-supply-chain-attack.html"
+      },
+      {
+        "id": 3,
+        "title": "UAT-8302: China-Linked APT Uses Shared Malware Arsenal Against Governments",
+        "tag": "APT / Nation-State",
+        "desc": "Cisco Talos tracks Chinese APT group targeting South American and SE European governments using malware shared across multiple threat clusters.",
+        "summary": "Cisco Talos identified a China-nexus APT group tracked as UAT-8302, active since late 2024, targeting government entities in South America and southeastern Europe. The group deploys NetDraft (aka NosyDoor), a .NET backdoor also used by Ink Dragon, Earth Alux, Jewelbug, and REF7707. Additional tools include CloudSorcerer, SNOWLIGHT (VShell stager), Deed RAT (ShadowPad successor), and Draculoader. ESET tracks NosyDoor use by LongNosedGoblin; Russian firm Solar traces it to Erudite Mogwai targeting Russian IT. UAT-8302 also uses a Rust-based SNOWRUST variant. The findings confirm the 'Premier Pass-as-a-Service' model where China-aligned groups share initial access and tooling.",
+        "importance": "The shared-malware model between multiple China-aligned clusters means attribution is getting nearly impossible.当一个 APT 组使用与其他五个已命名集群共享的工具时，防御者无法确定他们面对的对手。'Premier Pass-as-a-Service' commoditizes initial access, reducing time-to-exploitation and clouding forensic trails.",
+        "noteworthy": "Hunt for NetDraft/CloudSorcerer/SNOWLIGHT IOCs across environments. Assume shared tooling means multiple clusters may be present. Patch web-facing applications — N-day exploits in web apps are suspected initial access. Monitor for Stowaway VPN and SoftEther proxy usage as persistence.",
+        "link": "https://thehackernews.com/2026/05/china-linked-uat-8302-targets.html"
+      },
+      {
+        "id": 4,
+        "title": "1M Exposed AI Services: No Auth, Leaked Keys, Ollama APIs Wide Open",
+        "tag": "AI Security / Infrastructure",
+        "desc": "Intruder scans 2M hosts — AI infrastructure is more misconfigured than any other software category ever audited.",
+        "summary": "Intruder used certificate transparency logs to scan 2M hosts with 1M exposed AI services and found catastrophic misconfigurations across the board. Authentication is not enabled by default in most AI projects. Exposed chatbots leak full conversation histories and API keys in plaintext. Agent management platforms (n8n, Flowise) expose business logic and connected credentials. Of 5,200+ exposed Ollama APIs with connected models, 31% responded to a simple 'Hello' prompt without auth. Over 90 exposed instances across government, marketing, and finance sectors had chatbot workflows, prompts, and integrations fully open. The ClawdBot fiasco averaged 2.6 CVEs/day.",
+        "importance": "AI self-hosting is deploying faster than any previous software wave — and without the security hardening that took 20 years to build in web infrastructure. When government and finance orgs leave AI agent platforms (with file write and code execution capabilities) open to the internet, the blast radius isn't a data leak — it's full server compromise.",
+        "noteworthy": "Audit all self-hosted AI services for authentication. Never expose Ollama, n8n, Flowise, or chatbot frontends to the internet without auth. Check for exposed API keys in AI chatbot configurations. Implement network segmentation for AI workloads. If running ClawdBot, assume compromise.",
+        "link": "https://thehackernews.com/2026/05/we-scanned-1-million-exposed-ai.html"
+      },
+      {
+        "id": 5,
+        "title": "Microsoft: 35K Users Phished Across 26 Countries via AiTM Campaign",
+        "tag": "Phishing / Social Engineering",
+        "desc": "Code-of-conduct-themed lures hit 13K orgs in 48 hours — QR code phishing surged 146% in Q1 2026.",
+        "summary": "Microsoft disclosed a credential theft campaign (April 14–16, 2026) targeting 35,000+ users across 13,000+ organizations in 26 countries, 92% in the US. Sectors hit: healthcare/life sciences (19%), financial services (18%), professional services (11%), technology (11%). Lures used 'code of conduct review' themes with polished HTML templates and authenticity statements. PDF attachments lead through CAPTCHA-gated intermediate pages to AiTM phishing that harvests Microsoft credentials and tokens, bypassing MFA. Microsoft also reported 8.3 billion email-based phishing threats in Q1 2026, with QR code phishing surging 146% (7.6M in Jan → 18.7M in March).",
+        "importance": "The combination of enterprise-grade phishing templates + CAPTCHA gating + AiTM token theft is the mature evolution of credential theft. QR code phishing's 146% surge in one quarter signals a paradigm shift — defenders who aren't monitoring QR-based attack vectors are operating blind.",
+        "noteworthy": "Deploy FIDO2/WebAuthn security keys to defeat AiTM phishing. Train users to verify 'code of conduct' emails out-of-band. Monitor for QR codes embedded in email bodies. Block Tycoon 2FA PhaaS infrastructure. Update email gateway rules for CAPTCHA-gated redirect patterns.",
+        "link": "https://thehackernews.com/2026/05/microsoft-details-phishing-campaign.html"
+      },
+      {
+        "id": 6,
+        "title": "CVE-2026-29014: MetInfo CMS RCE Actively Exploited in China, Hong Kong",
+        "tag": "Critical Vulnerability / Active Exploitation",
+        "desc": "CVSS 9.8 PHP code injection in MetInfo CMS — exploitation surged May 1 targeting ~2,000 online instances.",
+        "summary": "CVE-2026-29014 (CVSS 9.8) is an unauthenticated PHP code injection vulnerability in MetInfo CMS versions 7.9, 8.0, and 8.1, rooted in the /app/system/weixin/include/class/weixinreply.class.php script due to insufficient input sanitization in WeChat API request handling. Remote attackers can inject and execute arbitrary PHP code when the /cache/weixin/ directory exists (created when the WeChat plugin is configured). Patches were released April 7, but exploitation began April 25. Attack volume surged May 1, focusing on China and Hong Kong IP addresses. Approximately 2,000 MetInfo CMS instances are accessible online, mostly in China.",
+        "importance": "A CVSS 9.8 unauthenticated RCE with patches available for a month and still 2,000+ exposed instances. The surge pattern — from sparse automated probing to mass exploitation — is the textbook exploitation curve. CMS vulnerabilities remain a primary entry vector for web shell deployment and downstream supply chain compromise.",
+        "noteworthy": "Patch MetInfo CMS immediately if running 7.9/8.0/8.1. If the WeChat plugin is not needed, remove /cache/weixin/ directory to reduce attack surface. Audit web server logs for POST requests to weixinreply.class.php. Scan for web shell indicators on MetInfo servers.",
+        "link": "https://thehackernews.com/2026/05/metinfo-cms-cve-2026-29014-exploited.html"
+      },
+      {
+        "id": 7,
+        "title": "ScarCruft BirdCall: DPRK Backdoor Goes Multi-Platform via Gaming Supply Chain",
+        "tag": "APT / Cyber Espionage",
+        "desc": "North Korea's ScarCruft compromises Yanbian gaming platform to deploy BirdCall on both Android and Windows devices.",
+        "summary": "ESET discovered North Korea's ScarCruft compromised sqgame.net, a gaming platform used by ethnic Koreans in China's Yanbian region bordering North Korea. The attack trojanized both Windows desktop client updates (since November 2024) and Android APK downloads with BirdCall, an advanced evolution of RokRAT. BirdCall Windows version features screenshot capture, keystroke logging, clipboard theft, shell command execution, and uses cloud services (Dropbox, pCloud) for C2. The Android variant collects contacts, SMS, call logs, media files, documents, screenshots, and ambient audio, using pCloud, Yandex Disk, and Zoho WorkDrive for exfiltration. The trojanized Android APKs remain available on the sqgame.net website as of disclosure.",
+        "importance": "ScarCruft shifting from Windows-only to multi-platform surveillance signals NK APTs are expanding collection capabilities to match target device profiles. The Yanbian region is a critical transit point for North Korean defectors — compromising a popular local gaming platform places surveillance directly on a high-value intelligence target population.",
+        "noteworthy": "Block sqgame[.]net and related domains on corporate networks. Hunt for BirdCall IOCs across Windows and Android endpoints. Check for suspicious DLL side-loading in DAEMON Tools-like update packages. Monitor for C2 traffic to pCloud, Yandex Disk, and Zoho WorkDrive APIs from unexpected processes.",
+        "link": "https://thehackernews.com/2026/05/scarcruft-hacks-gaming-platform-to.html"
+      },
+      {
+        "id": 8,
+        "title": "cPanel CVE-2026-41940 Weaponized: Gov Networks, Mirai, and Ransomware",
+        "tag": "Critical Vulnerability / Active Exploitation",
+        "desc": "44K IPs compromised via cPanel auth bypass within 24 hours of PoC release — SE Asian government and MSP networks hit.",
+        "summary": "Ctrl-Alt-Intel detected a previously unknown threat actor exploiting CVE-2026-41940 (critical cPanel authentication bypass) targeting Philippine military (.mil.ph), Laotian government (.gov.la), and MSPs/hosting providers across Philippines, Laos, Canada, South Africa, and the US. The attacker used publicly available PoC exploits from IP 95.111.250[.]175. A separate custom exploit chain targeted an Indonesian defense training portal using authenticated SQL injection + RCE with hard-coded credentials and CAPTCHA bypass. The actor deployed AdaptixC2 for persistent access, plus OpenVPN and Ligolo for tunneling, and exfiltrated Chinese railway-sector documents. Censys confirmed multiple third parties weaponized the flaw within 24 hours, deploying Mirai botnet variants and 'Sorry' ransomware. Shadowserver recorded 44K compromised IPs on April 30, dropping to 3,540 by May 3.",
+        "importance": "A single cPanel flaw spawned three distinct attack campaigns overnight — targeted espionage, botnet recruitment, and ransomware — demonstrating how critical infrastructure vulnerabilities become force-multipliers. The 44K→3.5K drop suggests mass cleanup, but thousands of compromised hosts likely persist as dormant assets.",
+        "noteworthy": "Patch cPanel immediately. Run cPanel's updated detection script for false-positive reduction. Check for AdaptixC2, OpenVPN, and Ligolo persistence on cPanel-hosted servers. Audit cPanel access logs for IPs from 95.111.250[.]175 and related indicators. If you're an MSP, assume lateral movement to all client environments.",
+        "link": "https://thehackernews.com/2026/05/critical-cpanel-vulnerability.html"
+      },
+      {
+        "id": 9,
+        "title": "MOVEit Automation: Critical Auth Bypass CVE-2026-4670 (CVSS 9.8)",
+        "tag": "Critical Vulnerability / Enterprise Software",
+        "desc": "Airbus SecLab finds authentication bypass and privilege escalation in MOVEit Automation — no workarounds available.",
+        "summary": "Progress Software patched two vulnerabilities in MOVEit Automation: CVE-2026-4670 (CVSS 9.8), an authentication bypass via service backend command port interfaces, and CVE-2026-5174 (CVSS 7.7), an improper input validation allowing privilege escalation. Discovered by Airbus SecLab researchers. Affected versions: MOVEit Automation ≤2025.1.4 (fixed in 2025.1.5), ≤2025.0.8 (fixed in 2025.0.9), ≤2024.1.7 (fixed in 2024.1.8). No workarounds exist. While no in-the-wild exploitation is confirmed yet, prior MOVEit Transfer flaws were exploited by Cl0p ransomware in 2023, making preemptive patching critical.",
+        "importance": "MOVEit is high-value ransomware target infrastructure. The 2023 Cl0p campaign exploiting MOVEit Transfer compromised thousands of organizations globally. Auth bypass in the Automation component gives attackers the same class of access — unauthenticated control of managed file transfer workflows and the data flowing through them.",
+        "noteworthy": "Patch MOVEit Automation to 2025.1.5, 2025.0.9, or 2024.1.8 immediately. There are no workarounds. Audit MOVEit Automation access logs for anomalous command port activity. Rotate MOVEit service credentials. Monitor for Cl0p IOCs — history suggests these flaws will be targeted.",
+        "link": "https://thehackernews.com/2026/05/progress-patches-critical-moveit.html"
+      },
+      {
+        "id": 10,
+        "title": "Chrome Silently Pushes 4GB Gemini Nano Model to Billions of Devices",
+        "tag": "Privacy / AI Infrastructure",
+        "desc": "Google Chrome downloads 4GB Gemini Nano weights.bin without consent, re-downloads after deletion — GDPR/ePrivacy violation alleged.",
+        "summary": "Privacy researcher Alexander Hanff discovered that Google Chrome silently downloads a ~4GB file (weights.bin, Gemini Nano on-device LLM) to the OptGuideOnDeviceModel directory without user consent. If deleted, Chrome re-downloads it. The only way to prevent re-download is disabling AI features via chrome://flags or enterprise policy. Hanff verified the behavior on a fresh macOS profile with zero human interaction — the model appeared in the audit profile within days. The legal analysis: this violates Article 5(3) of the ePrivacy Directive, Article 5(1) GDPR (lawfulness/fairness/transparency), and Article 25 GDPR (data protection by design). At Chrome's ~2B user scale, the environmental cost of one model push is estimated at 6,000–60,000 tonnes CO2-equivalent.",
+        "importance": "At billion-device scale, unilateral software decisions have planetary environmental consequences. If GDPR/ePrivacy enforcement holds, this could set a precedent requiring explicit consent for all on-device AI model deployment — reshaping how browsers, OSes, and apps deliver AI features.",
+        "noteworthy": "Check chrome://settings and chrome://flags for AI feature toggles. Disable 'Optimization Guide' and on-device model downloads if unwanted. Enterprise admins: deploy Chrome policy to disable Gemini Nano. Monitor disk space for OptGuideOnDeviceModel/weights.bin deletion-re-download cycles.",
+        "link": "https://www.thatprivacyguy.com/blog/chrome-silent-nano-install/"
+      },
+      {
+        "id": 11,
+        "title": "Global Crackdown: 276 Arrested, $701M Seized from Crypto Scam Centers",
+        "tag": "Cybercrime / Law Enforcement",
+        "desc": "Coordinated US-China-UAE operation shuts down 9 pig-butchering scam centers, charges 6 with federal fraud and money laundering.",
+        "summary": "A coordinated international operation led by Dubai Police with the FBI and Chinese Ministry of Public Security arrested 276 suspects and shut down 9 crypto investment fraud scam centers. Five individuals (Thet Min Nyi, Wiliang Awang, Andreas Chandra, Lisa Mariam, plus two fugitives) were charged with federal fraud and money laundering for managing/working at Ko Thet Company, Sanduo Group, and Giant Company. The scams used pig-butchering/romance baiting to trick victims into bogus crypto investments, often run by trafficked workers under slave-like conditions. FBI's Operation Level Up notified ~9,000 victims and saved an estimated $562M. Separately, two Chinese nationals (Jiang Wen Jie, Huang Xingshan) were charged for running the Shunda scam compound in Myanmar. The Treasury sanctioned a Cambodian senator behind cyber scam compounds. $701M in crypto was restrained.",
+        "importance": "The scale of this crackdown — 276 arrests, $701M seized, 9 centers shut — represents the largest coordinated action against pig-butchering infrastructure to date. The US-China-UAE cooperation is unprecedented and signals that these scam centers are being treated as transnational organized crime, not just fraud.",
+        "noteworthy": "If you or your org has been contacted by unsolicited crypto investment advisors, report to FBI IC3. Verify any crypto platform before investing — check against the 503 fake investment websites seized. HR teams: warn employees about romance-baiting crypto scams, which frequently target professionals.",
+        "link": "https://thehackernews.com/2026/05/global-crackdown-arrests-276-shuts-9.html"
+      },
+      {
+        "id": 12,
+        "title": "BTC at $81.5K — Shorts Unwind $79B, Fear & Greed Flips Neutral",
+        "tag": "Financial / Crypto",
+        "desc": "Bitcoin holds $81.5K as $79B short liquidations clear path upward; Fear & Greed turns neutral for first time since January.",
+        "summary": "Bitcoin trades at $81,543 (+0.84% 24h), with $79 billion in short liquidations since February clearing the path toward higher levels. The Crypto Fear & Greed Index turned neutral for the first time since January, signaling a shift from sustained fear. Ethereum trades at $2,375 (-0.29%), Solana at $87.27 (+2.99%). Derivatives markets remain relatively flat despite BTC's multi-month highs, suggesting the rally lacks leveraged froth. Options markets are pricing potential moves toward $90K. The mood shift from fear to neutral historically precedes either consolidation or acceleration phases.",
+        "importance": "The $79B in short liquidations represents forced buying that has methodically cleared resistance levels. The Fear & Greed shift to neutral after months in fear territory is a psychological inflection point — if it holds, institutional re-entry could accelerate. Flat derivatives with rising spot is technically healthier than leveraged rallies.",
+        "noteworthy": "Watch $81.5K as immediate support — a break below targets $78K. The Fear & Greed neutral reading suggests accumulation phase, not euphoria. Monitor Coinbase Premium for US institutional demand signals. SOL's +3% outperformance vs flat ETH bears watching for rotation.",
+        "link": "https://cointelegraph.com/markets/bitcoin-holds-81k-amid-flat-derivatives-markets-is-the-rally-sustainable"
+      }
+    ]
+  },
+  "yesterday": {
+    "date": "02/05/26",
+    "items": [
+      {
+        "id": 13,
         "title": "Trellix Confirms Source Code Breach — Unauthorized Repo Access",
         "tag": "Data Breach / Enterprise Security",
         "desc": "Cybersecurity giant Trellix (ex-McAfee/FireEye) confirms attackers accessed a portion of its source code repository.",
@@ -13,7 +138,7 @@
         "link": "https://thehackernews.com/2026/05/trellix-confirms-source-code-breach.html"
       },
       {
-        "id": 2,
+        "id": 14,
         "title": "AccountDumpling: 30K Facebook Accounts Hacked via Google AppSheet Phishing",
         "tag": "Phishing / Social Engineering",
         "desc": "Vietnamese-linked op uses Google AppSheet as phishing relay to steal 30,000 Facebook Business accounts, selling them back via illicit storefront.",
@@ -23,7 +148,7 @@
         "link": "https://thehackernews.com/2026/05/30000-facebook-accounts-hacked-via.html"
       },
       {
-        "id": 3,
+        "id": 15,
         "title": "SHADOW-EARTH-053: China-Linked APT Hits 7 Asian Govs + NATO Member",
         "tag": "APT / Nation-State",
         "desc": "China-aligned espionage group exploits N-day Exchange/IIS flaws to deploy ShadowPad across South/SE Asia and Poland.",
@@ -33,7 +158,7 @@
         "link": "https://thehackernews.com/2026/05/china-linked-hackers-target-asian.html"
       },
       {
-        "id": 4,
+        "id": 16,
         "title": "Vishing-to-SaaS: Cordial Spider & Snarky Spider in Rapid Extortion Blitz",
         "tag": "Malware / Social Engineering",
         "desc": "Two cybercrime groups use vishing + SSO AiTM to compromise entire SaaS ecosystems in hours, leaving minimal forensic trace.",
@@ -43,7 +168,7 @@
         "link": "https://thehackernews.com/2026/05/cybercrime-groups-using-vishing-and-sso.html"
       },
       {
-        "id": 5,
+        "id": 17,
         "title": "BufferZoneCorp: Poisoned Ruby Gems & Go Modules Exploit CI Pipelines",
         "tag": "Supply Chain Attack / Malware",
         "desc": "Sleepers in RubyGems and Go proxy registries harvest AWS keys, SSH creds, and GitHub Actions tokens from CI runners.",
@@ -53,7 +178,7 @@
         "link": "https://thehackernews.com/2026/05/poisoned-ruby-gems-and-go-modules.html"
       },
       {
-        "id": 6,
+        "id": 18,
         "title": "Copy Fail: CVE-2026-31431 — 2017 Kernel Bug Gives Root on All Linux Distros",
         "tag": "Linux / Critical Vulnerability",
         "desc": "732-byte Python script exploits 9-year-old kernel crypto flaw for instant root on Amazon Linux, RHEL, SUSE, Ubuntu.",
@@ -63,17 +188,17 @@
         "link": "https://thehackernews.com/2026/04/new-linux-copy-fail-vulnerability.html"
       },
       {
-        "id": 7,
+        "id": 19,
         "title": "PromptMink: DPRK Used Claude Opus to Inject Malware into npm Package",
         "tag": "AI Security / Nation-State",
         "desc": "North Korea's Famous Chollima group had Claude Opus commit a malicious npm dependency into an autonomous crypto trading agent.",
-        "summary": "ReversingLabs codenamed the campaign 'PromptMink,' linking it to DPRK's Famous Chollima (aka Shifty Corsair, behind Contagious Interview). Claude Opus co-authored a commit on Feb 28 that added '@validate-sdk/v2' as a dependency to 'openpaw-graveyard' — an autonomous Solana trading agent. The package was a cryptocurrency stealer, part of a two-layer supply chain with benign first-layer packages (e.g., @solana-launchpad/sdk) importing malicious second-layer ones. The campaign has evolved to target PyPI and use SSH persistence + Rust-compiled payloads for full project exfiltration.",
+        "summary": "ReversingLabs codenamed the campaign 'PromptMink,' linking it to DPRK's Famous Chollima (aka Shifty Corsair, behind Contagious Interview). Claude Opus co-authored a commit on Feb 28 that added '@validate-sdk/v2' as a dependency to 'openpaw-graveyard' — an autonomous Solana trading agent. The package was a cryptocurrency stealer, part of a two-layer supply chain with benign first-layer packages importing malicious second-layer ones. The campaign has evolved to target PyPI and use SSH persistence + Rust-compiled payloads for full project exfiltration.",
         "importance": "AI-assisted supply chain attacks are no longer theoretical. A nation-state actor literally had an LLM write and commit malware into a project. This blurs the line between 'vibe-coding accident' and intentional backdoor, making attribution and detection vastly harder.",
         "noteworthy": "Audit all AI-generated commits and pull requests — especially package additions. Scan for the listed malicious npm packages. Verify npm audit/CI passes. Treat AI-authored code with the same scrutiny as untrusted external contributions.",
         "link": "https://thehackernews.com/2026/04/new-wave-of-dprk-attacks-uses-ai.html"
       },
       {
-        "id": 8,
+        "id": 20,
         "title": "Two Ransomware Negotiators Get 4 Years for BlackCat Attacks",
         "tag": "Cybercrime / Law Enforcement",
         "desc": "US sentences two cybersecurity professionals who flipped from defenders to BlackCat ransomware affiliates.",
@@ -83,7 +208,7 @@
         "link": "https://www.bleepingcomputer.com/news/security/us-ransomware-negotiators-get-4-years-in-prison-over-blackcat-attacks/"
       },
       {
-        "id": 9,
+        "id": 21,
         "title": "Deep#Door RAT: New Stealthy Backdoor Targets Windows with Kernel Tricks",
         "tag": "Malware / Threat Intelligence",
         "desc": "Newly discovered Deep#Door RAT combines kernel-level stealth, persistence mechanisms, and multi-stage payload delivery.",
@@ -93,7 +218,7 @@
         "link": "https://securityaffairs.com/191567/malware/new-deepdoor-rat-uses-stealth-and-persistence-to-target-windows.html"
       },
       {
-        "id": 10,
+        "id": 22,
         "title": "BTC at $78.3K — 100-EMA Holds, Options Market Pricing 25% $84K Odds",
         "tag": "Financial / Crypto",
         "desc": "Bitcoin rebounds from 100-day EMA support at $78.3K; futures OI rises 6.6% to 257K BTC as traders position for upside.",
@@ -103,7 +228,7 @@
         "link": "https://cointelegraph.com/markets/3-bitcoin-data-points-suggest-rally-to-80k-is-imminent"
       },
       {
-        "id": 11,
+        "id": 23,
         "title": "CLARITY Act Stablecoin Yield Rules Finalized — 55% Odds of 2026 Passage",
         "tag": "Regulation / Crypto",
         "desc": "US Senate Banking Committee finalizes stablecoin yield provisions; Polymarket odds jump 9% as Coinbase calls for markup.",
@@ -113,139 +238,14 @@
         "link": "https://cointelegraph.com/news/go-time-after-clarity-act-stablecoin-yield-compromise-finalized"
       },
       {
-        "id": 12,
+        "id": 24,
         "title": "Ethereum Foundation Sells Another 10K ETH to BitMine in 3rd OTC Deal",
         "tag": "Financial / Crypto",
-        "desc": "Ethereum Foundation executes third OTC sale of 10,000 ETH to BitMine, continuing pattern of large strategic liquidations.",
+        "desc": "Ethereum Foundation executes third OTC sale of 10,000 ETH to institutional miner BitMine, continuing pattern of large strategic liquidations.",
         "summary": "The Ethereum Foundation sold another 10,000 ETH (~$23M) to institutional miner BitMine in the third such OTC transaction. The pattern of regular large sales by the Foundation, while likely part of a treasury management strategy, creates consistent sell pressure on ETH price. ETH trades at $2,304, underperforming BTC during the current rally.",
         "importance": "The Foundation's continued selling at $2.3K ETH signals they see this as an acceptable liquidation price. If the pattern continues, it creates a de facto ceiling on ETH rallies — institutional buyers know more supply is coming.",
         "noteworthy": "Monitor Ethereum Foundation wallet addresses for the next scheduled sale. Consider ETH/BTC ratio as a signal — persistent underperformance likely continues while Foundation selling persists. BTC remains the stronger relative bet.",
         "link": "https://cointelegraph.com/news/ethereum-foundation-sells-another-10000-eth-to-bitmine-in-third-otc-deal"
-      }
-    ]
-  },
-  "yesterday": {
-    "date": "29/04/26",
-    "items": [
-      {
-        "id": 13,
-        "title": "GitHub RCE: CVE-2026-3854 — One Git Push, Full Server Compromise",
-        "tag": "Critical Vulnerability / Supply Chain",
-        "desc": "Wiz uncovers critical RCE in GitHub's git infrastructure — exploitable by any authenticated user via a single git push.",
-        "summary": "Wiz Research disclosed CVE-2026-3854, a critical remote code execution vulnerability in GitHub's internal git pipeline. Any authenticated user could execute arbitrary commands on GitHub's backend servers with a single 'git push' using a standard git client. On GitHub.com, this allowed RCE on shared storage nodes where millions of public and private repositories were accessible. On GitHub Enterprise Server, the same flaw grants full server compromise including access to all repos and internal secrets. Notably, this was one of the first critical vulnerabilities found in closed-source binaries using AI-augmented reverse engineering (IDA MCP). GitHub mitigated GitHub.com within 6 hours, but 88% of GHES instances remain unpatched.",
-        "importance": "This is a supply chain nuclear bomb. GitHub hosts hundreds of millions of repos — a single RCE in the git pipeline means an attacker could poison builds, inject backdoors, or exfiltrate source code across the entire platform. The AI-assisted discovery method signals that closed-source binary security is now trivially auditable.",
-        "noteworthy": "Patch GHES immediately to 3.14.24+, 3.15.19+, 3.16.15+, 3.17.12+, 3.18.6+, or 3.19.3+. Audit git push logs for anomalous payloads. Rotate all repository secrets. Run 'ghe-repl-status' and verify cluster integrity.",
-        "link": "https://www.wiz.io/blog/github-rce-vulnerability-cve-2026-3854"
-      },
-      {
-        "id": 14,
-        "title": "CPanel Critical Auth Bypass — Update Immediately",
-        "tag": "Infrastructure Security",
-        "desc": "Critical authentication vulnerability in cPanel allows unauthorized access to server management interfaces.",
-        "summary": "A critical authentication bypass vulnerability has been identified in cPanel, one of the most widely used web hosting control panels. The flaw could allow attackers to bypass authentication and gain unauthorized access to server management interfaces, potentially leading to full server compromise across shared hosting environments.",
-        "importance": "cPanel powers millions of hosting environments worldwide. An auth bypass here means attackers can take over web servers, intercept email, and pivot into databases — all without credentials. Shared hosting providers are especially exposed.",
-        "noteworthy": "Update cPanel immediately. Audit access logs for unauthorized login attempts. Review cPanel service tokens and reset any that look suspicious.",
-        "link": "https://thehackernews.com/2026/04/critical-cpanel-authentication.html"
-      },
-      {
-        "id": 15,
-        "title": "CISA KEV Update: ConnectWise & Windows Flaws Actively Exploited",
-        "tag": "Infrastructure Security / CISA",
-        "desc": "CISA adds actively exploited ConnectWise and Windows vulnerabilities to its Known Exploited Vulnerabilities catalog.",
-        "summary": "CISA has added newly confirmed actively exploited vulnerabilities in ConnectWise and Microsoft Windows to its Known Exploited Vulnerabilities (KEV) catalog. Federal agencies face binding remediation deadlines, but the active exploitation status means private-sector organizations are equally at risk.",
-        "importance": "CISA only adds to KEV when exploitation is confirmed in the wild. ConnectWise remote access tools are ubiquitous in MSP environments — compromise here cascades to every managed client. Windows flaws hitting KEV mean threat actors are actively weaponizing them.",
-        "noteworthy": "Patch ConnectWise and Windows immediately per CISA directives. If you're an MSP, assume lateral movement to all client environments. Check ConnectWise audit logs for unauthorized sessions.",
-        "link": "https://thehackernews.com/2026/04/cisa-adds-actively-exploited.html"
-      },
-      {
-        "id": 16,
-        "title": "LiteLLM SQL Injection Exploited Within 36 Hours",
-        "tag": "AI Security / Vulnerabilities",
-        "desc": "CVE-2026-42208 in LiteLLM — SQL injection weaponized just 36 hours after disclosure.",
-        "summary": "A SQL injection vulnerability (CVE-2026-42208) in LiteLLM, a popular LLM gateway/proxy used to manage API calls across multiple AI providers, was exploited in the wild within 36 hours of disclosure. The speed from disclosure to mass exploitation demonstrates how quickly AI-adjacent infrastructure is targeted.",
-        "importance": "LiteLLM sits in front of LLM API keys for many organizations — a SQL injection here means attackers can exfiltrate API keys, manipulate model routing, or inject responses. The 36-hour weaponization window shows AI infra is a priority target.",
-        "noteworthy": "Update LiteLLM immediately. Rotate all LLM API keys that passed through the gateway. Audit query logs for SQL injection patterns.",
-        "link": "https://thehackernews.com/2026/04/litellm-cve-2026-42208-sql-injection.html"
-      },
-      {
-        "id": 17,
-        "title": "VECT 2.0 Ransomware: Destructive Wiper Disguised as Ransomware",
-        "tag": "Malware / Ransomware",
-        "desc": "New VECT 2.0 ransomware irreversibly destroys files over 131KB — no decryption possible.",
-        "summary": "VECT 2.0 ransomware has been identified targeting Windows, Linux, and ESXi environments. Unlike traditional ransomware, files over 131KB are irreversibly destroyed rather than encrypted — making recovery impossible even if a ransom is paid. This positions VECT 2.0 as a wiper with ransomware camouflage, likely intended for disruption rather than profit.",
-        "importance": "When ransomware destroys instead of encrypts, backups are your only recovery path — and threat actors know this. VECT 2.0 suggests a shift toward purely destructive campaigns, possibly nation-state aligned, where the ransom note is just a distraction.",
-        "noteworthy": "Verify offline/immutable backups are intact. EDR rules targeting VECT 2.0 IOCs. Segment ESXi management networks. If hit, do not pay — decryption is impossible.",
-        "link": "https://thehackernews.com/2026/04/vect-20-ransomware-irreversibly.html"
-      },
-      {
-        "id": 18,
-        "title": "Intel Arc Pro B70: 32GB VRAM AI Workstation GPU Launches",
-        "tag": "Hardware / GPU",
-        "desc": "Intel doubles down on AI GPU market with Arc Pro B70 featuring 32GB VRAM and Xe2 architecture.",
-        "summary": "Intel launched the Arc Pro B70, a new professional GPU built on the Xe2 architecture with 32GB of VRAM — double the cores and memory of the B50. Unlike AMD's approach of retrofitting gaming GPUs with extra VRAM (Radeon AI PRO R9700), Intel built an entirely new die. The B70 features ECC memory, dual media engines (8K 10-bit encode/decode), certified pro drivers for Adobe/Autodesk/Dassault, and targets the AI workstation market alongside NVIDIA's 72GB RTX PRO 5000 Blackwell.",
-        "importance": "The AI workstation GPU market is now a three-horse race. Intel's aggressive pricing and full-die approach could disrupt NVIDIA's margins in the mid-range AI workstation tier. 32GB VRAM at this price point makes local LLM inference accessible to smaller teams.",
-        "noteworthy": "Evaluate the B70 for local AI inference workloads if you're budget-constrained vs NVIDIA's 72GB Blackwell. Check driver maturity for your specific apps — Intel's pro driver certification program is still catching up to NVIDIA's.",
-        "link": "https://www.pugetsystems.com/labs/articles/intel-arc-pro-b70-review/"
-      },
-      {
-        "id": 19,
-        "title": "Gallium Oxide Semiconductors Withstand Near-Absolute-Zero Cold",
-        "tag": "Hardware / Semiconductors",
-        "desc": "KAUST research shows gallium oxide electronics operate reliably near absolute zero — enabling space and quantum computing applications.",
-        "summary": "Researchers at KAUST demonstrated that gallium oxide (Ga₂O₃) semiconductor devices maintain robust operation at cryogenic temperatures close to absolute zero. This is a breakthrough for space missions and quantum computing control electronics, where traditional silicon devices fail at extreme cold. Ga₂O₃'s ultra-wide bandgap provides inherent radiation hardness and thermal stability.",
-        "importance": "Quantum computing requires control electronics that function at cryogenic temperatures — current solutions need complex room-temperature wiring to quantum processors. Ga₂O₃ could enable co-located control circuits, drastically reducing latency and complexity. Space and defense applications are immediate beneficiaries.",
-        "noteworthy": "Monitor Ga₂O₃ foundry partnerships. If your org runs HPC in extreme environments or quantum R&D, this semiconductor could reduce cooling and wiring overhead within 3-5 years.",
-        "link": "https://discovery.kaust.edu.sa/en/article/26858/gallium-oxide-electronics-withstand-extreme-cold/"
-      },
-      {
-        "id": 20,
-        "title": "ASML: The Chokepoint for Cutting-Edge Chips",
-        "tag": "Hardware / Semiconductor Supply Chain",
-        "desc": "By betting on EUV lithography before it worked, ASML became the single bottleneck for advanced chipmaking worldwide.",
-        "summary": "A deep analysis of ASML's position as the sole manufacturer of extreme ultraviolet (EUV) lithography machines — the only equipment capable of producing sub-5nm chips. ASML's decades-long bet on EUV, when the rest of the industry doubted it, made them the gatekeeper of advanced semiconductor manufacturing. No foundry (TSMC, Samsung, Intel) can produce cutting-edge chips without ASML's machines.",
-        "importance": "Geopolitical control over ASML's export decisions directly determines which countries can manufacture advanced chips. US restrictions on ASML exports to China are effectively a semiconductor embargo. Any disruption to ASML (supply chain, sabotage, regulation) would halt global advanced chip production.",
-        "noteworthy": "Factor ASML export restrictions into long-term hardware procurement planning. If you rely on TSMC-fabbed chips, any ASML disruption cascades to your supply within 6-18 months.",
-        "link": "https://worksinprogress.co/issue/the-worlds-most-complex-machine/"
-      },
-      {
-        "id": 21,
-        "title": "BTC at $76.6K — Fed Chair Warsh Signals Mixed for Risk Assets",
-        "tag": "Financial / Crypto",
-        "desc": "Bitcoin holds $76.6K as new Fed chair Kevin Warsh takes helm; historical pattern suggests 'months of losses.'",
-        "summary": "Bitcoin trades at $76,596 with a modest +0.6% 24h change, but under pressure as Kevin Warsh becomes the new Federal Reserve chair. Historical data shows BTC fell after each new Fed chair began their term. The Coinbase Premium Index turned negative for the first time in three weeks, signaling weakening US spot demand. Weekly liquidations topped $829M, adding to bearish momentum even as long-term holders accumulate.",
-        "importance": "A new Fed chair historically brings policy uncertainty that compresses risk assets. Warsh's mixed signals on rate policy mean BTC could face a multi-month drawdown. The negative Coinbase Premium confirms institutional US buyers are stepping back.",
-        "noteworthy": "Monitor the Fed chair transition window — if historical pattern holds, BTC may trend lower for 2-4 months before recovering. Negative Coinbase Premium = weak US demand. Watch for accumulation by long-term holders as a contrarian bottom signal.",
-        "link": "https://cointelegraph.com/markets/bitcoin-stocks-face-months-of-losses-as-kevin-warsh-becomes-fed-chair"
-      },
-      {
-        "id": 22,
-        "title": "Canada Proposes Crypto ATM Ban Over Money Laundering",
-        "tag": "Regulation / Crypto",
-        "desc": "Ottawa moves to ban Bitcoin ATMs, citing their role as a key tool for scammers and money laundering.",
-        "summary": "The Canadian government proposed banning crypto ATMs entirely, arguing they have become a primary instrument for scammers and money launderers. The ban is part of broader regulatory tightening targeting high-risk segments of the crypto sector, following increasing reports of fraud facilitated through physical crypto ATMs.",
-        "importance": "If Canada bans crypto ATMs, other jurisdictions may follow. This directly impacts on-ramp accessibility for retail users and could set a precedent for physical crypto infrastructure regulation worldwide.",
-        "noteworthy": "If you operate or use crypto ATMs in Canada, prepare for shutdown. Monitor US and EU regulators for similar proposals. The trend is clear: physical crypto access points are being regulated like traditional financial infrastructure.",
-        "link": "https://cointelegraph.com/news/canada-proposes-crypto-atm-ban-over-scams-and-money-laundering"
-      },
-      {
-        "id": 23,
-        "title": "Hugging Face LeRobot Open to Unauthenticated RCE",
-        "tag": "AI Security / Critical Vulnerability",
-        "desc": "Critical unpatched CVE-2026-25874 in Hugging Face's LeRobot framework allows unauthenticated remote code execution.",
-        "summary": "A critical unpatched vulnerability (CVE-2026-25874) in Hugging Face's LeRobot — a popular open-source robotics/AI framework — allows unauthenticated remote code execution. With no patch available at time of disclosure, any system running LeRobot exposed to the network is vulnerable to full takeover.",
-        "importance": "LeRobot is used in AI/robotics research and prototyping environments — often on under-protected lab networks. An unauthenticated RCE with no patch means researchers' machines and potentially connected robotics hardware are at immediate risk of compromise.",
-        "noteworthy": "Isolate LeRobot instances from the internet immediately. Network-segment any robotics lab environments. Monitor for patches from Hugging Face. Do not expose LeRobot ports publicly.",
-        "link": "https://thehackernews.com/2026/04/critical-cve-2026-25874-leaves-hugging.html"
-      },
-      {
-        "id": 24,
-        "title": "Microsoft: Windows Shell CVE-2026-32202 Actively Exploited",
-        "tag": "Vulnerabilities / Active Exploitation",
-        "desc": "Microsoft confirms Windows Shell vulnerability is being actively exploited in the wild.",
-        "summary": "Microsoft confirmed that CVE-2026-32202, a vulnerability in Windows Shell, is being actively exploited. The flaw allows attackers to execute code through malicious file handling in the Windows Shell. Active exploitation confirmation means threat actors are already using this in campaigns, making patching an immediate priority.",
-        "importance": "Windows Shell vulnerabilities are high-impact because they affect virtually every Windows machine and often require minimal user interaction. Active exploitation + broad attack surface = urgent patching required.",
-        "noteworthy": "Deploy Microsoft's patch immediately via WSUS/Intune. Monitor for suspicious Shell process spawns. BlockKnown exploit vectors via ASR rules if patching is delayed.",
-        "link": "https://thehackernews.com/2026/04/microsoft-confirms-active-exploitation.html"
       }
     ]
   }
