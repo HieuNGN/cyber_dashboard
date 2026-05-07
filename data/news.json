@@ -1,9 +1,114 @@
 {
   "today": {
-    "date": "05/05/26",
+    "date": "07/05/26",
     "items": [
       {
         "id": 1,
+        "title": "Mirai xlabs_v1 Botnet Exploits ADB to Hijack IoT for DDoS",
+        "tag": "IoT / DDoS Botnet",
+        "desc": "New Mirai variant targets exposed Android Debug Bridge (ADB) ports to enlist IoT devices into a 30,000-node DDoS swarm.",
+        "summary": "Security researchers identified 'xlabs_v1', a Mirai-based botnet specifically targeting Android-based IoT devices with exposed ADB (TCP port 5555). The botnet uses ADB to push its binary, gains persistent root access via common system vulnerabilities, and incorporates a new multi-vector DDoS engine capable of HTTP/2 flood and SYN-ACK amplification. It primarily targets smart signage and retail point-of-sale systems in East Asia.",
+        "importance": "ADB is a high-risk management interface often left exposed by vendors. The xlabs_v1 variant demonstrates that botnet authors are specifically auditing for Android-specific IoT misconfigurations, which bypass traditional Mirai telnet/SSH scanning.",
+        "noteworthy": "Disable ADB over the network on all IoT devices unless strictly required. Block inbound TCP 5555 at the perimeter. Audit deployments for unauthorized binaries in /data/local/tmp. Use network segmentation for IoT fleets.",
+        "link": "https://thehackernews.com/2026/05/mirai-based-xlabs_v1-botnet-exploits.html"
+      },
+      {
+        "id": 2,
+        "title": "MuddyWater Uses Microsoft Teams for Credential Theft False Flag",
+        "tag": "APT / Nation-State",
+        "desc": "Iran-nexus MuddyWater APT leverages compromised Teams accounts to stage false-flag ransomware attacks against Middle Eastern orgs.",
+        "summary": "The MuddyWater APT (linked to Iran's MOIS) has shifted tactics to using compromised Microsoft Teams guest accounts to send phishing lures and malicious files directly to targets. The campaign features a 'False Flag' ransomware component, where the final payload masquerades as a financially motivated attack to mask the group's true intelligence-gathering objectives. Targets include financial and government sectors across Israel, UAE, and Jordan.",
+        "importance": "Teams is a high-trust environment where users are less likely to scrutinize internal or 'guest' messages. The false-flag ransomware tactic complicates incident response, as responders may treat it as a data recovery operation rather than a persistent nation-state intrusion.",
+        "noteworthy": "Restrict external guest access in Microsoft Teams. Implement conditional access policies for Teams message senders. Educate users that Teams is a viable phishing vector. Monitor for anomalous file transfers via Teams channels.",
+        "link": "https://thehackernews.com/2026/05/muddywater-uses-microsoft-teams-to.html"
+      },
+      {
+        "id": 3,
+        "title": "Palo Alto PAN-OS Flaw Under Active Exploitation (CVSS 9.8)",
+        "tag": "Critical Vulnerability / Network Infra",
+        "desc": "Shadowserver reports active exploitation of unauthenticated RCE in Palo Alto PAN-OS — over 1,500 firewalls compromised.",
+        "summary": "Palo Alto Networks issued an emergency advisory for a critical unauthenticated RCE in the PAN-OS management interface. Shadowserver telemetry confirms active exploitation since May 5, with at least 1,500 compromised instances detected globally. The vulnerability allows attackers to gain root access to the firewall, enabling lateral movement and traffic interception.",
+        "importance": "Firewalls are the perimeter. Root access to the firewall is total network compromise. The speed of weaponization (under 48 hours from disclosure) indicates sophisticated actors are prioritizing network infrastructure for initial access.",
+        "noteworthy": "Patch PAN-OS immediately. Restrict access to the management interface to trusted IP ranges only. Audit firewall logs for anomalous traffic or unauthorized configuration changes. Rotate administrative credentials.",
+        "link": "https://thehackernews.com/2026/05/palo-alto-pan-os-flaw-under-active.html"
+      },
+      {
+        "id": 4,
+        "title": "Critical Apache HTTP/2 Flaw Enabling DoS/RCE Hits Production",
+        "tag": "Critical Vulnerability / Web Server",
+        "desc": "CVE-2026-23918 weaponized: 10,000+ Apache servers hit with DoS, researchers demonstrate RCE on Docker-based deployments.",
+        "summary": "The Apache HTTP/2 double-free (CVE-2026-23918) has moved from lab PoC to active exploitation. Over 10,000 servers have been impacted by DoS attacks. Security researchers have successfully demonstrated an RCE path on official Apache Docker images using the APR mmap allocator. The exploit uses Heap Spraying via HTTP/2 headers to gain control over instruction pointers.",
+        "importance": "This transforms a theoretical DoS into a viable RCE vector for the world's most popular web server. Docker-based deployments, often considered 'self-healing,' are particularly vulnerable to the RCE chain due to predictable memory layouts.",
+        "noteworthy": "Upgrade Apache to 2.4.67. If using Docker, pull the latest official images immediately. As a temporary measure, disable HTTP/2 or switch to MPM prefork. Monitor for rapid RST_STREAM patterns in logs.",
+        "link": "https://thehackernews.com/2026/05/critical-apache-http2-flaw-cve-2026.html"
+      },
+      {
+        "id": 5,
+        "title": "Trump Pauses Hormuz Escorts 50 Hours After Announcement",
+        "tag": "Geopolitics / Middle East",
+        "desc": "US pauses 'Project Freedom' in Strait of Hormuz after 50-hour standoff; Iran claims transit safety will be ensured under new IRGC steps.",
+        "summary": "President Trump has paused the US operation to guide commercial vessels through the Strait of Hormuz, just 50 hours after its high-profile launch. The move followed intense mediation by Pakistan and calls for de-escalation from China. Iran's IRGC Navy stated it would ensure safe transit under 'new procedures,' and Al Jazeera reports a possible shift toward a limited framework deal settling Hormuz first and nuclear issues later.",
+        "importance": "The rapid reversal highlights a volatile US policy in the region. The pause prevents an immediate military clash but leaves the Strait's security status in a fragile limbo. A 'Hormuz-first' deal would represent a significant strategic shift in US-Iran relations.",
+        "noteworthy": "Monitor shipping insurance premiums for Strait of Hormuz transit. Track IRGC 'procedures' for commercial vessels. Expect high volatility in oil markets as the 'limited framework' deal progress remains unconfirmed.",
+        "link": "https://www.aljazeera.com/news/middle-east/2026/5/7/trump-pauses-hormuz-plan-50-hours-after-he-announced-it"
+      },
+      {
+        "id": 6,
+        "title": "Israeli Forces Bomb Beirut Suburbs Targeting Hezbollah Command",
+        "tag": "Conflict / Middle East",
+        "desc": "First strike on Beirut since April 17 truce; Israel targets Hezbollah commander as Trump calls for quick end to war.",
+        "summary": "Israeli jets bombed Beirut's southern Haret Hreik neighborhood for the first time since the April 17 truce. The IDF claimed the strike targeted a senior Hezbollah commander involved in recent border skirmishes. The escalation comes as President Trump meets with Israeli leadership, stating the war will be 'over quickly' while Iran reviews a US peace proposal.",
+        "importance": "The breach of the Beirut truce signal that regional stability remains elusive despite US diplomatic efforts. Trump's 'peace proposal' timeline is clashing with active military escalations, creating a high-risk environment for miscalculation.",
+        "noteworthy": "Avoid travel to Beirut's southern suburbs. Monitor IDF and Hezbollah official channels for retaliatory signals. Watch Trump's 'Project Freedom' updates as they relate to Lebanese maritime security.",
+        "link": "https://www.aljazeera.com/news/middle-east/2026/5/7/trump-says-iran-agreement-very-possible-israeli-forces-bomb-beirut"
+      },
+      {
+        "id": 7,
+        "title": "Intel Xeon 6 'Granite Rapids' Review: 128 P-Cores Reclaim Server Lead",
+        "tag": "Hardware / CPUs",
+        "desc": "Granite Rapids (6900P) benchmarks reveal massive performance gain; Intel's P-core strategy targets AMD's EPYC dominance.",
+        "summary": "Full reviews of the Intel Xeon 6980P (Granite Rapids) show Intel regaining the performance crown in compute-heavy server workloads. Featuring 128 high-performance P-cores and a chiplet-based architecture, the 6900P series offers up to 2x performance gains in AI and HPC over previous Sapphire Rapids parts. Benchmarks indicate Intel is now parity with or exceeding current AMD EPYC 'Genoa' parts in specific enterprise metrics.",
+        "importance": "This marks Intel's most competitive server launch in five years. The transition to 'Performance-core' server parts signals a shift toward high-margin AI/Compute workloads, directly challenging AMD's market share gain in hyper-scaler environments.",
+        "noteworthy": "Review enterprise procurement plans for 2026 datacenter refreshes. Evaluate Granite Rapids for AI training and massive HPC clusters over EPYC alternatives based on specific AVX-512 and AMX requirements.",
+        "link": "https://www.anandtech.com/show/21356/intel-xeon-6-6900p-granite-rapids-review"
+      },
+      {
+        "id": 8,
+        "title": "PCIe 8.0 Spec Finalized: 1 TB/s Bandwidth for AI Datacenters",
+        "tag": "Hardware / Interconnect",
+        "desc": "PCI-SIG releases PCIe 8.0 specification; doubles bandwidth again to 128 GB/s (x1) to feed next-gen GPU clusters.",
+        "summary": "The PCI-SIG has finalized the PCIe 8.0 specification, doubling the bandwidth of PCIe 7.0 to 128 GB/s per lane (1 TB/s for x16). The new spec uses PAM-4 signaling and targets the massive IO requirements of 2027-era AI accelerators and ultra-fast networking. It introduces new connector technology to handle signal integrity at extreme frequencies.",
+        "importance": "Interconnect bandwidth is the primary bottleneck for distributed AI training. PCIe 8.0 ensures that the physical layer can keep up with the exponential growth in GPU-to-GPU communication needs for trillion-parameter models.",
+        "noteworthy": "Expect first products to hit enterprise markets in late 2027. AI infrastructure architects should plan for PCIe 8.0-ready motherboards and networking switches in long-term CapEx cycles.",
+        "link": "https://www.tomshardware.com/news/pcie-8-specification-v1-released"
+      },
+      {
+        "id": 9,
+        "title": "BTC Hits $80.9K — Neutral Sentiment as $2B BTC Exits Exchanges",
+        "tag": "Financial / Crypto",
+        "desc": "Bitcoin holds $80.9K; $2B in spot BTC moved off exchanges in 24h as 'Fear & Greed' Index stabilizes at 50.",
+        "summary": "Bitcoin sits at $80,906 (-0.5% 24h) while Ethereum trades at $2,324. Market data shows a massive $2 billion outflow of BTC from centralized exchanges into cold storage over the last 24 hours. The Crypto Fear & Greed Index remains at 50 (Neutral), the longest period of stability at this level in 2026, suggesting a transition from accumulation to a major directional move.",
+        "importance": "Exchange outflows usually signal institutional 'HODLing' sentiment and reduced immediate sell pressure. The neutral index suggests the market is waiting for a catalyst — likely the CLARITY Act markup or Middle East geopolitical resolution.",
+        "noteworthy": "Monitor the $80K support level closely. A hold here confirms institutional floor pricing. Watch for SEC 404 updates in the US Senate as the next potential macro catalyst for price discovery toward $90K.",
+        "link": "https://cointelegraph.com/news/bitcoin-holds-80k-amid-neutral-sentiment"
+      },
+      {
+        "id": 10,
+        "title": "Solana Outperforms at $88 (1.3%) While ETH Stagnates at $2.3K",
+        "tag": "Financial / Crypto",
+        "desc": "SOL leads majors in daily gains; network activity hits 2026 highs while Ethereum Foundation sales weigh on ETH price.",
+        "summary": "Solana (SOL) reached $88.15 (+1.34% 24h), outperforming Bitcoin and Ethereum. Network metrics show Solana's daily active addresses have reclaimed 2026 highs, driven by DeFi volume and a surge in stablecoin transactions. Ethereum (ETH) continues to lag at $2,324 (-1.9%) as the market absorbs ongoing ETH Foundation sales and high L1 gas fees driving users toward L2s and alternative L1s.",
+        "importance": "The rotation from ETH to SOL is accelerating in the current market cycle. Solana's performance-oriented architecture is attracting the 'retail' and 'DeFi' volume that previously defined Ethereum's dominance. ETH underperformance is a growing structural concern for L1 bulls.",
+        "noteworthy": "Monitor SOL/BTC and SOL/ETH pairs for breakout signals. Evaluate Solana-based DeFi protocols for increased yield opportunities as volume shifts. Watch Ethereum L2 adoption vs Solana's 'monolithic' growth.",
+        "link": "https://cointelegraph.com/news/solana-outperforms-majors-as-network-activity-surges"
+      }
+    ]
+  },
+  "yesterday": {
+    "date": "05/05/26",
+    "items": [
+      {
+        "id": 11,
         "title": "CVE-2026-23918: Apache HTTP/2 Double-Free Enables DoS + RCE",
         "tag": "Critical Vulnerability / Server Security",
         "desc": "CVSS 8.8 flaw in Apache httpd 2.4.66 mod_http2 — one TCP connection crashes a worker, and with APR mmap (Debian/Docker default) RCE is achievable.",
@@ -13,7 +118,7 @@
         "link": "https://thehackernews.com/2026/05/critical-apache-http2-flaw-cve-2026.html"
       },
       {
-        "id": 2,
+        "id": 12,
         "title": "DAEMON Tools Supply Chain: Signed Installers Trojanized for a Month",
         "tag": "Supply Chain Attack / Endpoint Security",
         "desc": "Kaspersky finds DAEMON Tools Windows installers trojanized since April 8 with signed binaries — backdoor deployed to targeted subset of hosts.",
@@ -23,7 +128,7 @@
         "link": "https://thehackernews.com/2026/05/daemon-tools-supply-chain-attack.html"
       },
       {
-        "id": 3,
+        "id": 13,
         "title": "UAT-8302: China-Linked APT Uses Shared Malware Arsenal Against Governments",
         "tag": "APT / Nation-State",
         "desc": "Cisco Talos tracks Chinese APT group targeting South American and SE European governments using malware shared across multiple threat clusters.",
@@ -33,7 +138,7 @@
         "link": "https://thehackernews.com/2026/05/china-linked-uat-8302-targets.html"
       },
       {
-        "id": 4,
+        "id": 14,
         "title": "1M Exposed AI Services: No Auth, Leaked Keys, Ollama APIs Wide Open",
         "tag": "AI Security / Infrastructure",
         "desc": "Intruder scans 2M hosts — AI infrastructure is more misconfigured than any other software category ever audited.",
@@ -43,7 +148,7 @@
         "link": "https://thehackernews.com/2026/05/we-scanned-1-million-exposed-ai.html"
       },
       {
-        "id": 5,
+        "id": 15,
         "title": "Microsoft: 35K Users Phished Across 26 Countries via AiTM Campaign",
         "tag": "Phishing / Social Engineering",
         "desc": "Code-of-conduct-themed lures hit 13K orgs in 48 hours — QR code phishing surged 146% in Q1 2026.",
@@ -53,7 +158,7 @@
         "link": "https://thehackernews.com/2026/05/microsoft-details-phishing-campaign.html"
       },
       {
-        "id": 6,
+        "id": 16,
         "title": "CVE-2026-29014: MetInfo CMS RCE Actively Exploited in China, Hong Kong",
         "tag": "Critical Vulnerability / Active Exploitation",
         "desc": "CVSS 9.8 PHP code injection in MetInfo CMS — exploitation surged May 1 targeting ~2,000 online instances.",
@@ -63,7 +168,7 @@
         "link": "https://thehackernews.com/2026/05/metinfo-cms-cve-2026-29014-exploited.html"
       },
       {
-        "id": 7,
+        "id": 17,
         "title": "ScarCruft BirdCall: DPRK Backdoor Goes Multi-Platform via Gaming Supply Chain",
         "tag": "APT / Cyber Espionage",
         "desc": "North Korea's ScarCruft compromises Yanbian gaming platform to deploy BirdCall on both Android and Windows devices.",
@@ -73,7 +178,7 @@
         "link": "https://thehackernews.com/2026/05/scarcruft-hacks-gaming-platform-to.html"
       },
       {
-        "id": 8,
+        "id": 18,
         "title": "cPanel CVE-2026-41940 Weaponized: Gov Networks, Mirai, and Ransomware",
         "tag": "Critical Vulnerability / Active Exploitation",
         "desc": "44K IPs compromised via cPanel auth bypass within 24 hours of PoC release — SE Asian government and MSP networks hit.",
@@ -83,7 +188,7 @@
         "link": "https://thehackernews.com/2026/05/critical-cpanel-vulnerability.html"
       },
       {
-        "id": 9,
+        "id": 19,
         "title": "MOVEit Automation: Critical Auth Bypass CVE-2026-4670 (CVSS 9.8)",
         "tag": "Critical Vulnerability / Enterprise Software",
         "desc": "Airbus SecLab finds authentication bypass and privilege escalation in MOVEit Automation — no workarounds available.",
@@ -93,7 +198,7 @@
         "link": "https://thehackernews.com/2026/05/progress-patches-critical-moveit.html"
       },
       {
-        "id": 10,
+        "id": 20,
         "title": "Chrome Silently Pushes 4GB Gemini Nano Model to Billions of Devices",
         "tag": "Privacy / AI Infrastructure",
         "desc": "Google Chrome downloads 4GB Gemini Nano weights.bin without consent, re-downloads after deletion — GDPR/ePrivacy violation alleged.",
@@ -101,151 +206,6 @@
         "importance": "At billion-device scale, unilateral software decisions have planetary environmental consequences. If GDPR/ePrivacy enforcement holds, this could set a precedent requiring explicit consent for all on-device AI model deployment — reshaping how browsers, OSes, and apps deliver AI features.",
         "noteworthy": "Check chrome://settings and chrome://flags for AI feature toggles. Disable 'Optimization Guide' and on-device model downloads if unwanted. Enterprise admins: deploy Chrome policy to disable Gemini Nano. Monitor disk space for OptGuideOnDeviceModel/weights.bin deletion-re-download cycles.",
         "link": "https://www.thatprivacyguy.com/blog/chrome-silent-nano-install/"
-      },
-      {
-        "id": 11,
-        "title": "Global Crackdown: 276 Arrested, $701M Seized from Crypto Scam Centers",
-        "tag": "Cybercrime / Law Enforcement",
-        "desc": "Coordinated US-China-UAE operation shuts down 9 pig-butchering scam centers, charges 6 with federal fraud and money laundering.",
-        "summary": "A coordinated international operation led by Dubai Police with the FBI and Chinese Ministry of Public Security arrested 276 suspects and shut down 9 crypto investment fraud scam centers. Five individuals (Thet Min Nyi, Wiliang Awang, Andreas Chandra, Lisa Mariam, plus two fugitives) were charged with federal fraud and money laundering for managing/working at Ko Thet Company, Sanduo Group, and Giant Company. The scams used pig-butchering/romance baiting to trick victims into bogus crypto investments, often run by trafficked workers under slave-like conditions. FBI's Operation Level Up notified ~9,000 victims and saved an estimated $562M. Separately, two Chinese nationals (Jiang Wen Jie, Huang Xingshan) were charged for running the Shunda scam compound in Myanmar. The Treasury sanctioned a Cambodian senator behind cyber scam compounds. $701M in crypto was restrained.",
-        "importance": "The scale of this crackdown — 276 arrests, $701M seized, 9 centers shut — represents the largest coordinated action against pig-butchering infrastructure to date. The US-China-UAE cooperation is unprecedented and signals that these scam centers are being treated as transnational organized crime, not just fraud.",
-        "noteworthy": "If you or your org has been contacted by unsolicited crypto investment advisors, report to FBI IC3. Verify any crypto platform before investing — check against the 503 fake investment websites seized. HR teams: warn employees about romance-baiting crypto scams, which frequently target professionals.",
-        "link": "https://thehackernews.com/2026/05/global-crackdown-arrests-276-shuts-9.html"
-      },
-      {
-        "id": 12,
-        "title": "BTC at $81.5K — Shorts Unwind $79B, Fear & Greed Flips Neutral",
-        "tag": "Financial / Crypto",
-        "desc": "Bitcoin holds $81.5K as $79B short liquidations clear path upward; Fear & Greed turns neutral for first time since January.",
-        "summary": "Bitcoin trades at $81,543 (+0.84% 24h), with $79 billion in short liquidations since February clearing the path toward higher levels. The Crypto Fear & Greed Index turned neutral for the first time since January, signaling a shift from sustained fear. Ethereum trades at $2,375 (-0.29%), Solana at $87.27 (+2.99%). Derivatives markets remain relatively flat despite BTC's multi-month highs, suggesting the rally lacks leveraged froth. Options markets are pricing potential moves toward $90K. The mood shift from fear to neutral historically precedes either consolidation or acceleration phases.",
-        "importance": "The $79B in short liquidations represents forced buying that has methodically cleared resistance levels. The Fear & Greed shift to neutral after months in fear territory is a psychological inflection point — if it holds, institutional re-entry could accelerate. Flat derivatives with rising spot is technically healthier than leveraged rallies.",
-        "noteworthy": "Watch $81.5K as immediate support — a break below targets $78K. The Fear & Greed neutral reading suggests accumulation phase, not euphoria. Monitor Coinbase Premium for US institutional demand signals. SOL's +3% outperformance vs flat ETH bears watching for rotation.",
-        "link": "https://cointelegraph.com/markets/bitcoin-holds-81k-amid-flat-derivatives-markets-is-the-rally-sustainable"
-      }
-    ]
-  },
-  "yesterday": {
-    "date": "02/05/26",
-    "items": [
-      {
-        "id": 13,
-        "title": "Trellix Confirms Source Code Breach — Unauthorized Repo Access",
-        "tag": "Data Breach / Enterprise Security",
-        "desc": "Cybersecurity giant Trellix (ex-McAfee/FireEye) confirms attackers accessed a portion of its source code repository.",
-        "summary": "Trellix disclosed that it 'recently identified' a compromise of its source code repository and engaged forensic experts. The company stated it found no evidence the source code release process was affected or that code has been exploited, but did not disclose attacker identity, access duration, or data exfiltrated. Trellix was formed in 2022 from McAfee Enterprise and FireEye assets; Mandiant was spun off to Google for $5.4B.",
-        "importance": "Source code access at a major security vendor is a worst-case scenario. Attackers with repository access could identify zero-days in Trellix's detection engine, craft evasions, or plant backdoors — undermining trust across thousands of enterprise deployments.",
-        "noteworthy": "Audit Trellix endpoint deployments for unusual behavior. Rotate any API keys or integration tokens. Monitor for Trellix-specific bypasses appearing in threat actor tooling.",
-        "link": "https://thehackernews.com/2026/05/trellix-confirms-source-code-breach.html"
-      },
-      {
-        "id": 14,
-        "title": "AccountDumpling: 30K Facebook Accounts Hacked via Google AppSheet Phishing",
-        "tag": "Phishing / Social Engineering",
-        "desc": "Vietnamese-linked op uses Google AppSheet as phishing relay to steal 30,000 Facebook Business accounts, selling them back via illicit storefront.",
-        "summary": "Guardio codenamed the operation 'AccountDumpling,' tracing it to a Vietnamese individual (PHẠM TÀI TÂN). Phishing emails sent from 'noreply@appsheet.com' bypass spam filters, claiming to be Meta Support. Four distinct clusters use Netlify, Vercel, Google Drive PDFs (generated via free Canva), and fake job offers luring victims. Stolen credentials, 2FA codes, and government ID photos are exfiltrated to Telegram channels. Most victims are in the US, Italy, Canada, and the Philippines.",
-        "importance": "Google AppSheet's trusted sender reputation turns it into a perfect phishing relay. This pattern — trusted platforms repurposed as delivery, hosting, and monetization layers — is now the dominant phishing model and near-impossible for users to spot.",
-        "noteworthy": "Block or flag emails from 'noreply@appsheet.com' with Facebook/Meta-themed content. Educate Facebook Business admins: Meta will never threaten immediate deletion. Review Facebook login logs for unrecognized sessions.",
-        "link": "https://thehackernews.com/2026/05/30000-facebook-accounts-hacked-via.html"
-      },
-      {
-        "id": 15,
-        "title": "SHADOW-EARTH-053: China-Linked APT Hits 7 Asian Govs + NATO Member",
-        "tag": "APT / Nation-State",
-        "desc": "China-aligned espionage group exploits N-day Exchange/IIS flaws to deploy ShadowPad across South/SE Asia and Poland.",
-        "summary": "Trend Micro tracks the cluster as SHADOW-EARTH-053, active since December 2024, overlapping with CL-STA-0049 and Earth Alux. Targets include Pakistan, Thailand, Malaysia, India, Myanmar, Sri Lanka, Taiwan, and Poland (NATO). The group exploits ProxyLogon chain and React2Shell (CVE-2025-55182) on unpatched Exchange/IIS servers, drops Godzilla webshells, and deploys ShadowPad via AnyDesk DLL sideloading. Linux Noodle RAT variants observed. Uses IOX, GOST, Wstunnel tunneling and Mimikatz for credential theft.",
-        "importance": "Poland's inclusion signals Chinese APTs are now actively targeting NATO member states, not just regional neighbors. N-day exploitation means unpatched Exchange/IIS servers remain the primary entry vector — and there are thousands.",
-        "noteworthy": "Patch Exchange and IIS immediately. Deploy IPS/WAF rules for ProxyLogon, ProxyShell, and React2Shell exploit patterns. Hunt for Godzilla webshell IOCs. Segment IIS servers from internal networks.",
-        "link": "https://thehackernews.com/2026/05/china-linked-hackers-target-asian.html"
-      },
-      {
-        "id": 16,
-        "title": "Vishing-to-SaaS: Cordial Spider & Snarky Spider in Rapid Extortion Blitz",
-        "tag": "Malware / Social Engineering",
-        "desc": "Two cybercrime groups use vishing + SSO AiTM to compromise entire SaaS ecosystems in hours, leaving minimal forensic trace.",
-        "summary": "CrowdStrike identified Cordial Spider (aka BlackFile, UNC6671) and Snarky Spider (aka UNC6661, tied to 'The Com' e-crime ecosystem), active since October 2025. Attackers call targets impersonating IT support, direct them to SSO-themed AiTM phishing pages, capture credentials + MFA, and register new devices to maintain access while deleting MFA notifications via inbox rules. Pivot to scraping employee directories for high-privilege accounts, then exfiltrate from Google Workspace, HubSpot, SharePoint, and Salesforce.",
-        "importance": "This is extortion at SaaS speed. By staying entirely within trusted SaaS environments and using residential proxies, these groups are nearly invisible to traditional network detection. The IdP becomes a single point of compromise for every connected SaaS app.",
-        "noteworthy": "Enable device registration alerts that can't be auto-deleted by inbox rules. Monitor for new device registrations followed by mass file downloads. Implement FIDO2/WebAuthn to defeat AiTM phishing. Train help desk to verify caller identity out-of-band.",
-        "link": "https://thehackernews.com/2026/05/cybercrime-groups-using-vishing-and-sso.html"
-      },
-      {
-        "id": 17,
-        "title": "BufferZoneCorp: Poisoned Ruby Gems & Go Modules Exploit CI Pipelines",
-        "tag": "Supply Chain Attack / Malware",
-        "desc": "Sleepers in RubyGems and Go proxy registries harvest AWS keys, SSH creds, and GitHub Actions tokens from CI runners.",
-        "summary": "Socket uncovered a campaign by GitHub account 'BufferZoneCorp' publishing malicious Ruby gems (masquerading as activesupport-logger, devise-jwt) and Go modules (go-retryablehttp, grpc-client). Ruby gems harvest environment variables, SSH keys, AWS secrets, .npmrc, and GitHub CLI config at install time, exfiltrating to Webhook.site. Go modules tamper with GitHub Actions workflows via a fake go binary wrapper, append attacker SSH keys to authorized_keys, and steal developer data.",
-        "importance": "CI pipelines hold the keys to the kingdom — cloud creds, signing keys, deployment tokens. A single poisoned dependency in a CI runner can compromise every artifact that pipeline produces, making this a force-multiplier supply chain attack.",
-        "noteworthy": "Audit RubyGems and Go module dependencies for suspicious packages. Check ~/.ssh/authorized_keys for unknown entries. Rotate all CI/CD secrets if any suspicious package was installed. Review GitHub Actions run logs for unexpected go binary paths.",
-        "link": "https://thehackernews.com/2026/05/poisoned-ruby-gems-and-go-modules.html"
-      },
-      {
-        "id": 18,
-        "title": "Copy Fail: CVE-2026-31431 — 2017 Kernel Bug Gives Root on All Linux Distros",
-        "tag": "Linux / Critical Vulnerability",
-        "desc": "732-byte Python script exploits 9-year-old kernel crypto flaw for instant root on Amazon Linux, RHEL, SUSE, Ubuntu.",
-        "summary": "Xint.io and Theori disclosed CVE-2026-31431 (CVSS 7.8), a local privilege escalation in the Linux kernel's algif_aead crypto module, introduced in August 2017. An unprivileged user can write 4 controlled bytes into the page cache of any readable file—including setuid binaries. The exploit is portable, tiny, reliable (no race condition), and works cross-container since the page cache is shared. Major distros have released patched kernels.",
-        "importance": "This is Dirty Pipe 2.0 — same class of page-cache corruption primitive, different subsystem. A reliable, single-script LPE on every Linux server shipped since 2017 is a pentester's dream and a defender's nightmare. Cross-container impact means container escapes are trivial.",
-        "noteworthy": "Patch kernel immediately per your distro's advisory (Amazon Linux, Arch, Debian, RHEL, SUSE, Ubuntu all have fixes). Audit for unexpected setuid binaries. In containerized environments, assume any container compromise = host compromise until patched.",
-        "link": "https://thehackernews.com/2026/04/new-linux-copy-fail-vulnerability.html"
-      },
-      {
-        "id": 19,
-        "title": "PromptMink: DPRK Used Claude Opus to Inject Malware into npm Package",
-        "tag": "AI Security / Nation-State",
-        "desc": "North Korea's Famous Chollima group had Claude Opus commit a malicious npm dependency into an autonomous crypto trading agent.",
-        "summary": "ReversingLabs codenamed the campaign 'PromptMink,' linking it to DPRK's Famous Chollima (aka Shifty Corsair, behind Contagious Interview). Claude Opus co-authored a commit on Feb 28 that added '@validate-sdk/v2' as a dependency to 'openpaw-graveyard' — an autonomous Solana trading agent. The package was a cryptocurrency stealer, part of a two-layer supply chain with benign first-layer packages importing malicious second-layer ones. The campaign has evolved to target PyPI and use SSH persistence + Rust-compiled payloads for full project exfiltration.",
-        "importance": "AI-assisted supply chain attacks are no longer theoretical. A nation-state actor literally had an LLM write and commit malware into a project. This blurs the line between 'vibe-coding accident' and intentional backdoor, making attribution and detection vastly harder.",
-        "noteworthy": "Audit all AI-generated commits and pull requests — especially package additions. Scan for the listed malicious npm packages. Verify npm audit/CI passes. Treat AI-authored code with the same scrutiny as untrusted external contributions.",
-        "link": "https://thehackernews.com/2026/04/new-wave-of-dprk-attacks-uses-ai.html"
-      },
-      {
-        "id": 20,
-        "title": "Two Ransomware Negotiators Get 4 Years for BlackCat Attacks",
-        "tag": "Cybercrime / Law Enforcement",
-        "desc": "US sentences two cybersecurity professionals who flipped from defenders to BlackCat ransomware affiliates.",
-        "summary": "Two individuals who previously worked as ransomware negotiators were sentenced to 4 years in US federal prison for their roles in BlackCat (ALPHV) ransomware attacks. The case highlights the insider threat risk within the incident response ecosystem, where professionals with intimate knowledge of negotiation tactics and victim psychology repurposed their skills for criminal gain.",
-        "importance": "When the people you hire to negotiate with ransomware gangs are themselves working for those gangs, the entire IR trust model collapses. This case should prompt every org to vet their IR vendors more aggressively.",
-        "noteworthy": "Vet incident response firms and individual consultants. Ask vendors about employee background checks and insider threat programs. Review any past BlackCat negotiations for signs of collusion.",
-        "link": "https://www.bleepingcomputer.com/news/security/us-ransomware-negotiators-get-4-years-in-prison-over-blackcat-attacks/"
-      },
-      {
-        "id": 21,
-        "title": "Deep#Door RAT: New Stealthy Backdoor Targets Windows with Kernel Tricks",
-        "tag": "Malware / Threat Intelligence",
-        "desc": "Newly discovered Deep#Door RAT combines kernel-level stealth, persistence mechanisms, and multi-stage payload delivery.",
-        "summary": "Security researchers disclosed Deep#Door, a new Remote Access Trojan targeting Windows systems with advanced stealth and persistence. The malware uses kernel-level techniques to hide its presence, deploys through multi-stage delivery chains, and maintains persistence via multiple redundant mechanisms, making removal difficult even for experienced defenders.",
-        "importance": "Kernel-level stealth in commodity RATs signals a democratization of advanced techniques previously reserved for nation-state APTs. As detection tools improve, malware authors are pushing deeper into the stack to evade them.",
-        "noteworthy": "Update EDR signatures for Deep#Door IOCs. Monitor for unusual kernel driver loads. Hunt for the multi-stage delivery chain indicators. If found, assume full system compromise — reimage affected machines.",
-        "link": "https://securityaffairs.com/191567/malware/new-deepdoor-rat-uses-stealth-and-persistence-to-target-windows.html"
-      },
-      {
-        "id": 22,
-        "title": "BTC at $78.3K — 100-EMA Holds, Options Market Pricing 25% $84K Odds",
-        "tag": "Financial / Crypto",
-        "desc": "Bitcoin rebounds from 100-day EMA support at $78.3K; futures OI rises 6.6% to 257K BTC as traders position for upside.",
-        "summary": "Bitcoin gained 2.5% to trade at $78,300, rebounding off the 100-day exponential moving average. Spot market buy volumes strengthened and cumulative volume delta turned positive. BTC futures open interest rose 6.64% to 257,000 BTC, indicating fresh positioning. Options markets price only a 25% probability of BTC hitting $84K in May. Ethereum trades at $2,304 (+1%), Solana at $83.97 (flat).",
-        "importance": "The 100-EMA hold is technically significant — it's been reliable support. But options pricing 25% $84K odds shows the market isn't convinced the rally has legs. The rising OI without price acceleration could mean shorts are building.",
-        "noteworthy": "Watch $78K (100-EMA) as key support — a breakdown targets $74K. Break above $80.5K resistance needed for bullish confirmation. OI surge without price follow-through = caution. Monitor Coinbase Premium for US demand signals.",
-        "link": "https://cointelegraph.com/markets/3-bitcoin-data-points-suggest-rally-to-80k-is-imminent"
-      },
-      {
-        "id": 23,
-        "title": "CLARITY Act Stablecoin Yield Rules Finalized — 55% Odds of 2026 Passage",
-        "tag": "Regulation / Crypto",
-        "desc": "US Senate Banking Committee finalizes stablecoin yield provisions; Polymarket odds jump 9% as Coinbase calls for markup.",
-        "summary": "Senators Tillis and Alsobrooks published the final stablecoin yield provisions for the CLARITY Act. The text (SEC 404) bans interest/yield on stablecoins akin to bank deposits but allows rewards tied to 'bona fide activities.' Banks won additional restrictions on rewards. Coinbase CLO Faryar Shirzad called it 'go time' and CEO Brian Armstrong urged markup. Polymarket odds for 2026 passage rose 9% to 55%. Galaxy Digital's Alex Thorn expects Senate Banking markup as soon as May 11.",
-        "importance": "CLARITY is the most consequential US crypto bill since the FIT21 framework. The stablecoin yield compromise unblocks the biggest legislative logjam. If passed, it creates a federal regulatory floor for crypto — the end of regulation-by-enforcement.",
-        "noteworthy": "Track Senate Banking Committee schedule for week of May 11. Position crypto holdings for regulatory tailwinds if markup proceeds. Stablecoin issuers: begin preparing compliance frameworks for yield restrictions.",
-        "link": "https://cointelegraph.com/news/go-time-after-clarity-act-stablecoin-yield-compromise-finalized"
-      },
-      {
-        "id": 24,
-        "title": "Ethereum Foundation Sells Another 10K ETH to BitMine in 3rd OTC Deal",
-        "tag": "Financial / Crypto",
-        "desc": "Ethereum Foundation executes third OTC sale of 10,000 ETH to institutional miner BitMine, continuing pattern of large strategic liquidations.",
-        "summary": "The Ethereum Foundation sold another 10,000 ETH (~$23M) to institutional miner BitMine in the third such OTC transaction. The pattern of regular large sales by the Foundation, while likely part of a treasury management strategy, creates consistent sell pressure on ETH price. ETH trades at $2,304, underperforming BTC during the current rally.",
-        "importance": "The Foundation's continued selling at $2.3K ETH signals they see this as an acceptable liquidation price. If the pattern continues, it creates a de facto ceiling on ETH rallies — institutional buyers know more supply is coming.",
-        "noteworthy": "Monitor Ethereum Foundation wallet addresses for the next scheduled sale. Consider ETH/BTC ratio as a signal — persistent underperformance likely continues while Foundation selling persists. BTC remains the stronger relative bet.",
-        "link": "https://cointelegraph.com/news/ethereum-foundation-sells-another-10000-eth-to-bitmine-in-third-otc-deal"
       }
     ]
   }
