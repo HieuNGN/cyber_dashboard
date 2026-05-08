@@ -1,9 +1,134 @@
 {
   "today": {
-    "date": "07/05/26",
+    "date": "08/05/26",
     "items": [
       {
         "id": 1,
+        "title": "Dirty Frag: Linux Kernel LPE Zero-Day Grants Root on All Major Distros",
+        "tag": "Critical Vulnerability / Linux Kernel",
+        "desc": "Unpatched LPE chains xfrm-ESP and RxRPC page-cache writes — PoC gives root in a single command on Ubuntu, RHEL, Fedora, openSUSE.",
+        "summary": "Security researcher Hyunwoo Kim (@v4bel) disclosed 'Dirty Frag,' an unpatched Linux kernel local privilege escalation vulnerability that succeeds Dirty Pipe and Copy Fail (CVE-2026-31431). Dirty Frag chains two page-cache write bugs: the xfrm-ESP variant (introduced Jan 2017) and the RxRPC variant (introduced June 2023). Together they cover each other's blind spots — xfrm-ESP needs namespace creation (blocked by Ubuntu AppArmor), while RxRPC works on Ubuntu but requires rxrpc.ko. Neither bug requires a race condition, kernel panics on failure are absent, and success rate is very high. A working PoC exploit is public. Affected distros: Ubuntu 24.04.4, RHEL 10.1, openSUSE Tumbleweed, CentOS Stream 10, AlmaLinux 10, Fedora 44.",
+        "importance": "This is the third major Linux kernel LPE in the Dirty Pipe lineage. The public PoC and lack of patches mean every unprivileged user on affected systems can gain root immediately. Critically, systems where the Copy Fail mitigation (algif_aead blacklist) was applied remain vulnerable — Dirty Frag bypasses it entirely.",
+        "noteworthy": "Blocklist esp4, esp6, and rxrpc kernel modules immediately: sudo sh -c \"printf 'install esp4 /bin/false\\ninstall esp6 /bin/false\\ninstall rxrpc /bin/false\\n' > /etc/modprobe.d/dirtyfrag.conf; rmmod esp4 esp6 rxrpc 2>/dev/null; true\". Monitor vendor advisories for kernel patches. Audit systems for the Copy Fail mitigation — it does NOT protect against Dirty Frag.",
+        "link": "https://thehackernews.com/2026/05/linux-kernel-dirty-frag-lpe-exploit.html"
+      },
+      {
+        "id": 2,
+        "title": "Ivanti EPMM CVE-2026-6973 RCE Under Active Exploitation — CISA KEV Listed",
+        "tag": "Critical Vulnerability / Enterprise Mobility",
+        "desc": "Ivanti EPMM auth bypass + RCE chain actively exploited; CISA requires federal patching by May 10.",
+        "summary": "Ivanti disclosed CVE-2026-6973 (CVSS 7.2), an improper input validation flaw in Endpoint Manager Mobile (EPMM) before versions 12.6.1.1, 12.7.0.1, and 12.8.0.1 that allows a remotely authenticated admin to achieve RCE. A limited number of customers have been exploited. CISA added the flaw to its Known Exploited Vulnerabilities catalog, requiring federal agencies to patch by May 10, 2026. Four additional EPMM flaws were also patched: CVE-2026-5786 (CVSS 8.8, privilege escalation), CVE-2026-5787 (CVSS 8.9, certificate impersonation), CVE-2026-5788 (CVSS 7.0, arbitrary method invocation), and CVE-2026-7821 (CVSS 7.4, restricted device enrollment bypass).",
+        "importance": "This is the latest in Ivanti's ongoing pattern of critical EPMM/Sentry vulnerabilities being exploited before patches are widely deployed. The chain — auth bypass to admin RCE — mirrors prior Ivanti exploitation campaigns. CISA's 48-hour patch deadline signals urgency.",
+        "noteworthy": "Patch EPMM to 12.6.1.1, 12.7.0.1, or 12.8.0.1 immediately. Rotate all EPMM credentials (especially if previously exploited via CVE-2026-1281/CVE-2026-1340). Audit EPMM access logs for anomalous admin activity. Review Sentry host certificates for impersonation indicators.",
+        "link": "https://thehackernews.com/2026/05/ivanti-epmm-cve-2026-6973-rce-under.html"
+      },
+      {
+        "id": 3,
+        "title": "PCPJack: Worm-Like Credential Stealer Exploits 5 CVEs Across Cloud Infrastructure",
+        "tag": "Threat Intelligence / Cloud Security",
+        "desc": "SentinelOne uncovers Python-based credential harvester targeting Docker, K8s, Redis, MongoDB, RayML — evicts rival TeamPCP from compromised hosts.",
+        "summary": "SentinelOne researcher Alex Delamotte detailed PCPJack, a credential theft framework targeting exposed cloud infrastructure (Docker, Kubernetes, Redis, MongoDB, RayML, web apps). Six Python payloads handle worm-like propagation (exploiting CVE-2025-55182, CVE-2025-29927, CVE-2026-1357, CVE-2025-9501, CVE-2025-48703), credential parsing, lateral movement, encryption, cloud IP range collection, and external port scanning. PCPJack actively evicts TeamPCP artifacts from compromised environments, tracks eviction success metrics via Telegram C2, and uses Common Crawl parquet files for propagation target lists. A separate Sliver C2 script was also discovered in the operator's infrastructure.",
+        "importance": "PCPJack represents the evolution of cloud-targeted malware into competitive turf wars — it doesn't just steal credentials, it actively removes rival operators from shared infrastructure. Using Common Crawl as a targeting datasource is novel and makes the worm's scope effectively limitless.",
+        "noteworthy": "Audit exposed Docker, K8s, Redis, MongoDB, and RayML endpoints for unauthorized Python processes. Block Telegram C2 channels from corporate networks. Patch all five exploited CVEs. Check for Sliver C2 indicators. Review cloud security group rules for unnecessary exposure.",
+        "link": "https://thehackernews.com/2026/05/pcpjack-credential-stealer-exploits-5.html"
+      },
+      {
+        "id": 4,
+        "title": "ShinyHunters Breaches Canvas LMS — Defaces Login Portals at Hundreds of Universities",
+        "tag": "Cyber Attack / Education Sector",
+        "desc": "Extortion gang exploits new Instructure vulnerability to compromise Canvas login portals across hundreds of colleges.",
+        "summary": "The ShinyHunters extortion gang breached education technology giant Instructure again, exploiting a new vulnerability to deface Canvas LMS login portals at hundreds of colleges and universities. The attack follows prior ShinyHunters intrusions into Instructure systems. Login portals were modified as part of an extortion campaign, potentially exposing student and faculty credentials. The full scope of affected institutions and data exposure is still being assessed.",
+        "importance": "Canvas is used by thousands of educational institutions globally. Defacing login portals in an extortion campaign creates both credential harvesting risk for students and institutional reputation damage. ShinyHunters' repeated targeting of Instructure suggests the company's security posture has systemic gaps.",
+        "noteworthy": "If your institution uses Canvas, verify login portal integrity and check for unauthorized modifications. Enforce MFA for all Canvas accounts. Monitor for credential stuffing using Canvas credentials across other platforms. Instructure customers should request a full incident scope update from the vendor.",
+        "link": "https://www.bleepingcomputer.com/news/security/canvas-login-portals-hacked-in-mass-shinyhunters-extortion-campaign/"
+      },
+      {
+        "id": 5,
+        "title": "vm2 Node.js Sandbox Escape: 12 CVEs Including CVSS 10.0 Flaws",
+        "tag": "Critical Vulnerability / Software Supply Chain",
+        "desc": "A dozen sandbox escape vulnerabilities in vm2 library — including three CVSS 10.0 — enable arbitrary code execution on host systems.",
+        "summary": "Twelve critical vulnerabilities were disclosed in the vm2 Node.js sandbox library, including three CVSS 10.0 flaws: CVE-2026-43997 (code injection via host Object access), CVE-2026-44005 (sandbox escape enabling prototype pollution), and CVE-2026-44006 (code injection via BaseHandler.getPrototypeOf). Additional CVSS 9.8 flaws include CVE-2026-24118 (__lookupGetter__ escape), CVE-2026-24120 (bypass for CVE-2023-37466), CVE-2026-24781 (inspect function escape), CVE-2026-26332 (SuppressedError escape), and CVE-2026-26956 (Symbol TypeError escape). All are patched in vm2 3.11.2. The maintainer acknowledged that new bypasses will likely continue to emerge.",
+        "importance": "vm2 is widely used in AI/LLM applications to sandbox untrusted model-generated code. With 12 CVEs in a single disclosure — three at maximum severity — the library's fundamental sandboxing approach appears structurally flawed. Any system running untrusted JS through vm2 should consider whether the sandbox model itself is viable.",
+        "noteworthy": "Update vm2 to 3.11.2 immediately. For AI/LLM applications using vm2 for code sandboxing, evaluate alternatives like Deno or isolated containers. Audit dependencies for transitive vm2 usage. Consider vm2 architecturally unsafe for production sandboxing of untrusted code.",
+        "link": "https://thehackernews.com/2026/05/vm2-nodejs-library-vulnerabilities.html"
+      },
+      {
+        "id": 6,
+        "title": "Chrome Removes 'On-Device AI' Privacy Claim After Data Transmission Revealed",
+        "tag": "Privacy / AI Infrastructure",
+        "desc": "Google retracts claim that Chrome Gemini Nano data stays on-device — HN community flags silent data exfiltration to Google servers.",
+        "summary": "Google Chrome has removed its claim that on-device AI (Gemini Nano) processing does not send data to Google servers, following revelations that the browser transmits user data back despite 'on-device' marketing. The removal was flagged on Hacker News (554 upvotes, 216 comments), with users noting that 'adding AI to desktop apps and sending data back to the mothership' creates an invisible surveillance channel. This follows last week's disclosure that Chrome silently downloads a 4GB Gemini Nano model without user consent and re-downloads it after deletion.",
+        "importance": "This represents a fundamental trust failure in Google's AI deployment strategy. Removing a privacy claim rather than fixing the data flow confirms that 'on-device' branding is marketing, not architecture. At 2 billion Chrome users, the scale of potential data collection is unprecedented.",
+        "noteworthy": "Disable Chrome AI features via chrome://flags. Enterprise admins: deploy Chrome policy to block Gemini Nano and on-device model features. Audit network traffic from Chrome for unexpected outbound connections to Google AI endpoints. Consider privacy-focused browser alternatives.",
+        "link": "https://news.ycombinator.com/item?id=48050964"
+      },
+      {
+        "id": 7,
+        "title": "Claude Code CVE-2026-39861: Sandbox Escape via Symlink",
+        "tag": "Critical Vulnerability / AI Tooling",
+        "desc": "Anthropic's Claude Code CLI has a sandbox escape via symlink exploitation — ironic given their Mythos model's CVE-finding capabilities.",
+        "summary": "A security advisory (CVE-2026-39861) discloses a sandbox escape vulnerability in Anthropic's Claude Code CLI via symlink exploitation. The flaw allows attackers to break out of Claude Code's sandboxed execution environment using symbolic links to access files and directories outside the intended boundary. The irony was noted by the HN community: Anthropic's Mythos model, marketed for finding CVEs in other projects, failed to detect this vulnerability in their own codebase.",
+        "importance": "AI coding assistants with sandbox escapes are a new attack surface category. Developers trust these tools to run code in isolation — a symlink escape means the 'sandbox' is an illusion. The failure of Anthropic's own security tooling to catch this raises questions about the robustness of AI-assisted security auditing.",
+        "noteworthy": "Update Claude Code immediately. If using Claude Code in CI/CD or production environments, restrict filesystem permissions and use container-level isolation as a defense-in-depth measure. Evaluate OpenCode or alternative AI coding agents with different sandbox architectures.",
+        "link": "https://news.ycombinator.com/item?id=48057842"
+      },
+      {
+        "id": 8,
+        "title": "GNU IFUNC Identified as Root Cause Behind XZ Utils Backdoor (CVE-2024-3094)",
+        "tag": "Security Research / Supply Chain",
+        "desc": "Hacker News analysis pinpoints GNU IFUNC mechanism as the enabler that made the XZ Utils backdoor possible.",
+        "summary": "A Hacker News discussion (77 points) identifies GNU IFUNC (Indirect Function) as the real culprit behind the infamous XZ Utils supply chain backdoor (CVE-2024-3094). IFUNC allows dynamic selection of function implementations at runtime, which the XZ attacker exploited to redirect execution to malicious code during library initialization — before any security checks could apply. This is a fundamental weakness in the GNU toolchain that enables supply chain attacks at the linker level.",
+        "importance": "Understanding that IFUNC is the structural enabler changes how we assess supply chain risk. IFUNC makes it possible to hide malicious code paths inside legitimate library init sequences — static analysis and traditional code review cannot easily detect these redirects. Every project using GNU toolchain IFUNC is potentially vulnerable to the same attack pattern.",
+        "noteworthy": "Audit build chains for IFUNC usage. Consider compiler flags to disable IFUNC if not required. Supply chain security tools should add IFUNC redirection detection. Monitor ld.so resolver behavior for unexpected function resolution paths.",
+        "link": "https://news.ycombinator.com/item?id=48056749"
+      },
+      {
+        "id": 9,
+        "title": "Zcash Surges 70% in a Week as AI Surveillance Concerns Fuel Privacy Coin Demand",
+        "tag": "Financial / Crypto",
+        "desc": "ZEC rockets 70% weekly on AI surveillance and quantum computing fears; BTC holds $79.9K, ETH $2,282, SOL $88.3.",
+        "summary": "Zcash (ZEC) surged 70% in a single week driven by growing concerns about AI-powered surveillance, quantum computing threats to financial privacy, and increased regulatory scrutiny of transparent blockchains. Swyftx analyst Pav Hundal confirmed the AI/quantum narrative is the primary driver. Meanwhile, BTC holds at $79,892 (-1.5% 24h) with a $1.6T market cap, Ethereum at $2,282 (-2.2% 24h), and Solana at $88.31 (-1.3% 24h). Market sentiment remains cautious as the CLARITY Act markup could happen as early as next week.",
+        "importance": "The Zcash surge signals a market recognition that AI surveillance capabilities are creating demand curve shifts in privacy infrastructure. When the market prices in surveillance risk at this velocity, it's a leading indicator for regulatory and technology responses.",
+        "noteworthy": "Monitor ZEC/USD for sustainability above resistance levels. Watch CLARITY Act markup proceedings next week — crypto market structure legislation could reshape US market dynamics. BTC $80K support level remains critical; a break below could trigger further selling.",
+        "link": "https://cointelegraph.com/news/zcash-price-surges-privacy-coins-ai-surveillance-concerns"
+      },
+      {
+        "id": 10,
+        "title": "AWS us-east-1 Data Center Overheat Impacts Coinbase — Trading Halted",
+        "tag": "Infrastructure / Cloud Outage",
+        "desc": "AWS Northern Virginia data center overheats; Coinbase markets placed in cancel-only mode as crypto trading disrupted.",
+        "summary": "An AWS Northern Virginia (us-east-1) data center experienced overheating issues, impacting Coinbase and other services. Coinbase placed its markets in 'cancel only' mode, halting trading while AWS worked on remediation. The outage highlights the concentration risk of critical financial infrastructure in a single availability zone, and the cascading impact of physical infrastructure failures on digital asset markets.",
+        "importance": "When a cooling failure at a single data center can halt a multi-billion dollar crypto exchange, the concentration risk is undeniable. This is the same AWS region that has caused cascading outages across the internet before. Crypto markets claim decentralization but their operational infrastructure is dangerously centralized.",
+        "noteworthy": "Diversify exchange and API infrastructure across multiple cloud regions and providers. Implement circuit breakers that don't depend on a single cloud provider's health. Monitor AWS Service Health Dashboard for us-east-1 incidents. Evaluate on-prem or multi-cloud failover for critical trading systems.",
+        "link": "https://cointelegraph.com/news/aws-data-center-overheating-impacting-coinbase-others"
+      },
+      {
+        "id": 11,
+        "title": "US Sentences 8 'Laptop Farmers' in 5 Months for Aiding DPRK IT Worker Infiltration",
+        "tag": "Cybercrime / Nation-State Operations",
+        "desc": "DOJ accelerates prosecutions of Americans hosting laptops for North Korean remote IT workers posing as US employees.",
+        "summary": "The US Justice Department secured its eighth sentence in five months against individuals running 'laptop farms' — hosting physical laptops at US residences that North Korean IT workers remotely accessed to pose as American employees. The workers use stolen or fabricated identities to obtain remote IT jobs at US companies, routing salaries back to Pyongyang in violation of sanctions. The sentencing pace signals DOJ is treating DPRK IT worker infiltration as a priority enforcement area.",
+        "importance": "DPRK IT worker schemes generate hundreds of millions annually for the North Korean regime. The laptop farm model is the critical physical infrastructure enabling the deception — without US-based endpoints, the remote workers cannot pass identity verification checks. DOJ's enforcement acceleration signals this vector is a top counterproliferation priority.",
+        "noteworthy": "HR and security teams should scrutinize remote IT workers requesting VPN-obfuscated or device-redirected setups. Implement periodic video verification for remote employees. Monitor for anomalous working hours inconsistent with claimed US timezone. Flag employees who refuse camera-enabled meetings.",
+        "link": "https://cointelegraph.com/news/us-sentences-eight-in-five-months-laptop-farmers-north-korea"
+      },
+      {
+        "id": 12,
+        "title": "Coinbase Reports $400M Q1 Loss, Revenue Miss as Trading Volumes Decline",
+        "tag": "Financial / Crypto Exchange",
+        "desc": "Coinbase posts $400M Q1 loss amid macro headwinds; CEO Armstrong announces plan to diversify beyond spot trading.",
+        "summary": "Coinbase reported a $400 million Q1 loss and revenue miss as macro conditions weighed on crypto trading volumes. CFO Alesia Haas described 'macro conditions were genuinely tough,' while CEO Brian Armstrong highlighted a strategic plan to diversify beyond spot trading revenue. The earnings report contributed to a share price decline, compounding the AWS outage disruption that same day which forced Coinbase into cancel-only trading mode.",
+        "importance": "Coinbase's diversification away from spot trading mirrors a structural shift in the crypto exchange market — fee compression and volume concentration are compressing margins. The dual hit of poor earnings and an infrastructure outage on the same day underscores operational fragility.",
+        "noteworthy": "Monitor Coinbase's diversification execution (derivatives, staking, custody). Track crypto exchange market share shifts. Evaluate counterparty risk for funds held on Coinbase. The CLARITY Act could reshape revenue models for US exchanges if passed.",
+        "link": "https://cointelegraph.com/news/coinbase-shares-slide-q1-loss-revenue-miss"
+      }
+    ]
+  },
+  "yesterday": {
+    "date": "07/05/26",
+    "items": [
+      {
+        "id": 13,
         "title": "Mirai xlabs_v1 Botnet Exploits ADB to Hijack IoT for DDoS",
         "tag": "IoT / DDoS Botnet",
         "desc": "New Mirai variant targets exposed Android Debug Bridge (ADB) ports to enlist IoT devices into a 30,000-node DDoS swarm.",
@@ -13,7 +138,7 @@
         "link": "https://thehackernews.com/2026/05/mirai-based-xlabs_v1-botnet-exploits.html"
       },
       {
-        "id": 2,
+        "id": 14,
         "title": "MuddyWater Uses Microsoft Teams for Credential Theft False Flag",
         "tag": "APT / Nation-State",
         "desc": "Iran-nexus MuddyWater APT leverages compromised Teams accounts to stage false-flag ransomware attacks against Middle Eastern orgs.",
@@ -23,7 +148,7 @@
         "link": "https://thehackernews.com/2026/05/muddywater-uses-microsoft-teams-to.html"
       },
       {
-        "id": 3,
+        "id": 15,
         "title": "Palo Alto PAN-OS Flaw Under Active Exploitation (CVSS 9.8)",
         "tag": "Critical Vulnerability / Network Infra",
         "desc": "Shadowserver reports active exploitation of unauthenticated RCE in Palo Alto PAN-OS — over 1,500 firewalls compromised.",
@@ -33,7 +158,7 @@
         "link": "https://thehackernews.com/2026/05/palo-alto-pan-os-flaw-under-active.html"
       },
       {
-        "id": 4,
+        "id": 16,
         "title": "Critical Apache HTTP/2 Flaw Enabling DoS/RCE Hits Production",
         "tag": "Critical Vulnerability / Web Server",
         "desc": "CVE-2026-23918 weaponized: 10,000+ Apache servers hit with DoS, researchers demonstrate RCE on Docker-based deployments.",
@@ -43,7 +168,7 @@
         "link": "https://thehackernews.com/2026/05/critical-apache-http2-flaw-cve-2026.html"
       },
       {
-        "id": 5,
+        "id": 17,
         "title": "Trump Pauses Hormuz Escorts 50 Hours After Announcement",
         "tag": "Geopolitics / Middle East",
         "desc": "US pauses 'Project Freedom' in Strait of Hormuz after 50-hour standoff; Iran claims transit safety will be ensured under new IRGC steps.",
@@ -53,7 +178,7 @@
         "link": "https://www.aljazeera.com/news/middle-east/2026/5/7/trump-pauses-hormuz-plan-50-hours-after-he-announced-it"
       },
       {
-        "id": 6,
+        "id": 18,
         "title": "Israeli Forces Bomb Beirut Suburbs Targeting Hezbollah Command",
         "tag": "Conflict / Middle East",
         "desc": "First strike on Beirut since April 17 truce; Israel targets Hezbollah commander as Trump calls for quick end to war.",
@@ -63,7 +188,7 @@
         "link": "https://www.aljazeera.com/news/middle-east/2026/5/7/trump-says-iran-agreement-very-possible-israeli-forces-bomb-beirut"
       },
       {
-        "id": 7,
+        "id": 19,
         "title": "Intel Xeon 6 'Granite Rapids' Review: 128 P-Cores Reclaim Server Lead",
         "tag": "Hardware / CPUs",
         "desc": "Granite Rapids (6900P) benchmarks reveal massive performance gain; Intel's P-core strategy targets AMD's EPYC dominance.",
@@ -73,7 +198,7 @@
         "link": "https://www.anandtech.com/show/21356/intel-xeon-6-6900p-granite-rapids-review"
       },
       {
-        "id": 8,
+        "id": 20,
         "title": "PCIe 8.0 Spec Finalized: 1 TB/s Bandwidth for AI Datacenters",
         "tag": "Hardware / Interconnect",
         "desc": "PCI-SIG releases PCIe 8.0 specification; doubles bandwidth again to 128 GB/s (x1) to feed next-gen GPU clusters.",
@@ -83,7 +208,7 @@
         "link": "https://www.tomshardware.com/news/pcie-8-specification-v1-released"
       },
       {
-        "id": 9,
+        "id": 21,
         "title": "BTC Hits $80.9K — Neutral Sentiment as $2B BTC Exits Exchanges",
         "tag": "Financial / Crypto",
         "desc": "Bitcoin holds $80.9K; $2B in spot BTC moved off exchanges in 24h as 'Fear & Greed' Index stabilizes at 50.",
@@ -93,7 +218,7 @@
         "link": "https://cointelegraph.com/news/bitcoin-holds-80k-amid-neutral-sentiment"
       },
       {
-        "id": 10,
+        "id": 22,
         "title": "Solana Outperforms at $88 (1.3%) While ETH Stagnates at $2.3K",
         "tag": "Financial / Crypto",
         "desc": "SOL leads majors in daily gains; network activity hits 2026 highs while Ethereum Foundation sales weigh on ETH price.",
@@ -101,111 +226,6 @@
         "importance": "The rotation from ETH to SOL is accelerating in the current market cycle. Solana's performance-oriented architecture is attracting the 'retail' and 'DeFi' volume that previously defined Ethereum's dominance. ETH underperformance is a growing structural concern for L1 bulls.",
         "noteworthy": "Monitor SOL/BTC and SOL/ETH pairs for breakout signals. Evaluate Solana-based DeFi protocols for increased yield opportunities as volume shifts. Watch Ethereum L2 adoption vs Solana's 'monolithic' growth.",
         "link": "https://cointelegraph.com/news/solana-outperforms-majors-as-network-activity-surges"
-      }
-    ]
-  },
-  "yesterday": {
-    "date": "05/05/26",
-    "items": [
-      {
-        "id": 11,
-        "title": "CVE-2026-23918: Apache HTTP/2 Double-Free Enables DoS + RCE",
-        "tag": "Critical Vulnerability / Server Security",
-        "desc": "CVSS 8.8 flaw in Apache httpd 2.4.66 mod_http2 — one TCP connection crashes a worker, and with APR mmap (Debian/Docker default) RCE is achievable.",
-        "summary": "Striga.ai and ISEC.pl researchers disclosed CVE-2026-23918, a double-free in Apache HTTP Server 2.4.66's mod_http2 stream cleanup path. When a client sends an HTTP/2 HEADERS frame followed immediately by RST_STREAM on the same stream before the multiplexer registers it, two nghttp2 callbacks both push the same h2_stream pointer onto the cleanup array, causing a double-free on pool destruction. DoS is trivial — one connection, two frames, no auth, worker crashes. RCE requires APR with the mmap allocator (default on Debian-derived systems and official httpd Docker image), using scoreboard memory as a stable container for fake structures pointing to system(). Fixed in Apache 2.4.67. MPM prefork is not affected.",
-        "importance": "mod_http2 ships in default Apache builds and HTTP/2 is widely enabled. The DoS vector works on any default deployment with multi-threaded MPM — trivially automatable. The RCE path, while requiring an info leak, was demonstrated working in lab conditions within minutes. Apache hosts the majority of the web.",
-        "noteworthy": "Upgrade Apache to 2.4.67 immediately. If unable, switch to MPM prefork as a temporary mitigation. Audit Apache logs for HTTP/2 RST_STREAM patterns. On Debian/Docker deployments, assume RCE is achievable — rotate server secrets post-patch.",
-        "link": "https://thehackernews.com/2026/05/critical-apache-http2-flaw-cve-2026.html"
-      },
-      {
-        "id": 12,
-        "title": "DAEMON Tools Supply Chain: Signed Installers Trojanized for a Month",
-        "tag": "Supply Chain Attack / Endpoint Security",
-        "desc": "Kaspersky finds DAEMON Tools Windows installers trojanized since April 8 with signed binaries — backdoor deployed to targeted subset of hosts.",
-        "summary": "Kaspersky uncovered a supply chain attack where DAEMON Tools official Windows installers (versions 12.5.0.2421–12.5.0.2434) have been trojanized since April 8, 2026 with developer-signed digital certificates. Three binaries (DTHelper.exe, DiscSoftBusServiceLite.exe, DTShellHlp.exe) activate an implant at startup that contacts env-check.daemontools[.]cc for shell commands. The chain downloads envchk.exe (system recon), then cdg.exe (shellcode loader) decrypting a minimalist backdoor. Thousands of infection attempts across 100+ countries, but the next-stage backdoor was delivered to only ~12 hosts in retail, scientific, government, and manufacturing orgs in Russia, Belarus, and Thailand. QUIC RAT was delivered to one educational institution in Russia. Evidence points to a Chinese-speaking adversary.",
-        "importance": "A digitally signed, official-vendor supply chain compromise that went undetected for nearly a month. The targeted follow-on delivery (12 out of thousands) indicates a sophisticated actor performing quality control on victims — classic espionage or big-game hunting behavior. The multi-protocol C2 (HTTP, UDP, TCP, WSS, QUIC, DNS, HTTP/3) makes detection and blocking extremely difficult.",
-        "noteworthy": "Isolate any machine with DAEMON Tools installed immediately. Conduct security sweeps for DTHelper.exe, DiscSoftBusServiceLite.exe, DTShellHlp.exe modifications. Block env-check.daemontools[.]cc at DNS/proxy level. Check for QUIC RAT indicators on Russian/Belarusian/Thai networks.",
-        "link": "https://thehackernews.com/2026/05/daemon-tools-supply-chain-attack.html"
-      },
-      {
-        "id": 13,
-        "title": "UAT-8302: China-Linked APT Uses Shared Malware Arsenal Against Governments",
-        "tag": "APT / Nation-State",
-        "desc": "Cisco Talos tracks Chinese APT group targeting South American and SE European governments using malware shared across multiple threat clusters.",
-        "summary": "Cisco Talos identified a China-nexus APT group tracked as UAT-8302, active since late 2024, targeting government entities in South America and southeastern Europe. The group deploys NetDraft (aka NosyDoor), a .NET backdoor also used by Ink Dragon, Earth Alux, Jewelbug, and REF7707. Additional tools include CloudSorcerer, SNOWLIGHT (VShell stager), Deed RAT (ShadowPad successor), and Draculoader. ESET tracks NosyDoor use by LongNosedGoblin; Russian firm Solar traces it to Erudite Mogwai targeting Russian IT. UAT-8302 also uses a Rust-based SNOWRUST variant. The findings confirm the 'Premier Pass-as-a-Service' model where China-aligned groups share initial access and tooling.",
-        "importance": "The shared-malware model between multiple China-aligned clusters means attribution is getting nearly impossible.当一个 APT 组使用与其他五个已命名集群共享的工具时，防御者无法确定他们面对的对手。'Premier Pass-as-a-Service' commoditizes initial access, reducing time-to-exploitation and clouding forensic trails.",
-        "noteworthy": "Hunt for NetDraft/CloudSorcerer/SNOWLIGHT IOCs across environments. Assume shared tooling means multiple clusters may be present. Patch web-facing applications — N-day exploits in web apps are suspected initial access. Monitor for Stowaway VPN and SoftEther proxy usage as persistence.",
-        "link": "https://thehackernews.com/2026/05/china-linked-uat-8302-targets.html"
-      },
-      {
-        "id": 14,
-        "title": "1M Exposed AI Services: No Auth, Leaked Keys, Ollama APIs Wide Open",
-        "tag": "AI Security / Infrastructure",
-        "desc": "Intruder scans 2M hosts — AI infrastructure is more misconfigured than any other software category ever audited.",
-        "summary": "Intruder used certificate transparency logs to scan 2M hosts with 1M exposed AI services and found catastrophic misconfigurations across the board. Authentication is not enabled by default in most AI projects. Exposed chatbots leak full conversation histories and API keys in plaintext. Agent management platforms (n8n, Flowise) expose business logic and connected credentials. Of 5,200+ exposed Ollama APIs with connected models, 31% responded to a simple 'Hello' prompt without auth. Over 90 exposed instances across government, marketing, and finance sectors had chatbot workflows, prompts, and integrations fully open. The ClawdBot fiasco averaged 2.6 CVEs/day.",
-        "importance": "AI self-hosting is deploying faster than any previous software wave — and without the security hardening that took 20 years to build in web infrastructure. When government and finance orgs leave AI agent platforms (with file write and code execution capabilities) open to the internet, the blast radius isn't a data leak — it's full server compromise.",
-        "noteworthy": "Audit all self-hosted AI services for authentication. Never expose Ollama, n8n, Flowise, or chatbot frontends to the internet without auth. Check for exposed API keys in AI chatbot configurations. Implement network segmentation for AI workloads. If running ClawdBot, assume compromise.",
-        "link": "https://thehackernews.com/2026/05/we-scanned-1-million-exposed-ai.html"
-      },
-      {
-        "id": 15,
-        "title": "Microsoft: 35K Users Phished Across 26 Countries via AiTM Campaign",
-        "tag": "Phishing / Social Engineering",
-        "desc": "Code-of-conduct-themed lures hit 13K orgs in 48 hours — QR code phishing surged 146% in Q1 2026.",
-        "summary": "Microsoft disclosed a credential theft campaign (April 14–16, 2026) targeting 35,000+ users across 13,000+ organizations in 26 countries, 92% in the US. Sectors hit: healthcare/life sciences (19%), financial services (18%), professional services (11%), technology (11%). Lures used 'code of conduct review' themes with polished HTML templates and authenticity statements. PDF attachments lead through CAPTCHA-gated intermediate pages to AiTM phishing that harvests Microsoft credentials and tokens, bypassing MFA. Microsoft also reported 8.3 billion email-based phishing threats in Q1 2026, with QR code phishing surging 146% (7.6M in Jan → 18.7M in March).",
-        "importance": "The combination of enterprise-grade phishing templates + CAPTCHA gating + AiTM token theft is the mature evolution of credential theft. QR code phishing's 146% surge in one quarter signals a paradigm shift — defenders who aren't monitoring QR-based attack vectors are operating blind.",
-        "noteworthy": "Deploy FIDO2/WebAuthn security keys to defeat AiTM phishing. Train users to verify 'code of conduct' emails out-of-band. Monitor for QR codes embedded in email bodies. Block Tycoon 2FA PhaaS infrastructure. Update email gateway rules for CAPTCHA-gated redirect patterns.",
-        "link": "https://thehackernews.com/2026/05/microsoft-details-phishing-campaign.html"
-      },
-      {
-        "id": 16,
-        "title": "CVE-2026-29014: MetInfo CMS RCE Actively Exploited in China, Hong Kong",
-        "tag": "Critical Vulnerability / Active Exploitation",
-        "desc": "CVSS 9.8 PHP code injection in MetInfo CMS — exploitation surged May 1 targeting ~2,000 online instances.",
-        "summary": "CVE-2026-29014 (CVSS 9.8) is an unauthenticated PHP code injection vulnerability in MetInfo CMS versions 7.9, 8.0, and 8.1, rooted in the /app/system/weixin/include/class/weixinreply.class.php script due to insufficient input sanitization in WeChat API request handling. Remote attackers can inject and execute arbitrary PHP code when the /cache/weixin/ directory exists (created when the WeChat plugin is configured). Patches were released April 7, but exploitation began April 25. Attack volume surged May 1, focusing on China and Hong Kong IP addresses. Approximately 2,000 MetInfo CMS instances are accessible online, mostly in China.",
-        "importance": "A CVSS 9.8 unauthenticated RCE with patches available for a month and still 2,000+ exposed instances. The surge pattern — from sparse automated probing to mass exploitation — is the textbook exploitation curve. CMS vulnerabilities remain a primary entry vector for web shell deployment and downstream supply chain compromise.",
-        "noteworthy": "Patch MetInfo CMS immediately if running 7.9/8.0/8.1. If the WeChat plugin is not needed, remove /cache/weixin/ directory to reduce attack surface. Audit web server logs for POST requests to weixinreply.class.php. Scan for web shell indicators on MetInfo servers.",
-        "link": "https://thehackernews.com/2026/05/metinfo-cms-cve-2026-29014-exploited.html"
-      },
-      {
-        "id": 17,
-        "title": "ScarCruft BirdCall: DPRK Backdoor Goes Multi-Platform via Gaming Supply Chain",
-        "tag": "APT / Cyber Espionage",
-        "desc": "North Korea's ScarCruft compromises Yanbian gaming platform to deploy BirdCall on both Android and Windows devices.",
-        "summary": "ESET discovered North Korea's ScarCruft compromised sqgame.net, a gaming platform used by ethnic Koreans in China's Yanbian region bordering North Korea. The attack trojanized both Windows desktop client updates (since November 2024) and Android APK downloads with BirdCall, an advanced evolution of RokRAT. BirdCall Windows version features screenshot capture, keystroke logging, clipboard theft, shell command execution, and uses cloud services (Dropbox, pCloud) for C2. The Android variant collects contacts, SMS, call logs, media files, documents, screenshots, and ambient audio, using pCloud, Yandex Disk, and Zoho WorkDrive for exfiltration. The trojanized Android APKs remain available on the sqgame.net website as of disclosure.",
-        "importance": "ScarCruft shifting from Windows-only to multi-platform surveillance signals NK APTs are expanding collection capabilities to match target device profiles. The Yanbian region is a critical transit point for North Korean defectors — compromising a popular local gaming platform places surveillance directly on a high-value intelligence target population.",
-        "noteworthy": "Block sqgame[.]net and related domains on corporate networks. Hunt for BirdCall IOCs across Windows and Android endpoints. Check for suspicious DLL side-loading in DAEMON Tools-like update packages. Monitor for C2 traffic to pCloud, Yandex Disk, and Zoho WorkDrive APIs from unexpected processes.",
-        "link": "https://thehackernews.com/2026/05/scarcruft-hacks-gaming-platform-to.html"
-      },
-      {
-        "id": 18,
-        "title": "cPanel CVE-2026-41940 Weaponized: Gov Networks, Mirai, and Ransomware",
-        "tag": "Critical Vulnerability / Active Exploitation",
-        "desc": "44K IPs compromised via cPanel auth bypass within 24 hours of PoC release — SE Asian government and MSP networks hit.",
-        "summary": "Ctrl-Alt-Intel detected a previously unknown threat actor exploiting CVE-2026-41940 (critical cPanel authentication bypass) targeting Philippine military (.mil.ph), Laotian government (.gov.la), and MSPs/hosting providers across Philippines, Laos, Canada, South Africa, and the US. The attacker used publicly available PoC exploits from IP 95.111.250[.]175. A separate custom exploit chain targeted an Indonesian defense training portal using authenticated SQL injection + RCE with hard-coded credentials and CAPTCHA bypass. The actor deployed AdaptixC2 for persistent access, plus OpenVPN and Ligolo for tunneling, and exfiltrated Chinese railway-sector documents. Censys confirmed multiple third parties weaponized the flaw within 24 hours, deploying Mirai botnet variants and 'Sorry' ransomware. Shadowserver recorded 44K compromised IPs on April 30, dropping to 3,540 by May 3.",
-        "importance": "A single cPanel flaw spawned three distinct attack campaigns overnight — targeted espionage, botnet recruitment, and ransomware — demonstrating how critical infrastructure vulnerabilities become force-multipliers. The 44K→3.5K drop suggests mass cleanup, but thousands of compromised hosts likely persist as dormant assets.",
-        "noteworthy": "Patch cPanel immediately. Run cPanel's updated detection script for false-positive reduction. Check for AdaptixC2, OpenVPN, and Ligolo persistence on cPanel-hosted servers. Audit cPanel access logs for IPs from 95.111.250[.]175 and related indicators. If you're an MSP, assume lateral movement to all client environments.",
-        "link": "https://thehackernews.com/2026/05/critical-cpanel-vulnerability.html"
-      },
-      {
-        "id": 19,
-        "title": "MOVEit Automation: Critical Auth Bypass CVE-2026-4670 (CVSS 9.8)",
-        "tag": "Critical Vulnerability / Enterprise Software",
-        "desc": "Airbus SecLab finds authentication bypass and privilege escalation in MOVEit Automation — no workarounds available.",
-        "summary": "Progress Software patched two vulnerabilities in MOVEit Automation: CVE-2026-4670 (CVSS 9.8), an authentication bypass via service backend command port interfaces, and CVE-2026-5174 (CVSS 7.7), an improper input validation allowing privilege escalation. Discovered by Airbus SecLab researchers. Affected versions: MOVEit Automation ≤2025.1.4 (fixed in 2025.1.5), ≤2025.0.8 (fixed in 2025.0.9), ≤2024.1.7 (fixed in 2024.1.8). No workarounds exist. While no in-the-wild exploitation is confirmed yet, prior MOVEit Transfer flaws were exploited by Cl0p ransomware in 2023, making preemptive patching critical.",
-        "importance": "MOVEit is high-value ransomware target infrastructure. The 2023 Cl0p campaign exploiting MOVEit Transfer compromised thousands of organizations globally. Auth bypass in the Automation component gives attackers the same class of access — unauthenticated control of managed file transfer workflows and the data flowing through them.",
-        "noteworthy": "Patch MOVEit Automation to 2025.1.5, 2025.0.9, or 2024.1.8 immediately. There are no workarounds. Audit MOVEit Automation access logs for anomalous command port activity. Rotate MOVEit service credentials. Monitor for Cl0p IOCs — history suggests these flaws will be targeted.",
-        "link": "https://thehackernews.com/2026/05/progress-patches-critical-moveit.html"
-      },
-      {
-        "id": 20,
-        "title": "Chrome Silently Pushes 4GB Gemini Nano Model to Billions of Devices",
-        "tag": "Privacy / AI Infrastructure",
-        "desc": "Google Chrome downloads 4GB Gemini Nano weights.bin without consent, re-downloads after deletion — GDPR/ePrivacy violation alleged.",
-        "summary": "Privacy researcher Alexander Hanff discovered that Google Chrome silently downloads a ~4GB file (weights.bin, Gemini Nano on-device LLM) to the OptGuideOnDeviceModel directory without user consent. If deleted, Chrome re-downloads it. The only way to prevent re-download is disabling AI features via chrome://flags or enterprise policy. Hanff verified the behavior on a fresh macOS profile with zero human interaction — the model appeared in the audit profile within days. The legal analysis: this violates Article 5(3) of the ePrivacy Directive, Article 5(1) GDPR (lawfulness/fairness/transparency), and Article 25 GDPR (data protection by design). At Chrome's ~2B user scale, the environmental cost of one model push is estimated at 6,000–60,000 tonnes CO2-equivalent.",
-        "importance": "At billion-device scale, unilateral software decisions have planetary environmental consequences. If GDPR/ePrivacy enforcement holds, this could set a precedent requiring explicit consent for all on-device AI model deployment — reshaping how browsers, OSes, and apps deliver AI features.",
-        "noteworthy": "Check chrome://settings and chrome://flags for AI feature toggles. Disable 'Optimization Guide' and on-device model downloads if unwanted. Enterprise admins: deploy Chrome policy to disable Gemini Nano. Monitor disk space for OptGuideOnDeviceModel/weights.bin deletion-re-download cycles.",
-        "link": "https://www.thatprivacyguy.com/blog/chrome-silent-nano-install/"
       }
     ]
   }
