@@ -1,19 +1,104 @@
 {
   "today": {
-    "date": "09/05/26",
+    "date": "11/05/26",
     "items": [
       {
         "id": 1,
+        "title": "Bleeding Llama: Critical Ollama Vulnerability Leaks Process Memory",
+        "tag": "Critical Vulnerability / AI Infrastructure",
+        "desc": "CVE-2026-7482 (CVSS 9.1) affects Ollama GGUF loader; remote attackers can leak process memory via malformed models.",
+        "summary": "Security researchers at Cyera disclosed 'Bleeding Llama' (CVE-2026-7482), an architectural heap out-of-bounds read vulnerability in Ollama (versions before 0.17.1). The flaw resides in the GGUF model loader when processing malformed tensor offsets via the `/api/create` endpoint. An unauthenticated remote attacker can supply a specially crafted GGUF file that causes the Ollama server to read past allocated heap buffers during quantization, leaking sensitive process memory which may include system environment variables, API keys, and conversation history from memory buffers.",
+        "importance": "As Hieu moves toward local-first AI, vulnerabilities in the model loader are existential. Ollama is often exposed to local networks or proxied to the internet. Because the leak occurs during model 'creation'\u2014a common task for developers\u2014it represents a high-risk vector for credential theft from the very environment running the agent.",
+        "noteworthy": "Upgrade Ollama to version 0.17.1 or later immediately. Audit systems for exposure of the Ollama API (default port 11434) to untrusted networks. In the lab, verify Ollama is bound to 127.0.0.1 and accessed only via secure tunnels. Do not pull or 'create' models from unverified or untrusted sources (e.g., random Hugging Face repos).",
+        "link": "https://thehackernews.com/2026/05/ollama-out-of-bounds-read-vulnerability.html"
+      },
+      {
+        "id": 2,
+        "title": "Fake OpenAI Privacy Filter on Hugging Face Draws 244K Downloads",
+        "tag": "Malware / Software Supply Chain",
+        "desc": "Malicious 'openai-privacy-filter' repo targets AI developers for credential exfiltration; masquerades as official utility.",
+        "summary": "Threat actors successfully poisoned the Hugging Face model registry with a malicious repository named 'openai-privacy-filter.' Masquerading as a harmless utility to redact PII before sending data to OpenAI APIs, the repo was downloaded over 244,000 times before removal. The malware is embedded in the repository's configuration files, executing during the model loading process to harvest environment variables, `.ssh` keys, and browser cookies. It specifically targets developer workstations to enable lateral movement into cloud production environments.",
+        "importance": "The scale of this compromise (nearly a quarter-million downloads) highlights the 'blind trust' developers place in popular model hubs like Hugging Face. Unlike NPM or PyPI, Hugging Face's security scanning for non-model code in repos is still maturing. This is a direct threat to any dev using 'helper' libraries for AI integration.",
+        "noteworthy": "If you downloaded `openai-privacy-filter`, rotate all API keys, SSH keys, and cloud credentials immediately. Scan `~/.cache/huggingface` for suspicious artifacts. Use `pip install` with caution for AI-related utilities. Implement runtime behavioral monitoring for developer workstations (e.g., alerts on unauthorized `.ssh` folder access).",
+        "link": "https://thehackernews.com/2026/05/fake-openai-privacy-filter-repo-hits-1.html"
+      },
+      {
+        "id": 3,
+        "title": "Hardware Attestation: The 'Secure' Path to App Store Monopoly",
+        "tag": "Hardware / OS Security",
+        "desc": "GrapheneOS researchers warn that remote hardware attestation is being weaponized to kill third-party OS ecosystems.",
+        "summary": "New research from the GrapheneOS community details how remote hardware attestation (like Google's Play Integrity API and Apple's DeviceCheck) is evolving from a security feature into an anti-competitive tool. By requiring apps to prove they are running on 'official' hardware with unmodified software, developers can effectively block users on privacy-focused OS forks (like GrapheneOS or CalyxOS). The research highlights that this 'trusted execution' model creates a hardware-enforced monopoly where only the vendor-approved software stack can access essential financial and communication services.",
+        "importance": "For your lab and mobile testing (Pixel 8a), this is a critical structural shift. If hardware attestation becomes mandatory for daily-driver apps, the viability of de-Googled or custom Linux-based mobile environments reaches a dead end. It represents a pivot from 'security for the user' to 'security for the service provider against the user.'",
+        "noteworthy": "Monitor the 'Strong Integrity' requirements on your Pixel 8a when running GrapheneOS. Explore 'Key Mint' and TEE isolation features to understand the boundaries of what attestation can see. Support initiatives like the Digital Markets Act (DMA) that challenge mandatory attestation for non-security critical apps.",
+        "link": "https://grapheneos.social/@GrapheneOS/116550899908879585"
+      },
+      {
+        "id": 4,
+        "title": "Gmail Registration Now Requires Mandatory QR Scan and SMS",
+        "tag": "Privacy / Infrastructure",
+        "desc": "Google tightens account creation; mandatory hardware-tethered identity verification blocks anonymous registrations.",
+        "summary": "Google has updated its account registration process to require a mandatory QR code scan from a mobile device followed by an SMS verification. The process effectively tethers new accounts to a physical device and a verified phone number, making anonymous or 'burner' account creation significantly more difficult. This change targets bot-driven signups but also hits privacy-conscious users who lack a stable mobile device or wish to remain unlinked from Google's mobile tracking ecosystem. It follows the recent reCAPTCHA updates that also required Play Services for verification.",
+        "importance": "Infrastructure hardening at this level signals the end of the 'free and open' web registration era. For lab automation or testing, this creates a significant friction point for service accounts. It underscores the importance of self-hosting (Proxmox/Mini-PCs) for services where you value independence from big-tech identity silos.",
+        "noteworthy": "When creating lab-related service accounts, consider using alternative providers like ProtonMail or self-hosted mail servers where possible. If Google accounts are required, be prepared for increased identity verification hurdles. Monitor for 'Verified Identity' trends across other big-tech platforms (Microsoft, Meta).",
+        "link": "https://discuss.privacyguides.net/t/google-account-registration-now-requires-sending-an-sms-via-phone-instead-of-receiving-an-sms/36082"
+      },
+      {
+        "id": 5,
+        "title": "Tflop/s on a Mac: Optimizing Matrix Multiplication in Swift",
+        "tag": "Hardware / Software Engineering",
+        "desc": "Technical deep-dive into Apple Silicon performance; taking Swift-based LLM training from Gflop/s to Tflop/s.",
+        "summary": "A viral technical analysis on Hacker News explores optimizing matrix multiplication (GEMM) on Apple Silicon using Swift. By leveraging Accelerate framework's AMX (Apple Matrix eXtensions) and tight memory management, the author demonstrates a performance jump from ~200 Gflop/s to over 1 Tflop/s on an M2/M3 chip. The research provides a blueprint for efficient local LLM training and inference without the overhead of heavy Python wrappers, proving that high-level languages can achieve near-native metal performance when correctly architected for the underlying hardware.",
+        "importance": "As you move toward DevOps and high-performance computing, understanding hardware-level optimization is key. This story proves that 'hardware awareness' is the bottleneck, not the language choice. For a home lab enthusiast, it demonstrates that even consumer-grade silicon (MacBooks) has massive untapped compute potential if you bypass the standard stack.",
+        "noteworthy": "Review the optimization steps (tiling, pre-fetching, SIMD) as high-level concepts for any performance-critical code in your 'netops' or 'cyberdash' projects. Check if your current local LLM tools (Ollama, llama.cpp) utilize AMX/Metal to their full extent. Consider Swift as a viable path for internal high-speed tooling.",
+        "link": "https://www.cocoawithlove.com/blog/matrix-multiplications-swift.html"
+      },
+      {
+        "id": 6,
+        "title": "Trump: Iran's Response to War-Ending Proposal 'Totally Unacceptable'",
+        "tag": "Geopolitics / Conflict",
+        "desc": "War drums in the Middle East; Trump slams Iranian counter-offer as tensions over regional security escalate.",
+        "summary": "Former President Donald Trump, currently leading in several US election polls, has described Iran's response to a recent US-brokered proposal to de-escalate regional conflict as 'totally unacceptable.' The proposal aimed to address tensions in the Straits of Hormuz and proxy warfare across the Middle East. Trump's rhetoric signals a potential return to a 'maximum pressure' policy if re-elected, while current diplomatic channels report a stalemate. The statement has contributed to market jitters regarding oil prices and shipping security in the Persian Gulf.",
+        "importance": "Geopolitical stability in the Middle East directly impacts global trade and tech supply chains. Any escalation in the Straits of Hormuz (a global maritime choke point) leads to immediate hardware lead-time increases and energy cost spikes. For a network engineer, this translates to potential budget pressures and supply chain delays for networking equipment.",
+        "noteworthy": "Monitor shipping news and oil price volatility as indicators of kinetic escalation risk. Assess the impact of potential new sanctions on regional tech partnerships. For home lab planning, consider that hardware prices (SSDs, CPUs) remain sensitive to these macro-geopolitical shocks.",
+        "link": "https://www.bbc.com/news/articles/clypgz9e5pmo"
+      },
+      {
+        "id": 7,
+        "title": "Crypto Snapshot: BTC Holds $81.6K; SOL Leads Major Gainers at $97.2",
+        "tag": "Finance / Crypto Markets",
+        "desc": "Bitcoin stabilizes at $81.6K (+0.25%); Solana surges 3% to $97.2 on network growth; Ethereum flat at $2.3K.",
+        "summary": "The crypto market has entered a consolidation phase following recent volatility, with Bitcoin (BTC) holding firmly above the $80K level at $81,639. Solana (SOL) is the standout among majors, gaining 3% to reach $97.23, driven by a surge in decentralized exchange (DEX) volume and network active addresses. Ethereum (ETH) continues to lag, trading down slightly at $2,338. The market is currently awaiting clarity on the US 'CLARITY' Act markup scheduled for this week, which could dictate the next major directional move for US-based institutional capital.",
+        "importance": "The decoupling of SOL from ETH is a significant trend to watch. As the lab manages digital assets, the 'Solana Narrative' (speed/low-fee) vs the 'Ethereum Roadmap' (Layer-2 fragmentation) is playing out in the charts. BTC holding $80K is a psychological floor that supports high-risk assets elsewhere in the sector.",
+        "noteworthy": "Track the $100 psychological resistance for SOL. Monitor the Senate Banking Committee markup of the CLARITY Act on May 14 (as noted in yesterday's news). Ensure your lab's price-tracking scripts account for the current Coingecko API rate limits. BTC support at $78K is the line in the sand for the current bull trend.",
+        "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
+      },
+      {
+        "id": 8,
+        "title": "Weekly Recap: macOS Crypto Stealers and Linux Rootkits",
+        "tag": "Threat Intel / Weekly Summary",
+        "desc": "Roundup of the week's major threats: macOS Cthulhu Stealer, Linux Rootkits, and WebSocket skimmers.",
+        "summary": "The first full week of May 2026 has been dominated by sophisticated malware campaigns. Key highlights include 'Cthulhu Stealer,' a macOS info-stealer targeting crypto wallets; a new 'kworker'-disguised Linux rootkit that persists via PAM hooks; and a massive campaign of WebSocket-based card skimmers targeting e-commerce checkout pages. Additionally, the 'Bleeding Llama' Ollama flaw and cPanel's emergency triple-patch have defined the vulnerability landscape. Researchers also noted a pivot in APT targeting toward AI-infrastructure developers.",
+        "importance": "Recaps provide the high-level 'weather report' for the threat landscape. The focus on macOS and Linux (your primary environments) indicates that the era of 'Windows-only' malware is long dead. The common thread is the targeting of developers and infrastructure managers to enable high-impact downstream attacks.",
+        "noteworthy": "Review last week's indicators of compromise (IoCs) for the 'Cthulhu Stealer.' Perform a rootkit scan on your Proxmox hosts and development machines. Ensure browser-based protections are active against WebSocket skimmers. Maintain the 'Payload First' approach to security: patch the low-hanging fruit before chasing complex APT patterns.",
+        "link": "https://thehackernews.com/2026/05/weekly-recap-linux-rootkit-macos-crypto.html"
+      }
+    ]
+  },
+  "yesterday": {
+    "date": "09/05/26",
+    "items": [
+      {
+        "id": 9,
         "title": "io_uring ZCRX Freelists LPE: 'You Gave Me a u32, I Gave You Root'",
         "tag": "Critical Vulnerability / Linux Kernel",
         "desc": "New heap-based LPE in Linux 6.15-6.19 zero-copy receive (ZCRX) mechanism; unprivileged users can hijack kernel freelists.",
-        "summary": "Security researcher ze3tar disclosed a critical local privilege escalation (LPE) vulnerability in the Linux kernel's io_uring zero-copy receive (ZCRX) implementation (Linux 6.15–6.19 pre-770594e). The flaw allows an unprivileged user to provide a malformed u32 index that triggers a heap out-of-bounds access, enabling the hijacking of kernel freelists. By manipulating the freelist, an attacker can gain arbitrary kernel memory read/write capabilities and achieve full root access without requiring complex race conditions or namespaces. The vulnerability only affects systems with CONFIG_IO_URING_ZCRX=y enabled.",
+        "summary": "Security researcher ze3tar disclosed a critical local privilege escalation (LPE) vulnerability in the Linux kernel's io_uring zero-copy receive (ZCRX) implementation (Linux 6.15\u20136.19 pre-770594e). The flaw allows an unprivileged user to provide a malformed u32 index that triggers a heap out-of-bounds access, enabling the hijacking of kernel freelists. By manipulating the freelist, an attacker can gain arbitrary kernel memory read/write capabilities and achieve full root access without requiring complex race conditions or namespaces. The vulnerability only affects systems with CONFIG_IO_URING_ZCRX=y enabled.",
         "importance": "io_uring continues to be the primary attack surface for modern Linux kernel exploitation. This specific LPE is highly reliable and targets the new high-performance networking code. While ZCRX is relatively new, its inclusion in major rolling release distros puts unpatched high-end servers at immediate risk.",
         "noteworthy": "Disable io_uring if not strictly required: sysctl -w kernel.io_uring_disabled=1 (or 2). If ZCRX is needed, upgrade to kernel 6.19+ or apply the 770594e commit patch. Monitor for unusual io_uring system calls from unprivileged users. Audit kernel configs for CONFIG_IO_URING_ZCRX enablement.",
         "link": "https://ze3tar.github.io/post-zcrx.html"
       },
       {
-        "id": 2,
+        "id": 10,
         "title": "Quasar Linux RAT: Supply Chain Threat Targets Developer Credentials",
         "tag": "Malware / Software Supply Chain",
         "desc": "Undocumented Linux RAT (QLNX) targets .npmrc, .pypirc, AWS, and Kube configs to compromise CI/CD pipelines.",
@@ -23,7 +108,7 @@
         "link": "https://thehackernews.com/2026/05/quasar-linux-rat-steals-developer.html"
       },
       {
-        "id": 3,
+        "id": 11,
         "title": "React2Shell RCE: Critical Meta Advisory Hits Millions of Websites",
         "tag": "Critical Vulnerability / Web Security",
         "desc": "CVE-2025-55182 (React2Shell) allows RCE via React Server Components' (RSC) 'Flight' protocol; affects Next.js and React core.",
@@ -33,7 +118,7 @@
         "link": "https://lachlan.nz/blog/the-react2shell-story/"
       },
       {
-        "id": 4,
+        "id": 12,
         "title": "cPanel/WHM Triple Patch: RCE and File Read Flaws Disclosed",
         "tag": "Vulnerability / Web Hosting",
         "desc": "Three new vulnerabilities in cPanel/WHM (CVE-2026-29201/2/3) enable Perl RCE, arbitrary file reads, and symlink-based LPE.",
@@ -43,7 +128,7 @@
         "link": "https://thehackernews.com/2026/05/cpanel-whm-patch-3-new-vulnerabilities.html"
       },
       {
-        "id": 5,
+        "id": 13,
         "title": "Google Breaks reCAPTCHA for De-Googled Android Users",
         "tag": "Privacy / Infrastructure",
         "desc": "Google Play Services 25.41.30+ now required for reCAPTCHA; GrapheneOS and custom ROM users blocked by mandatory QR-code verification.",
@@ -53,7 +138,7 @@
         "link": "https://reclaimthenet.org/google-broke-recaptcha-for-de-googled-android-users"
       },
       {
-        "id": 6,
+        "id": 14,
         "title": "PamDOORa: $1,600 Linux PAM Backdoor Hits Cybercrime Forums",
         "tag": "Threat Intel / Malware",
         "desc": "New Russian-made backdoor 'PamDOORa' targets Linux PAM stack for SSH credential harvesting and magic-password persistence.",
@@ -63,7 +148,7 @@
         "link": "https://thehackernews.com/2026/05/new-linux-pamdoora-backdoor-uses-pam.html"
       },
       {
-        "id": 7,
+        "id": 15,
         "title": "US CLARITY Act Markup Set for May 14; 'Big Step Forward' for Crypto",
         "tag": "Finance / Crypto Legislation",
         "desc": "Senate Banking Committee confirms vote on CLARITY Act; industry expects resolution on DeFi and stablecoin yields.",
@@ -73,7 +158,7 @@
         "link": "https://cointelegraph.com/news/us-clarity-act-markup-date-set-tim-scott-crypto-industry"
       },
       {
-        "id": 8,
+        "id": 16,
         "title": "Zcash (ZEC) Surges 70% Weekly as AI Surveillance Fears Explode",
         "tag": "Financial / Privacy Tech",
         "desc": "Privacy coin ZEC rockets on AI-powered chain analysis concerns; BTC holds $80.3K, SOL surges 5.5% to $93.5.",
@@ -83,7 +168,7 @@
         "link": "https://cointelegraph.com/news/zcash-price-surges-privacy-coins-ai-surveillance-concerns"
       },
       {
-        "id": 9,
+        "id": 17,
         "title": "Spot Bitcoin ETFs Log 6th Straight Week of Inflows; Longest Streak in 9 Months",
         "tag": "Financial / Markets",
         "desc": "$3.4B pulled in since April 2; institutional accumulation holds steady despite late-week volatility and job data uncertainty.",
@@ -93,7 +178,7 @@
         "link": "https://cointelegraph.com/news/spot-bitcoin-etfs-log-6th-straight-week-of-net-inflows-for-first-time-in-9-months"
       },
       {
-        "id": 10,
+        "id": 18,
         "title": "Wi is Fi: Unpacking the 802.11be (Wi-Fi 7) and 802.11bn (Wi-Fi 8) Specs",
         "tag": "Hardware / Networking",
         "desc": "Technical breakdown of Wi-Fi 7's 320MHz channels and Wi-Fi 8's focus on 'Ultra-High Reliability' (UHR).",
@@ -103,17 +188,17 @@
         "link": "https://www.wiisfi.com/"
       },
       {
-        "id": 11,
+        "id": 19,
         "title": "Arbitrum DAO Cleared to Transfer $71M in 'NK-Tied' ETH to Aave",
         "tag": "Finance / Legal",
         "desc": "Manhattan judge allows transfer of frozen funds to Aave while preserving terrorism victims' claims; ETH remains 'on-chain' but productive.",
-        "summary": "A Manhattan judge has modified a restraining notice to allow the Arbitrum DAO to transfer $71 million in Ether—previously tied to North Korean hacking activity—to the Aave lending protocol. The move allows the funds to become 'productive' (earning yield) while the legal claims from terrorism victims against the original stolen funds are preserved. This represents a novel legal precedent where 'hot' crypto assets are permitted to engage in DeFi while under a court-ordered hold, rather than sitting idle and depreciating.",
+        "summary": "A Manhattan judge has modified a restraining notice to allow the Arbitrum DAO to transfer $71 million in Ether\u2014previously tied to North Korean hacking activity\u2014to the Aave lending protocol. The move allows the funds to become 'productive' (earning yield) while the legal claims from terrorism victims against the original stolen funds are preserved. This represents a novel legal precedent where 'hot' crypto assets are permitted to engage in DeFi while under a court-ordered hold, rather than sitting idle and depreciating.",
         "importance": "This is a landmark for the intersection of DeFi and traditional law. It recognizes that freezing an asset in crypto doesn't mean it has to be locked out of the financial ecosystem. Allowing 'seized' funds to generate yield via Aave creates a blueprint for handling large-scale on-chain asset litigation in the future.",
         "noteworthy": "Monitor the yield generation of the $71M Arbitrum ETH vault on Aave. Watch for similar legal filings regarding other 'frozen' DAO assets. This move may increase institutional trust in Aave's compliance framework if US courts are comfortable with its 'restraining' capabilities.",
         "link": "https://cointelegraph.com/news/court-lets-arbitrum-dao-to-transfer-71m-in-eth-tied-to-north-korea-hack-to-aave"
       },
       {
-        "id": 12,
+        "id": 20,
         "title": "AWS us-east-1 Overheat Incident Resolved; Coinbase Recovery Context",
         "tag": "Infrastructure / Post-Mortem",
         "desc": "AWS Northern Virginia cooling failure caused cascading 'overheat' shutdowns; highlights crypto exchange region concentration risk.",
@@ -121,131 +206,6 @@
         "importance": "If the 'world's computer' (crypto) stops because a fan fails in Virginia, we are not decentralized. This is a recurring theme in NetOps: physical environmentals are the ultimate root of all digital failures. For your lab, this is a reminder why Tailscale and cloud-dispersal are necessary to avoid 'Virginia-dependent' uptime.",
         "noteworthy": "Review multi-region failover options for personal or project-related cloud infrastructure. In the lab, verify Pi-hole and Home Assistant backups are synced outside of a single cloud provider. Check with exchange providers about their multi-regional DR (Disaster Recovery) status before high-volatility events like the CLARITY Act markup.",
         "link": "https://www.cnbc.com/2026/05/08/aws-outage-data-center-fanduel-coinbase.html"
-      }
-    ]
-  },
-  "yesterday": {
-    "date": "08/05/26",
-    "items": [
-      {
-        "id": 13,
-        "title": "Dirty Frag: Linux Kernel LPE Zero-Day Grants Root on All Major Distros",
-        "tag": "Critical Vulnerability / Linux Kernel",
-        "desc": "Unpatched LPE chains xfrm-ESP and RxRPC page-cache writes — PoC gives root in a single command on Ubuntu, RHEL, Fedora, openSUSE.",
-        "summary": "Security researcher Hyunwoo Kim (@v4bel) disclosed 'Dirty Frag,' an unpatched Linux kernel local privilege escalation vulnerability that succeeds Dirty Pipe and Copy Fail (CVE-2026-31431). Dirty Frag chains two page-cache write bugs: the xfrm-ESP variant (introduced Jan 2017) and the RxRPC variant (introduced June 2023). Together they cover each other's blind spots — xfrm-ESP needs namespace creation (blocked by Ubuntu AppArmor), while RxRPC works on Ubuntu but requires rxrpc.ko. Neither bug requires a race condition, kernel panics on failure are absent, and success rate is very high. A working PoC exploit is public. Affected distros: Ubuntu 24.04.4, RHEL 10.1, openSUSE Tumbleweed, CentOS Stream 10, AlmaLinux 10, Fedora 44.",
-        "importance": "This is the third major Linux kernel LPE in the Dirty Pipe lineage. The public PoC and lack of patches mean every unprivileged user on affected systems can gain root immediately. Critically, systems where the Copy Fail mitigation (algif_aead blacklist) was applied remain vulnerable — Dirty Frag bypasses it entirely.",
-        "noteworthy": "Blocklist esp4, esp6, and rxrpc kernel modules immediately: sudo sh -c \"printf 'install esp4 /bin/false\\ninstall esp6 /bin/false\\ninstall rxrpc /bin/false\\n' > /etc/modprobe.d/dirtyfrag.conf; rmmod esp4 esp6 rxrpc 2>/dev/null; true\". Monitor vendor advisories for kernel patches. Audit systems for the Copy Fail mitigation — it does NOT protect against Dirty Frag.",
-        "link": "https://thehackernews.com/2026/05/linux-kernel-dirty-frag-lpe-exploit.html"
-      },
-      {
-        "id": 14,
-        "title": "Ivanti EPMM CVE-2026-6973 RCE Under Active Exploitation — CISA KEV Listed",
-        "tag": "Critical Vulnerability / Enterprise Mobility",
-        "desc": "Ivanti EPMM auth bypass + RCE chain actively exploited; CISA requires federal patching by May 10.",
-        "summary": "Ivanti disclosed CVE-2026-6973 (CVSS 7.2), an improper input validation flaw in Endpoint Manager Mobile (EPMM) before versions 12.6.1.1, 12.7.0.1, and 12.8.0.1 that allows a remotely authenticated admin to achieve RCE. A limited number of customers have been exploited. CISA added the flaw to its Known Exploited Vulnerabilities catalog, requiring federal agencies to patch by May 10, 2026. Four additional EPMM flaws were also patched: CVE-2026-5786 (CVSS 8.8, privilege escalation), CVE-2026-5787 (CVSS 8.9, certificate impersonation), CVE-2026-5788 (CVSS 7.0, arbitrary method invocation), and CVE-2026-7821 (CVSS 7.4, restricted device enrollment bypass).",
-        "importance": "This is the latest in Ivanti's ongoing pattern of critical EPMM/Sentry vulnerabilities being exploited before patches are widely deployed. The chain — auth bypass to admin RCE — mirrors prior Ivanti exploitation campaigns. CISA's 48-hour patch deadline signals urgency.",
-        "noteworthy": "Patch EPMM to 12.6.1.1, 12.7.0.1, or 12.8.0.1 immediately. Rotate all EPMM credentials (especially if previously exploited via CVE-2026-1281/CVE-2026-1340). Audit EPMM access logs for anomalous admin activity. Review Sentry host certificates for impersonation indicators.",
-        "link": "https://thehackernews.com/2026/05/ivanti-epmm-cve-2026-6973-rce-under.html"
-      },
-      {
-        "id": 15,
-        "title": "PCPJack: Worm-Like Credential Stealer Exploits 5 CVEs Across Cloud Infrastructure",
-        "tag": "Threat Intelligence / Cloud Security",
-        "desc": "SentinelOne uncovers Python-based credential harvester targeting Docker, K8s, Redis, MongoDB, RayML — evicts rival TeamPCP from compromised hosts.",
-        "summary": "SentinelOne researcher Alex Delamotte detailed PCPJack, a credential theft framework targeting exposed cloud infrastructure (Docker, Kubernetes, Redis, MongoDB, RayML, web apps). Six Python payloads handle worm-like propagation (exploiting CVE-2025-55182, CVE-2025-29927, CVE-2026-1357, CVE-2025-9501, CVE-2025-48703), credential parsing, lateral movement, encryption, cloud IP range collection, and external port scanning. PCPJack actively evicts TeamPCP artifacts from compromised environments, tracks eviction success metrics via Telegram C2, and uses Common Crawl parquet files for propagation target lists. A separate Sliver C2 script was also discovered in the operator's infrastructure.",
-        "importance": "PCPJack represents the evolution of cloud-targeted malware into competitive turf wars — it doesn't just steal credentials, it actively removes rival operators from shared infrastructure. Using Common Crawl as a targeting datasource is novel and makes the worm's scope effectively limitless.",
-        "noteworthy": "Audit exposed Docker, K8s, Redis, MongoDB, and RayML endpoints for unauthorized Python processes. Block Telegram C2 channels from corporate networks. Patch all five exploited CVEs. Check for Sliver C2 indicators. Review cloud security group rules for unnecessary exposure.",
-        "link": "https://thehackernews.com/2026/05/pcpjack-credential-stealer-exploits-5.html"
-      },
-      {
-        "id": 16,
-        "title": "ShinyHunters Breaches Canvas LMS — Defaces Login Portals at Hundreds of Universities",
-        "tag": "Cyber Attack / Education Sector",
-        "desc": "Extortion gang exploits new Instructure vulnerability to compromise Canvas login portals across hundreds of colleges.",
-        "summary": "The ShinyHunters extortion gang breached education technology giant Instructure again, exploiting a new vulnerability to deface Canvas LMS login portals at hundreds of colleges and universities. The attack follows prior ShinyHunters intrusions into Instructure systems. Login portals were modified as part of an extortion campaign, potentially exposing student and faculty credentials. The full scope of affected institutions and data exposure is still being assessed.",
-        "importance": "Canvas is used by thousands of educational institutions globally. Defacing login portals in an extortion campaign creates both credential harvesting risk for students and institutional reputation damage. ShinyHunters' repeated targeting of Instructure suggests the company's security posture has systemic gaps.",
-        "noteworthy": "If your institution uses Canvas, verify login portal integrity and check for unauthorized modifications. Enforce MFA for all Canvas accounts. Monitor for credential stuffing using Canvas credentials across other platforms. Instructure customers should request a full incident scope update from the vendor.",
-        "link": "https://www.bleepingcomputer.com/news/security/canvas-login-portals-hacked-in-mass-shinyhunters-extortion-campaign/"
-      },
-      {
-        "id": 17,
-        "title": "vm2 Node.js Sandbox Escape: 12 CVEs Including CVSS 10.0 Flaws",
-        "tag": "Critical Vulnerability / Software Supply Chain",
-        "desc": "A dozen sandbox escape vulnerabilities in vm2 library — including three CVSS 10.0 — enable arbitrary code execution on host systems.",
-        "summary": "Twelve critical vulnerabilities were disclosed in the vm2 Node.js sandbox library, including three CVSS 10.0 flaws: CVE-2026-43997 (code injection via host Object access), CVE-2026-44005 (sandbox escape enabling prototype pollution), and CVE-2026-44006 (code injection via BaseHandler.getPrototypeOf). Additional CVSS 9.8 flaws include CVE-2026-24118 (__lookupGetter__ escape), CVE-2026-24120 (bypass for CVE-2023-37466), CVE-2026-24781 (inspect function escape), CVE-2026-26332 (SuppressedError escape), and CVE-2026-26956 (Symbol TypeError escape). All are patched in vm2 3.11.2. The maintainer acknowledged that new bypasses will likely continue to emerge.",
-        "importance": "vm2 is widely used in AI/LLM applications to sandbox untrusted model-generated code. With 12 CVEs in a single disclosure — three at maximum severity — the library's fundamental sandboxing approach appears structurally flawed. Any system running untrusted JS through vm2 should consider whether the sandbox model itself is viable.",
-        "noteworthy": "Update vm2 to 3.11.2 immediately. For AI/LLM applications using vm2 for code sandboxing, evaluate alternatives like Deno or isolated containers. Audit dependencies for transitive vm2 usage. Consider vm2 architecturally unsafe for production sandboxing of untrusted code.",
-        "link": "https://thehackernews.com/2026/05/vm2-nodejs-library-vulnerabilities.html"
-      },
-      {
-        "id": 18,
-        "title": "Chrome Removes 'On-Device AI' Privacy Claim After Data Transmission Revealed",
-        "tag": "Privacy / AI Infrastructure",
-        "desc": "Google retracts claim that Chrome Gemini Nano data stays on-device — HN community flags silent data exfiltration to Google servers.",
-        "summary": "Google Chrome has removed its claim that on-device AI (Gemini Nano) processing does not send data to Google servers, following revelations that the browser transmits user data back despite 'on-device' marketing. The removal was flagged on Hacker News (554 upvotes, 216 comments), with users noting that 'adding AI to desktop apps and sending data back to the mothership' creates an invisible surveillance channel. This follows last week's disclosure that Chrome silently downloads a 4GB Gemini Nano model without user consent and re-downloads it after deletion.",
-        "importance": "This represents a fundamental trust failure in Google's AI deployment strategy. Removing a privacy claim rather than fixing the data flow confirms that 'on-device' branding is marketing, not architecture. At 2 billion Chrome users, the scale of potential data collection is unprecedented.",
-        "noteworthy": "Disable Chrome AI features via chrome://flags. Enterprise admins: deploy Chrome policy to block Gemini Nano and on-device model features. Audit network traffic from Chrome for unexpected outbound connections to Google AI endpoints. Consider privacy-focused browser alternatives.",
-        "link": "https://news.ycombinator.com/item?id=48050964"
-      },
-      {
-        "id": 19,
-        "title": "Claude Code CVE-2026-39861: Sandbox Escape via Symlink",
-        "tag": "Critical Vulnerability / AI Tooling",
-        "desc": "Anthropic's Claude Code CLI has a sandbox escape via symlink exploitation — ironic given their Mythos model's CVE-finding capabilities.",
-        "summary": "A security advisory (CVE-2026-39861) discloses a sandbox escape vulnerability in Anthropic's Claude Code CLI via symlink exploitation. The flaw allows attackers to break out of Claude Code's sandboxed execution environment using symbolic links to access files and directories outside the intended boundary. The irony was noted by the HN community: Anthropic's Mythos model, marketed for finding CVEs in other projects, failed to detect this vulnerability in their own codebase.",
-        "importance": "AI coding assistants with sandbox escapes are a new attack surface category. Developers trust these tools to run code in isolation — a symlink escape means the 'sandbox' is an illusion. The failure of Anthropic's own security tooling to catch this raises questions about the robustness of AI-assisted security auditing.",
-        "noteworthy": "Update Claude Code immediately. If using Claude Code in CI/CD or production environments, restrict filesystem permissions and use container-level isolation as a defense-in-depth measure. Evaluate OpenCode or alternative AI coding agents with different sandbox architectures.",
-        "link": "https://news.ycombinator.com/item?id=48057842"
-      },
-      {
-        "id": 20,
-        "title": "GNU IFUNC Identified as Root Cause Behind XZ Utils Backdoor (CVE-2024-3094)",
-        "tag": "Security Research / Supply Chain",
-        "desc": "Hacker News analysis pinpoints GNU IFUNC mechanism as the enabler that made the XZ Utils backdoor possible.",
-        "summary": "A Hacker News discussion (77 points) identifies GNU IFUNC (Indirect Function) as the real culprit behind the infamous XZ Utils supply chain backdoor (CVE-2024-3094). IFUNC allows dynamic selection of function implementations at runtime, which the XZ attacker exploited to redirect execution to malicious code during library initialization — before any security checks could apply. This is a fundamental weakness in the GNU toolchain that enables supply chain attacks at the linker level.",
-        "importance": "Understanding that IFUNC is the structural enabler changes how we assess supply chain risk. IFUNC makes it possible to hide malicious code paths inside legitimate library init sequences — static analysis and traditional code review cannot easily detect these redirects. Every project using GNU toolchain IFUNC is potentially vulnerable to the same attack pattern.",
-        "noteworthy": "Audit build chains for IFUNC usage. Consider compiler flags to disable IFUNC if not required. Supply chain security tools should add IFUNC redirection detection. Monitor ld.so resolver behavior for unexpected function resolution paths.",
-        "link": "https://news.ycombinator.com/item?id=48056749"
-      },
-      {
-        "id": 21,
-        "title": "Zcash Surges 70% in a Week as AI Surveillance Concerns Fuel Privacy Coin Demand",
-        "tag": "Financial / Crypto",
-        "desc": "ZEC rockets 70% weekly on AI surveillance and quantum computing fears; BTC holds $79.9K, ETH $2,282, SOL $88.3.",
-        "summary": "Zcash (ZEC) surged 70% in a single week driven by growing concerns about AI-powered surveillance, quantum computing threats to financial privacy, and increased regulatory scrutiny of transparent blockchains. Swyftx analyst Pav Hundal confirmed the AI/quantum narrative is the primary driver. Meanwhile, BTC holds at $79,892 (-1.5% 24h) with a $1.6T market cap, Ethereum at $2,282 (-2.2% 24h), and Solana at $88.31 (-1.3% 24h). Market sentiment remains cautious as the CLARITY Act markup could happen as early as next week.",
-        "importance": "The Zcash surge signals a market recognition that AI surveillance capabilities are creating demand curve shifts in privacy infrastructure. When the market prices in surveillance risk at this velocity, it's a leading indicator for regulatory and technology responses.",
-        "noteworthy": "Monitor ZEC/USD for sustainability above resistance levels. Watch CLARITY Act markup proceedings next week — crypto market structure legislation could reshape US market dynamics. BTC $80K support level remains critical; a break below could trigger further selling.",
-        "link": "https://cointelegraph.com/news/zcash-price-surges-privacy-coins-ai-surveillance-concerns"
-      },
-      {
-        "id": 22,
-        "title": "AWS us-east-1 Data Center Overheat Impacts Coinbase — Trading Halted",
-        "tag": "Infrastructure / Cloud Outage",
-        "desc": "AWS Northern Virginia data center overheats; Coinbase markets placed in cancel-only mode as crypto trading disrupted.",
-        "summary": "An AWS Northern Virginia (us-east-1) data center experienced overheating issues, impacting Coinbase and other services. Coinbase placed its markets in 'cancel only' mode, halting trading while AWS worked on remediation. The outage highlights the concentration risk of critical financial infrastructure in a single availability zone, and the cascading impact of physical infrastructure failures on digital asset markets.",
-        "importance": "When a cooling failure at a single data center can halt a multi-billion dollar crypto exchange, the concentration risk is undeniable. This is the same AWS region that has caused cascading outages across the internet before. Crypto markets claim decentralization but their operational infrastructure is dangerously centralized.",
-        "noteworthy": "Diversify exchange and API infrastructure across multiple cloud regions and providers. Implement circuit breakers that don't depend on a single cloud provider's health. Monitor AWS Service Health Dashboard for us-east-1 incidents. Evaluate on-prem or multi-cloud failover for critical trading systems.",
-        "link": "https://cointelegraph.com/news/aws-data-center-overheating-impacting-coinbase-others"
-      },
-      {
-        "id": 23,
-        "title": "US Sentences 8 'Laptop Farmers' in 5 Months for Aiding DPRK IT Worker Infiltration",
-        "tag": "Cybercrime / Nation-State Operations",
-        "desc": "DOJ accelerates prosecutions of Americans hosting laptops for North Korean remote IT workers posing as US employees.",
-        "summary": "The US Justice Department secured its eighth sentence in five months against individuals running 'laptop farms' — hosting physical laptops at US residences that North Korean IT workers remotely accessed to pose as American employees. The workers use stolen or fabricated identities to obtain remote IT jobs at US companies, routing salaries back to Pyongyang in violation of sanctions. The sentencing pace signals DOJ is treating DPRK IT worker infiltration as a priority enforcement area.",
-        "importance": "DPRK IT worker schemes generate hundreds of millions annually for the North Korean regime. The laptop farm model is the critical physical infrastructure enabling the deception — without US-based endpoints, the remote workers cannot pass identity verification checks. DOJ's enforcement acceleration signals this vector is a top counterproliferation priority.",
-        "noteworthy": "HR and security teams should scrutinize remote IT workers requesting VPN-obfuscated or device-redirected setups. Implement periodic video verification for remote employees. Monitor for anomalous working hours inconsistent with claimed US timezone. Flag employees who refuse camera-enabled meetings.",
-        "link": "https://cointelegraph.com/news/us-sentences-eight-in-five-months-laptop-farmers-north-korea"
-      },
-      {
-        "id": 24,
-        "title": "Coinbase Reports $400M Q1 Loss, Revenue Miss as Trading Volumes Decline",
-        "tag": "Financial / Crypto Exchange",
-        "desc": "Coinbase posts $400M Q1 loss amid macro headwinds; CEO Armstrong announces plan to diversify beyond spot trading.",
-        "summary": "Coinbase reported a $400 million Q1 loss and revenue miss as macro conditions weighed on crypto trading volumes. CFO Alesia Haas described 'macro conditions were genuinely tough,' while CEO Brian Armstrong highlighted a strategic plan to diversify beyond spot trading revenue. The earnings report contributed to a share price decline, compounding the AWS outage disruption that same day which forced Coinbase into cancel-only trading mode.",
-        "importance": "Coinbase's diversification away from spot trading mirrors a structural shift in the crypto exchange market — fee compression and volume concentration are compressing margins. The dual hit of poor earnings and an infrastructure outage on the same day underscores operational fragility.",
-        "noteworthy": "Monitor Coinbase's diversification execution (derivatives, staking, custody). Track crypto exchange market share shifts. Evaluate counterparty risk for funds held on Coinbase. The CLARITY Act could reshape revenue models for US exchanges if passed.",
-        "link": "https://cointelegraph.com/news/coinbase-shares-slide-q1-loss-revenue-miss"
       }
     ]
   }
