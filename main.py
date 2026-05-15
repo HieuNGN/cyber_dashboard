@@ -32,7 +32,7 @@ async def get_news():
     if os.path.exists(data_file):
         with open(data_file, "r") as f:
             return JSONResponse(json.load(f))
-    return JSONResponse(content={"today": {"date": "", "items": []}, "yesterday": {"date": "", "items": []}})
+    return JSONResponse(content={"today": {"date": "", "items": []}, "yesterday": {"date": "", "items": []}, "day_before_yesterday": {"date": "", "items": []}})
 
 @app.post("/api/export")
 async def export_md(req: dict):

@@ -89,7 +89,7 @@ h1 { font-size:2.2rem; font-weight:800; text-transform:uppercase; letter-spacing
     <div class="status-indicator"><div class="blink"></div>System Live</div>
   </h1>
   <div class="net-stats"><span id="lastUpdated">Waiting for data…</span><span id="itemCount">0 items loaded</span></div>
-  <div class="date-tabs" id="dateTabs"><button class="date-tab active" data-day="today">Today — <span id="tabToday">…</span></button><button class="date-tab" data-day="yesterday">Yesterday — <span id="tabYesterday">…</span></button></div>
+  <div class="date-tabs" id="dateTabs"><button class="date-tab active" data-day="today">Today — <span id="tabToday">…</span></button><button class="date-tab" data-day="yesterday">Yesterday — <span id="tabYesterday">…</span></button><button class="date-tab" data-day="day_before_yesterday">Two Days Ago — <span id="tabDBY">…</span></button></div>
   <div class="grid" id="intelGrid"><div class="loading">// INITIALIZING DATA STREAM…</div></div>
   <div class="footer-text">Project Dashboard // Node: P14s-AMD // Sector: ~/projs</div>
 </div>
@@ -198,7 +198,7 @@ h1 { font-size:2.2rem; font-weight:800; text-transform:uppercase; letter-spacing
 </div>
 
 <script>
-let newsData = { today: { date: '', items: [] }, yesterday: { date: '', items: [] } };
+let newsData = { today: { date: '', items: [] }, yesterday: { date: '', items: [] }, day_before_yesterday: { date: '', items: [] } };
 let currentDay = 'today';
 
 async function fetchNews() {
@@ -206,12 +206,14 @@ async function fetchNews() {
     const res = await fetch('/api/news');
     const json = await res.json();
     newsData = json;
-    const itemCount = (json.today?.items?.length || 0) + (json.yesterday?.items?.length || 0);
+    const itemCount = (json.today?.items?.length || 0) + (json.yesterday?.items?.length || 0) + (json.day_before_yesterday?.items?.length || 0);
     document.getElementById('itemCount').textContent = itemCount + ' items loaded';
     const todayDate = json.today?.date || 'today';
     const yestDate = json.yesterday?.date || 'yesterday';
+    const dbyDate = json.day_before_yesterday?.date || 'two days ago';
     document.getElementById('tabToday').textContent = todayDate;
     document.getElementById('tabYesterday').textContent = yestDate;
+    document.getElementById('tabDBY').textContent = dbyDate;
     document.getElementById('lastUpdated').textContent = 'Last Update: ' + todayDate;
     initGrid(currentDay);
   } catch (e) {
@@ -251,23 +253,25 @@ function openModal(day, idx) {
 }
 function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
 
-// Date tabs
+// Date tabs — use closest() so clicking <span> inside button still works
 document.getElementById('dateTabs').addEventListener('click', e => {
-  if(e.target.classList.contains('date-tab')) {
+  const tab = e.target.closest('.date-tab');
+  if(tab) {
     document.querySelectorAll('.date-tab').forEach(t => t.classList.remove('active'));
-    e.target.classList.add('active');
-    currentDay = e.target.dataset.day;
+    tab.classList.add('active');
+    currentDay = tab.dataset.day;
     initGrid(currentDay);
   }
 });
 
-// Side pane tabs
+// Side pane tabs — use closest() for same reason
 document.querySelector('.pane-tabs').addEventListener('click', e => {
-  if(e.target.classList.contains('pane-tab')) {
+  const tab = e.target.closest('.pane-tab');
+  if(tab) {
     document.querySelectorAll('.pane-tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.pane-body').forEach(p => p.classList.remove('active'));
-    e.target.classList.add('active');
-    document.getElementById('pane-' + e.target.dataset.pane).classList.add('active');
+    tab.classList.add('active');
+    document.getElementById('pane-' + tab.dataset.pane).classList.add('active');
   }
 });
 
