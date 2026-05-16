@@ -1,9 +1,94 @@
 {
   "today": {
-    "date": "16/05/26",
+    "date": "13/05/26",
     "items": [
       {
         "id": 1,
+        "title": "Pixel 10 Zero-Click: Project Zero Drops Critical VPU Exploit Chain",
+        "tag": "Critical Vulnerability / Mobile Security",
+        "desc": "Project Zero discloses 0-click exploit chain for Pixel 10 targeting new VPU driver on Tensor G5 chip.",
+        "summary": "Google Project Zero researcher Seth Jenkins disclosed a new zero-click exploit chain for the Pixel 10. The attack targets the new Video Processing Unit (VPU) driver (`/dev/vpu`) associated with the Chips&Media Wave677DV hardware on the Tensor G5. By abusing the mediacodec SELinux context, attackers can achieve root on Android in just two exploits. Notably, the Pixel 10's use of Return Address Cryptography (RET PAC) forced researchers to bypass standard stack protections using `dap_cpdp_init` overwrites, proving that even hardware-enforced security has logic-level windows.",
+        "importance": "As you use a Pixel 8a for testing, understand that the Tensor lineage's specialized hardware (TPU/VPU) is the new primary attack surface. This is a 0-click exploit\u2014it requires no user interaction and targets drivers that are often less audited than the core kernel. It highlights that as we add 'AI acceleration' hardware, we are expanding the platform's trusted computing base (TCB) with new vulnerabilities.",
+        "noteworthy": "Monitor the May/June security patch level (SPL) for your Pixel devices. If you are on an unpatched Tensor G5 device, disable background media processing where possible. Review the Project Zero blog to understand how SELinux contexts for hardware drivers (like `/dev/vpu`) can be massaged for privilege escalation.",
+        "link": "https://projectzero.google/2026/05/pixel-10-exploit.html"
+      },
+      {
+        "id": 2,
+        "title": "Kioxia & Dell Cram 10PB into 2RU: The End of Nearline HDD?",
+        "tag": "Hardware / Storage Infrastructure",
+        "desc": "Dell PowerEdge R7725xd uses 245TB QLC SSDs to hit 9.8PB in 2U; signals death of high-capacity hard drives.",
+        "summary": "Dell and Kioxia have announced the PowerEdge R7725xd, a 2RU server that packs nearly 10 petabytes of all-flash storage. Utilizing forty 245.76TB LC9 E3.L QLC SSDs and AMD EPYC 9005 processors, the system achieves a density of 196PB per rack. With support for five 400Gbps NICs, the server is designed for massive AI data ingestion and data lakes. Industry experts suggest this level of density and I/O performance marks the terminal phase for rotating nearline HDDs in the high-end datacenter.",
+        "importance": "For your home lab and future NetOps planning, the 'Density Wars' have a direct impact on TCO and power efficiency. 10PB in 2U means the storage bottleneck is no longer physical space, but networking and power. As you scale projs/labs, flash is no longer a 'cache'\u2014it's the only viable substrate for modern data density. 1PB drives are already on the horizon.",
+        "noteworthy": "When planning your next storage refresh (TrueNAS/Proxmox), factor in the rapid price-per-TB decline of high-capacity QLC flash. Monitor the development of E3.L form factor support in consumer-grade motherboards. Ensure your networking (Tailscale/10GbE) is ready for the throughput requirements of dense flash arrays.",
+        "link": "https://www.blocksandfiles.com/flash/2026/05/14/kioxia-and-dell-cram-10-pb-into-slim-2ru-server/5240574"
+      },
+      {
+        "id": 3,
+        "title": "Russian 'Kazuar' Backdoor Mutates into Resilient P2P Botnet",
+        "tag": "Threat Intelligence / Malware",
+        "desc": "Palo Alto uncovers Kazuar 4.0; now uses P2P mesh networking to dodge C2 takedowns and ISP blocking.",
+        "summary": "The Russian-linked Kazuar backdoor (attributed to the Turla APT) has released version 4.0, featuring a major pivot to Peer-to-Peer (P2P) mesh networking. The malware now creates a modular P2P botnet that uses authenticated local communication to propagate commands, making it nearly impossible to dismantle by simply taking down a central C2 server. It also includes new 'anti-analysis' modules that detect EDR sandboxing by timing the execution of complex mathematical functions vs. known CPU performance baselines.",
+        "importance": "P2P botnets are a nightmare for Network Engineers. They don't generate predictable 'phone home' traffic to a single IP; they blend into legitimate peer-to-peer traffic on the LAN. This mutation shows that state-sponsored actors are prioritizing resilience over stealth as network perimeter defenses (like your Pi-hole/Firewall) become more effective.",
+        "noteworthy": "Monitor your LAN for anomalous P2P traffic patterns between untrusted hosts. Use behavioral analysis (NetOps-Vision) to detect 'Kazuar' heartbeat signals that occur outside of standard peer communication. Implement strict egress filtering to prevent nodes from becoming bridgeheads for the external mesh.",
+        "link": "https://www.bleepingcomputer.com/news/security/russian-hackers-turn-kazuar-backdoor-into-modular-p2p-botnet/"
+      },
+      {
+        "id": 4,
+        "title": "Pwn2Own Day 2: MS Exchange and Windows 11 Chain-Exploited",
+        "tag": "Cyber / Vulnerability Research",
+        "desc": "Vancouver Pwn2Own hackers demo zero-days in MS Exchange, Windows 11, and RHEL; over $400K in prizes awarded.",
+        "summary": "The second day of Pwn2Own Vancouver 2026 saw massive successful exploits against primary enterprise targets. Teams demonstrated a chain against Microsoft Exchange Server (achieving SYSTEM privileges) and multiple local privilege escalations (LPE) in Windows 11. Red Hat Enterprise Linux (RHEL) also fell to a new kernel-level exploit. The event highlights that even 'hardened' enterprise stacks remain vulnerable to dedicated researchers using sophisticated multi-stage chains.",
+        "importance": "Pwn2Own is the primary signal for the 'exploit of the year.' When Exchange falls at Pwn2Own, it usually means a mass-exploitation wave is coming in the next 30-60 days once the patches are reverse-engineered. For your lab's security posture, treat every Pwn2Own success as a 'Pre-CVE' warning for your own infrastructure.",
+        "noteworthy": "Watch for Microsoft's out-of-band (OOB) updates following the event. If you manage any Exchange or Windows server infrastructure, prioritize the upcoming patches. Review the high-level exploit descriptions to understand the 'exploit path' (e.g., RPC over HTTP, heap sprays) and ensure your WAF/IDS is tuned to detect similar patterns.",
+        "link": "https://www.bleepingcomputer.com/news/security/pwn2own-day-two-hackers-demo-microsoft-exchange-windows-11-red-had-enterprise-linux-zero-days/"
+      },
+      {
+        "id": 5,
+        "title": "Dnsmasq Security Crisis: Six New CVEs Disclosed for Core Internet Tool",
+        "tag": "Critical Vulnerability / Networking",
+        "desc": "CERT/CC releases six vulnerabilities for dnsmasq; affects DNS caching and DHCP services across millions of routers.",
+        "summary": "CERT/CC and the dnsmasq maintainers have disclosed six new vulnerabilities impacting dnsmasq, the lightweight DNS/DHCP forwarder used in millions of home routers, IoT devices, and Linux distributions. The flaws, ranging from heap buffer overflows to information leaks, allow for potential remote code execution (RCE) and DNS cache poisoning. Given dnsmasq's role as a trusted intermediary for DNS traffic, these vulnerabilities provide a potent vector for network-wide lateral movement and man-in-the-middle attacks.",
+        "importance": "As a Network Engineer, this is your primary concern. Dnsmasq is the heartbeat of most local networks, including your lab. A flaw here doesn't just affect one host; it can poison the entire network's resolution, redirecting traffic to malicious mirrors or enabling silent lateral movement through DHCP manipulation.",
+        "noteworthy": "Search for dnsmasq usage across your Proxmox containers and Pi-hole instances. Update to dnsmasq 2.91+ (or backported security versions) immediately. Monitor for anomalous DHCP requests or frequent DNS cache resets. Disable unused features like TFTP or large DNS packet support to reduce attack surface.",
+        "link": "https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2026q2/018471.html"
+      },
+      {
+        "id": 6,
+        "title": "Mini Shai-Hulud Worm Hits AI Supply Chain: TanStack, Mistral AI Affected",
+        "tag": "Critical Vulnerability / AI Supply Chain",
+        "desc": "Sophisticated 'Mini Shai-Hulud' worm targets AI developers; compromises TanStack, Mistral AI, and Guardrails AI packages.",
+        "summary": "Security researchers have identified a worm-like supply chain attack dubbed 'Mini Shai-Hulud' targeting the Python and JavaScript AI ecosystems. The worm systematically poisons packages used by AI developers, including TanStack, Mistral AI, and Guardrails AI, by injecting credential-harvesting code that activates during model training or inference. The worm propagates by stealing the developer's registry tokens and automatically republishing infected sub-dependencies, creating a massive cascading compromise across the AI infrastructure stack.",
+        "importance": "This marks a pivot in supply chain attacks from generic web devs to the AI sector. Because AI development often implies high-value data and massive compute resources, a compromise in this niche is exponentially more dangerous. It leverages the rapid, often un-audited pace of AI library releases to propagate.",
+        "noteworthy": "Audit internal dependencies for 'Mini Shai-Hulud' signatures. Freeze all AI-related package versions in your 'netops' and 'cyberdash' projects. Use hardware security keys for registry authentication. Pin dependencies to specific SHA hashes rather than version tags to mitigate the impact of malicious republications.",
+        "link": "https://thehackernews.com/2026/05/mini-shai-hulud-worm-compromises.html"
+      },
+      {
+        "id": 7,
+        "title": "UK Deploys Jets and Warships to Strait of Hormuz for Defense Mission",
+        "tag": "Geopolitics / War Drums",
+        "desc": "Strategic escalation: UK promises drones, jets, and a warship for Hormuz maritime security as tensions spike.",
+        "summary": "The UK government has committed a significant military package\u2014including fighter jets, advanced surveillance drones, and a dedicated warship\u2014to a new maritime security mission in the Strait of Hormuz. The deployment aims to protect international shipping following increased threats to merchant vessels. This move signals a hardening of the Western stance toward regional maritime threats and increases the kinetic risk profile of the world's most critical oil transit corridor.",
+        "importance": "The Strait of Hormuz is the world's most critical energy choke point. Any military buildup here increases the risk of 'unintended' escalation. For your hardware supply chain, this is a 'Yellow Alert': prolonged tension usually precedes logistics surcharges and semiconductor shipping delays out of Asian hubs that transit nearby.",
+        "noteworthy": "Monitor global energy prices and shipping lead times for hardware components. Consider the geopolitical risk when planning long-term infrastructure procurement. For your 'netops' project, this provides a real-world scenario for traffic rerouting and service resilience during macro disruptions.",
+        "link": "https://www.bbc.com/news/articles/c5y909grldqo"
+      },
+      {
+        "id": 8,
+        "title": "Needle: Quantized 26M Gemini Model for High-Efficiency Tool Calling",
+        "tag": "AI / Local Hardware",
+        "desc": "Show HN: 'Needle' distills Gemini tool-calling capabilities into a tiny 26M parameter model for local execution.",
+        "summary": "A new project called 'Needle' has successfully distilled the tool-calling and function-orchestration capabilities of Google's Gemini into a tiny, 26-million parameter model. Designed for edge execution, Needle can run on consumer hardware with negligible latency, enabling low-power devices to handle complex LLM-driven orchestration without calling out to the cloud for every step. This represents a significant step forward in making 'Agentic' behavior viable on resource-constrained home lab hardware.",
+        "importance": "As you build your 'netops' agent and 'cyberdash' server, 'Needle' is exactly the type of efficiency play you need. 26M parameters means it can run effectively in the background of your existing services or on a low-spec Raspberry Pi, freeing up your main GPU/NPU for more intensive reasoning tasks.",
+        "noteworthy": "Evaluate 'Needle' (available on GitHub under cactus-compute/needle) for your local agentic workflows. Test its reliability in mapping user intent to specific Python function calls. Its compact size makes it a perfect candidate for sub-agent orchestration in your multi-layer NetOps-Vision stack.",
+        "link": "https://github.com/cactus-compute/needle"
+      }
+    ]
+  },
+  "yesterday": {
+    "date": "16/05/26",
+    "items": [
+      {
+        "id": 9,
         "title": "Turla's Kazuar Backdoor Evolves Into P2P Botnet for Stealth Access",
         "tag": "Threat Intel / Nation-State",
         "desc": "Russian Turla (APT28) upgrades Kazuar backdoor with P2P mesh networking to bypass perimeter blocks.",
@@ -13,7 +98,7 @@
         "link": "https://thehackernews.com/2026/05/turla-turns-kazuar-backdoor-into.html"
       },
       {
-        "id": 2,
+        "id": 10,
         "title": "Four OpenClaw Flaws Enable Data Theft and Privilege Escalation",
         "tag": "Critical Vulnerability / Supply Chain",
         "desc": "Security researchers disclose four critical flaws in OpenClaw library; affects AI-generated code validation pipelines.",
@@ -23,7 +108,7 @@
         "link": "https://thehackernews.com/2026/05/four-openclaw-flaws-enable-data-theft.html"
       },
       {
-        "id": 3,
+        "id": 11,
         "title": "TanStack Supply Chain Attack Hits OpenAI Employee Devices",
         "tag": "Cyber Attack / Supply Chain",
         "desc": "Supply chain compromise of TanStack libraries targets high-value AI developers; triggers emergency macOS updates.",
@@ -33,7 +118,7 @@
         "link": "https://thehackernews.com/2026/05/tanstack-supply-chain-attack-hits-two.html"
       },
       {
-        "id": 4,
+        "id": 12,
         "title": "Cisco SD-WAN CVE-2026-20182: Admin Access Under Active Exploitation",
         "tag": "Critical Vulnerability / Networking",
         "desc": "CISA adds Cisco SD-WAN flaw to KEV after threat actors achieve unauthorized admin access on edge routers.",
@@ -43,7 +128,7 @@
         "link": "https://thehackernews.com/2026/05/cisa-adds-cisco-sd-wan-cve-2026-20182.html"
       },
       {
-        "id": 5,
+        "id": 13,
         "title": "SANA-WM: Nvidia Unveils 2.6B Open-Source 'World Model' for Video",
         "tag": "AI / Open Source Hardware",
         "desc": "Nvidia researchers release SANA-WM, a high-efficiency world model capable of 1-minute 720p 30fps video generation on local hardware.",
@@ -53,148 +138,13 @@
         "link": "https://nvlabs.github.io/Sana/WM/"
       },
       {
-        "id": 6,
+        "id": 14,
         "title": "Crypto Slump: BTC Drops to $78.1K as Jobs Data Volatility Hits",
         "tag": "Finance / Crypto Markets",
         "desc": "Bitcoin slides 1.4% to $78,104; Solana and Ethereum follow as macro jitters over US jobs data trigger liquidations.",
         "summary": "Bitcoin (BTC) has slipped to $78,104 as a fresh batch of US jobs data triggered volatility across the risk-asset spectrum. The market saw over $140M in long liquidations in the last 12 hours. Solana (SOL) has retreated significantly to $86.36, while Ethereum (ETH) holds at $2,178. Analysts suggest the 'CLARITY Act' optimism from earlier in the week is being tempered by macro-economic uncertainty, though institutional 'diamond hands' in the spot ETFs have remained largely resilient.",
         "importance": "The $80K psychological floor has been breached locally. For your lab's digital asset management, this is a test of the 'structural floor.' Macro still wins the day, but the decoupling narrative is currently in a 'bearish backtest.'",
         "noteworthy": "Watch the $75K support for BTC as the next major line in the sand. Monitor the impact of the jobs data on the broader US dollar index (DXY). Ensure limit orders are appropriately placed to capitalize on 'macro wick' volatility.",
-        "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
-      }
-    ]
-  },
-  "yesterday": {
-    "date": "15/05/26",
-    "items": [
-      {
-        "id": 7,
-        "title": "Cisco SD-WAN Auth Bypass (CVE-2026-20182) Hits KEV",
-        "tag": "Critical Vulnerability / Networking",
-        "desc": "CISA adds Cisco Catalyst SD-WAN Controller flaw to KEV; active exploitation leads to full admin access.",
-        "summary": "CISA has added CVE-2026-20182, a critical authentication bypass in Cisco Catalyst SD-WAN Controller (vSmart) and Manager, to its Known Exploited Vulnerabilities catalog. Attackers are exploiting a peering authentication flaw to gain unauthorized administrative control over SD-WAN infrastructure. This enables full visibility into network traffic and the ability to reconfigure edge devices across the enterprise fabric.",
-        "importance": "SD-WAN is the backbone of modern enterprise connectivity. A bypass here is effectively a skeleton key to the entire WAN. Given Hieu's focus on Network Engineering, this is a top-tier audit item for any Cisco-heavy deployments or client networks.",
-        "noteworthy": "Identify affected Cisco SD-WAN instances and patch to the latest version immediately (Transition to May 2026 releases). Review peering logs for unauthorized controller connections. FCEB agencies must remediate by May 17.",
-        "link": "https://thehackernews.com/2026/05/cisa-adds-cisco-sd-wan-cve-2026-20182.html"
-      },
-      {
-        "id": 8,
-        "title": "Stealer Backdoor Found in Node-IPC Targeting Dev Secrets",
-        "tag": "Malware / Supply Chain",
-        "desc": "Versions 9.1.6, 9.2.3, and 12.0.1 of node-ipc backdoored; targets environment variables and SSH keys.",
-        "summary": "Security researchers discovered a stealer backdoor in several versions of the popular `node-ipc` package. The malicious code is designed to identify developer workstations and exfiltrate sensitive data, including `.env` files, `.ssh` credentials, and registry tokens. The campaign mimics previous supply chain attacks where high-traffic packages are poisoned to gain ingress into cloud infrastructure via developer local environments.",
-        "importance": "The supply chain remains the soft underbelly of DevOps. This attack specifically targets the tools you use daily. If your 'cyberdash' or 'netops' projects pull these versions, your local environment\u2014including your SSH keys to the lab\u2014is compromised.",
-        "noteworthy": "Audit all `package.json` and `package-lock.json` files for `node-ipc` versions 9.1.6, 9.2.3, or 12.0.1. Pin to known-good versions or relocate secret storage to hardware-backed solutions. Monitor outbound traffic for exfiltration patterns to unknown IP addresses.",
-        "link": "https://thehackernews.com/2026/05/stealer-backdoor-found-in-3-node-ipc.html"
-      },
-      {
-        "id": 9,
-        "title": "18-Year-Old NGINX Rewrite Module RCE Disclosed",
-        "tag": "Critical Vulnerability / Web Servers",
-        "desc": "Unauthenticated RCE flaw (CVE-2026-42945) found in ngx_http_rewrite_module; affects NGINX Plus and Open.",
-        "summary": "A heap buffer overflow vulnerability lingering for 18 years in NGINX's rewrite module has been disclosed. Labeled CVE-2026-42945 with a CVSS score of 9.2, the flaw allows for unauthenticated remote code execution or denial of service by sending specially crafted requests that trigger the overflow during URL mapping. The extensive reach of NGINX makes this one of the most significant web server vulns in recent memory.",
-        "importance": "As the gatekeeper for millions of containers and services, an NGINX RCE is catastrophic. For your lab, if you use NGINX as a reverse proxy for your 'cyberdash' or Guacamole, you are potentially exposed to a pre-auth RCE. This is a mandatory patch day.",
-        "noteworthy": "Update NGINX to the latest mainline or stable branch containing the fix. If immediate patching is not possible, audit rewrite rules and disable the module if it isn't strictly necessary. Monitor error logs for NGINX worker crashes, which may indicate exploitation attempts.",
-        "link": "https://thehackernews.com/2026/05/18-year-old-nginx-rewrite-module-flaw.html"
-      },
-      {
-        "id": 10,
-        "title": "PraisonAI Auth Bypass Targeted Hours After Disclosure",
-        "tag": "Vulnerability / AI Infrastructure",
-        "desc": "CVE-2026-44338 (CVSS 7.3) exposes multi-agent framework; attackers observed invoking agents remotely.",
-        "summary": "Threat actors were spotted exploiting a missing authentication vulnerability (CVE-2026-44338) in PraisonAI, an open-source multi-agent orchestration framework, just four hours after the security advisory went public. The flaw allows remote attackers to access sensitive endpoints and execute agentic tasks without credentials. This highlighting the speed at which the 'adversarial AI' landscape is maturing.",
-        "importance": "This is exactly what the autonomous-ai-agents skill is designed to prevent. As you experiment with multi-agent workflows, the security of the framework itself is as critical as the code the agents write. Insecure orchestration = unauthorized remote control of your lab.",
-        "noteworthy": "Verify if PraisonAI or similar frameworks are exposed on your network. Bind all agentic dashboard services to 127.0.0.1 and access via authenticated tunnels. Update PraisonAI to the patched version immediately.",
-        "link": "https://thehackernews.com/2026/05/praisonai-cve-2026-44338-auth-bypass.html"
-      },
-      {
-        "id": 11,
-        "title": "Fragnesia: New Linux Page Cache Corruption LPE Hits Root",
-        "tag": "Kernel / OS Security",
-        "desc": "CVE-2026-46300 grants local root access via Page Cache corruption; third such vulnerability in two weeks.",
-        "summary": "A new Linux kernel local privilege escalation (LPE) vulnerability, dubbed 'Fragnesia' (CVE-2026-46300), has been disclosed. The bug resides in the kernel's XFRM subsystem and allows a local user to corrupt the Page Cache. By manipulating cache entries, an attacker can overwrite read-only files (like `/etc/passwd` or system binaries), resulting in instant root access. Fragnesia follows in the footsteps of the recent 'Dirty Frag' vulnerabilities.",
-        "importance": "Kernel security is the final line of defense for your Proxmox nodes and Fedora workstations. An LPE like Fragnesia allows a compromised container or low-priv listener to take total control of the host. Multi-user systems or shared lab resources are at high risk.",
-        "noteworthy": "Apply the latest kernel updates to your Fedora and openSUSE machines. For your Proxmox hosts, check the PVE repositories for backported security kernels. Monitor for unusual file modifications in `/etc` by non-root processes.",
-        "link": "https://thehackernews.com/2026/05/new-fragnesia-linux-kernel-lpe-grants.html"
-      },
-      {
-        "id": 12,
-        "title": "Windows Zero-Days: YellowKey BitLocker Bypass and GreenPlasma Escalation",
-        "tag": "OS Security / Zero-Day",
-        "desc": "New zero-days codenamed YellowKey and GreenPlasma expose BitLocker and CTFMON to critical flaws.",
-        "summary": "An anonymous researcher has disclosed two high-impact Windows zero-days. 'YellowKey' is a BitLocker bypass that allows an attacker with physical access to extract encryption keys or bypass the pre-boot environment. 'GreenPlasma' targets the Collaborative Translation Framework (CTFMON), offering a potent route for privilege escalation. These flaws bypass standard Microsoft Defender protections, leaving many systems vulnerable until an official patch is released.",
-        "importance": "For any Windows-based workstations in your lab, these zero-days represent a significant risk. YellowKey is particularly dangerous for laptops (like your potential mobile workstations) if they are lost or stolen, as it undermines the core disk encryption promise.",
-        "noteworthy": "For YellowKey, consider using a startup PIN in addition to TPM-based BitLocker. For GreenPlasma, monitor for suspicious `ctfmon.exe` behavior or privilege elevations. Stay tuned for the June Patch Tuesday for official fixes.",
-        "link": "https://thehackernews.com/2026/05/windows-zero-days-expose-bitlocker.html"
-      },
-      {
-        "id": 13,
-        "title": "Pwn2Own Berlin 2026: Windows 11 and Edge Hacked on Day 1",
-        "tag": "Cyber / Exploit Contest",
-        "desc": "Latest versions of Windows 11 and Microsoft Edge fall to sophisticated exploit chains at Pwn2Own.",
-        "summary": "The Pwn2Own Berlin 2026 competition has kicked off with multiple successful hacks against top-tier targets. Researchers successfully demonstrated exploit chains targeting Windows 11 and Microsoft Edge, achieving unauthorized code execution on fully patched systems. Other targets falling on the first day included various IoT devices and automotive systems, highlighting the persistent gaps in even the most hardened consumer software.",
-        "importance": "Pwn2Own is the 'early warning system' for the next wave of widespread exploits. The successful hacks against Edge and Windows 11 show that current 'fully patched' states are only temporary. The techniques demonstrated today will likely filter down to threat actors within months.",
-        "noteworthy": "Maintain a 'security in depth' approach; never rely solely on the OS or browser for protection. Use network-level segmentation (VLANs) in your lab to contain potential browser-based compromises. Expect out-of-band patches from Microsoft in the coming weeks.",
-        "link": "https://www.bleepingcomputer.com/news/security/windows-11-and-microsoft-edge-hacked-on-first-day-of-pwn2own-berlin-2026/"
-      },
-      {
-        "id": 14,
-        "title": "RTX 5090 vs M4 MacBook Air: The eGPU Gaming Frontier",
-        "tag": "Hardware / Performance",
-        "desc": "New benchmarks test NVIDIA's Blackwell RTX 5090 on M4-equipped Macs via Thunderbolt 5/eGPU.",
-        "summary": "A deep-dive analysis has surfaced testing the latest NVIDIA RTX 5090 (Blackwell) on the M4 MacBook Air using early Thunderbolt 5 eGPU enclosures. Despite the lack of official macOS driver support for NVIDIA cards, researchers are using custom translation layers to achieve massive performance gains in GPGPU tasks and simulated gaming. The results show that the Tflop/s potential of the 5090 overcomes the bandwidth bottlenecks of previous generations.",
-        "importance": "As the hardware market shifts, the ability to pair Apple's high-efficiency silicon with NVIDIA's raw GPU power is the 'Holy Grail' for mobile devs. This indicates a future where your thin-and-light laptop can transform into a local AI training powerhouse in the lab.",
-        "noteworthy": "Monitor the development of 'Metal-to-CUDA' translation layers. If you are planning a hardware refresh, consider the Thunderbolt 5 roadmap for future-proofing your eGPU setups. This is highly relevant for your local LLM and data science projects.",
-        "link": "https://scottjg.com/posts/2026-05-05-egpu-mac-gaming/"
-      },
-      {
-        "id": 15,
-        "title": "Tesla Wall Connector Bootloader Bypass Achieved",
-        "tag": "Hardware / Firmware Hacking",
-        "desc": "Synacktiv researchers bypass firmware downgrade ratchet on Tesla Wall Connector via charge port.",
-        "summary": "Security researchers at Synacktiv have successfully bypassed the bootloader security on the Tesla Wall Connector. The exploit involves a hardware-level bypass of the 'firmware downgrade ratchet,' allowing the researchers to install older, vulnerable firmware versions. This ingress was achieved directly through the charge port connector, demonstrating a novel physical attack vector for smart infrastructure.",
-        "importance": "This is a masterclass in 'hardware logic' exploitation. It highlights that even systems with rigorous signature checks can be vulnerable if the rollback protection (the ratchet) is bypassed. It's a reminder to secure your IoT devices not just via software, but by physically limiting access.",
-        "noteworthy": "Read the Synacktiv whitepaper for a deep dive into bootloader security. Apply these concepts to your own lab hardware (routers, SBCs)\u2014ensure that physical access doesn't automatically mean firmware-level compromise. Disable physical debugging ports on production lab devices.",
-        "link": "https://www.synacktiv.com/en/publications/exploiting-the-tesla-wall-connector-from-its-charge-port-connector-part-2-bypassing"
-      },
-      {
-        "id": 16,
-        "title": "DIY Open-Source Ultrasound on RP2040/RP2350",
-        "tag": "Hardware / Embedded Systems",
-        "desc": "Project 'pic0rick' brings low-cost medical imaging to the RP2040/RP2350 platform.",
-        "summary": "A new open-source project named 'pic0rick' has successfully implemented a working ultrasound imaging system using the Raspberry Pi RP2040 (and its successor, the RP2350). By leveraging the PIO (Programmable I/O) blocks for high-speed signal processing, the project achieves medical-grade image acquisition at a fraction of the cost of commercial systems. It represents a massive leap in what is possible on $5 microcontrollers.",
-        "importance": "The RP2040/RP2350 is the 'Swiss Army Knife' of the modern lab. This project proves that high-frequency signal processing, once reserved for FPGAs or specialized DSPs, is now viable on generic embedded hardware. For your 'netops' projects, this shows the raw power available for custom network sniffing or signal analysis.",
-        "noteworthy": "Check out 'un0rick.cc/pic0rick' for the Bill of Materials and source code. Consider experimenting with RP2350 PIO blocks for high-speed packet manipulation in your networking projects. This is a prime example of the hardware democratization you follow.",
-        "link": "http://un0rick.cc/pic0rick"
-      },
-      {
-        "id": 17,
-        "title": "Geopolitical Tension: Iranian Forces Seize 'Floating Armoury' Ship",
-        "tag": "Geopolitics / War Drums",
-        "desc": "Strategic escalation: Iran reportedly seizes a maritime security vessel in the Gulf of Oman.",
-        "summary": "Reports indicate that Iranian forces have seized a 'floating armoury' ship\u2014a vessel used to store weapons for private maritime security companies\u2014near the Gulf of Oman. The seizure adds a new layer of complexity to regional maritime security, as these ships are essential for protecting commercial traffic from piracy. This move is seen as a direct challenge to the Western-led maritime security missions in the region.",
-        "importance": "Seizing an armory ship is a high-stakes move. It directly interferes with the logistics of maritime defense. For your supply chain awareness, this increases the risk profile for hardware shipments transiting the Middle East, potentially leading to increased insurance premiums and further shipment delays.",
-        "noteworthy": "Monitor the kinetic responses from NATO and regional maritime coalitions. Track shipping rerouting trends. This event increases the 'Yellow Alert' status for technology logistics. A kinetic escalation here could have immediate impacts on the availability of networking gear.",
-        "link": "https://www.bbc.com/news/articles/cx219xwxg9no"
-      },
-      {
-        "id": 18,
-        "title": "Ceasefire Collapses in Southern Lebanon; 22 Killed in Strikes",
-        "tag": "Geopolitics / Conflict",
-        "desc": "Israeli strikes reported in southern Lebanon as ceasefire fails to hold; regional tensions spike.",
-        "summary": "The fragile peace in southern Lebanon has shattered as Israeli airstrikes reportedly killed 22 people following the collapse of a regional ceasefire agreement. Reports indicate that Hezbollah support in the region remains robust, and kinetic exchanges have resumed along the border. International mediators are struggling to restart the diplomatic process as both sides harden their military stances.",
-        "importance": "The Middle East is at a boiling point. The failure of this ceasefire indicates that a prolonged conflict is more likely than a swift diplomatic resolution. This further destabilizes the region's role as a secondary tech and logistics hub. Political instability often precedes larger-scale cyber warfare campaigns from regional actors.",
-        "noteworthy": "Assess the risk of increased hacktivist activity and state-sponsored cyber operations linked to the conflict. Monitor for regional internet service disruptions. Ensure your lab's off-site backups are geographically diverse to mitigate against regional-scale infrastructure failures.",
-        "link": "https://www.bbc.com/news/articles/c1k2zekj8y9o"
-      },
-      {
-        "id": 19,
-        "title": "Crypto: BTC Holds $80K Amid Senate Markup Anxiety",
-        "tag": "Finance / Crypto Markets",
-        "desc": "Bitcoin stabilizes at $80,411 (+0.67%) while the market waits for the CLARITY Act markup results.",
-        "summary": "Bitcoin (BTC) is currently trading at $80,411, maintaining its psychological support above $80K. Market participants are nervously awaiting the results of the US Senate's 'CLARITY' Act markup, which is expected to set the regulatory tone for the coming years. Solana (SOL) and Ethereum (ETH) have seen slight pullbacks, trading at $90.69 and $2,249 respectively, as capital rotates back into the market leader.",
-        "importance": "The $80K support for BTC is the defining line for the current market cycle. Any breakdown here would signal a shift in macro sentiment. The CLARITY Act is the final boss of crypto regulation for 2026\u2014its outcome will directly dictate the legality and liquidity of DeFi services you might use.",
-        "noteworthy": "Monitor the $78K support cluster for BTC. Watch for high-volatility news coming out of the Senate Banking Committee today. Verify that your automated trading or tracking scripts handle the current market volatility without hitting API rate limits.",
         "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
       }
     ]
