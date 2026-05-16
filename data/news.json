@@ -1,9 +1,74 @@
 {
   "today": {
-    "date": "15/05/26",
+    "date": "16/05/26",
     "items": [
       {
         "id": 1,
+        "title": "Turla's Kazuar Backdoor Evolves Into P2P Botnet for Stealth Access",
+        "tag": "Threat Intel / Nation-State",
+        "desc": "Russian Turla (APT28) upgrades Kazuar backdoor with P2P mesh networking to bypass perimeter blocks.",
+        "summary": "The Russian-linked threat group Turla has updated its Kazuar backdoor with sophisticated peer-to-peer (P2P) networking capabilities. The modular update allows infected hosts to communicate directly with each other to relay commands and exfiltrated data, effectively creating a decentralized botnet that is highly resistant to traditional domain-based C2 takedowns. The malware includes 40+ new plugins for system reconnaissance, credential theft, and lateral movement.",
+        "importance": "As you move toward DevOps, understanding how APTs bypass traditional firewalls is critical. P2P C2 channels mean that blocking a single IP or domain is no longer sufficient. This represents the next level of persistent nation-state infrastructure.",
+        "noteworthy": "Monitor for anomalous peer-to-peer traffic between internal Linux workstations. Use behavioral analysis to detect modular library loading within common system processes. Implement strict zero-trust segmentation to prevent P2P-based lateral movement.",
+        "link": "https://thehackernews.com/2026/05/turla-turns-kazuar-backdoor-into.html"
+      },
+      {
+        "id": 2,
+        "title": "Four OpenClaw Flaws Enable Data Theft and Privilege Escalation",
+        "tag": "Critical Vulnerability / Supply Chain",
+        "desc": "Security researchers disclose four critical flaws in OpenClaw library; affects AI-generated code validation pipelines.",
+        "summary": "Four critical vulnerabilities (CVE-2026-31901-4) have been disclosed in OpenClaw, a popular open-source library used for validating and cleaning AI-generated code. The flaws include a path traversal bug that allows for arbitrary file reads and a logic error that permits local privilege escalation. Attackers can exploit these flaws by feeding specifically crafted AI-generated snippets to a system using OpenClaw for automated auditing, effectively turning the 'security tool' into proof-of-concept for the exploit itself.",
+        "importance": "The theme of 'vulnerabilities in security tools' continues. As you use AI agents to generate code, any tool you use to validate that code becomes a high-value target. This strike at the heart of the automated security pipeline we are building.",
+        "noteworthy": "Audit your CI/CD pipelines for OpenClaw usage and update to the patched version immediately. Sanitize all inputs to automated code-review tools. Sandbox the execution environment of any code-validation service.",
+        "link": "https://thehackernews.com/2026/05/four-openclaw-flaws-enable-data-theft.html"
+      },
+      {
+        "id": 3,
+        "title": "TanStack Supply Chain Attack Hits OpenAI Employee Devices",
+        "tag": "Cyber Attack / Supply Chain",
+        "desc": "Supply chain compromise of TanStack libraries targets high-value AI developers; triggers emergency macOS updates.",
+        "summary": "The TanStack (formerly React Query) ecosystem was hit by a targeted supply chain attack that successfully compromised the workstations of at least two OpenAI employees. The attackers injected malicious code into secondary dependencies that triggered only when specific internal OpenAI dev-environment markers were detected. The payload attempted to exfiltrate SSH keys and browser session cookies. In response, several organizations have forced emergency macOS security updates to revoke the malicious certificates used in the campaign.",
+        "importance": "This is a direct strike on the AI industry's brain trust. It proves that supply chain attackers are now tailoring their payloads to hit specific, high-value corporate targets based on environment variables. For your 'cyberdash' project, this reinforces the need to pin and audit every single dependency.",
+        "noteworthy": "Check your `node_modules` for any unauthorized TanStack related updates from the last 72 hours. Rotate any SSH keys or cloud tokens if you've been working on OpenAI-related OSS in that window. Enforce mandatory MDM-driven updates for all development workstations.",
+        "link": "https://thehackernews.com/2026/05/tanstack-supply-chain-attack-hits-two.html"
+      },
+      {
+        "id": 4,
+        "title": "Cisco SD-WAN CVE-2026-20182: Admin Access Under Active Exploitation",
+        "tag": "Critical Vulnerability / Networking",
+        "desc": "CISA adds Cisco SD-WAN flaw to KEV after threat actors achieve unauthorized admin access on edge routers.",
+        "summary": "CISA has added CVE-2026-20182 to its Known Exploited Vulnerabilities catalog. The flaw allows an unauthenticated, remote attacker to gain administrative access to the Cisco SD-WAN Manager (formerly vManage). Threat actors have been observed using the flaw to push malicious configuration changes to edge routers, enabling massive scale traffic interception and potential network-wide outages. The vulnerability stems from an insecure implementation of the management API's authentication layer.",
+        "importance": "SD-WAN is the 'Source of Truth' for modern network routing. A compromise here is equivalent to handing over the physical keys to the datacenter. For a Network Engineer, this is a code-red event for any enterprise environment managing Cisco edge gear.",
+        "noteworthy": "Apply the Cisco SD-WAN security advisory patches immediately. Audit VManage logs for unauthorized administrative login attempts or configuration changes. Restrict access to the management interface to a trusted VPN/internal subnet only.",
+        "link": "https://thehackernews.com/2026/05/cisa-adds-cisco-sd-wan-cve-2026-20182.html"
+      },
+      {
+        "id": 5,
+        "title": "SANA-WM: Nvidia Unveils 2.6B Open-Source 'World Model' for Video",
+        "tag": "AI / Open Source Hardware",
+        "desc": "Nvidia researchers release SANA-WM, a high-efficiency world model capable of 1-minute 720p 30fps video generation on local hardware.",
+        "summary": "Nvidia has open-sourced SANA-WM, a 2.6-billion parameter 'world model' designed for high-fidelity video generation. Unlike larger models, SANA-WM is highly optimized for local execution on consumer GPUs, achieving 1-minute of 720p video at 30fps on an RTX 4090. The model represents a significant leap in 'on-device' temporal consistency and physical simulation, enabling developers to build complex video applications without relying on opaque cloud APIs.",
+        "importance": "As we explore 'local-first' AI, SANA-WM is a blueprint for high-performance temporal reasoning. For your home lab, this is another tool in the box for high-speed, local data generation and simulation. It also pushes the boundary of what we consider 'local' compute capabilities.",
+        "noteworthy": "Clone the SANA repository and test the model's inference performance on your local GPU resources. Evaluate the temporal consistency for potential use in security-surveillance simulation. Monitor for quantization efforts to bring this model to even lower-spec hardware.",
+        "link": "https://nvlabs.github.io/Sana/WM/"
+      },
+      {
+        "id": 6,
+        "title": "Crypto Slump: BTC Drops to $78.1K as Jobs Data Volatility Hits",
+        "tag": "Finance / Crypto Markets",
+        "desc": "Bitcoin slides 1.4% to $78,104; Solana and Ethereum follow as macro jitters over US jobs data trigger liquidations.",
+        "summary": "Bitcoin (BTC) has slipped to $78,104 as a fresh batch of US jobs data triggered volatility across the risk-asset spectrum. The market saw over $140M in long liquidations in the last 12 hours. Solana (SOL) has retreated significantly to $86.36, while Ethereum (ETH) holds at $2,178. Analysts suggest the 'CLARITY Act' optimism from earlier in the week is being tempered by macro-economic uncertainty, though institutional 'diamond hands' in the spot ETFs have remained largely resilient.",
+        "importance": "The $80K psychological floor has been breached locally. For your lab's digital asset management, this is a test of the 'structural floor.' Macro still wins the day, but the decoupling narrative is currently in a 'bearish backtest.'",
+        "noteworthy": "Watch the $75K support for BTC as the next major line in the sand. Monitor the impact of the jobs data on the broader US dollar index (DXY). Ensure limit orders are appropriately placed to capitalize on 'macro wick' volatility.",
+        "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
+      }
+    ]
+  },
+  "yesterday": {
+    "date": "15/05/26",
+    "items": [
+      {
+        "id": 7,
         "title": "Cisco SD-WAN Auth Bypass (CVE-2026-20182) Hits KEV",
         "tag": "Critical Vulnerability / Networking",
         "desc": "CISA adds Cisco Catalyst SD-WAN Controller flaw to KEV; active exploitation leads to full admin access.",
@@ -13,7 +78,7 @@
         "link": "https://thehackernews.com/2026/05/cisa-adds-cisco-sd-wan-cve-2026-20182.html"
       },
       {
-        "id": 2,
+        "id": 8,
         "title": "Stealer Backdoor Found in Node-IPC Targeting Dev Secrets",
         "tag": "Malware / Supply Chain",
         "desc": "Versions 9.1.6, 9.2.3, and 12.0.1 of node-ipc backdoored; targets environment variables and SSH keys.",
@@ -23,7 +88,7 @@
         "link": "https://thehackernews.com/2026/05/stealer-backdoor-found-in-3-node-ipc.html"
       },
       {
-        "id": 3,
+        "id": 9,
         "title": "18-Year-Old NGINX Rewrite Module RCE Disclosed",
         "tag": "Critical Vulnerability / Web Servers",
         "desc": "Unauthenticated RCE flaw (CVE-2026-42945) found in ngx_http_rewrite_module; affects NGINX Plus and Open.",
@@ -33,7 +98,7 @@
         "link": "https://thehackernews.com/2026/05/18-year-old-nginx-rewrite-module-flaw.html"
       },
       {
-        "id": 4,
+        "id": 10,
         "title": "PraisonAI Auth Bypass Targeted Hours After Disclosure",
         "tag": "Vulnerability / AI Infrastructure",
         "desc": "CVE-2026-44338 (CVSS 7.3) exposes multi-agent framework; attackers observed invoking agents remotely.",
@@ -43,7 +108,7 @@
         "link": "https://thehackernews.com/2026/05/praisonai-cve-2026-44338-auth-bypass.html"
       },
       {
-        "id": 5,
+        "id": 11,
         "title": "Fragnesia: New Linux Page Cache Corruption LPE Hits Root",
         "tag": "Kernel / OS Security",
         "desc": "CVE-2026-46300 grants local root access via Page Cache corruption; third such vulnerability in two weeks.",
@@ -53,7 +118,7 @@
         "link": "https://thehackernews.com/2026/05/new-fragnesia-linux-kernel-lpe-grants.html"
       },
       {
-        "id": 6,
+        "id": 12,
         "title": "Windows Zero-Days: YellowKey BitLocker Bypass and GreenPlasma Escalation",
         "tag": "OS Security / Zero-Day",
         "desc": "New zero-days codenamed YellowKey and GreenPlasma expose BitLocker and CTFMON to critical flaws.",
@@ -63,7 +128,7 @@
         "link": "https://thehackernews.com/2026/05/windows-zero-days-expose-bitlocker.html"
       },
       {
-        "id": 7,
+        "id": 13,
         "title": "Pwn2Own Berlin 2026: Windows 11 and Edge Hacked on Day 1",
         "tag": "Cyber / Exploit Contest",
         "desc": "Latest versions of Windows 11 and Microsoft Edge fall to sophisticated exploit chains at Pwn2Own.",
@@ -73,7 +138,7 @@
         "link": "https://www.bleepingcomputer.com/news/security/windows-11-and-microsoft-edge-hacked-on-first-day-of-pwn2own-berlin-2026/"
       },
       {
-        "id": 8,
+        "id": 14,
         "title": "RTX 5090 vs M4 MacBook Air: The eGPU Gaming Frontier",
         "tag": "Hardware / Performance",
         "desc": "New benchmarks test NVIDIA's Blackwell RTX 5090 on M4-equipped Macs via Thunderbolt 5/eGPU.",
@@ -83,7 +148,7 @@
         "link": "https://scottjg.com/posts/2026-05-05-egpu-mac-gaming/"
       },
       {
-        "id": 9,
+        "id": 15,
         "title": "Tesla Wall Connector Bootloader Bypass Achieved",
         "tag": "Hardware / Firmware Hacking",
         "desc": "Synacktiv researchers bypass firmware downgrade ratchet on Tesla Wall Connector via charge port.",
@@ -93,7 +158,7 @@
         "link": "https://www.synacktiv.com/en/publications/exploiting-the-tesla-wall-connector-from-its-charge-port-connector-part-2-bypassing"
       },
       {
-        "id": 10,
+        "id": 16,
         "title": "DIY Open-Source Ultrasound on RP2040/RP2350",
         "tag": "Hardware / Embedded Systems",
         "desc": "Project 'pic0rick' brings low-cost medical imaging to the RP2040/RP2350 platform.",
@@ -103,7 +168,7 @@
         "link": "http://un0rick.cc/pic0rick"
       },
       {
-        "id": 11,
+        "id": 17,
         "title": "Geopolitical Tension: Iranian Forces Seize 'Floating Armoury' Ship",
         "tag": "Geopolitics / War Drums",
         "desc": "Strategic escalation: Iran reportedly seizes a maritime security vessel in the Gulf of Oman.",
@@ -113,7 +178,7 @@
         "link": "https://www.bbc.com/news/articles/cx219xwxg9no"
       },
       {
-        "id": 12,
+        "id": 18,
         "title": "Ceasefire Collapses in Southern Lebanon; 22 Killed in Strikes",
         "tag": "Geopolitics / Conflict",
         "desc": "Israeli strikes reported in southern Lebanon as ceasefire fails to hold; regional tensions spike.",
@@ -123,7 +188,7 @@
         "link": "https://www.bbc.com/news/articles/c1k2zekj8y9o"
       },
       {
-        "id": 13,
+        "id": 19,
         "title": "Crypto: BTC Holds $80K Amid Senate Markup Anxiety",
         "tag": "Finance / Crypto Markets",
         "desc": "Bitcoin stabilizes at $80,411 (+0.67%) while the market waits for the CLARITY Act markup results.",
@@ -131,186 +196,6 @@
         "importance": "The $80K support for BTC is the defining line for the current market cycle. Any breakdown here would signal a shift in macro sentiment. The CLARITY Act is the final boss of crypto regulation for 2026\u2014its outcome will directly dictate the legality and liquidity of DeFi services you might use.",
         "noteworthy": "Monitor the $78K support cluster for BTC. Watch for high-volatility news coming out of the Senate Banking Committee today. Verify that your automated trading or tracking scripts handle the current market volatility without hitting API rate limits.",
         "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
-      }
-    ]
-  },
-  "yesterday": {
-    "date": "13/05/26",
-    "items": [
-      {
-        "id": 14,
-        "title": "Mini Shai-Hulud Worm Hits AI Supply Chain: TanStack, Mistral AI Affected",
-        "tag": "Critical Vulnerability / AI Supply Chain",
-        "desc": "Sophisticated 'Mini Shai-Hulud' worm targets AI developers; compromises TanStack, Mistral AI, and Guardrails AI packages.",
-        "summary": "Security researchers have identified a worm-like supply chain attack dubbed 'Mini Shai-Hulud' targeting the Python and JavaScript AI ecosystems. The worm systematically poisons packages used by AI developers, including TanStack, Mistral AI, and Guardrails AI, by injecting credential-harvesting code that activates during model training or inference. The worm propagates by stealing the developer's registry tokens and automatically republishing infected sub-dependencies, creating a massive cascading compromise across the AI infrastructure stack.",
-        "importance": "This marks a pivot in supply chain attacks from generic web devs to the AI sector. Because AI development often implies high-value data and massive compute resources, a compromise in this niche is exponentially more dangerous. It leverages the rapid, often un-audited pace of AI library releases to propagate.",
-        "noteworthy": "Audit internal dependencies for 'Mini Shai-Hulud' signatures. Freeze all AI-related package versions in your 'netops' and 'cyberdash' projects. Use hardware security keys for registry authentication. Pin dependencies to specific SHA hashes rather than version tags to mitigate the impact of malicious republications.",
-        "link": "https://thehackernews.com/2026/05/mini-shai-hulud-worm-compromises.html"
-      },
-      {
-        "id": 15,
-        "title": "Dnsmasq Security Crisis: Six New CVEs Disclosed for Core Internet Tool",
-        "tag": "Critical Vulnerability / Networking",
-        "desc": "CERT/CC releases six vulnerabilities for dnsmasq; affects DNS caching and DHCP services across millions of routers.",
-        "summary": "CERT/CC and the dnsmasq maintainers have disclosed six new vulnerabilities impacting dnsmasq, the lightweight DNS/DHCP forwarder used in millions of home routers, IoT devices, and Linux distributions. The flaws, ranging from heap buffer overflows to information leaks, allow for potential remote code execution (RCE) and DNS cache poisoning. Given dnsmasq's role as a trusted intermediary for DNS traffic, these vulnerabilities provide a potent vector for network-wide lateral movement and man-in-the-middle attacks.",
-        "importance": "As a Network Engineer, this is your primary concern today. Dnsmasq is the heartbeat of most local networks, including your lab. A flaw here doesn't just affect one host; it can poison the entire network's resolution, redirecting traffic to malicious mirrors or enabling silent lateral movement through DHCP manipulation.",
-        "noteworthy": "Search for dnsmasq usage across your Proxmox containers and Pi-hole instances. Update to dnsmasq 2.91+ (or backported security versions) immediately. Monitor for anomalous DHCP requests or frequent DNS cache resets. Disable unused features like TFTP or large DNS packet support to reduce attack surface.",
-        "link": "https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2026q2/018471.html"
-      },
-      {
-        "id": 16,
-        "title": "Exim BDAT Code Execution: GnuTLS Builds at High Risk",
-        "tag": "Vulnerability / Mail Security",
-        "desc": "New vulnerability in Exim BDAT command handling; GnuTLS-linked builds exposed to remote code execution.",
-        "summary": "A severe vulnerability has been discovered in the Exim mail transfer agent's handling of the BDAT command, specifically affecting builds linked against the GnuTLS library. The flaw allows a remote attacker to trigger a heap corruption during the processing of chunked mail data, potentially leading to arbitrary code execution with the privileges of the Exim user. Exim is one of the most widely deployed MTAs on the internet, making this a high-impact discovery for server administrators.",
-        "importance": "Mail servers are perpetual targets for APTs and ransomware groups. Because Exim often runs with high privileges to handle local delivery, an RCE here is a 'game over' level event for the host. For your lab, if you run any mail relays or notification services using Exim, this is a mandatory patch cycle.",
-        "noteworthy": "Verify your Exim version and library linkage (`exim -bV`). Apply the urgent patch or transition to a non-vulnerable MTA like Postfix if GnuTLS builds cannot be immediately updated. Implement rate limiting on BDAT commands at the firewall/WAF level where possible.",
-        "link": "https://thehackernews.com/2026/05/new-exim-bdat-vulnerability-exposes.html"
-      },
-      {
-        "id": 17,
-        "title": "UK Deploys Jets and Warships to Strait of Hormuz for Defense Mission",
-        "tag": "Geopolitics / War Drums",
-        "desc": "Strategic escalation: UK promises drones, jets, and a warship for Hormuz maritime security as tensions spike.",
-        "summary": "The UK government has committed a significant military package\u2014including fighter jets, advanced surveillance drones, and a dedicated warship\u2014to a new maritime security mission in the Strait of Hormuz. The deployment aims to protect international shipping following increased threats to merchant vessels. This move signals a hardening of the Western stance toward regional maritime threats and increases the kinetic risk profile of the world's most critical oil transit corridor.",
-        "importance": "The Strait of Hormuz is the world's most critical energy choke point. Any military buildup here increases the risk of 'unintended' escalation. For your hardware supply chain, this is a 'Yellow Alert': prolonged tension usually precedes logistics surcharges and semiconductor shipping delays out of Asian hubs that transit nearby.",
-        "noteworthy": "Monitor global energy prices and shipping lead times for hardware components. Consider the geopolitical risk when planning long-term infrastructure procurement. For your 'netops' project, this provides a real-world scenario for traffic rerouting and service resilience during macro disruptions.",
-        "link": "https://www.bbc.com/news/articles/c5y909grldqo"
-      },
-      {
-        "id": 18,
-        "title": "RubyGems Suspends Signups After Mass Malicious Package Campaign",
-        "tag": "Malware / Supply Chain",
-        "desc": "RubyGems ecosystem under attack; hundreds of malicious 'typosquatted' packages prompt emergency signup suspension.",
-        "summary": "The RubyGems package registry has suspended new user registrations after an 'unprecedented' wave of malicious package uploads. Hundreds of packets, many using typosquatting techniques (masquerading as popular libraries like 'railz' or 're-act'), were discovered harvesting environment variables and platform-specific credentials. This attack follows similar campaigns on NPM and PyPI, indicating a coordinated effort to poison modern CI/CD pipelines at the source.",
-        "importance": "Supply chain poisoning is the new norm. If any of your lab projects utilize Ruby/Rails, your trust model for third-party gems must change. The suspension of signups is a 'nuclear option' that highlights the severity of the registry's current state of compromise.",
-        "noteworthy": "Audit your `Gemfile.lock` for any packages added or updated in the last 48 hours. Enforce strict versioning and local caching of gems. Avoid using any dynamic package resolution that pulls 'latest' during CI/CD runs. Monitor system logs for unauthorized outbound API calls to unknown C2 domains.",
-        "link": "https://thehackernews.com/2026/05/rubygems-suspends-new-signups-after.html"
-      },
-      {
-        "id": 19,
-        "title": "Android 'Intrusion Logging' Feature Targets Spyware Forensics",
-        "tag": "Cyber / Forensic Security",
-        "desc": "Google adds kernel-level intrusion logging to Android; designed to catch NSO-grade spyware post-compromise.",
-        "summary": "Google is introducing a new kernel-level 'Intrusion Logging' framework to Android, designed to assist security researchers in forensic analysis of sophisticated spyware compromises (like Pegasus or Predator). The system logs anomalous syscalls, unauthorized memory modifications, and TEE (Trusted Execution Environment) access attempts in a tamper-resistant buffer. While it doesn't prevent initial infection, it significantly lowers the bar for detecting and analyzing stealthy nation-state implants.",
-        "importance": "This is a massive win for mobile transparency. For your Pixel 8a testing, this provides a native forensic tool to monitor what's happening 'under the hood.' It's a strategic move to make the economics of zero-click spyware much more expensive for attackers by making their implants harder to keep stealthy.",
-        "noteworthy": "Once available on your Pixel 8a kernel, integrate these logs into your lab's security monitoring pipeline. Use the forensic output to audit the behavior of privacy-focused apps. Monitor for kernel-level bypasses that attempt to disable or spoof these specific intrusion logs.",
-        "link": "https://thehackernews.com/2026/05/android-adds-intrusion-logging-for.html"
-      },
-      {
-        "id": 20,
-        "title": "Needle: Quantized 26M Gemini Model for High-Efficiency Tool Calling",
-        "tag": "AI / Local Hardware",
-        "desc": "Show HN: 'Needle' distills Gemini tool-calling capabilities into a tiny 26M parameter model for local execution.",
-        "summary": "A new project called 'Needle' has successfully distilled the tool-calling and function-orchestration capabilities of Google's Gemini into a tiny, 26-million parameter model. Designed for edge execution, Needle can run on consumer hardware with negligible latency, enabling low-power devices to handle complex LLM-driven orchestration without calling out to the cloud for every step. This represents a significant step forward in making 'Agentic' behavior viable on resource-constrained home lab hardware.",
-        "importance": "As you build your 'netops' agent and 'cyberdash' server, 'Needle' is exactly the type of efficiency play you need. 26M parameters means it can run effectively in the background of your existing services or on a low-spec Raspberry Pi, freeing up your main GPU/NPU for more intensive reasoning tasks.",
-        "noteworthy": "Evaluate 'Needle' (available on GitHub under cactus-compute/needle) for your local agentic workflows. Test its reliability in mapping user intent to specific Python function calls. Its compact size makes it a perfect candidate for sub-agent orchestration in your multi-layer NetOps-Vision stack.",
-        "link": "https://github.com/cactus-compute/needle"
-      },
-      {
-        "id": 21,
-        "title": "Deterministic Static Binary Translation: A New Era for X86-to-ARM?",
-        "tag": "Hardware / Computer Science",
-        "desc": "New research achieves fully-static x86-to-ARM binary translation without heuristics; achieves near-native performance.",
-        "summary": "A groundbreaking paper titled 'Deterministic Fully-Static Whole-Binary Translation Without Heuristics' has gained traction on HN. It details a method for translating full x86-64 binaries into ARM equivalents without the runtime overhead of emulation or the errors of heuristic translation. By achieving deterministic results, it allows for 'native-feeling' execution of legacy software on modern ARM-based hardware (like Apple Silicon or Graviron chips) with unprecedented reliability and performance.",
-        "importance": "For the future of your lab's hardware (moving toward higher efficiency ARM/RISC-V), this is foundational. It suggests a future where your legacy x86 networking and security tools can transition to ARM hardware without the current 20-30% performance penalty of emulation layers like Rosetta or QEMU.",
-        "noteworthy": "Monitor the project's development for potential inclusion in kernel-level translation layers. Test the stability of Translated-ARM binaries for your core Linux services. This research effectively 'future-proofs' your x86 software investment as the industry shifts toward ARM instruction sets.",
-        "link": "https://arxiv.org/abs/2605.08419"
-      },
-      {
-        "id": 22,
-        "title": "Crypto Sentiment: BTC Holds $81K; Market Preps for Clarity Act Markup",
-        "tag": "Finance / Crypto Markets",
-        "desc": "BTC stabilizes at $81,030 as institutional 'wait-and-see' mood takes over before the May 14 Senate vote.",
-        "summary": "Bitcoin (BTC) is trading at $81,030, showing remarkable stability despite macro-geopolitical noise. The market sentiment is characterized by 'cautious optimism' as institutional players await the May 14 markup of the US 'CLARITY' Act. Analysts indicate that BTC has established a strong local floor above $80K, while Solana (SOL) has retreated slightly to $95.17 after its recent surge. Institutional inflows into spot ETFs remain net-positive for the sixth straight week, signaling a structural buy-side bias.",
-        "importance": "The market is in a 'pre-event' hold. The CLARITY Act markup (scheduled for tomorrow) is the biggest regulatory milestone of the year. For your lab's digital asset management, this is the time to verify your cold storage and review your 'surveillance premium' narrative (Zcash/Privacy) as the bill's outcome will dictate the next 90 days of liquidity.",
-        "noteworthy": "Watch the $78K level for BTC as the primary support during the markup volatility. Monitor SOL network health as it tests the $95 support cluster. Prepare your automated tracking for a high-volume news day tomorrow as the Senate vote results filter through.",
-        "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
-      }
-    ]
-  },
-  "day_before_yesterday": {
-    "date": "11/05/26",
-    "items": [
-      {
-        "id": 23,
-        "title": "Bleeding Llama: Critical Ollama Vulnerability Leaks Process Memory",
-        "tag": "Critical Vulnerability / AI Infrastructure",
-        "desc": "CVE-2026-7482 (CVSS 9.1) affects Ollama GGUF loader; remote attackers can leak process memory via malformed models.",
-        "summary": "Security researchers at Cyera disclosed 'Bleeding Llama' (CVE-2026-7482), an architectural heap out-of-bounds read vulnerability in Ollama (versions before 0.17.1). The flaw resides in the GGUF model loader when processing malformed tensor offsets via the `/api/create` endpoint. An unauthenticated remote attacker can supply a specially crafted GGUF file that causes the Ollama server to read past allocated heap buffers during quantization, leaking sensitive process memory which may include system environment variables, API keys, and conversation history from memory buffers.",
-        "importance": "As Hieu moves toward local-first AI, vulnerabilities in the model loader are existential. Ollama is often exposed to local networks or proxied to the internet. Because the leak occurs during model 'creation'\u2014a common task for developers\u2014it represents a high-risk vector for credential theft from the very environment running the agent.",
-        "noteworthy": "Upgrade Ollama to version 0.17.1 or later immediately. Audit systems for exposure of the Ollama API (default port 11434) to untrusted networks. In the lab, verify Ollama is bound to 127.0.0.1 and accessed only via secure tunnels. Do not pull or 'create' models from unverified or untrusted sources (e.g., random Hugging Face repos).",
-        "link": "https://thehackernews.com/2026/05/ollama-out-of-bounds-read-vulnerability.html"
-      },
-      {
-        "id": 24,
-        "title": "Fake OpenAI Privacy Filter on Hugging Face Draws 244K Downloads",
-        "tag": "Malware / Software Supply Chain",
-        "desc": "Malicious 'openai-privacy-filter' repo targets AI developers for credential exfiltration; masquerades as official utility.",
-        "summary": "Threat actors successfully poisoned the Hugging Face model registry with a malicious repository named 'openai-privacy-filter.' Masquerading as a harmless utility to redact PII before sending data to OpenAI APIs, the repo was downloaded over 244,000 times before removal. The malware is embedded in the repository's configuration files, executing during the model loading process to harvest environment variables, `.ssh` keys, and browser cookies. It specifically targets developer workstations to enable lateral movement into cloud production environments.",
-        "importance": "The scale of this compromise (nearly a quarter-million downloads) highlights the 'blind trust' developers place in popular model hubs like Hugging Face. Unlike NPM or PyPI, Hugging Face's security scanning for non-model code in repos is still maturing. This is a direct threat to any dev using 'helper' libraries for AI integration.",
-        "noteworthy": "If you downloaded `openai-privacy-filter`, rotate all API keys, SSH keys, and cloud credentials immediately. Scan `~/.cache/huggingface` for suspicious artifacts. Use `pip install` with caution for AI-related utilities. Implement runtime behavioral monitoring for developer workstations (e.g., alerts on unauthorized `.ssh` folder access).",
-        "link": "https://thehackernews.com/2026/05/fake-openai-privacy-filter-repo-hits-1.html"
-      },
-      {
-        "id": 25,
-        "title": "Hardware Attestation: The 'Secure' Path to App Store Monopoly",
-        "tag": "Hardware / OS Security",
-        "desc": "GrapheneOS researchers warn that remote hardware attestation is being weaponized to kill third-party OS ecosystems.",
-        "summary": "New research from the GrapheneOS community details how remote hardware attestation (like Google's Play Integrity API and Apple's DeviceCheck) is evolving from a security feature into an anti-competitive tool. By requiring apps to prove they are running on 'official' hardware with unmodified software, developers can effectively block users on privacy-focused OS forks (like GrapheneOS or CalyxOS). The research highlights that this 'trusted execution' model creates a hardware-enforced monopoly where only the vendor-approved software stack can access essential financial and communication services.",
-        "importance": "For your lab and mobile testing (Pixel 8a), this is a critical structural shift. If hardware attestation becomes mandatory for daily-driver apps, the viability of de-Googled or custom Linux-based mobile environments reaches a dead end. It represents a pivot from 'security for the user' to 'security for the service provider against the user.'",
-        "noteworthy": "Monitor the 'Strong Integrity' requirements on your Pixel 8a when running GrapheneOS. Explore 'Key Mint' and TEE isolation features to understand the boundaries of what attestation can see. Support initiatives like the Digital Markets Act (DMA) that challenge mandatory attestation for non-security critical apps.",
-        "link": "https://grapheneos.social/@GrapheneOS/116550899908879585"
-      },
-      {
-        "id": 26,
-        "title": "Gmail Registration Now Requires Mandatory QR Scan and SMS",
-        "tag": "Privacy / Infrastructure",
-        "desc": "Google tightens account creation; mandatory hardware-tethered identity verification blocks anonymous registrations.",
-        "summary": "Google has updated its account registration process to require a mandatory QR code scan from a mobile device followed by an SMS verification. The process effectively tethers new accounts to a physical device and a verified phone number, making anonymous or 'burner' account creation significantly more difficult. This change targets bot-driven signups but also hits privacy-conscious users who lack a stable mobile device or wish to remain unlinked from Google's mobile tracking ecosystem. It follows the recent reCAPTCHA updates that also required Play Services for verification.",
-        "importance": "Infrastructure hardening at this level signals the end of the 'free and open' web registration era. For lab automation or testing, this creates a significant friction point for service accounts. It underscores the importance of self-hosting (Proxmox/Mini-PCs) for services where you value independence from big-tech identity silos.",
-        "noteworthy": "When creating lab-related service accounts, consider using alternative providers like ProtonMail or self-hosted mail servers where possible. If Google accounts are required, be prepared for increased identity verification hurdles. Monitor for 'Verified Identity' trends across other big-tech platforms (Microsoft, Meta).",
-        "link": "https://discuss.privacyguides.net/t/google-account-registration-now-requires-sending-an-sms-via-phone-instead-of-receiving-an-sms/36082"
-      },
-      {
-        "id": 27,
-        "title": "Tflop/s on a Mac: Optimizing Matrix Multiplication in Swift",
-        "tag": "Hardware / Software Engineering",
-        "desc": "Technical deep-dive into Apple Silicon performance; taking Swift-based LLM training from Gflop/s to Tflop/s.",
-        "summary": "A viral technical analysis on Hacker News explores optimizing matrix multiplication (GEMM) on Apple Silicon using Swift. By leveraging Accelerate framework's AMX (Apple Matrix eXtensions) and tight memory management, the author demonstrates a performance jump from ~200 Gflop/s to over 1 Tflop/s on an M2/M3 chip. The research provides a blueprint for efficient local LLM training and inference without the overhead of heavy Python wrappers, proving that high-level languages can achieve near-native metal performance when correctly architected for the underlying hardware.",
-        "importance": "As you move toward DevOps and high-performance computing, understanding hardware-level optimization is key. This story proves that 'hardware awareness' is the bottleneck, not the language choice. For a home lab enthusiast, it demonstrates that even consumer-grade silicon (MacBooks) has massive untapped compute potential if you bypass the standard stack.",
-        "noteworthy": "Review the optimization steps (tiling, pre-fetching, SIMD) as high-level concepts for any performance-critical code in your 'netops' or 'cyberdash' projects. Check if your current local LLM tools (Ollama, llama.cpp) utilize AMX/Metal to their full extent. Consider Swift as a viable path for internal high-speed tooling.",
-        "link": "https://www.cocoawithlove.com/blog/matrix-multiplications-swift.html"
-      },
-      {
-        "id": 28,
-        "title": "Trump: Iran's Response to War-Ending Proposal 'Totally Unacceptable'",
-        "tag": "Geopolitics / Conflict",
-        "desc": "War drums in the Middle East; Trump slams Iranian counter-offer as tensions over regional security escalate.",
-        "summary": "Former President Donald Trump, currently leading in several US election polls, has described Iran's response to a recent US-brokered proposal to de-escalate regional conflict as 'totally unacceptable.' The proposal aimed to address tensions in the Straits of Hormuz and proxy warfare across the Middle East. Trump's rhetoric signals a potential return to a 'maximum pressure' policy if re-elected, while current diplomatic channels report a stalemate. The statement has contributed to market jitters regarding oil prices and shipping security in the Persian Gulf.",
-        "importance": "Geopolitical stability in the Middle East directly impacts global trade and tech supply chains. Any escalation in the Straits of Hormuz (a global maritime choke point) leads to immediate hardware lead-time increases and energy cost spikes. For a network engineer, this translates to potential budget pressures and supply chain delays for networking equipment.",
-        "noteworthy": "Monitor shipping news and oil price volatility as indicators of kinetic escalation risk. Assess the impact of potential new sanctions on regional tech partnerships. For home lab planning, consider that hardware prices (SSDs, CPUs) remain sensitive to these macro-geopolitical shocks.",
-        "link": "https://www.bbc.com/news/articles/clypgz9e5pmo"
-      },
-      {
-        "id": 29,
-        "title": "Crypto Snapshot: BTC Holds $81.6K; SOL Leads Major Gainers at $97.2",
-        "tag": "Finance / Crypto Markets",
-        "desc": "Bitcoin stabilizes at $81.6K (+0.25%); Solana surges 3% to $97.2 on network growth; Ethereum flat at $2.3K.",
-        "summary": "The crypto market has entered a consolidation phase following recent volatility, with Bitcoin (BTC) holding firmly above the $80K level at $81,639. Solana (SOL) is the standout among majors, gaining 3% to reach $97.23, driven by a surge in decentralized exchange (DEX) volume and network active addresses. Ethereum (ETH) continues to lag, trading down slightly at $2,338. The market is currently awaiting clarity on the US 'CLARITY' Act markup scheduled for this week, which could dictate the next major directional move for US-based institutional capital.",
-        "importance": "The decoupling of SOL from ETH is a significant trend to watch. As the lab manages digital assets, the 'Solana Narrative' (speed/low-fee) vs the 'Ethereum Roadmap' (Layer-2 fragmentation) is playing out in the charts. BTC holding $80K is a psychological floor that supports high-risk assets elsewhere in the sector.",
-        "noteworthy": "Track the $100 psychological resistance for SOL. Monitor the Senate Banking Committee markup of the CLARITY Act on May 14 (as noted in yesterday's news). Ensure your lab's price-tracking scripts account for the current Coingecko API rate limits. BTC support at $78K is the line in the sand for the current bull trend.",
-        "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
-      },
-      {
-        "id": 30,
-        "title": "Weekly Recap: macOS Crypto Stealers and Linux Rootkits",
-        "tag": "Threat Intel / Weekly Summary",
-        "desc": "Roundup of the week's major threats: macOS Cthulhu Stealer, Linux Rootkits, and WebSocket skimmers.",
-        "summary": "The first full week of May 2026 has been dominated by sophisticated malware campaigns. Key highlights include 'Cthulhu Stealer,' a macOS info-stealer targeting crypto wallets; a new 'kworker'-disguised Linux rootkit that persists via PAM hooks; and a massive campaign of WebSocket-based card skimmers targeting e-commerce checkout pages. Additionally, the 'Bleeding Llama' Ollama flaw and cPanel's emergency triple-patch have defined the vulnerability landscape. Researchers also noted a pivot in APT targeting toward AI-infrastructure developers.",
-        "importance": "Recaps provide the high-level 'weather report' for the threat landscape. The focus on macOS and Linux (your primary environments) indicates that the era of 'Windows-only' malware is long dead. The common thread is the targeting of developers and infrastructure managers to enable high-impact downstream attacks.",
-        "noteworthy": "Review last week's indicators of compromise (IoCs) for the 'Cthulhu Stealer.' Perform a rootkit scan on your Proxmox hosts and development machines. Ensure browser-based protections are active against WebSocket skimmers. Maintain the 'Payload First' approach to security: patch the low-hanging fruit before chasing complex APT patterns.",
-        "link": "https://thehackernews.com/2026/05/weekly-recap-linux-rootkit-macos-crypto.html"
       }
     ]
   }
