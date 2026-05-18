@@ -1,9 +1,114 @@
 {
   "today": {
-    "date": "13/05/26",
+    "date": "17/05/26",
     "items": [
       {
         "id": 1,
+        "title": "NGINX CVE-2026-42945: Critical Worker Crash and Potential RCE",
+        "tag": "Critical Vulnerability / Server Infrastructure",
+        "desc": "Active exploitation of NGINX flaw triggers worker crashes; affects versions 1.25.x through 1.27.1.",
+        "summary": "Security researchers have identified active exploitation of CVE-2026-42945, a critical flaw in the NGINX core's HTTP/3 module handling. By sending a specifically malformed QUIC transport frame, an unauthenticated remote attacker can trigger a heap-based buffer overflow, causing worker processes to crash consistently (DoS) or potentially achieving remote code execution (RCE). The vulnerability is particularly potent because it bypasses many standard front-end WAF protections that do not yet fully inspect encrypted QUIC headers.",
+        "importance": "NGINX is the entry point for 40% of the web. A zero-day or near-zero-day that causes crashes is a top-tier infrastructure threat. For your lab, if you use NGINX as an ingress for Proxmox or internal tools, this is an immediate patch priority. It also underscores the inherent complexity and risk in the transition from TCP to QUIC/HTTP3.",
+        "noteworthy": "Update NGINX to 1.27.2+ or 1.25.6+ immediately. If patching isn't possible, disable HTTP/3 (QUIC) support (`listen 443 quic;` and `http3 on;` directives) at the configuration level. Monitor error logs for repeated 'worker process exited on signal 11' events linked to QUIC connections.",
+        "link": "https://thehackernews.com/2026/05/nginx-cve-2026-42945-exploited-in-wild.html"
+      },
+      {
+        "id": 2,
+        "title": "Grafana GitHub Token Breach: Codebase Downloaded in Extortion Attempt",
+        "tag": "Cyber Attack / Developer Security",
+        "desc": "Breach of a developer's GitHub token led to unauthorized access to Grafana's private repositories and source code.",
+        "summary": "Grafana Labs disclosed a security incident where an attacker obtained a valid GitHub PAT (Personal Access Token) belonging to a senior developer. The attacker utilized the token to clone several private repositories, including core observability engine components. Following the exfiltration, the threat actor attempted to extort the company, threatening to leak the source code unless a ransom was paid. Grafana has revoked all tokens and stated that no customer data or production infrastructure was compromised in the event.",
+        "importance": "This is a textbook example of identity-based supply chain risk. A single leaked token can compromise the 'source of truth' for a major platform. For our project, it reinforces why we must never commit secrets to Git and why using short-lived, hardware-backed tokens (like Yubikeys) for GitHub auth is not optional for NetOps missions.",
+        "noteworthy": "Rotate all GitHub Personal Access Tokens (PATs) and move to GitHub Fine-grained tokens or SSH keys stored in hardware modules. Audit GitHub Enterprise logs for anomalous cloning activity from unknown IP ranges. Implement 'Secret Scanning' on all internal repositories to proactively catch leaked tokens before they are exploited.",
+        "link": "https://thehackernews.com/2026/05/grafana-github-token-breach-led-to.html"
+      },
+      {
+        "id": 3,
+        "title": "Cerebras Systems Files for $5.5B IPO: The 'Wafer-Scale' AI Bet",
+        "tag": "Hardware / AI Infrastructure",
+        "desc": "Wafer-scale chipmaker Cerebras files for one of the largest semiconductor IPOs; challenges Nvidia's GPU dominance.",
+        "summary": "Cerebras Systems, the creator of the world's largest AI processor (the Wafer-Scale Engine), has filed for an IPO seeking a valuation of $5.5 billion. The company's WSE-3 chip, which is the size of a full silicon wafer and contains 4 trillion transistors, is designed specifically to handle massive LLM workloads that traditional GPU clusters struggle to scale. The IPO marks a significant moment in the 'AI Hardware Wars' as investors bet on alternative architectures to break the Nvidia supply bottleneck.",
+        "importance": "As Hieu scales AI labs, the shift from 'cluster of GPUs' to 'wafer-scale compute' is a generational architectural change. Cerebras' ability to go public signals that the market believes Nvidia's H100/B200 dominance is vulnerable to custom-silicon niches. For a developer, this means the software stack (like PyTorch/Cuda) will eventually have to become truly architecture-agnostic.",
+        "noteworthy": "Monitor the success of the Cerebras SDK and its integration with PyTorch/TensorFlow. If the IPO succeeds, expect a wave of 'wafer-scale' competitors. For lab planning, understand that the era of 'GPU-only' AI is ending; future-proof your projects by focusing on ONNX or other intermediate representations.",
+        "link": "https://news.google.com/stories/CAAqNggKIjBDQklTSGpvSmMzUnZjbmt0TXpZd1NoRUtEd2pQMS1PT0VSR0Y1U3JsS04wOWNDZ0FQAQ"
+      },
+      {
+        "id": 4,
+        "title": "On-Prem Exchange CVE-2026-42897: Zero-Click RCE via Crafted Email",
+        "tag": "Critical Vulnerability / Mail Security",
+        "desc": "New zero-click RCE in on-prem Microsoft Exchange Server targets parsing of binary attachments; CVSS 9.8.",
+        "summary": "Microsoft is warning of a critical zero-click RCE (CVE-2026-42897) in on-premise Exchange Servers. The flaw exists in the handling of malformed TNEF attachments, where a specially crafted email can trigger a remote code execution event when processed by the server's transport service\u2014before the user even opens the mail. Threat actors are already observed using the flaw to deploy web shells and perform lateral movement into enterprise AD environments.",
+        "importance": "Exchange continues to be the 'soft underbelly' of enterprise infrastructure. A zero-click RCE in a mail server is a 'Priority 0' fix. For your lab, if you relay mail for any services, verify you aren't running an unpatched Exchange instance. It's also a reminder that 'Zero-Click' vectors are moving from mobile targets to core enterprise infrastructure.",
+        "noteworthy": "Apply Microsoft's emergency KB patch for Exchange Server 2019 and 2016. If patching is delayed, use a mail gateway (like Proxmox Mail Gateway) to strip TNEF attachments before they reach the Exchange transport. Monitor for unauthorized PowerShell execution originating from the `EdgeTransport.exe` process.",
+        "link": "https://thehackernews.com/2026/05/on-prem-microsoft-exchange-server-cve.html"
+      },
+      {
+        "id": 5,
+        "title": "Cisco Catalyst SD-WAN Auth Bypass Exposes Edge Routers to Admin Takeover",
+        "tag": "Critical Vulnerability / Networking",
+        "desc": "CVE-2026-20182 allows remote, unauthenticated attackers to gain admin access to SD-WAN controllers.",
+        "summary": "Cisco has released a critical security update for its Catalyst SD-WAN Controller (formerly vSmart). CVE-2026-20182 stems from an improper authentication of the REST API, allowing a remote attacker to bypass credentials and obtain full administrative access. Once inside, attackers can push malicious configurations to all managed edge routers, enabling network-wide traffic diversion or total denial-of-service. CISA has added the flaw to the KEV catalog after reports of active exploitation by financial-sector targeting groups.",
+        "importance": "This is a career-defining vulnerability for Network Engineers. SD-WAN is the control plane of the modern enterprise network; a bypass here is equivalent to handing over the physical keys to every branch office. It highlights the inherent danger in 'API-first' networking if the auth layer isn't fundamentally hardened.",
+        "noteworthy": "Update Cisco Catalyst SD-WAN Manager and Controllers to the May 2026 release. Audit all 'vSmart' configuration change logs for the last 14 days. Implement strict IP allow-listing for the REST API interface. Move the SD-WAN management plane into an out-of-band (OOB) network restricted from the general internet.",
+        "link": "https://thehackernews.com/2026/05/cisco-catalyst-sd-wan-controller-auth.html"
+      },
+      {
+        "id": 6,
+        "title": "Global Semiconductor Sales Forecast to Hit $1 Trillion in 2026",
+        "tag": "Hardware / Economics",
+        "desc": "Industry analysts forecast $1T annual chip market; AI demand drives historic spending on data center GPUs.",
+        "summary": "The semiconductor industry is on track to reach a historic $1 trillion in annual sales by the end of 2026, driven primarily by the global 'AI Gold Rush.' The surging demand for data center GPUs, high-bandwidth memory (HBM), and specialized AI accelerators has pushed the Philadelphia Semiconductor Index up 50% in the last six weeks. However, some analysts warn of 'dot-com' style bubble signals as retail investment floods into chip designer stocks, potentially leading to a massive oversupply correction in 2027.",
+        "importance": "Market scale dictates technology availability. The $1T milestone means semiconductors are now a primary pillar of global geopolitics and finance. For Hieu, this means that while AI compute is plentiful today, we are in a 'high-volatility' era where hardware prices for the lab could swing wildly as the bubble either expands or bursts.",
+        "noteworthy": "Monitor HBM (High Bandwidth Memory) supply chains as a leading indicator for GPU availability. If you are planning significant hardware upgrades, consider 'locking in' current pricing before the expected Q4 demand spike. Watch for the Cerebras IPO performance as a gauge for non-Nvidia hardware appetite.",
+        "link": "https://eraoflight.com/2026/05/18/the-global-war-for-chips/"
+      },
+      {
+        "id": 7,
+        "title": "RK3562 Tablet Hack: From $80 E-Waste to Debian Workstation",
+        "tag": "Hardware / Linux Hacking",
+        "desc": "Hacker 'tech4bot' converts cheap Android tablets into full Debian ARM workstations; unlocks bootloader on RK3562 chips.",
+        "summary": "A new community project has successfully ported a full Debian Linux distribution to cheap, off-the-shelf Android tablets powered by the Rockchip RK3562 SoC. By bypassing vendor bootloader locks and creating custom device trees, hackers can now utilize these $80 devices as low-power, fully-functional ARM workstations or headless home lab servers. The project provides a blueprint for 'upcycling' low-cost consumer hardware into useful technical infrastructure, bypassing the planned obsolescence of the Android ecosystem.",
+        "importance": "This is exactly what the home lab is about\u2014extracting value from undervalued hardware. An $80 'workstation' is a perfect low-cost node for your NetOps project or a dedicated Pi-hole/VPN gateway. It proves that the barrier to entry for a distributed lab setup is your ability to hack the bootloader, not your budget.",
+        "noteworthy": "Check your 'junk hardware' drawers for Rockchip-based devices. Visit the 'rk3562deb' GitHub repo to follow the installation steps. Use these cheap nodes for non-critical, edge-of-network services like environmental monitoring or non-sensitive log aggregation.",
+        "link": "https://github.com/tech4bot/rk3562deb"
+      },
+      {
+        "id": 8,
+        "title": "Crypto Macro Panic: BTC Dips Below $77K as US Rates Fear Returns",
+        "tag": "Finance / Crypto Markets",
+        "desc": "Bitcoin sinks to $76,984; Ethereum loses $2.1K support as hawkish US jobs data signals 'Higher for Longer' rates.",
+        "summary": "The cryptocurrency market has entered a fresh localized slump, with Bitcoin (BTC) sliding over 1.5% in 24 hours to trade at $76,984. The sell-off was triggered by stronger-than-expected US employment data, reigniting fears that the Federal Reserve will maintain high interest rates well into 2027. Ethereum (ETH) has followed suit, dropping to $2,122, while Solana (SOL) holds precariously at $85.26. Total market liquidations have exceeded $180M, though institutional spot ETF net inflows remain marginally positive.",
+        "importance": "Macro is currently the only driver that matters. The 'jobs data' volatility is testing the resilience of the $75K psychological support for BTC. For your digital asset planning, the 'Buy the Dip' window is opening, but only for those who believe the 'Higher for Longer' narrative is a bluff. It's a high-stakes moment for liquidity management.",
+        "noteworthy": "Watch the $75K support for BTC; a break below could trigger a cascade to $68K. Monitor the US Dollar Index (DXY) as it negatively correlates with BTC during these macro shocks. Evaluate your SOL positions as it continues to lose momentum relative to the broader market.",
+        "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
+      },
+      {
+        "id": 9,
+        "title": "'This May Be the Last Time You Hear My Voice': Iran Execution Surge",
+        "tag": "Geopolitics / Human Rights",
+        "desc": "Surge in political executions in Iran since regional conflict started; activists warn of 'judicial war' against dissent.",
+        "summary": "BBC reports and human rights groups have raised the alarm over a massive surge in political executions in Iran since the start of the current regional war. Over 150 individuals have been executed in the last 45 days, many of whom were political prisoners and activists. Former detainees have released harrowing audio recordings predicting their own death. Activists argue that the Iranian government is utilizing the 'fog of war' to silence internal dissent and consolidate power through a judicial campaign of intimidation.",
+        "importance": "Internal stability in Iran is a second-order driver for regional conflict. A domestic escalation can lead to 'distraction' tactics abroad, potentially impacting maritime security or proxy-war intensity. For a global-focused engineer, the 'human' layer is often the precursor to the 'kinetic' layer that disrupts commerce and tech.",
+        "noteworthy": "Monitor for retaliatory strikes or civil unrest within Iran that could bleed over into regional proxy conflicts. Track the impact on international diplomatic negotiations regarding the Strait of Hormuz. Understand that geopolitical volatility often starts in the courtrooms before it hits the warships.",
+        "link": "https://www.bbc.com/news/articles/cn8p392nl7yo"
+      },
+      {
+        "id": 10,
+        "title": "Hezbollah Drone Strike Videos: The Evolution of Loitering Munitions",
+        "tag": "Geopolitics / Conflict",
+        "desc": "New IDF-targeted drone strike footage shows Hezbollah's evolving tactical use of locally assembled loitering munitions.",
+        "summary": "Recent footage released by Hezbollah media channels shows a significant tactical evolution in their use of one-way 'loitering' munitions (kamikaze drones). The videos demonstrate sophisticated path-planning to bypass Iron Dome interceptors and precision strikes on IDF communication infrastructure. Analysts note the shift toward locally assembled, cheap drone platforms that utilize commercial-off-the-shelf (COTS) electronics\u2014mirroring the tactics pioneered in the Ukraine-Russia conflict.",
+        "importance": "The 'Ukraine-ification' of global warfare continues. Cheap, high-tech drones are the new asymmetric standard. This impacts your mission because hardware components (controllers, sensors) are increasingly categorized as 'dual-use,' leading to tighter trade controls and potential 'sanction-creep' on your hardware procurement.",
+        "noteworthy": "Observe the 'dual-use' electronics categories for any specialized sensors you procure for the lab. Understand that your knowledge of networking (and by extension, signal propagation) is increasingly a 'security-critical' domain as warfare moves to the RF spectrum.",
+        "link": "https://www.bbc.com/news/articles/c1j2zwe9g5no"
+      }
+    ]
+  },
+  "yesterday": {
+    "date": "13/05/26",
+    "items": [
+      {
+        "id": 11,
         "title": "Pixel 10 Zero-Click: Project Zero Drops Critical VPU Exploit Chain",
         "tag": "Critical Vulnerability / Mobile Security",
         "desc": "Project Zero discloses 0-click exploit chain for Pixel 10 targeting new VPU driver on Tensor G5 chip.",
@@ -13,7 +118,7 @@
         "link": "https://projectzero.google/2026/05/pixel-10-exploit.html"
       },
       {
-        "id": 2,
+        "id": 12,
         "title": "Kioxia & Dell Cram 10PB into 2RU: The End of Nearline HDD?",
         "tag": "Hardware / Storage Infrastructure",
         "desc": "Dell PowerEdge R7725xd uses 245TB QLC SSDs to hit 9.8PB in 2U; signals death of high-capacity hard drives.",
@@ -23,7 +128,7 @@
         "link": "https://www.blocksandfiles.com/flash/2026/05/14/kioxia-and-dell-cram-10-pb-into-slim-2ru-server/5240574"
       },
       {
-        "id": 3,
+        "id": 13,
         "title": "Russian 'Kazuar' Backdoor Mutates into Resilient P2P Botnet",
         "tag": "Threat Intelligence / Malware",
         "desc": "Palo Alto uncovers Kazuar 4.0; now uses P2P mesh networking to dodge C2 takedowns and ISP blocking.",
@@ -33,7 +138,7 @@
         "link": "https://www.bleepingcomputer.com/news/security/russian-hackers-turn-kazuar-backdoor-into-modular-p2p-botnet/"
       },
       {
-        "id": 4,
+        "id": 14,
         "title": "Pwn2Own Day 2: MS Exchange and Windows 11 Chain-Exploited",
         "tag": "Cyber / Vulnerability Research",
         "desc": "Vancouver Pwn2Own hackers demo zero-days in MS Exchange, Windows 11, and RHEL; over $400K in prizes awarded.",
@@ -43,7 +148,7 @@
         "link": "https://www.bleepingcomputer.com/news/security/pwn2own-day-two-hackers-demo-microsoft-exchange-windows-11-red-had-enterprise-linux-zero-days/"
       },
       {
-        "id": 5,
+        "id": 15,
         "title": "Dnsmasq Security Crisis: Six New CVEs Disclosed for Core Internet Tool",
         "tag": "Critical Vulnerability / Networking",
         "desc": "CERT/CC releases six vulnerabilities for dnsmasq; affects DNS caching and DHCP services across millions of routers.",
@@ -53,7 +158,7 @@
         "link": "https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2026q2/018471.html"
       },
       {
-        "id": 6,
+        "id": 16,
         "title": "Mini Shai-Hulud Worm Hits AI Supply Chain: TanStack, Mistral AI Affected",
         "tag": "Critical Vulnerability / AI Supply Chain",
         "desc": "Sophisticated 'Mini Shai-Hulud' worm targets AI developers; compromises TanStack, Mistral AI, and Guardrails AI packages.",
@@ -63,7 +168,7 @@
         "link": "https://thehackernews.com/2026/05/mini-shai-hulud-worm-compromises.html"
       },
       {
-        "id": 7,
+        "id": 17,
         "title": "UK Deploys Jets and Warships to Strait of Hormuz for Defense Mission",
         "tag": "Geopolitics / War Drums",
         "desc": "Strategic escalation: UK promises drones, jets, and a warship for Hormuz maritime security as tensions spike.",
@@ -73,7 +178,7 @@
         "link": "https://www.bbc.com/news/articles/c5y909grldqo"
       },
       {
-        "id": 8,
+        "id": 18,
         "title": "Needle: Quantized 26M Gemini Model for High-Efficiency Tool Calling",
         "tag": "AI / Local Hardware",
         "desc": "Show HN: 'Needle' distills Gemini tool-calling capabilities into a tiny 26M parameter model for local execution.",
@@ -81,71 +186,6 @@
         "importance": "As you build your 'netops' agent and 'cyberdash' server, 'Needle' is exactly the type of efficiency play you need. 26M parameters means it can run effectively in the background of your existing services or on a low-spec Raspberry Pi, freeing up your main GPU/NPU for more intensive reasoning tasks.",
         "noteworthy": "Evaluate 'Needle' (available on GitHub under cactus-compute/needle) for your local agentic workflows. Test its reliability in mapping user intent to specific Python function calls. Its compact size makes it a perfect candidate for sub-agent orchestration in your multi-layer NetOps-Vision stack.",
         "link": "https://github.com/cactus-compute/needle"
-      }
-    ]
-  },
-  "yesterday": {
-    "date": "16/05/26",
-    "items": [
-      {
-        "id": 9,
-        "title": "Turla's Kazuar Backdoor Evolves Into P2P Botnet for Stealth Access",
-        "tag": "Threat Intel / Nation-State",
-        "desc": "Russian Turla (APT28) upgrades Kazuar backdoor with P2P mesh networking to bypass perimeter blocks.",
-        "summary": "The Russian-linked threat group Turla has updated its Kazuar backdoor with sophisticated peer-to-peer (P2P) networking capabilities. The modular update allows infected hosts to communicate directly with each other to relay commands and exfiltrated data, effectively creating a decentralized botnet that is highly resistant to traditional domain-based C2 takedowns. The malware includes 40+ new plugins for system reconnaissance, credential theft, and lateral movement.",
-        "importance": "As you move toward DevOps, understanding how APTs bypass traditional firewalls is critical. P2P C2 channels mean that blocking a single IP or domain is no longer sufficient. This represents the next level of persistent nation-state infrastructure.",
-        "noteworthy": "Monitor for anomalous peer-to-peer traffic between internal Linux workstations. Use behavioral analysis to detect modular library loading within common system processes. Implement strict zero-trust segmentation to prevent P2P-based lateral movement.",
-        "link": "https://thehackernews.com/2026/05/turla-turns-kazuar-backdoor-into.html"
-      },
-      {
-        "id": 10,
-        "title": "Four OpenClaw Flaws Enable Data Theft and Privilege Escalation",
-        "tag": "Critical Vulnerability / Supply Chain",
-        "desc": "Security researchers disclose four critical flaws in OpenClaw library; affects AI-generated code validation pipelines.",
-        "summary": "Four critical vulnerabilities (CVE-2026-31901-4) have been disclosed in OpenClaw, a popular open-source library used for validating and cleaning AI-generated code. The flaws include a path traversal bug that allows for arbitrary file reads and a logic error that permits local privilege escalation. Attackers can exploit these flaws by feeding specifically crafted AI-generated snippets to a system using OpenClaw for automated auditing, effectively turning the 'security tool' into proof-of-concept for the exploit itself.",
-        "importance": "The theme of 'vulnerabilities in security tools' continues. As you use AI agents to generate code, any tool you use to validate that code becomes a high-value target. This strike at the heart of the automated security pipeline we are building.",
-        "noteworthy": "Audit your CI/CD pipelines for OpenClaw usage and update to the patched version immediately. Sanitize all inputs to automated code-review tools. Sandbox the execution environment of any code-validation service.",
-        "link": "https://thehackernews.com/2026/05/four-openclaw-flaws-enable-data-theft.html"
-      },
-      {
-        "id": 11,
-        "title": "TanStack Supply Chain Attack Hits OpenAI Employee Devices",
-        "tag": "Cyber Attack / Supply Chain",
-        "desc": "Supply chain compromise of TanStack libraries targets high-value AI developers; triggers emergency macOS updates.",
-        "summary": "The TanStack (formerly React Query) ecosystem was hit by a targeted supply chain attack that successfully compromised the workstations of at least two OpenAI employees. The attackers injected malicious code into secondary dependencies that triggered only when specific internal OpenAI dev-environment markers were detected. The payload attempted to exfiltrate SSH keys and browser session cookies. In response, several organizations have forced emergency macOS security updates to revoke the malicious certificates used in the campaign.",
-        "importance": "This is a direct strike on the AI industry's brain trust. It proves that supply chain attackers are now tailoring their payloads to hit specific, high-value corporate targets based on environment variables. For your 'cyberdash' project, this reinforces the need to pin and audit every single dependency.",
-        "noteworthy": "Check your `node_modules` for any unauthorized TanStack related updates from the last 72 hours. Rotate any SSH keys or cloud tokens if you've been working on OpenAI-related OSS in that window. Enforce mandatory MDM-driven updates for all development workstations.",
-        "link": "https://thehackernews.com/2026/05/tanstack-supply-chain-attack-hits-two.html"
-      },
-      {
-        "id": 12,
-        "title": "Cisco SD-WAN CVE-2026-20182: Admin Access Under Active Exploitation",
-        "tag": "Critical Vulnerability / Networking",
-        "desc": "CISA adds Cisco SD-WAN flaw to KEV after threat actors achieve unauthorized admin access on edge routers.",
-        "summary": "CISA has added CVE-2026-20182 to its Known Exploited Vulnerabilities catalog. The flaw allows an unauthenticated, remote attacker to gain administrative access to the Cisco SD-WAN Manager (formerly vManage). Threat actors have been observed using the flaw to push malicious configuration changes to edge routers, enabling massive scale traffic interception and potential network-wide outages. The vulnerability stems from an insecure implementation of the management API's authentication layer.",
-        "importance": "SD-WAN is the 'Source of Truth' for modern network routing. A compromise here is equivalent to handing over the physical keys to the datacenter. For a Network Engineer, this is a code-red event for any enterprise environment managing Cisco edge gear.",
-        "noteworthy": "Apply the Cisco SD-WAN security advisory patches immediately. Audit VManage logs for unauthorized administrative login attempts or configuration changes. Restrict access to the management interface to a trusted VPN/internal subnet only.",
-        "link": "https://thehackernews.com/2026/05/cisa-adds-cisco-sd-wan-cve-2026-20182.html"
-      },
-      {
-        "id": 13,
-        "title": "SANA-WM: Nvidia Unveils 2.6B Open-Source 'World Model' for Video",
-        "tag": "AI / Open Source Hardware",
-        "desc": "Nvidia researchers release SANA-WM, a high-efficiency world model capable of 1-minute 720p 30fps video generation on local hardware.",
-        "summary": "Nvidia has open-sourced SANA-WM, a 2.6-billion parameter 'world model' designed for high-fidelity video generation. Unlike larger models, SANA-WM is highly optimized for local execution on consumer GPUs, achieving 1-minute of 720p video at 30fps on an RTX 4090. The model represents a significant leap in 'on-device' temporal consistency and physical simulation, enabling developers to build complex video applications without relying on opaque cloud APIs.",
-        "importance": "As we explore 'local-first' AI, SANA-WM is a blueprint for high-performance temporal reasoning. For your home lab, this is another tool in the box for high-speed, local data generation and simulation. It also pushes the boundary of what we consider 'local' compute capabilities.",
-        "noteworthy": "Clone the SANA repository and test the model's inference performance on your local GPU resources. Evaluate the temporal consistency for potential use in security-surveillance simulation. Monitor for quantization efforts to bring this model to even lower-spec hardware.",
-        "link": "https://nvlabs.github.io/Sana/WM/"
-      },
-      {
-        "id": 14,
-        "title": "Crypto Slump: BTC Drops to $78.1K as Jobs Data Volatility Hits",
-        "tag": "Finance / Crypto Markets",
-        "desc": "Bitcoin slides 1.4% to $78,104; Solana and Ethereum follow as macro jitters over US jobs data trigger liquidations.",
-        "summary": "Bitcoin (BTC) has slipped to $78,104 as a fresh batch of US jobs data triggered volatility across the risk-asset spectrum. The market saw over $140M in long liquidations in the last 12 hours. Solana (SOL) has retreated significantly to $86.36, while Ethereum (ETH) holds at $2,178. Analysts suggest the 'CLARITY Act' optimism from earlier in the week is being tempered by macro-economic uncertainty, though institutional 'diamond hands' in the spot ETFs have remained largely resilient.",
-        "importance": "The $80K psychological floor has been breached locally. For your lab's digital asset management, this is a test of the 'structural floor.' Macro still wins the day, but the decoupling narrative is currently in a 'bearish backtest.'",
-        "noteworthy": "Watch the $75K support for BTC as the next major line in the sand. Monitor the impact of the jobs data on the broader US dollar index (DXY). Ensure limit orders are appropriately placed to capitalize on 'macro wick' volatility.",
-        "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
       }
     ]
   }
