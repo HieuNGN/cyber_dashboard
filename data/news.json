@@ -1,5 +1,90 @@
 {
   "today": {
+    "date": "25/05/26",
+    "items": [
+      {
+        "id": 1,
+        "title": "cPanel Auth Bypass: 1.5 Million Servers in the Crosshairs",
+        "tag": "Critical Vulnerability / Web Hosting",
+        "desc": "A critical authentication bypass in cPanel allows unauthenticated attackers to gain administrative access; mass exploitation reported.",
+        "summary": "Security researchers have identified a critical vulnerability in the cPanel management interface that allows for a complete authentication bypass. This flaw is reportedly being exploited at scale, with over 1.5 million servers currently exposed to the open web. The vulnerability allows an attacker to manipulate session tokens to bypass standard login prompts, granting them full control over hosting environments, databases, and mail servers. Affected versions include all stable releases prior to the emergency patch issued this morning.",
+        "importance": "cPanel is the backbone of small-to-medium web hosting. An auth bypass here is a catastrophe for the 'NetOps' mission. If you manage any client sites or have a personal web server running cPanel, drop everything and patch. This is exactly why we use immutable infrastructure where possible—to minimize the impact of control-plane failures.",
+        "noteworthy": "Apply the emergency cPanel update immediately. Audit all administrative logins from the last 72 hours. Check for unauthorized API tokens or SSH keys added to user accounts. If patching isn't instant, restrict access to ports 2083 and 2087 to trusted IP ranges only.",
+        "link": "https://carthageelectronics.com/zero-day-threat-report-may-2026/"
+      },
+      {
+        "id": 2,
+        "title": "npm Staged Publishing: GitHub Mandates 2FA for All Releases",
+        "tag": "Supply Chain Security / DevSecOps",
+        "desc": "GitHub rolls out 'Staged Publishing' for npm, requiring human 2FA approval before any package becomes installable.",
+        "summary": "To combat the relentless tide of supply chain attacks, GitHub has introduced 'Staged Publishing' for the npm registry. This feature mandates that a human maintainer pass a two-factor authentication (2FA) challenge before a package version is promoted to the public registry. This ensures 'proof of presence' even for automated CI/CD workflows. Packages are first uploaded to a secure stage queue and remain hidden until the second factor is provided, preventing rogue CI/CD pipelines from pushing malicious updates.",
+        "importance": "This is a major win for the 'Mission Security' parameter. Automated pipelines are convenient, but they are also a single point of failure. By forcing a 'Man-in-the-Middle' (the good kind) via 2FA, the barrier for supply chain hijackers just got significantly higher. It's a reminder that even in an automated world, human oversight is the final line of defense.",
+        "noteworthy": "Enable 'Staged Publishing' for all critical internal dependencies. Update your deployment documentation to include the manual 2FA step. Ensure all maintainers have hardware-backed 2FA (Yubikeys) for the best security posture.",
+        "link": "https://thehackernews.com/2026/05/npm-adds-2fa-gated-publishing.html"
+      },
+      {
+        "id": 3,
+        "title": "Packagist Malware: Linux Binaries Hidden in PHP Hooks",
+        "tag": "Malware / Supply Chain",
+        "desc": "Eight popular Packagist packages found infected with Linux malware using cross-ecosystem package.json hooks.",
+        "summary": "Security auditors discovered a 'coordinated' supply chain attack affecting eight packages on Packagist. The attackers used a clever 'cross-ecosystem' technique: while the packages are for PHP (Composer), the malicious code was hidden in a 'package.json' file. This targeted projects that bundle JavaScript build tools alongside PHP code. The script triggers a post-install hook to download and execute a malicious Linux binary from a GitHub Releases URL, bypassing scanners that only look for PHP-specific malicious patterns.",
+        "importance": "Attackers are getting creative. They are betting on developers only checking the metadata for the 'primary' language of a package. This highlights the danger of 'polyglot' projects. For your lab experiments, this is a clear signal to run your build/install processes in isolated, ephemeral containers (like Docker or Podman) to prevent host-level compromise during a 'simple' npm or composer install.",
+        "noteworthy": "Audit all projects that mix Composer and npm dependencies. Use 'Socket' or similar tools to scan for suspicious lifecycle hooks. Move your build pipelines to isolated environments that lack persistent network access unless explicitly gated.",
+        "link": "https://thehackernews.com/2026/05/packagist-supply-chain-attack-infects.html"
+      },
+      {
+        "id": 4,
+        "title": "Russian APT28 Deploys New NTLM Credential Theft Chain",
+        "tag": "Threat Intel / APT",
+        "desc": "Suspected Russian state actor APT28 is exploiting a new vulnerability chain to steal Windows NTLM credentials.",
+        "summary": "Threat intelligence reports indicate that APT28 (Fancy Bear) is actively utilizing a newly discovered exploit chain to harvest NTLMv2 hashes from Windows environments. The attack begins with a specially crafted Outlook invite that forces the client to attempt authentication against a remote, attacker-controlled SMB server. Once the NTLM hash is captured, it is used for 'Pass-the-Hash' attacks to gain entry into corporate and governmental networks. This campaign appears to be targeting defense contractors and diplomatic missions in Europe.",
+        "importance": "The NTLM protocol is 30 years old and still the easiest way into a Windows environment. APT28’s continued success proves that 'Legacy Protocols + User Friction = Breach.' For the NetOps mission, this is why we disable NTLM entirely in favor of Kerberos or modern identity providers wherever possible. If you must use NTLM, ensure NTLMv1 is dead and buried.",
+        "noteworthy": "Disable outbound SMB (Port 445) at the perimeter for all workstations. Implement SMB Signing and LDAP Channel Binding. Monitor Windows event logs for anomalous NTLM authentication attempts from external IP addresses.",
+        "link": "https://carthageelectronics.com/zero-day-threat-report-may-2026/"
+      },
+      {
+        "id": 5,
+        "title": "Crypto Macro: BTC Holding $77K Support Amid ETF Lull",
+        "tag": "Finance / Crypto Markets",
+        "desc": "Bitcoin trades at $77,064 with minor gains; market remains cautiously optimistic despite flat institutional inflows.",
+        "summary": "Bitcoin (BTC) is currently trading at $77,064.15, marking a 0.4% increase over the last 24 hours. The broader market remains in a consolidation phase, with the global cryptocurrency market cap sitting at $2.65 trillion. Ethereum (ETH) has slightly dipped to $2,102.62. Analysts note that while spot ETF inflows have slowed significantly compared to Q1 2026, the retail 'support floor' around $75K appears to be resilient. Major altcoins like SOL ($85) and BNB ($658) are trading sideways as the macro environment waits for the next move from the Federal Reserve.",
+        "importance": "Stability is a trap. In the crypto world, sideways movement is usually the precursor to a major volatility event. For your lab’s digital asset tracking, $77K is the current 'comfort zone.' If it breaks, expect a fast slide to $68K. It's a good time to audit your cold storage—better to be prepared for the worst while the fees are low.",
+        "noteworthy": "Watch for a BTC close above $80K to confirm a bullish breakout. Monitor the 'DXY' (Dollar Index) for any sudden surges that might pressure risk assets. Keep an eye on Solana's $80 support as it has been testing it repeatedly this week.",
+        "link": "https://www.coingecko.com/"
+      },
+      {
+        "id": 6,
+        "title": "Intel 'Celestial' GPUs: A High-End Gambit for ARC 3rd Gen",
+        "tag": "Hardware / GPU News",
+        "desc": "Leaked roadmaps for Intel's 'Celestial' GPUs suggest a serious attempt to compete in the high-end gaming and AI market.",
+        "summary": "Rumors and leaked roadmaps for Intel's third-generation discrete graphics architecture, codenamed 'Celestial,' indicate a significant shift in strategy. Unlike 'Battlemage' which focused on the mainstream market, Celestial is rumored to target the high-end segment, aiming to compete directly with Nvidia's RTX 5080 and AMD's RDNA 4 equivalents. The architecture supposedly features a massive jump in Ray Tracing hardware and dedicated AI 'XMX' cores for faster inference. Initial benchmarks (unconfirmed) show a 40% performance-per-watt improvement over current-gen designs.",
+        "importance": "Competition is the only thing that keeps Nvidia from charging a literal arm and a leg for silicon. If Intel can finally deliver a stable, high-end driver stack with Celestial, it changes the economics of AI/ML workstations for the lab. We might finally see 24GB+ VRAM becoming standard in the $600-800 price bracket. We need that VRAM for the local LLMs.",
+        "noteworthy": "Watch for Intel's official announcement in late 2026. Keep an eye on the 'OneAPI' software ecosystem—hardware is only half the battle. If you're planning a workstation refresh, Intel might finally be a viable option for more than just QuickSync.",
+        "link": "https://www.noobfeed.com/articles/2026-gpu-launch-outlook-nvidia-amd-intel"
+      },
+      {
+        "id": 7,
+        "title": "Totolink A8000RU RCE: Public Exploit for Router Flaw",
+        "tag": "Vulnerability / IoT",
+        "desc": "A remote command injection vulnerability in Totolink A8000RU routers (v7.1cu.643) has a public exploit; devices are being scanned.",
+        "summary": "A vulnerability was identified in the Totolink A8000RU router, specifically in how it handles arguments for certain internal modes. This 'Command Injection' flaw allows a remote, unauthenticated attacker to execute arbitrary OS commands with root privileges. A proof-of-concept (PoC) was recently released on public repositories, and active scanning for vulnerable devices has already been detected. The vulnerability stems from a lack of input sanitization in the device's web management interface.",
+        "importance": "This is 'IoT 101' failed again. Routers are the perimeter of the home; a root-level RCE is a total game-over. For the NetOps mission, this reinforces why consumer-grade hardware should NEVER be exposed to the internet, and why we prefer OpenWRT or pfSense where we actually control the update cycle. If you have an A8000RU, it's either time to patch or time for a target-practice session.",
+        "noteworthy": "Disable the 'Web Management' interface on the WAN side. Check for firmware version 7.1cu.643_b20200521 or newer. If you can't patch, replace the device—it's currently a beacon for botnets.",
+        "link": "https://app.opencve.io/"
+      },
+      {
+        "id": 8,
+        "title": "SANS Military Appreciation: Training Discounts for May 2026",
+        "tag": "Education / Training",
+        "desc": "SANS Institute offers a 10% discount on cybersecurity training for U.S. military personnel during Military Appreciation Month.",
+        "summary": "To coincide with Military Appreciation Month, the SANS Institute has announced a special 10% discount on all cybersecurity training courses for active-duty U.S. military, veterans, and their families. This discount applies to both online ('OnDemand') and in-person training events scheduled for late 2026. SANS is also highlighting its 'Vouchers' program for organizations looking to upskill their military-affiliated staff. Use code MILITARY10 at checkout.",
+        "importance": "Training is the most important 'hardware' we have. SANS courses are notoriously expensive—often costing as much as a high-end server—so any discount is significant for individual learners. For Hieu, this is a chance to pick up that advanced forensics or cloud security cert without absolutely nuking the mission budget.",
+        "noteworthy": "Offer expires May 31, 2026. Valid for U.S.-based personnel and veterans. Ensure you have your military ID or verification ready through ID.me.",
+        "link": "https://thehackernews.com/"
+      }
+    ]
+  },
+  "yesterday": {
     "date": "19/05/26",
     "items": [
       {
@@ -39,7 +124,7 @@
         "desc": "Anthropic buys Stainless API; move signals intent to create the most seamless developer experience in the LLM market.",
         "summary": "AI giant Anthropic has announced the acquisition of Stainless, a startup focused on automating the generation of high-quality, type-safe SDKs from API specifications. The acquisition is a strategic play to improve the developer experience for the Claude API. By integrating Stainless's automation into their pipeline, Anthropic aims to provide 'instant' SDK updates across multiple languages (Python, TS, Go, etc.) as soon as new model capabilities or API features are released.",
         "importance": "This is a direct indicator of where the 'AI Wars' are moving: developer ergonomics. As Hieu builds projects like 'cyberdash' and 'netops', the speed of SDK maturity is a bottleneck. Anthropic's move suggests they want to be the 'dev-first' alternative to OpenAI, prioritizing seamless integration over just model benchmarks.",
-        "noteworthy": "Watch for the next version of the Claude Python SDK for 'Stainless' improvements (better types, higher performance). Consider utilizing similar spec-to-SDK tools for your own 'netops' internal APIs to maintain consistency across services. It\u2019s a win for those who value 'DevX'.",
+        "noteworthy": "Watch for the next version of the Claude Python SDK for 'Stainless' improvements (better types, higher performance). Consider utilizing similar spec-to-SDK tools for your own 'netops' internal APIs to maintain consistency across services. It’s a win for those who value 'DevX'.",
         "link": "https://www.anthropic.com/news/anthropic-acquires-stainless"
       },
       {
@@ -57,9 +142,9 @@
         "title": "Regex Chess: A 2-ply Minimax Engine in 84,688 Regular Expressions",
         "tag": "Technical / Software Hacking",
         "desc": "Hacker creates functional chess engine using only regular expressions; a record in 'computational masochism'.",
-        "summary": "In a display of extreme technical creativity, researcher Nicholas Carlini has built a 2-ply minimax chess engine that runs entirely within the confines of a single regular expression (or rather, 84,688 of them). The engine can analyze the board, evaluate moves, and respond at a depth of 2\u2014using nothing but regex engines found in standard browsers or Python. The project highlights the 'Turing-complete' nature of modern regex engines while being a hilarious example of software engineering 'because we can.'",
-        "importance": "This story is for the 'Soul' of the lab. It reinforces that the tools we use (regex) are often far more powerful\u2014and dangerous\u2014than we realize. For your 'netops' project, it\u2019s a warning about the computational cost of complex regexes: if someone can build a chess engine in 84k regexes, they can certainly crash your WAF with a single poorly-formed string.",
-        "noteworthy": "Check the 'Regex Chess' repo to see how state is managed in a regex match. Audit your own projects for 'Regex DoS' (ReDoS) vulnerabilities. Remember: just because a tool *can* do something, doesn't mean it *should*\u2014unless it's for the glory of HN.",
+        "summary": "In a display of extreme technical creativity, researcher Nicholas Carlini has built a 2-ply minimax chess engine that runs entirely within the confines of a single regular expression (or rather, 84,688 of them). The engine can analyze the board, evaluate moves, and respond at a depth of 2—using nothing but regex engines found in standard browsers or Python. The project highlights the 'Turing-complete' nature of modern regex engines while being a hilarious example of software engineering 'because we can.'",
+        "importance": "This story is for the 'Soul' of the lab. It reinforces that the tools we use (regex) are often far more powerful—and dangerous—than we realize. For your 'netops' project, it’s a warning about the computational cost of complex regexes: if someone can build a chess engine in 84k regexes, they can certainly crash your WAF with a single poorly-formed string.",
+        "noteworthy": "Check the 'Regex Chess' repo to see how state is managed in a regex match. Audit your own projects for 'Regex DoS' (ReDoS) vulnerabilities. Remember: just because a tool *can* do something, doesn't mean it *should*—unless it's for the glory of HN.",
         "link": "https://nicholas.carlini.com/writing/2025/regex-chess.html"
       },
       {
@@ -68,7 +153,7 @@
         "tag": "Finance / Crypto Markets",
         "desc": "Bitcoin slides to $76,697; Solana drops to $84.7 as market sentiment shifts to 'Bearish' on macro jitters.",
         "summary": "Bitcoin (BTC) has recorded its lowest price point in two weeks, trading at $76,697 as institutional spot ETF inflows have reportedly 'hit a wall.' The decline has dragged the entire market lower, with Solana (SOL) dropping over 5% to $84.72 and Ethereum (ETH) struggling at $2,125. Analysts attribute the slump to a combination of profit-taking and fears over upcoming US inflation data, indicating that the 'post-halving' rally is facing its first significant structural test.",
-        "importance": "The 'Summer Lull' is setting in early. The decoupling we saw earlier in the month is reversing as the whole market moves together in a risk-off rotation. For your lab's digital asset tracker, this is a 'Holding Pattern' alert\u2014the $75K floor is the next critical battleground for bulls.",
+        "importance": "The 'Summer Lull' is setting in early. The decoupling we saw earlier in the month is reversing as the whole market moves together in a risk-off rotation. For your lab's digital asset tracker, this is a 'Holding Pattern' alert—the $75K floor is the next critical battleground for bulls.",
         "noteworthy": "Watch for a BTC bounce at the $75K psychological support. Monitor the 'Crypto Fear & Greed' index as it approaches 'Neutral.' If you are dollar-cost-averaging into SOL, $80 is the next significant support cluster to observe.",
         "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
       },
@@ -81,111 +166,6 @@
         "importance": "IoT is the 'Security Trash Can' of the modern home. For your lab, this is why 'Cloud Tunnels' that bypass your firewall (like the ones built into many smart devices) are a secondary attack vector. If a device can bypass your NAT without you seeing it, it's a hole in your perimeter.",
         "noteworthy": "Isolate all IoT devices (doorbells, cameras, bulbs) on a dedicated VLAN with strict egress rules. Use Pi-hole to block vendor 'phone home' domains that aren't strictly necessary for functionality. Avoid using proprietary 'Cloud Access' features if you can achieve the same via a secure VPN (Tailscale/Wireguard).",
         "link": "https://www.abgeo.dev/blog/anyone-can-ring-your-doorbell"
-      }
-    ]
-  },
-  "yesterday": {
-    "date": "17/05/26",
-    "items": [
-      {
-        "id": 9,
-        "title": "NGINX CVE-2026-42945: Critical Worker Crash and Potential RCE",
-        "tag": "Critical Vulnerability / Server Infrastructure",
-        "desc": "Active exploitation of NGINX flaw triggers worker crashes; affects versions 1.25.x through 1.27.1.",
-        "summary": "Security researchers have identified active exploitation of CVE-2026-42945, a critical flaw in the NGINX core's HTTP/3 module handling. By sending a specifically malformed QUIC transport frame, an unauthenticated remote attacker can trigger a heap-based buffer overflow, causing worker processes to crash consistently (DoS) or potentially achieving remote code execution (RCE). The vulnerability is particularly potent because it bypasses many standard front-end WAF protections that do not yet fully inspect encrypted QUIC headers.",
-        "importance": "NGINX is the entry point for 40% of the web. A zero-day or near-zero-day that causes crashes is a top-tier infrastructure threat. For your lab, if you use NGINX as an ingress for Proxmox or internal tools, this is an immediate patch priority. It also underscores the inherent complexity and risk in the transition from TCP to QUIC/HTTP3.",
-        "noteworthy": "Update NGINX to 1.27.2+ or 1.25.6+ immediately. If patching isn't possible, disable HTTP/3 (QUIC) support (`listen 443 quic;` and `http3 on;` directives) at the configuration level. Monitor error logs for repeated 'worker process exited on signal 11' events linked to QUIC connections.",
-        "link": "https://thehackernews.com/2026/05/nginx-cve-2026-42945-exploited-in-wild.html"
-      },
-      {
-        "id": 10,
-        "title": "Grafana GitHub Token Breach: Codebase Downloaded in Extortion Attempt",
-        "tag": "Cyber Attack / Developer Security",
-        "desc": "Breach of a developer's GitHub token led to unauthorized access to Grafana's private repositories and source code.",
-        "summary": "Grafana Labs disclosed a security incident where an attacker obtained a valid GitHub PAT (Personal Access Token) belonging to a senior developer. The attacker utilized the token to clone several private repositories, including core observability engine components. Following the exfiltration, the threat actor attempted to extort the company, threatening to leak the source code unless a ransom was paid. Grafana has revoked all tokens and stated that no customer data or production infrastructure was compromised in the event.",
-        "importance": "This is a textbook example of identity-based supply chain risk. A single leaked token can compromise the 'source of truth' for a major platform. For our project, it reinforces why we must never commit secrets to Git and why using short-lived, hardware-backed tokens (like Yubikeys) for GitHub auth is not optional for NetOps missions.",
-        "noteworthy": "Rotate all GitHub Personal Access Tokens (PATs) and move to GitHub Fine-grained tokens or SSH keys stored in hardware modules. Audit GitHub Enterprise logs for anomalous cloning activity from unknown IP ranges. Implement 'Secret Scanning' on all internal repositories to proactively catch leaked tokens before they are exploited.",
-        "link": "https://thehackernews.com/2026/05/grafana-github-token-breach-led-to.html"
-      },
-      {
-        "id": 11,
-        "title": "Cerebras Systems Files for $5.5B IPO: The 'Wafer-Scale' AI Bet",
-        "tag": "Hardware / AI Infrastructure",
-        "desc": "Wafer-scale chipmaker Cerebras files for one of the largest semiconductor IPOs; challenges Nvidia's GPU dominance.",
-        "summary": "Cerebras Systems, the creator of the world's largest AI processor (the Wafer-Scale Engine), has filed for an IPO seeking a valuation of $5.5 billion. The company's WSE-3 chip, which is the size of a full silicon wafer and contains 4 trillion transistors, is designed specifically to handle massive LLM workloads that traditional GPU clusters struggle to scale. The IPO marks a significant moment in the 'AI Hardware Wars' as investors bet on alternative architectures to break the Nvidia supply bottleneck.",
-        "importance": "As Hieu scales AI labs, the shift from 'cluster of GPUs' to 'wafer-scale compute' is a generational architectural change. Cerebras' ability to go public signals that the market believes Nvidia's H100/B200 dominance is vulnerable to custom-silicon niches. For a developer, this means the software stack (like PyTorch/Cuda) will eventually have to become truly architecture-agnostic.",
-        "noteworthy": "Monitor the success of the Cerebras SDK and its integration with PyTorch/TensorFlow. If the IPO succeeds, expect a wave of 'wafer-scale' competitors. For lab planning, understand that the era of 'GPU-only' AI is ending; future-proof your projects by focusing on ONNX or other intermediate representations.",
-        "link": "https://news.google.com/stories/CAAqNggKIjBDQklTSGpvSmMzUnZjbmt0TXpZd1NoRUtEd2pQMS1PT0VSR0Y1U3JsS04wOWNDZ0FQAQ"
-      },
-      {
-        "id": 12,
-        "title": "On-Prem Exchange CVE-2026-42897: Zero-Click RCE via Crafted Email",
-        "tag": "Critical Vulnerability / Mail Security",
-        "desc": "New zero-click RCE in on-prem Microsoft Exchange Server targets parsing of binary attachments; CVSS 9.8.",
-        "summary": "Microsoft is warning of a critical zero-click RCE (CVE-2026-42897) in on-premise Exchange Servers. The flaw exists in the handling of malformed TNEF attachments, where a specially crafted email can trigger a remote code execution event when processed by the server's transport service\u2014before the user even opens the mail. Threat actors are already observed using the flaw to deploy web shells and perform lateral movement into enterprise AD environments.",
-        "importance": "Exchange continues to be the 'soft underbelly' of enterprise infrastructure. A zero-click RCE in a mail server is a 'Priority 0' fix. For your lab, if you relay mail for any services, verify you aren't running an unpatched Exchange instance. It's also a reminder that 'Zero-Click' vectors are moving from mobile targets to core enterprise infrastructure.",
-        "noteworthy": "Apply Microsoft's emergency KB patch for Exchange Server 2019 and 2016. If patching is delayed, use a mail gateway (like Proxmox Mail Gateway) to strip TNEF attachments before they reach the Exchange transport. Monitor for unauthorized PowerShell execution originating from the `EdgeTransport.exe` process.",
-        "link": "https://thehackernews.com/2026/05/on-prem-microsoft-exchange-server-cve.html"
-      },
-      {
-        "id": 13,
-        "title": "Cisco Catalyst SD-WAN Auth Bypass Exposes Edge Routers to Admin Takeover",
-        "tag": "Critical Vulnerability / Networking",
-        "desc": "CVE-2026-20182 allows remote, unauthenticated attackers to gain admin access to SD-WAN controllers.",
-        "summary": "Cisco has released a critical security update for its Catalyst SD-WAN Controller (formerly vSmart). CVE-2026-20182 stems from an improper authentication of the REST API, allowing a remote attacker to bypass credentials and obtain full administrative access. Once inside, attackers can push malicious configurations to all managed edge routers, enabling network-wide traffic diversion or total denial-of-service. CISA has added the flaw to the KEV catalog after reports of active exploitation by financial-sector targeting groups.",
-        "importance": "This is a career-defining vulnerability for Network Engineers. SD-WAN is the control plane of the modern enterprise network; a bypass here is equivalent to handing over the physical keys to every branch office. It highlights the inherent danger in 'API-first' networking if the auth layer isn't fundamentally hardened.",
-        "noteworthy": "Update Cisco Catalyst SD-WAN Manager and Controllers to the May 2026 release. Audit all 'vSmart' configuration change logs for the last 14 days. Implement strict IP allow-listing for the REST API interface. Move the SD-WAN management plane into an out-of-band (OOB) network restricted from the general internet.",
-        "link": "https://thehackernews.com/2026/05/cisco-catalyst-sd-wan-controller-auth.html"
-      },
-      {
-        "id": 14,
-        "title": "Global Semiconductor Sales Forecast to Hit $1 Trillion in 2026",
-        "tag": "Hardware / Economics",
-        "desc": "Industry analysts forecast $1T annual chip market; AI demand drives historic spending on data center GPUs.",
-        "summary": "The semiconductor industry is on track to reach a historic $1 trillion in annual sales by the end of 2026, driven primarily by the global 'AI Gold Rush.' The surging demand for data center GPUs, high-bandwidth memory (HBM), and specialized AI accelerators has pushed the Philadelphia Semiconductor Index up 50% in the last six weeks. However, some analysts warn of 'dot-com' style bubble signals as retail investment floods into chip designer stocks, potentially leading to a massive oversupply correction in 2027.",
-        "importance": "Market scale dictates technology availability. The $1T milestone means semiconductors are now a primary pillar of global geopolitics and finance. For Hieu, this means that while AI compute is plentiful today, we are in a 'high-volatility' era where hardware prices for the lab could swing wildly as the bubble either expands or bursts.",
-        "noteworthy": "Monitor HBM (High Bandwidth Memory) supply chains as a leading indicator for GPU availability. If you are planning significant hardware upgrades, consider 'locking in' current pricing before the expected Q4 demand spike. Watch for the Cerebras IPO performance as a gauge for non-Nvidia hardware appetite.",
-        "link": "https://eraoflight.com/2026/05/18/the-global-war-for-chips/"
-      },
-      {
-        "id": 15,
-        "title": "RK3562 Tablet Hack: From $80 E-Waste to Debian Workstation",
-        "tag": "Hardware / Linux Hacking",
-        "desc": "Hacker 'tech4bot' converts cheap Android tablets into full Debian ARM workstations; unlocks bootloader on RK3562 chips.",
-        "summary": "A new community project has successfully ported a full Debian Linux distribution to cheap, off-the-shelf Android tablets powered by the Rockchip RK3562 SoC. By bypassing vendor bootloader locks and creating custom device trees, hackers can now utilize these $80 devices as low-power, fully-functional ARM workstations or headless home lab servers. The project provides a blueprint for 'upcycling' low-cost consumer hardware into useful technical infrastructure, bypassing the planned obsolescence of the Android ecosystem.",
-        "importance": "This is exactly what the home lab is about\u2014extracting value from undervalued hardware. An $80 'workstation' is a perfect low-cost node for your NetOps project or a dedicated Pi-hole/VPN gateway. It proves that the barrier to entry for a distributed lab setup is your ability to hack the bootloader, not your budget.",
-        "noteworthy": "Check your 'junk hardware' drawers for Rockchip-based devices. Visit the 'rk3562deb' GitHub repo to follow the installation steps. Use these cheap nodes for non-critical, edge-of-network services like environmental monitoring or non-sensitive log aggregation.",
-        "link": "https://github.com/tech4bot/rk3562deb"
-      },
-      {
-        "id": 16,
-        "title": "Crypto Macro Panic: BTC Dips Below $77K as US Rates Fear Returns",
-        "tag": "Finance / Crypto Markets",
-        "desc": "Bitcoin sinks to $76,984; Ethereum loses $2.1K support as hawkish US jobs data signals 'Higher for Longer' rates.",
-        "summary": "The cryptocurrency market has entered a fresh localized slump, with Bitcoin (BTC) sliding over 1.5% in 24 hours to trade at $76,984. The sell-off was triggered by stronger-than-expected US employment data, reigniting fears that the Federal Reserve will maintain high interest rates well into 2027. Ethereum (ETH) has followed suit, dropping to $2,122, while Solana (SOL) holds precariously at $85.26. Total market liquidations have exceeded $180M, though institutional spot ETF net inflows remain marginally positive.",
-        "importance": "Macro is currently the only driver that matters. The 'jobs data' volatility is testing the resilience of the $75K psychological support for BTC. For your digital asset planning, the 'Buy the Dip' window is opening, but only for those who believe the 'Higher for Longer' narrative is a bluff. It's a high-stakes moment for liquidity management.",
-        "noteworthy": "Watch the $75K support for BTC; a break below could trigger a cascade to $68K. Monitor the US Dollar Index (DXY) as it negatively correlates with BTC during these macro shocks. Evaluate your SOL positions as it continues to lose momentum relative to the broader market.",
-        "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
-      },
-      {
-        "id": 17,
-        "title": "'This May Be the Last Time You Hear My Voice': Iran Execution Surge",
-        "tag": "Geopolitics / Human Rights",
-        "desc": "Surge in political executions in Iran since regional conflict started; activists warn of 'judicial war' against dissent.",
-        "summary": "BBC reports and human rights groups have raised the alarm over a massive surge in political executions in Iran since the start of the current regional war. Over 150 individuals have been executed in the last 45 days, many of whom were political prisoners and activists. Former detainees have released harrowing audio recordings predicting their own death. Activists argue that the Iranian government is utilizing the 'fog of war' to silence internal dissent and consolidate power through a judicial campaign of intimidation.",
-        "importance": "Internal stability in Iran is a second-order driver for regional conflict. A domestic escalation can lead to 'distraction' tactics abroad, potentially impacting maritime security or proxy-war intensity. For a global-focused engineer, the 'human' layer is often the precursor to the 'kinetic' layer that disrupts commerce and tech.",
-        "noteworthy": "Monitor for retaliatory strikes or civil unrest within Iran that could bleed over into regional proxy conflicts. Track the impact on international diplomatic negotiations regarding the Strait of Hormuz. Understand that geopolitical volatility often starts in the courtrooms before it hits the warships.",
-        "link": "https://www.bbc.com/news/articles/cn8p392nl7yo"
-      },
-      {
-        "id": 18,
-        "title": "Hezbollah Drone Strike Videos: The Evolution of Loitering Munitions",
-        "tag": "Geopolitics / Conflict",
-        "desc": "New IDF-targeted drone strike footage shows Hezbollah's evolving tactical use of locally assembled loitering munitions.",
-        "summary": "Recent footage released by Hezbollah media channels shows a significant tactical evolution in their use of one-way 'loitering' munitions (kamikaze drones). The videos demonstrate sophisticated path-planning to bypass Iron Dome interceptors and precision strikes on IDF communication infrastructure. Analysts note the shift toward locally assembled, cheap drone platforms that utilize commercial-off-the-shelf (COTS) electronics\u2014mirroring the tactics pioneered in the Ukraine-Russia conflict.",
-        "importance": "The 'Ukraine-ification' of global warfare continues. Cheap, high-tech drones are the new asymmetric standard. This impacts your mission because hardware components (controllers, sensors) are increasingly categorized as 'dual-use,' leading to tighter trade controls and potential 'sanction-creep' on your hardware procurement.",
-        "noteworthy": "Observe the 'dual-use' electronics categories for any specialized sensors you procure for the lab. Understand that your knowledge of networking (and by extension, signal propagation) is increasingly a 'security-critical' domain as warfare moves to the RF spectrum.",
-        "link": "https://www.bbc.com/news/articles/c1j2zwe9g5no"
       }
     ]
   }
