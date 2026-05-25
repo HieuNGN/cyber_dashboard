@@ -1,5 +1,70 @@
 {
   "today": {
+    "date": "26/05/26",
+    "items": [
+      {
+        "id": 1,
+        "title": "LiteSpeed cPanel Plugin Root RCE Exploited in the Wild",
+        "tag": "Critical Vulnerability / Web Hosting",
+        "desc": "CVE-2026-48172 allows remote authenticated users to execute scripts with root privileges via terminal plugin.",
+        "summary": "Threat actors are actively exploiting a critical vulnerability (CVE-2026-48172) in the LiteSpeed extension for cPanel/WHM. The flaw resides in the 'terminal' plugin component, which improperly validates user input before passing it to a privileged shell. An attacker with low-level hosting account access can execute arbitrary scripts with root privileges, leading to full server compromise. LiteSpeed has released version 1.10.2 to address the issue, but widespread exploitation is reported on unpatched shared hosting environments.",
+        "importance": "cPanel environments are high-value targets due to the volume of sites they host. A root-level RCE in a common plugin is a 'game over' scenario for hosting providers. For your lab, if you manage any LiteSpeed/cPanel instances for side projects, this is a mandatory P0 patch.",
+        "noteworthy": "Update LiteSpeed cPanel plugin to 1.10.2+ immediately. Audit `/var/log/cpanel` for unauthorized usage of the LiteSpeed terminal module. If patching is not possible, disable the LiteSpeed cPanel plugin via WHM to mitigate the risk of host-level privilege escalation.",
+        "link": "https://thehackernews.com/2026/05/litespeed-cpanel-plugin-cve-2026-48172.html"
+      },
+      {
+        "id": 2,
+        "title": "npm Hardens Registry: 2FA-Gated Publishing Now Mandatory",
+        "tag": "Cyber Security / Supply Chain",
+        "desc": "npm implements mandatory 2FA for all publishers; introduces 'Package Install Controls' to block malicious scripts.",
+        "summary": "Following a surge in supply chain attacks, npm has implemented mandatory 2FA for all accounts that publish packages. Additionally, a new feature called 'Package Install Controls' allows developers to restrict packages from executing arbitrary scripts during the `npm install` phase. This move is designed to mitigate 'post-install' malware campaigns that harvest environment variables (like AWS/Heroku keys) before developers have a chance to inspect the code.",
+        "importance": "The days of 'Move fast and break things' in JavaScript are over. The addition of mandatory 2FA and install-time controls is the most significant supply chain defense implementation in years. For our NetOps projects, this reduces the risk of accidental poisoning, but it means you must ensure your CI/CD service accounts use automation-safe tokens.",
+        "noteworthy": "Enforce 2FA on your npm account if not already enabled. Update your local `npm` client to version 10.x+ to support the new Install Controls. Audit your `package.json` for `postinstall` scripts; move vital build logic to explicit build commands that can be reviewed.",
+        "link": "https://thehackernews.com/2026/05/npm-adds-2fa-gated-publishing.html"
+      },
+      {
+        "id": 3,
+        "title": "Packagist Attack: 8 PHP Packages Poisoned with GitHub-Hosted Malware",
+        "tag": "Malware / Software Supply Chain",
+        "desc": "Malicious versions of popular PHP utility packages exfiltrate secrets to C2 servers hosted on GitHub Gists.",
+        "summary": "Security researchers identified a supply chain attack targeting the Packagist (PHP) repository. Eight widely used packages, primarily in the Laravel ecosystem, were compromised via hijacked maintainer accounts. The infected versions contain a base64-encoded payload that executes during deployment, harvesting `.env` files and SSH keys. Notably, the malware uses GitHub Gists as a covert command-and-control channel to exfiltrate data, making it harder to detect via traditional domain-based DNS filtering.",
+        "importance": "PHP supply chain attacks are increasing as actors target high-traffic Laravel applications. Using GitHub as a C2 is a clever way to bypass egress filtering since most dev environments allow traffic to `github.com`. It highlights the need for 'Intent-Based Networking' where only specific, required endpoints are reachable by production apps.",
+        "noteworthy": "Check your `composer.lock` for unauthorized updates to `laravel-lang` and related packages. Use `composer audit` to scan for known compromised versions. Implement strict egress filtering in your lab to block unrecognized traffic to cloud providers, even to sites like GitHub, from your production containers.",
+        "link": "https://thehackernews.com/2026/05/packagist-supply-chain-attack-infects-8.html"
+      },
+      {
+        "id": 4,
+        "title": "Memory Costs Now Two-Thirds of Total AI Chip Manufacturing",
+        "tag": "Hardware / AI Infrastructure",
+        "desc": "Analysis of H200/B200 chips reveals HBM (High Bandwidth Memory) has become the dominant cost factor.",
+        "summary": "A new technical breakdown on Hacker News reveals that memory (HBM3e) now accounts for nearly 65% of the total component cost for high-end AI chips like Nvidia's B200. The cost shift is driven by the 'Memory Wall'\u2014the fact that AI reasoning speed is bottlenecked by the ability to move data out of memory rather than the speed of the silicon itself. Analysts predict this will drive a massive industry-wide pivot toward on-package memory and new 'Unified Memory' architectures in 2027.",
+        "importance": "This cost shift explains why GPU prices are not falling despite silicon yields improving. For your lab planning, understand that 'RAM' is no longer a commodity; it's the premium resource of the decade. This confirms your decision to focus on memory-efficient models (like quantized GGUF) for local hosting.",
+        "noteworthy": "Prioritize quantization techniques (4-bit/5-bit) to maximize your existing hardware's 'Token-to-Dollar' ratio. Monitor advancements in HBM4 as an indicator of when the next performance floor will jump. In the lab, verify that your local context-size is optimized for your VRAM capacity to avoid costly swapping.",
+        "link": "https://news.ycombinator.com/item?id=48214821"
+      },
+      {
+        "id": 5,
+        "title": "DeepSeek Reasonix: Native Coding Agent with 10x Cost Efficiency",
+        "tag": "AI / Developer Tooling",
+        "desc": "DeepSeek releases 'Reasonix', a reasoning-first coding model with high caching performance for terminal-based agents.",
+        "summary": "DeepSeek has announced 'Reasonix', its first native AI coding agent architected for high-frequency iterative development. The model utilizes a new 'Context-Caching' mechanism that reduces input token costs by up to 90% for repeated file inspections. Optimized for CLI-based agents, Reasonix claims to outperform GPT-4o on complex multi-file refactoring tasks while being 10x cheaper to run. It has already been integrated into several open-source coding assistants as a 'DeepSeek-v4-Pro' alternative.",
+        "importance": "This is a direct upgrade for your workflow. Since we use deepseek models for coding delegation, 'Reasonix' represents the next step in 'Agentic Coding.' High caching and lower costs mean we can be more comprehensive in our pre-commit reviews without blowing the token budget. It's the competitive pressure the ecosystem needs.",
+        "noteworthy": "Update your coding agent configurations to leverage the new DeepSeek 'Reasonix' endpoint if available via your proxy. Test its performance on your 'NetOps' repository for large-scale refactors. Use the 'Context-Caching' feature to keep entire codebase indices 'warm' during long debugging sessions.",
+        "link": "https://github.com/deepseek-ai/Reasonix"
+      },
+      {
+        "id": 6,
+        "title": "Crypto Sentiment: BTC Stabilizes at $77K; ETH Trends Down on Gas Lows",
+        "tag": "Finance / Crypto Markets",
+        "desc": "Bitcoin holds $77,015; Ethereum lags at $2,093 as L2 volume shifts fees away from mainnet.",
+        "summary": "Bitcoin (BTC) is trading at $77,015, showing resilience above the $75K support level. In contrast, Ethereum (ETH) has dropped to $2,093 as 'Mainnet Fee Burn' hits record lows. The shift is attributed to the massive success of Layer-2 scaling solutions (Base, Arbitrum), which have successfully moved transaction volume off-chain but have simultaneously reduced native ETH demand-drivers. Solana (SOL) remains flat at $84.88, characterized by high network activity but lackluster price action.",
+        "importance": "The market is undergoing a structural transition. 'Mainnet Ethereum' is slowly becoming a settlement layer rather than a playground, which is reflected in its trailing price. For your digital asset dashboard, the metric to watch is no longer just 'Mainnet TVL' but the cumulative volume across the L2 stack where the actual utility is sequestered.",
+        "noteworthy": "Monitor the $2,000 support level for ETH; a break below could trigger a liquidation cascade. Track L2 fee-efficiency metrics as a leading indicator of network value. For BTC, $80K remains the target for a confirmed bull-market resumption.",
+        "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
+      }
+    ]
+  },
+  "yesterday": {
     "date": "25/05/26",
     "items": [
       {
@@ -8,7 +73,7 @@
         "tag": "Critical Vulnerability / Web Hosting",
         "desc": "A critical authentication bypass in cPanel allows unauthenticated attackers to gain administrative access; mass exploitation reported.",
         "summary": "Security researchers have identified a critical vulnerability in the cPanel management interface that allows for a complete authentication bypass. This flaw is reportedly being exploited at scale, with over 1.5 million servers currently exposed to the open web. The vulnerability allows an attacker to manipulate session tokens to bypass standard login prompts, granting them full control over hosting environments, databases, and mail servers. Affected versions include all stable releases prior to the emergency patch issued this morning.",
-        "importance": "cPanel is the backbone of small-to-medium web hosting. An auth bypass here is a catastrophe for the 'NetOps' mission. If you manage any client sites or have a personal web server running cPanel, drop everything and patch. This is exactly why we use immutable infrastructure where possible—to minimize the impact of control-plane failures.",
+        "importance": "cPanel is the backbone of small-to-medium web hosting. An auth bypass here is a catastrophe for the 'NetOps' mission. If you manage any client sites or have a personal web server running cPanel, drop everything and patch. This is exactly why we use immutable infrastructure where possible\u2014to minimize the impact of control-plane failures.",
         "noteworthy": "Apply the emergency cPanel update immediately. Audit all administrative logins from the last 72 hours. Check for unauthorized API tokens or SSH keys added to user accounts. If patching isn't instant, restrict access to ports 2083 and 2087 to trusted IP ranges only.",
         "link": "https://carthageelectronics.com/zero-day-threat-report-may-2026/"
       },
@@ -38,7 +103,7 @@
         "tag": "Threat Intel / APT",
         "desc": "Suspected Russian state actor APT28 is exploiting a new vulnerability chain to steal Windows NTLM credentials.",
         "summary": "Threat intelligence reports indicate that APT28 (Fancy Bear) is actively utilizing a newly discovered exploit chain to harvest NTLMv2 hashes from Windows environments. The attack begins with a specially crafted Outlook invite that forces the client to attempt authentication against a remote, attacker-controlled SMB server. Once the NTLM hash is captured, it is used for 'Pass-the-Hash' attacks to gain entry into corporate and governmental networks. This campaign appears to be targeting defense contractors and diplomatic missions in Europe.",
-        "importance": "The NTLM protocol is 30 years old and still the easiest way into a Windows environment. APT28’s continued success proves that 'Legacy Protocols + User Friction = Breach.' For the NetOps mission, this is why we disable NTLM entirely in favor of Kerberos or modern identity providers wherever possible. If you must use NTLM, ensure NTLMv1 is dead and buried.",
+        "importance": "The NTLM protocol is 30 years old and still the easiest way into a Windows environment. APT28\u2019s continued success proves that 'Legacy Protocols + User Friction = Breach.' For the NetOps mission, this is why we disable NTLM entirely in favor of Kerberos or modern identity providers wherever possible. If you must use NTLM, ensure NTLMv1 is dead and buried.",
         "noteworthy": "Disable outbound SMB (Port 445) at the perimeter for all workstations. Implement SMB Signing and LDAP Channel Binding. Monitor Windows event logs for anomalous NTLM authentication attempts from external IP addresses.",
         "link": "https://carthageelectronics.com/zero-day-threat-report-may-2026/"
       },
@@ -48,7 +113,7 @@
         "tag": "Finance / Crypto Markets",
         "desc": "Bitcoin trades at $77,064 with minor gains; market remains cautiously optimistic despite flat institutional inflows.",
         "summary": "Bitcoin (BTC) is currently trading at $77,064.15, marking a 0.4% increase over the last 24 hours. The broader market remains in a consolidation phase, with the global cryptocurrency market cap sitting at $2.65 trillion. Ethereum (ETH) has slightly dipped to $2,102.62. Analysts note that while spot ETF inflows have slowed significantly compared to Q1 2026, the retail 'support floor' around $75K appears to be resilient. Major altcoins like SOL ($85) and BNB ($658) are trading sideways as the macro environment waits for the next move from the Federal Reserve.",
-        "importance": "Stability is a trap. In the crypto world, sideways movement is usually the precursor to a major volatility event. For your lab’s digital asset tracking, $77K is the current 'comfort zone.' If it breaks, expect a fast slide to $68K. It's a good time to audit your cold storage—better to be prepared for the worst while the fees are low.",
+        "importance": "Stability is a trap. In the crypto world, sideways movement is usually the precursor to a major volatility event. For your lab\u2019s digital asset tracking, $77K is the current 'comfort zone.' If it breaks, expect a fast slide to $68K. It's a good time to audit your cold storage\u2014better to be prepared for the worst while the fees are low.",
         "noteworthy": "Watch for a BTC close above $80K to confirm a bullish breakout. Monitor the 'DXY' (Dollar Index) for any sudden surges that might pressure risk assets. Keep an eye on Solana's $80 support as it has been testing it repeatedly this week.",
         "link": "https://www.coingecko.com/"
       },
@@ -59,7 +124,7 @@
         "desc": "Leaked roadmaps for Intel's 'Celestial' GPUs suggest a serious attempt to compete in the high-end gaming and AI market.",
         "summary": "Rumors and leaked roadmaps for Intel's third-generation discrete graphics architecture, codenamed 'Celestial,' indicate a significant shift in strategy. Unlike 'Battlemage' which focused on the mainstream market, Celestial is rumored to target the high-end segment, aiming to compete directly with Nvidia's RTX 5080 and AMD's RDNA 4 equivalents. The architecture supposedly features a massive jump in Ray Tracing hardware and dedicated AI 'XMX' cores for faster inference. Initial benchmarks (unconfirmed) show a 40% performance-per-watt improvement over current-gen designs.",
         "importance": "Competition is the only thing that keeps Nvidia from charging a literal arm and a leg for silicon. If Intel can finally deliver a stable, high-end driver stack with Celestial, it changes the economics of AI/ML workstations for the lab. We might finally see 24GB+ VRAM becoming standard in the $600-800 price bracket. We need that VRAM for the local LLMs.",
-        "noteworthy": "Watch for Intel's official announcement in late 2026. Keep an eye on the 'OneAPI' software ecosystem—hardware is only half the battle. If you're planning a workstation refresh, Intel might finally be a viable option for more than just QuickSync.",
+        "noteworthy": "Watch for Intel's official announcement in late 2026. Keep an eye on the 'OneAPI' software ecosystem\u2014hardware is only half the battle. If you're planning a workstation refresh, Intel might finally be a viable option for more than just QuickSync.",
         "link": "https://www.noobfeed.com/articles/2026-gpu-launch-outlook-nvidia-amd-intel"
       },
       {
@@ -69,7 +134,7 @@
         "desc": "A remote command injection vulnerability in Totolink A8000RU routers (v7.1cu.643) has a public exploit; devices are being scanned.",
         "summary": "A vulnerability was identified in the Totolink A8000RU router, specifically in how it handles arguments for certain internal modes. This 'Command Injection' flaw allows a remote, unauthenticated attacker to execute arbitrary OS commands with root privileges. A proof-of-concept (PoC) was recently released on public repositories, and active scanning for vulnerable devices has already been detected. The vulnerability stems from a lack of input sanitization in the device's web management interface.",
         "importance": "This is 'IoT 101' failed again. Routers are the perimeter of the home; a root-level RCE is a total game-over. For the NetOps mission, this reinforces why consumer-grade hardware should NEVER be exposed to the internet, and why we prefer OpenWRT or pfSense where we actually control the update cycle. If you have an A8000RU, it's either time to patch or time for a target-practice session.",
-        "noteworthy": "Disable the 'Web Management' interface on the WAN side. Check for firmware version 7.1cu.643_b20200521 or newer. If you can't patch, replace the device—it's currently a beacon for botnets.",
+        "noteworthy": "Disable the 'Web Management' interface on the WAN side. Check for firmware version 7.1cu.643_b20200521 or newer. If you can't patch, replace the device\u2014it's currently a beacon for botnets.",
         "link": "https://app.opencve.io/"
       },
       {
@@ -78,94 +143,9 @@
         "tag": "Education / Training",
         "desc": "SANS Institute offers a 10% discount on cybersecurity training for U.S. military personnel during Military Appreciation Month.",
         "summary": "To coincide with Military Appreciation Month, the SANS Institute has announced a special 10% discount on all cybersecurity training courses for active-duty U.S. military, veterans, and their families. This discount applies to both online ('OnDemand') and in-person training events scheduled for late 2026. SANS is also highlighting its 'Vouchers' program for organizations looking to upskill their military-affiliated staff. Use code MILITARY10 at checkout.",
-        "importance": "Training is the most important 'hardware' we have. SANS courses are notoriously expensive—often costing as much as a high-end server—so any discount is significant for individual learners. For Hieu, this is a chance to pick up that advanced forensics or cloud security cert without absolutely nuking the mission budget.",
+        "importance": "Training is the most important 'hardware' we have. SANS courses are notoriously expensive\u2014often costing as much as a high-end server\u2014so any discount is significant for individual learners. For Hieu, this is a chance to pick up that advanced forensics or cloud security cert without absolutely nuking the mission budget.",
         "noteworthy": "Offer expires May 31, 2026. Valid for U.S.-based personnel and veterans. Ensure you have your military ID or verification ready through ID.me.",
         "link": "https://thehackernews.com/"
-      }
-    ]
-  },
-  "yesterday": {
-    "date": "19/05/26",
-    "items": [
-      {
-        "id": 1,
-        "title": "MiniPlasma Windows 0-Day: SYSTEM Privesc on Fully Patched Hosts",
-        "tag": "Critical Vulnerability / Windows Security",
-        "desc": "New Windows 'MiniPlasma' 0-day bypasses kernel-level stack protections to grant SYSTEM access via malformed UI rendering.",
-        "summary": "Security researchers disclosed 'MiniPlasma,' a critical zero-day vulnerability in the Windows kernel's UI rendering subsystem. The flaw allows an unprivileged user to achieve full SYSTEM privileges on fully patched Windows 11 23H2 systems. By abusing a logic-level race condition in how the kernel handles window handle allocation during desktop session transitions, an attacker can bypass modern mitigations like RET PAC (Return Address Cryptography) and Kernel Stack Protection (KSP). Active exploitation has already been observed by a suspected state-sponsored actor targeting financial institutions.",
-        "importance": "As more sophisticated mitigations (RET PAC) are rolled out, attackers are shifting to architectural logic flaws rather than simple memory corruptions. 'MiniPlasma' proves that 'hardware-enforced' security doesn't protect against logical races in the OS core. For your lab, this is a reminder why your Windows VMs must be isolated from the rest of the NetOps infrastructure to prevent lateral movement after a privilege escalation.",
-        "noteworthy": "Monitor for anomalous window handle (HWND) allocation spikes in production environments. Implement device-level isolation for administrative accounts. Watch for Microsoft's out-of-band security advisory. Use EDR queries to detect 'MiniPlasma' activity associated with specific GDI32.dll calls.",
-        "link": "https://thehackernews.com/2026/05/miniplasma-windows-0-day-enables-system.html"
-      },
-      {
-        "id": 2,
-        "title": "FortiAuthenticator Auth Bypass (CVSS 9.1) Leads Critical Patch Wave",
-        "tag": "Critical Vulnerability / Infrastructure",
-        "desc": "Fortinet, Ivanti, and n8n release critical fixes; FortiAuthenticator flaw (CVE-2026-44277) allows unauthenticated RCE.",
-        "summary": "A massive wave of security patches hit enterprise software today. Fortinet disclosed CVE-2026-44277 (CVSS 9.1) in FortiAuthenticator, enabling unauthenticated remote code execution via crafted packets. Ivanti patched CVE-2026-8043 (CVSS 9.6) in Xtraction, and n8n (popular workflow automation tool) released fixes for a critical SQL injection that could lead to full database compromise. All vulnerabilities are reported to be in the 'high-likelihood of exploitation' category as scanners for these flaws have already appeared on criminal forums.",
-        "importance": "For your home lab, the n8n fix is mandatory if you use it for automation. These tools are the 'connective tissue' of your infra; a compromise in n8n can lead to the attacker highjacking your entire automation pipeline (API keys, webhooks, SSH credentials). It reinforces the 'Security by Isolation' principle for lab services.",
-        "noteworthy": "Upgrade n8n to version 1.34.0+ immediately. Check Fortinet and Ivanti appliances for current patch levels. Audit all n8n workflows for suspicious modifications or new credentials added in the last 48 hours. Ensure your n8n instance is NOT exposed to the public internet.",
-        "link": "https://thehackernews.com/2026/05/ivanti-fortinet-sap-vmware-n8n-patch.html"
-      },
-      {
-        "id": 3,
-        "title": "INTERPOL 'Operation Ramz' Disrupts MENA Cybercrime Ring; 201 Arrested",
-        "tag": "Threat Intelligence / Law Enforcement",
-        "desc": "Joint operation by INTERPOL and Middle Eastern agencies dismantles carding and BEC networks; $25M in assets seized.",
-        "summary": "INTERPOL, in collaboration with agencies from Bahrain, Egypt, and the UAE, announced the conclusion of 'Operation Ramz.' The joint task force dismantled a sophisticated cybercrime network responsible for Business Email Compromise (BEC) and payment card fraud across the MENA region. Operation Ramz led to 201 arrests and the seizure of high-end vehicles, cash, and luxury properties valued at over $25 million. Investigators also recovered millions of stolen credit card numbers from a private C2 server.",
-        "importance": "This operation disrupts a major tactical arm of the cyber-criminal ecosystem in your regional vicinity (Asia/MENA). The focus on BEC underscores that 'Identity Theft' and 'Social Engineering' remain the primary revenue drivers for organized crime groups. It highlights the success of cross-border intelligence sharing between law enforcement and private sector security firms.",
-        "noteworthy": "Monitor for potential 'retaliatory' DDoS attacks on regional infrastructure. Review your organization's BEC defenses and employee security awareness training. The seizure of assets from this group will likely lead to a temporary vacuum in the cards-market, potentially leading to price spikes for stolen data.",
-        "link": "https://thehackernews.com/2026/05/interpol-operation-ramz-disrupts-mena.html"
-      },
-      {
-        "id": 4,
-        "title": "Anthropic Acquires Stainless to Automate SDK Generation",
-        "tag": "AI / Developer Tooling",
-        "desc": "Anthropic buys Stainless API; move signals intent to create the most seamless developer experience in the LLM market.",
-        "summary": "AI giant Anthropic has announced the acquisition of Stainless, a startup focused on automating the generation of high-quality, type-safe SDKs from API specifications. The acquisition is a strategic play to improve the developer experience for the Claude API. By integrating Stainless's automation into their pipeline, Anthropic aims to provide 'instant' SDK updates across multiple languages (Python, TS, Go, etc.) as soon as new model capabilities or API features are released.",
-        "importance": "This is a direct indicator of where the 'AI Wars' are moving: developer ergonomics. As Hieu builds projects like 'cyberdash' and 'netops', the speed of SDK maturity is a bottleneck. Anthropic's move suggests they want to be the 'dev-first' alternative to OpenAI, prioritizing seamless integration over just model benchmarks.",
-        "noteworthy": "Watch for the next version of the Claude Python SDK for 'Stainless' improvements (better types, higher performance). Consider utilizing similar spec-to-SDK tools for your own 'netops' internal APIs to maintain consistency across services. It’s a win for those who value 'DevX'.",
-        "link": "https://www.anthropic.com/news/anthropic-acquires-stainless"
-      },
-      {
-        "id": 5,
-        "title": "Israeli Forces Board Gaza-Bound Flotilla; Peace Progress Hits 'Deadlock'",
-        "tag": "Geopolitics / Conflict",
-        "desc": "IDF boards activist ship near Cyprus; Trump warns of 'ticking clock' as regional peace progress stalls.",
-        "summary": "Israeli naval forces have reportedly boarded a Gaza-bound activist flotilla in international waters near Cyprus. The incident has triggered a diplomative crisis, with activists claiming the boarding was illegal under maritime law while Israel maintains it was necessary to prevent smuggling. Simultaneously, former President Donald Trump warned that the 'clock is ticking' for a regional peace deal, signaling a return to more aggressive posture as negotiations reach a total deadlock.",
-        "importance": "The maritime incident near Cyprus escalates the 'Shadow War' in the Mediterranean. As we've seen, kinetic escalations in this region lead to immediate cyber-offensive surges from regional players. For your lab, this is a flag for increased 'patriotic' hacking activity targeting regional infrastructure.",
-        "noteworthy": "Monitor maritime security feeds for impacts on shipping routes. Expect increased network scanning activity from regional IP blocks. Ensure your lab's firewall is hardened against state-proxy DDoS vectors often deployed during these 'peak' tension moments.",
-        "link": "https://www.bbc.com/news/articles/c142vz80553o"
-      },
-      {
-        "id": 6,
-        "title": "Regex Chess: A 2-ply Minimax Engine in 84,688 Regular Expressions",
-        "tag": "Technical / Software Hacking",
-        "desc": "Hacker creates functional chess engine using only regular expressions; a record in 'computational masochism'.",
-        "summary": "In a display of extreme technical creativity, researcher Nicholas Carlini has built a 2-ply minimax chess engine that runs entirely within the confines of a single regular expression (or rather, 84,688 of them). The engine can analyze the board, evaluate moves, and respond at a depth of 2—using nothing but regex engines found in standard browsers or Python. The project highlights the 'Turing-complete' nature of modern regex engines while being a hilarious example of software engineering 'because we can.'",
-        "importance": "This story is for the 'Soul' of the lab. It reinforces that the tools we use (regex) are often far more powerful—and dangerous—than we realize. For your 'netops' project, it’s a warning about the computational cost of complex regexes: if someone can build a chess engine in 84k regexes, they can certainly crash your WAF with a single poorly-formed string.",
-        "noteworthy": "Check the 'Regex Chess' repo to see how state is managed in a regex match. Audit your own projects for 'Regex DoS' (ReDoS) vulnerabilities. Remember: just because a tool *can* do something, doesn't mean it *should*—unless it's for the glory of HN.",
-        "link": "https://nicholas.carlini.com/writing/2025/regex-chess.html"
-      },
-      {
-        "id": 7,
-        "title": "Crypto Slump: BTC Sinks to $76.6K as ETF Inflows Dry Up",
-        "tag": "Finance / Crypto Markets",
-        "desc": "Bitcoin slides to $76,697; Solana drops to $84.7 as market sentiment shifts to 'Bearish' on macro jitters.",
-        "summary": "Bitcoin (BTC) has recorded its lowest price point in two weeks, trading at $76,697 as institutional spot ETF inflows have reportedly 'hit a wall.' The decline has dragged the entire market lower, with Solana (SOL) dropping over 5% to $84.72 and Ethereum (ETH) struggling at $2,125. Analysts attribute the slump to a combination of profit-taking and fears over upcoming US inflation data, indicating that the 'post-halving' rally is facing its first significant structural test.",
-        "importance": "The 'Summer Lull' is setting in early. The decoupling we saw earlier in the month is reversing as the whole market moves together in a risk-off rotation. For your lab's digital asset tracker, this is a 'Holding Pattern' alert—the $75K floor is the next critical battleground for bulls.",
-        "noteworthy": "Watch for a BTC bounce at the $75K psychological support. Monitor the 'Crypto Fear & Greed' index as it approaches 'Neutral.' If you are dollar-cost-averaging into SOL, $80 is the next significant support cluster to observe.",
-        "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
-      },
-      {
-        "id": 8,
-        "title": "Anyone on the Internet Can Ring Your Doorbell: IoT Security Fail",
-        "tag": "IoT / Privacy Security",
-        "desc": "Popular smart doorbell vendor found exposing local trigger APIs to the public web via misconfigured cloud tunnels.",
-        "summary": "A security audit of a top-selling smart doorbell brand revealed that millions of devices are vulnerable to a simple cloud-based auth bypass. By accessing a hidden endpoint in the vendor's API, anyone on the internet can remotely trigger the doorbell's chime, speaker, and even some smart-lock integrations. The vulnerability stemmed from the vendor's 'Cloud Tunneling' feature, which was intended to simplify setup but inadvertently exposed internal, unauthenticated admin APIs to the open web.",
-        "importance": "IoT is the 'Security Trash Can' of the modern home. For your lab, this is why 'Cloud Tunnels' that bypass your firewall (like the ones built into many smart devices) are a secondary attack vector. If a device can bypass your NAT without you seeing it, it's a hole in your perimeter.",
-        "noteworthy": "Isolate all IoT devices (doorbells, cameras, bulbs) on a dedicated VLAN with strict egress rules. Use Pi-hole to block vendor 'phone home' domains that aren't strictly necessary for functionality. Avoid using proprietary 'Cloud Access' features if you can achieve the same via a secure VPN (Tailscale/Wireguard).",
-        "link": "https://www.abgeo.dev/blog/anyone-can-ring-your-doorbell"
       }
     ]
   }
