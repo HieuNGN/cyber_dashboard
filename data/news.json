@@ -1,9 +1,104 @@
 {
   "today": {
-    "date": "26/05/26",
+    "date": "27/05/26",
     "items": [
       {
         "id": 1,
+        "title": "Crypto Market Catastrophe: BTC Free-Falls $7K in 24 Hours, ETF Inflows Collapse",
+        "tag": "Financial / Crypto Markets",
+        "desc": "Bitcoin crashes to $73,040 (-3.3%); ETH/SOL also tumble as 'U.S. Trade War 2.0' signals spook institutional investors.",
+        "summary": "The crypto market just experienced its worst 24-hour period since the FTX collapse. Bitcoin (BTC) has dropped nearly 7% from $78K to $73,040, Ethereum (ETH) is down 4.4% to $1,976, and Solana (SOL) has fallen to $80.35 (-3.7%). Analysts are attributing the crash to a resurgence of 'Trade War 2.0' fears after new U.S. tariffs on Asian tech imports were signaled by the White House. Spot ETF inflows have reportedly collapsed, with over $400M in outflows recorded in the last trading session as institutional investors rush to reduce exposure to high-beta assets.",
+        "importance": "This is a macro-driven 'flight to safety' event. The 'Trade War 2.0' narrative is particularly bad for your hardware procurement (GPU lead times, SSD pricing) because Asian tech imports are the direct target. The $70K level for BTC is now the 'line in the sand'\u2014a break below that historically triggers massive cascading liquidations.",
+        "noteworthy": "Monitor the $70K support for BTC. If you're buying digital assets, wait for the 'Dead Cat Bounce' after this level of panic selling. Lock in prices for any planned hardware upgrades before the trade war tariffs kick in and raise SSD/CPU costs. Diversify any short-term liquidity into stablecoins if you fear further macro shocks.",
+        "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
+      },
+      {
+        "id": 2,
+        "title": "Malicious npm Package Exfiltrates Claude AI User Data via GitHub Tokens",
+        "tag": "Critical Vulnerability / AI Supply Chain",
+        "desc": "New npm malware targets Claude AI desktop users; harvests GitHub tokens and 'thinking' data from project directories.",
+        "summary": "A malicious npm package, masquerading as a dependency for a popular coding tool, has been discovered stealing sensitive data from developers' machines. The package specifically targets users of the Claude AI desktop application, exfiltrating conversation history, project files, and, critically, GitHub Personal Access Tokens (PATs) via a covert channel to GitHub Gists. Researchers believe the campaign is linked to a state-sponsored group targeting AI development infrastructure.",
+        "importance": "This is the 'juiciest' intelligence for today. As an active user of Claude Code (and now likely looking at DeepSeek Reasonix), your workflow is a direct target. A PAT theft here is a 'master key' to your entire software lifecycle. This is why AI agents need the same level of credential hygiene as human developers.",
+        "noteworthy": "Rotate all GitHub PATs immediately if you installed any new npm packages in the last week. Verify your Claude AI desktop app's file access permissions. Implement a 'Principle of Least Privilege' for GitHub tokens\u2014use fine-grained PATs with expiration dates instead of global tokens. Run a malware scan on your node_modules folder.",
+        "link": "https://thehackernews.com/2026/05/malicious-npm-package-stole-files-from.html"
+      },
+      {
+        "id": 3,
+        "title": "Gitea Critical Bug Exposes Private Container Images Without Auth",
+        "tag": "Critical Vulnerability / DevOps Security",
+        "desc": "Unpatched Gitea flaw (pre-1.23.x) allows anonymous access to private Docker/OCI container registries hosted on the platform.",
+        "summary": "A critical vulnerability in the self-hosted Git service Gitea (affecting versions before 1.23.x) has been disclosed. The flaw allows an unauthenticated remote attacker to bypass authentication and pull any private container images (Docker/OCI) stored in Gitea's registry. This turns Gitea instances into public data leaks for proprietary application containers, similar to the risks seen in past Gitlab registry exposures.",
+        "importance": "For your 'netops' project and 'cyberdash' deployments, if you use Gitea as a self-hosted Git/Container registry, this is a massive breach vector. Private internal services, API keys, and proprietary configurations are all at risk of exposure if your Gitea isn't patched immediately.",
+        "noteworthy": "Update Gitea to version 1.23.0+ immediately. Audit your container registry access logs for any unauthorized pulls since the flaw was introduced. If you cannot patch, disable the container registry feature or move sensitive images to a dedicated, isolated registry. Rotate all secrets that were present in the container images.",
+        "link": "https://thehackernews.com/2026/05/gitea-vulnerability-exposes-private.html"
+      },
+      {
+        "id": 4,
+        "title": "GlassWorm Malware Takedown: Developer Supply Chain War Heats Up",
+        "tag": "Threat Intelligence / Law Enforcement",
+        "desc": "Joint operation between Google, GitHub, and CISA dismantles the infrastructure behind the 'GlassWorm' malware campaign.",
+        "summary": "A coordinated takedown operation led by Google, GitHub, and CISA has disrupted the infrastructure of the 'GlassWorm' supply chain attack. The malware, which targeted AI developers via fake 'open source' Python and JavaScript packages, had successfully infected hundreds of developer environments before the takedown. The group behind GlassWorm was using it to harvest AI model weights and proprietary training datasets from compromised dev workstations.",
+        "importance": "This is a victory for the 'Good Guys,' but a stark reminder of the scale of the AI supply chain war. The fact that they were specifically targeting 'AI model weights' means that state actors are now directly targeting the 'thought processes' of organizations. Your local Ollama models and training data are now strategic assets.",
+        "noteworthy": "Check your pip/npm logs for any packages named 'open-source-ai-helpers' or similar. Rotate any credentials used on infected machines. Monitor your AI training pipelines for unauthorized data exfiltration. The GlassWorm takedown is temporary\u2014expect copycat campaigns immediately.",
+        "link": "https://thehackernews.com/2026/05/glassworm-malware-takedown-disrupts.html"
+      },
+      {
+        "id": 5,
+        "title": "MuddyWater APT Returns: DLL Side-Loading Targets 9 Countries",
+        "tag": "Threat Intel / Nation-State Operations",
+        "desc": "Iranian MuddyWater APT group resurfaces with new DLL side-loading toolkit targeting gov/military in Middle East and Asia.",
+        "summary": "The Iranian-linked MuddyWater APT group (also known as Seedworm) has launched a new campaign using a sophisticated DLL side-loading technique to target government and military entities across 9 countries in the Middle East and Asia. The group is leveraging a custom backdoor named 'MuddyC3' that uses legitimate, signed executables to load malicious DLLs, allowing it to bypass endpoint security controls that only monitor executable files.",
+        "importance": "MuddyWater's return signals that Iranian state-sponsored groups are active and evolving. As you scale your lab toward networking and security monitoring, understanding APT TTPs (Tactics, Techniques, and Procedures) like DLL side-loading is critical for building effective detection rules. Their focus on the 9-country region is a direct threat to regional stability.",
+        "noteworthy": "Deploy YARA rules for 'MuddyC3' indicators of compromise. Monitor for PowerShell execution from unexpected locations or with unusual parent processes. Implement strict DLL signing policies to prevent side-loading. Review network logs for connections to known MuddyWater C2 domains in the Middle East.",
+        "link": "https://thehackernews.com/2026/05/muddywater-uses-dll-side-loading-in.html"
+      },
+      {
+        "id": 6,
+        "title": "YouTube Mandates AI Content Labels for Creators Worldwide",
+        "tag": "AI / Content Policy",
+        "desc": "YouTube rolls out mandatory 'AI-generated' labels for all video uploads; content without labels facing de-monetization.",
+        "summary": "YouTube has announced the global enforcement of its AI content labeling policy. Creators must now explicitly tag any video containing 'significantly altered or synthetically generated' content. Failure to comply results in automatic content removal or de-monetization. The platform is also rolling out a new 'AI-Generated Content' filter that allows users to search for purely synthetic media, a move that is reshaping the creator economy.",
+        "importance": "As AI-generated content proliferates, the 'Authenticity Economy' is being formalized. For your lab, this signals that AI-content watermarking and detection will become a core security feature. Tools that can verify the provenance of media (like your lab's screenshots or data visualizations) will be critical for maintaining trust.",
+        "noteworthy": "Implement a 'Digital Provenance' pipeline for any AI-generated content from your lab. Use the new C2PA (Coalition for Content Provenance and Authenticity) standards to add metadata to your media. Monitor the 'AI-Generated Content' filter for any unauthorized use of your likeness or lab data.",
+        "link": "https://blog.youtube/news-and-events/improving-ai-labels-viewers-creators/"
+      },
+      {
+        "id": 7,
+        "title": "Anthropic & OpenAI: Product-Market Fit Achieved in 'Agentic' Era",
+        "tag": "AI / Industry Analysis",
+        "desc": "Industry analysts confirm both Anthropic and OpenAI have achieved massive 'Product-Market Fit' as AI agents hit mainstream adoption.",
+        "summary": "Simon Willison's analysis confirms that both Anthropic (Claude) and OpenAI (GPT-4o) have achieved true product-market fit in the 'Agentic' era. The shift from simple chat to complex multi-step task execution (coding, research, deployment) has created a new category of AI-native software. OpenAI is focusing on broad platform integration, while Anthropic is leading in developer ergonomics (post-Stainless acquisition) and safety-focused features.",
+        "importance": "As Hieu builds 'netops' and 'cyberdash,' this confirms that 'Agentic AI' is the defining software category of 2026. The 'Agentic' paradigm means your software stack must be designed to handle LLM-driven orchestration natively. The winners will be those who build the best tools for AI agents to interact with, not just for humans.",
+        "noteworthy": "Design your 'netops' APIs to be 'AI-friendly' (structured output, clear error messages). Consider integrating with Anthropic's Claude API for complex multi-step tasks in your lab. Monitor the 'Agentic' market for new frameworks like LangChain or AutoGPT that reduce the friction of building agentic systems.",
+        "link": "https://simonwillison.net/2026/May/27/product-market-fit/"
+      },
+      {
+        "id": 8,
+        "title": "Grandoreiro & BTMOB: Banking Trojans Resurge on Windows and Android",
+        "tag": "Malware / Financial Fraud",
+        "desc": "New wave of banking trojans 'Grandoreiro' and 'BTMOB' detected; target 2FA tokens and mobile banking apps.",
+        "summary": "A resurgence of sophisticated banking trojans 'Grandoreiro' (Windows) and 'BTMOB' (Android) has been detected in a coordinated campaign targeting financial institutions across Latin America and Europe. Grandoreiro uses a novel 'in-browser' injection technique that modifies web banking sessions in real-time, while BTMOB overlays legitimate banking apps to steal 2FA tokens. The campaign is linked to a financially-motivated threat group that has been operating since 2016.",
+        "importance": "Banking trojans remain the most profitable tool for financially-motivated cybercriminals. For your lab's security posture, this is a reminder that 'Defense-in-Depth' for financial transactions is essential. No single 2FA method is bulletproof if the mobile OS itself is compromised.",
+        "noteworthy": "If you manage any financial systems, deploy behavioral EDR rules for 'Grandoreiro' process injection patterns. On Android, avoid sideloading banking apps and use hardware-backed security keys for high-value transactions. Monitor for unusual overlay permissions in mobile banking apps.",
+        "link": "https://thehackernews.com/2026/05/grandoreiro-malware-and-btmob-rat.html"
+      },
+      {
+        "id": 9,
+        "title": "Mesh Networking: Meshtastic and the Future of Decentralized Communication",
+        "tag": "Hardware / Networking",
+        "desc": "New community focus on Meshtastic and Reticulum for off-grid, encrypted peer-to-peer networking independent of ISP infrastructure.",
+        "summary": "A growing community of hackers and network engineers is gravitating toward Meshtastic and Reticulum as the future of resilient, decentralized communication. Meshtastic uses cheap LoRa radios to create mesh networks that operate completely independently of the internet or cellular infrastructure. Reticulum provides a cryptographic, peer-to-peer communication layer designed for long-haul radio and wire-based networks. Together, they represent a 'Swiss Army Knife' for building resilient networks in contested environments.",
+        "importance": "As a Network Engineer, this is the 'Soul' of the profession: building networks that survive the collapse of existing infrastructure. For your home lab, Meshtastic nodes (~$30 each) are an excellent project for learning about RF propagation, routing protocols, and cryptographic key management in a real-world, geographically distributed test environment.",
+        "noteworthy": "Start with a Meshtastic device (like the LILYGO T-Beam) and set up a local test mesh with your lab. Explore the 'Reticulum' protocol for building encrypted tunnels over non-IP networks. This is also a critical skill for 'War Drums' scenarios where internet infrastructure is the first casualty of conflict.",
+        "link": "https://www.jonaharagon.com/posts/im-getting-into-mesh-networks-meshtastic-meshcore-and-reticulum/"
+      }
+    ]
+  },
+  "yesterday": {
+    "date": "26/05/26",
+    "items": [
+      {
+        "id": 10,
         "title": "LiteSpeed cPanel Plugin Root RCE Exploited in the Wild",
         "tag": "Critical Vulnerability / Web Hosting",
         "desc": "CVE-2026-48172 allows remote authenticated users to execute scripts with root privileges via terminal plugin.",
@@ -13,7 +108,7 @@
         "link": "https://thehackernews.com/2026/05/litespeed-cpanel-plugin-cve-2026-48172.html"
       },
       {
-        "id": 2,
+        "id": 11,
         "title": "npm Hardens Registry: 2FA-Gated Publishing Now Mandatory",
         "tag": "Cyber Security / Supply Chain",
         "desc": "npm implements mandatory 2FA for all publishers; introduces 'Package Install Controls' to block malicious scripts.",
@@ -23,7 +118,7 @@
         "link": "https://thehackernews.com/2026/05/npm-adds-2fa-gated-publishing.html"
       },
       {
-        "id": 3,
+        "id": 12,
         "title": "Packagist Attack: 8 PHP Packages Poisoned with GitHub-Hosted Malware",
         "tag": "Malware / Software Supply Chain",
         "desc": "Malicious versions of popular PHP utility packages exfiltrate secrets to C2 servers hosted on GitHub Gists.",
@@ -33,7 +128,7 @@
         "link": "https://thehackernews.com/2026/05/packagist-supply-chain-attack-infects-8.html"
       },
       {
-        "id": 4,
+        "id": 13,
         "title": "Memory Costs Now Two-Thirds of Total AI Chip Manufacturing",
         "tag": "Hardware / AI Infrastructure",
         "desc": "Analysis of H200/B200 chips reveals HBM (High Bandwidth Memory) has become the dominant cost factor.",
@@ -43,7 +138,7 @@
         "link": "https://news.ycombinator.com/item?id=48214821"
       },
       {
-        "id": 5,
+        "id": 14,
         "title": "DeepSeek Reasonix: Native Coding Agent with 10x Cost Efficiency",
         "tag": "AI / Developer Tooling",
         "desc": "DeepSeek releases 'Reasonix', a reasoning-first coding model with high caching performance for terminal-based agents.",
@@ -53,7 +148,7 @@
         "link": "https://github.com/deepseek-ai/Reasonix"
       },
       {
-        "id": 6,
+        "id": 15,
         "title": "Crypto Sentiment: BTC Stabilizes at $77K; ETH Trends Down on Gas Lows",
         "tag": "Finance / Crypto Markets",
         "desc": "Bitcoin holds $77,015; Ethereum lags at $2,093 as L2 volume shifts fees away from mainnet.",
@@ -61,91 +156,6 @@
         "importance": "The market is undergoing a structural transition. 'Mainnet Ethereum' is slowly becoming a settlement layer rather than a playground, which is reflected in its trailing price. For your digital asset dashboard, the metric to watch is no longer just 'Mainnet TVL' but the cumulative volume across the L2 stack where the actual utility is sequestered.",
         "noteworthy": "Monitor the $2,000 support level for ETH; a break below could trigger a liquidation cascade. Track L2 fee-efficiency metrics as a leading indicator of network value. For BTC, $80K remains the target for a confirmed bull-market resumption.",
         "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
-      }
-    ]
-  },
-  "yesterday": {
-    "date": "25/05/26",
-    "items": [
-      {
-        "id": 1,
-        "title": "cPanel Auth Bypass: 1.5 Million Servers in the Crosshairs",
-        "tag": "Critical Vulnerability / Web Hosting",
-        "desc": "A critical authentication bypass in cPanel allows unauthenticated attackers to gain administrative access; mass exploitation reported.",
-        "summary": "Security researchers have identified a critical vulnerability in the cPanel management interface that allows for a complete authentication bypass. This flaw is reportedly being exploited at scale, with over 1.5 million servers currently exposed to the open web. The vulnerability allows an attacker to manipulate session tokens to bypass standard login prompts, granting them full control over hosting environments, databases, and mail servers. Affected versions include all stable releases prior to the emergency patch issued this morning.",
-        "importance": "cPanel is the backbone of small-to-medium web hosting. An auth bypass here is a catastrophe for the 'NetOps' mission. If you manage any client sites or have a personal web server running cPanel, drop everything and patch. This is exactly why we use immutable infrastructure where possible\u2014to minimize the impact of control-plane failures.",
-        "noteworthy": "Apply the emergency cPanel update immediately. Audit all administrative logins from the last 72 hours. Check for unauthorized API tokens or SSH keys added to user accounts. If patching isn't instant, restrict access to ports 2083 and 2087 to trusted IP ranges only.",
-        "link": "https://carthageelectronics.com/zero-day-threat-report-may-2026/"
-      },
-      {
-        "id": 2,
-        "title": "npm Staged Publishing: GitHub Mandates 2FA for All Releases",
-        "tag": "Supply Chain Security / DevSecOps",
-        "desc": "GitHub rolls out 'Staged Publishing' for npm, requiring human 2FA approval before any package becomes installable.",
-        "summary": "To combat the relentless tide of supply chain attacks, GitHub has introduced 'Staged Publishing' for the npm registry. This feature mandates that a human maintainer pass a two-factor authentication (2FA) challenge before a package version is promoted to the public registry. This ensures 'proof of presence' even for automated CI/CD workflows. Packages are first uploaded to a secure stage queue and remain hidden until the second factor is provided, preventing rogue CI/CD pipelines from pushing malicious updates.",
-        "importance": "This is a major win for the 'Mission Security' parameter. Automated pipelines are convenient, but they are also a single point of failure. By forcing a 'Man-in-the-Middle' (the good kind) via 2FA, the barrier for supply chain hijackers just got significantly higher. It's a reminder that even in an automated world, human oversight is the final line of defense.",
-        "noteworthy": "Enable 'Staged Publishing' for all critical internal dependencies. Update your deployment documentation to include the manual 2FA step. Ensure all maintainers have hardware-backed 2FA (Yubikeys) for the best security posture.",
-        "link": "https://thehackernews.com/2026/05/npm-adds-2fa-gated-publishing.html"
-      },
-      {
-        "id": 3,
-        "title": "Packagist Malware: Linux Binaries Hidden in PHP Hooks",
-        "tag": "Malware / Supply Chain",
-        "desc": "Eight popular Packagist packages found infected with Linux malware using cross-ecosystem package.json hooks.",
-        "summary": "Security auditors discovered a 'coordinated' supply chain attack affecting eight packages on Packagist. The attackers used a clever 'cross-ecosystem' technique: while the packages are for PHP (Composer), the malicious code was hidden in a 'package.json' file. This targeted projects that bundle JavaScript build tools alongside PHP code. The script triggers a post-install hook to download and execute a malicious Linux binary from a GitHub Releases URL, bypassing scanners that only look for PHP-specific malicious patterns.",
-        "importance": "Attackers are getting creative. They are betting on developers only checking the metadata for the 'primary' language of a package. This highlights the danger of 'polyglot' projects. For your lab experiments, this is a clear signal to run your build/install processes in isolated, ephemeral containers (like Docker or Podman) to prevent host-level compromise during a 'simple' npm or composer install.",
-        "noteworthy": "Audit all projects that mix Composer and npm dependencies. Use 'Socket' or similar tools to scan for suspicious lifecycle hooks. Move your build pipelines to isolated environments that lack persistent network access unless explicitly gated.",
-        "link": "https://thehackernews.com/2026/05/packagist-supply-chain-attack-infects.html"
-      },
-      {
-        "id": 4,
-        "title": "Russian APT28 Deploys New NTLM Credential Theft Chain",
-        "tag": "Threat Intel / APT",
-        "desc": "Suspected Russian state actor APT28 is exploiting a new vulnerability chain to steal Windows NTLM credentials.",
-        "summary": "Threat intelligence reports indicate that APT28 (Fancy Bear) is actively utilizing a newly discovered exploit chain to harvest NTLMv2 hashes from Windows environments. The attack begins with a specially crafted Outlook invite that forces the client to attempt authentication against a remote, attacker-controlled SMB server. Once the NTLM hash is captured, it is used for 'Pass-the-Hash' attacks to gain entry into corporate and governmental networks. This campaign appears to be targeting defense contractors and diplomatic missions in Europe.",
-        "importance": "The NTLM protocol is 30 years old and still the easiest way into a Windows environment. APT28\u2019s continued success proves that 'Legacy Protocols + User Friction = Breach.' For the NetOps mission, this is why we disable NTLM entirely in favor of Kerberos or modern identity providers wherever possible. If you must use NTLM, ensure NTLMv1 is dead and buried.",
-        "noteworthy": "Disable outbound SMB (Port 445) at the perimeter for all workstations. Implement SMB Signing and LDAP Channel Binding. Monitor Windows event logs for anomalous NTLM authentication attempts from external IP addresses.",
-        "link": "https://carthageelectronics.com/zero-day-threat-report-may-2026/"
-      },
-      {
-        "id": 5,
-        "title": "Crypto Macro: BTC Holding $77K Support Amid ETF Lull",
-        "tag": "Finance / Crypto Markets",
-        "desc": "Bitcoin trades at $77,064 with minor gains; market remains cautiously optimistic despite flat institutional inflows.",
-        "summary": "Bitcoin (BTC) is currently trading at $77,064.15, marking a 0.4% increase over the last 24 hours. The broader market remains in a consolidation phase, with the global cryptocurrency market cap sitting at $2.65 trillion. Ethereum (ETH) has slightly dipped to $2,102.62. Analysts note that while spot ETF inflows have slowed significantly compared to Q1 2026, the retail 'support floor' around $75K appears to be resilient. Major altcoins like SOL ($85) and BNB ($658) are trading sideways as the macro environment waits for the next move from the Federal Reserve.",
-        "importance": "Stability is a trap. In the crypto world, sideways movement is usually the precursor to a major volatility event. For your lab\u2019s digital asset tracking, $77K is the current 'comfort zone.' If it breaks, expect a fast slide to $68K. It's a good time to audit your cold storage\u2014better to be prepared for the worst while the fees are low.",
-        "noteworthy": "Watch for a BTC close above $80K to confirm a bullish breakout. Monitor the 'DXY' (Dollar Index) for any sudden surges that might pressure risk assets. Keep an eye on Solana's $80 support as it has been testing it repeatedly this week.",
-        "link": "https://www.coingecko.com/"
-      },
-      {
-        "id": 6,
-        "title": "Intel 'Celestial' GPUs: A High-End Gambit for ARC 3rd Gen",
-        "tag": "Hardware / GPU News",
-        "desc": "Leaked roadmaps for Intel's 'Celestial' GPUs suggest a serious attempt to compete in the high-end gaming and AI market.",
-        "summary": "Rumors and leaked roadmaps for Intel's third-generation discrete graphics architecture, codenamed 'Celestial,' indicate a significant shift in strategy. Unlike 'Battlemage' which focused on the mainstream market, Celestial is rumored to target the high-end segment, aiming to compete directly with Nvidia's RTX 5080 and AMD's RDNA 4 equivalents. The architecture supposedly features a massive jump in Ray Tracing hardware and dedicated AI 'XMX' cores for faster inference. Initial benchmarks (unconfirmed) show a 40% performance-per-watt improvement over current-gen designs.",
-        "importance": "Competition is the only thing that keeps Nvidia from charging a literal arm and a leg for silicon. If Intel can finally deliver a stable, high-end driver stack with Celestial, it changes the economics of AI/ML workstations for the lab. We might finally see 24GB+ VRAM becoming standard in the $600-800 price bracket. We need that VRAM for the local LLMs.",
-        "noteworthy": "Watch for Intel's official announcement in late 2026. Keep an eye on the 'OneAPI' software ecosystem\u2014hardware is only half the battle. If you're planning a workstation refresh, Intel might finally be a viable option for more than just QuickSync.",
-        "link": "https://www.noobfeed.com/articles/2026-gpu-launch-outlook-nvidia-amd-intel"
-      },
-      {
-        "id": 7,
-        "title": "Totolink A8000RU RCE: Public Exploit for Router Flaw",
-        "tag": "Vulnerability / IoT",
-        "desc": "A remote command injection vulnerability in Totolink A8000RU routers (v7.1cu.643) has a public exploit; devices are being scanned.",
-        "summary": "A vulnerability was identified in the Totolink A8000RU router, specifically in how it handles arguments for certain internal modes. This 'Command Injection' flaw allows a remote, unauthenticated attacker to execute arbitrary OS commands with root privileges. A proof-of-concept (PoC) was recently released on public repositories, and active scanning for vulnerable devices has already been detected. The vulnerability stems from a lack of input sanitization in the device's web management interface.",
-        "importance": "This is 'IoT 101' failed again. Routers are the perimeter of the home; a root-level RCE is a total game-over. For the NetOps mission, this reinforces why consumer-grade hardware should NEVER be exposed to the internet, and why we prefer OpenWRT or pfSense where we actually control the update cycle. If you have an A8000RU, it's either time to patch or time for a target-practice session.",
-        "noteworthy": "Disable the 'Web Management' interface on the WAN side. Check for firmware version 7.1cu.643_b20200521 or newer. If you can't patch, replace the device\u2014it's currently a beacon for botnets.",
-        "link": "https://app.opencve.io/"
-      },
-      {
-        "id": 8,
-        "title": "SANS Military Appreciation: Training Discounts for May 2026",
-        "tag": "Education / Training",
-        "desc": "SANS Institute offers a 10% discount on cybersecurity training for U.S. military personnel during Military Appreciation Month.",
-        "summary": "To coincide with Military Appreciation Month, the SANS Institute has announced a special 10% discount on all cybersecurity training courses for active-duty U.S. military, veterans, and their families. This discount applies to both online ('OnDemand') and in-person training events scheduled for late 2026. SANS is also highlighting its 'Vouchers' program for organizations looking to upskill their military-affiliated staff. Use code MILITARY10 at checkout.",
-        "importance": "Training is the most important 'hardware' we have. SANS courses are notoriously expensive\u2014often costing as much as a high-end server\u2014so any discount is significant for individual learners. For Hieu, this is a chance to pick up that advanced forensics or cloud security cert without absolutely nuking the mission budget.",
-        "noteworthy": "Offer expires May 31, 2026. Valid for U.S.-based personnel and veterans. Ensure you have your military ID or verification ready through ID.me.",
-        "link": "https://thehackernews.com/"
       }
     ]
   }
