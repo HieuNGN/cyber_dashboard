@@ -1,9 +1,94 @@
 {
   "today": {
-    "date": "28/05/26",
+    "date": "01/06/26",
     "items": [
       {
         "id": 1,
+        "title": "PAN-OS GlobalProtect Auth Bypass (CVE-2026-0257): Active Exploitation",
+        "tag": "Critical Vulnerability / Network Security",
+        "desc": "Palo Alto PAN-OS GlobalProtect gateway flaw allows unauthenticated access; under active exploitation.",
+        "summary": "CVE-2026-0257 in Palo Alto Networks PAN-OS GlobalProtect gateway allows remote attackers to bypass authentication and access internal networks. The flaw affects multiple PAN-OS versions and is being actively exploited in the wild, targeting enterprise VPN infrastructure globally.",
+        "importance": "PAN-OS GlobalProtect is a primary enterprise VPN for remote access. A bypass here means anyone on the internet can walk into your network perimeter.",
+        "noteworthy": "Patch PAN-OS to 10.2.14-h3/11.1.6/12.1.3. Disable GlobalProtect if not strictly required. Audit VPN logs for anomalous auth patterns.",
+        "link": "https://thehackernews.com/2026/05/pan-os-globalprotect-authentication.html"
+      },
+      {
+        "id": 2,
+        "title": "Dutch Botnet Takedown: 17M Infected Devices Neutralized",
+        "tag": "Cybercrime / Law Enforcement",
+        "desc": "Authorities dismantled a massive IoT botnet; highlights the scale of compromised consumer hardware.",
+        "summary": "Dutch police and international partners have dismantled a botnet responsible for compromising 17 million devices globally. The botnet was primarily used for DDoS attacks and credential stuffing.",
+        "importance": "17M devices is a wake-up call. Your IoT VLAN isolation isn't paranoia\u2014it's basic hygiene.",
+        "noteworthy": "Check your Pi-hole and router for unusual outbound traffic. Rotate all credentials on devices that haven't been patched in 6+ months.",
+        "link": "https://thehackernews.com/2026/05/dutch-authorities-dismantle-botnet.html"
+      },
+      {
+        "id": 3,
+        "title": "ChatGPhish: ChatGPT Web Summaries Weaponized for Phishing",
+        "tag": "Vulnerability / AI Security",
+        "desc": "New attack uses LLM web summarization as a phishing vector; tricks users into visiting malicious links.",
+        "summary": "Researchers found that ChatGPT's web content summarization feature can be manipulated to display fake URLs. Attackers embed malicious links in web pages that, when summarized, appear legitimate.",
+        "importance": "LLMs are now a phishing delivery mechanism. As you integrate AI into workflows, the 'trust the AI output' assumption is a liability.",
+        "noteworthy": "Never click URLs from LLM-summarized content without verifying. Use Pali's URL preview before trusting AI-generated links.",
+        "link": "https://thehackernews.com/2026/05/chatgphish-vulnerability-turns-chatgpt.html"
+      },
+      {
+        "id": 4,
+        "title": "LLM Agents Used for Post-Exploitation After Marimo RCE",
+        "tag": "Threat Intel / AI-Powered Attacks",
+        "desc": "Attackers chain Marimo CVE-2026-39987 RCE with autonomous LLM agents for post-exploitation.",
+        "summary": "A new attack chain uses the Marimo CVE-2026-39987 RCE exploit to gain initial access, then deploys an LLM agent to autonomously search for valuable files, API keys, and credentials on the compromised system.",
+        "importance": "AI is now being used OFFENSIVELY. Attackers are automating post-exploitation with AI agents. The asymmetry is growing.",
+        "noteworthy": "Patch Marimo immediately. Monitor for anomalous LLM API calls from internal hosts. Use network egress filtering to prevent unauthorized AI API usage.",
+        "link": "https://thehackernews.com/2026/05/attackers-use-llm-agent-for-post.html"
+      },
+      {
+        "id": 5,
+        "title": "Kimsuky Deploys HTTPSpy, Expands with HelloDoor & VS Code Tunnels",
+        "tag": "Threat Intel / Nation-State APT",
+        "desc": "North Korean Kimsuky APT adds new tools; uses VS Code Tunnels as a covert C2 channel.",
+        "summary": "Kimsuky has introduced HTTPSpy (a custom backdoor) and is leveraging VS Code's remote tunnels feature as a novel C2 channel that bypasses traditional network monitoring.",
+        "importance": "VS Code Tunnels is a new C2 vector. It's inside your allowed software list. The 'living off the land' playbook is evolving.",
+        "noteworthy": "Disable VS Code's remote tunnel feature in enterprise environments. Audit VS Code extensions. Block *.service.twilio.com and *.tunnel.dev inside the perimeter.",
+        "link": "https://thehackernews.com/2026/05/kimsuky-deploys-httpspy-expands-arsenal.html"
+      },
+      {
+        "id": 6,
+        "title": "Malicious NuGet Package Steals Banking Credentials",
+        "tag": "Malware / Supply Chain",
+        "desc": "Sicoob malware targets .NET developers via poisoned NuGet packages; harvests banking credentials.",
+        "summary": "A malicious NuGet package is stealing developer credentials and environment variables. It specifically targets .NET applications used in the Brazilian banking sector.",
+        "importance": "NuGet is the next NPM. The same attack patterns are migrating to the .NET ecosystem.",
+        "noteworthy": "Audit NuGet package sources. Pin NuGet versions. Monitor .env files for unauthorized access.",
+        "link": "https://thehackernews.com/2026/05/malicious-sicoob-nuget-steals-banking.html"
+      },
+      {
+        "id": 7,
+        "title": "Market: BTC $73,786. Market Still Bleeding.",
+        "tag": "Finance / Crypto Markets",
+        "desc": "BTC $73,786 (-0.36%). ETH $2,010 (-1%). SOL $82.63 (-0.56%). All red.",
+        "summary": "Crypto markets remain in a risk-off rotation. No clear catalyst for reversal. ETF inflows flat.",
+        "importance": "The bear market is testing patience. Hold cash. Watch $70K floor.",
+        "noteworthy": "No new positions. Monitor $70K BTC support. SOL losing relative strength.",
+        "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
+      },
+      {
+        "id": 8,
+        "title": "GREYVIBE: Russia-Linked APT Targets Ukraine with AI-Powered Attacks",
+        "tag": "Geopolitics / Cyber War",
+        "desc": "New Russian APT 'GREYVIBE' uses AI for spear-phishing and social engineering against Ukrainian targets.",
+        "summary": "Russian state-sponsored actors are using AI to automate highly targeted spear-phishing campaigns against Ukrainian government and critical infrastructure.",
+        "importance": "State actors are fully weaponizing AI. The 'Cyber War' playbook is being rewritten in real-time.",
+        "noteworthy": "If you monitor regional threats, deploy AI-aware email filtering. Watch for AI-generated spear-phish that bypasses traditional detection.",
+        "link": "https://thehackernews.com/2026/05/new-russian-linked-greyvibe-targets.html"
+      }
+    ]
+  },
+  "yesterday": {
+    "date": "28/05/26",
+    "items": [
+      {
+        "id": 9,
         "title": "npm Malware Harvests Claude AI User Data via GitHub Tokens",
         "tag": "Critical Vulnerability / Supply Chain",
         "desc": "Rogue npm package steals Claude AI project files and GitHub tokens from developer machines.",
@@ -13,7 +98,7 @@
         "link": "https://thehackernews.com/2026/05/malicious-npm-package-stole-files-from-claude-ai.html"
       },
       {
-        "id": 2,
+        "id": 10,
         "title": "GlassWorm Malware Takedown: Google, GitHub & CISA Disrupt AI Model Theft",
         "tag": "Threat Intelligence / Supply Chain",
         "desc": "Joint operation dismantles GlassWorm infrastructure; was targeting AI model weights and LLM training datasets.",
@@ -23,7 +108,7 @@
         "link": "https://thehackernews.com/2026/05/glassworm-malware-takedown-disrupts-developer.html"
       },
       {
-        "id": 3,
+        "id": 11,
         "title": "Grandoreiro & BTMOB RAT: Cross-Platform Banking Trojans Surge",
         "tag": "Malware / Financial Threats",
         "desc": "New wave of Grandoreiro (Windows) and BTMOB (Android) RAT campaigns targeting MENA banking apps.",
@@ -33,7 +118,7 @@
         "link": "https://thehackernews.com/2026/05/grandoreiro-malware-and-btmob-rat-campaigns.html"
       },
       {
-        "id": 4,
+        "id": 12,
         "title": "LiteSpeed cPanel Root RCE (CVE-2026-48172): Patch Immediately",
         "tag": "Critical Vulnerability / Web Hosting",
         "desc": "Active exploitation of LiteSpeed Enterprise cPanel extension allows privilege escalation to root.",
@@ -43,7 +128,7 @@
         "link": "https://thehackernews.com/2026/05/litespeed-cpanel-extension-high-severity-vulnerability.html"
       },
       {
-        "id": 5,
+        "id": 13,
         "title": "npm Enforces Mandatory 2FA for Publishers\u2014Security Win",
         "tag": "Security / Developer Ecosystem",
         "desc": "npm registry mandates two-factor authentication for all package publishers; blocks malicious post-install scripts.",
@@ -53,7 +138,7 @@
         "link": "https://thehackernews.com/2026/05/npm-registry-mandates-two-factor-authentication.html"
       },
       {
-        "id": 6,
+        "id": 14,
         "title": "YouTube Auto-Labels AI-Generated Content\u2014Deepfake Defense Layer",
         "tag": "Privacy / AI Content Authenticity",
         "desc": "YouTube mandates AI-generated content labels for creators; aims to curb deepfake misinformation and synthetic media.",
@@ -63,7 +148,7 @@
         "link": "https://blog.youtube/news-and-events/improving-ai-labels-viewers-creators/"
       },
       {
-        "id": 7,
+        "id": 15,
         "title": "Market Update: BTC Holds $73K Amid ETF Outflow Panic",
         "tag": "Financial / Crypto Markets",
         "desc": "BTC $73,055 (-0.2%); ETH $1,979 (-0.1%); SOL $80.65 (+0.1%). Market stabilizes after macro-panic.",
@@ -73,7 +158,7 @@
         "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
       },
       {
-        "id": 8,
+        "id": 16,
         "title": "Anthropic & OpenAI: Product-Market Fit Achieved in 'Agentic' Era",
         "tag": "AI / Industry Analysis",
         "desc": "Analysts confirm both Anthropic and OpenAI have crossed the product-market fit threshold for autonomous AI agents.",
@@ -81,101 +166,6 @@
         "importance": "This signals a market-wide shift from 'AI as a chatbot' to 'AI as an autonomous agent.' For your own projects (netops, cyberdash), this means the tooling ecosystem for agentic workflows is now production-ready.",
         "noteworthy": "Evaluate deploying Claude Code or OpenAI's operator APIs for your most repetitive coding tasks. The 'Cost per Task' metric is now the key KPI for automation. The agentic era is here\u2014start integrating it into your own infrastructure.",
         "link": "https://simonwillison.net/2026/May/27/product-market-fit/"
-      }
-    ]
-  },
-  "yesterday": {
-    "date": "27/05/26",
-    "items": [
-      {
-        "id": 9,
-        "title": "Crypto Market Catastrophe: BTC Free-Falls $7K in 24 Hours, ETF Inflows Collapse",
-        "tag": "Financial / Crypto Markets",
-        "desc": "Bitcoin crashes to $73,040 (-3.3%); ETH/SOL also tumble as 'U.S. Trade War 2.0' signals spook institutional investors.",
-        "summary": "The crypto market just experienced its worst 24-hour period since the FTX collapse. Bitcoin (BTC) has dropped nearly 7% from $78K to $73,040, Ethereum (ETH) is down 4.4% to $1,976, and Solana (SOL) has fallen to $80.35 (-3.7%). Analysts are attributing the crash to a resurgence of 'Trade War 2.0' fears after new U.S. tariffs on Asian tech imports were signaled by the White House. Spot ETF inflows have reportedly collapsed, with over $400M in outflows recorded in the last trading session as institutional investors rush to reduce exposure to high-beta assets.",
-        "importance": "This is a macro-driven 'flight to safety' event. The 'Trade War 2.0' narrative is particularly bad for your hardware procurement (GPU lead times, SSD pricing) because Asian tech imports are the direct target. The $70K level for BTC is now the 'line in the sand'\u2014a break below that historically triggers massive cascading liquidations.",
-        "noteworthy": "Monitor the $70K support for BTC. If you're buying digital assets, wait for the 'Dead Cat Bounce' after this level of panic selling. Lock in prices for any planned hardware upgrades before the trade war tariffs kick in and raise SSD/CPU costs. Diversify any short-term liquidity into stablecoins if you fear further macro shocks.",
-        "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
-      },
-      {
-        "id": 10,
-        "title": "Malicious npm Package Exfiltrates Claude AI User Data via GitHub Tokens",
-        "tag": "Critical Vulnerability / AI Supply Chain",
-        "desc": "New npm malware targets Claude AI desktop users; harvests GitHub tokens and 'thinking' data from project directories.",
-        "summary": "A malicious npm package, masquerading as a dependency for a popular coding tool, has been discovered stealing sensitive data from developers' machines. The package specifically targets users of the Claude AI desktop application, exfiltrating conversation history, project files, and, critically, GitHub Personal Access Tokens (PATs) via a covert channel to GitHub Gists. Researchers believe the campaign is linked to a state-sponsored group targeting AI development infrastructure.",
-        "importance": "This is the 'juiciest' intelligence for today. As an active user of Claude Code (and now likely looking at DeepSeek Reasonix), your workflow is a direct target. A PAT theft here is a 'master key' to your entire software lifecycle. This is why AI agents need the same level of credential hygiene as human developers.",
-        "noteworthy": "Rotate all GitHub PATs immediately if you installed any new npm packages in the last week. Verify your Claude AI desktop app's file access permissions. Implement a 'Principle of Least Privilege' for GitHub tokens\u2014use fine-grained PATs with expiration dates instead of global tokens. Run a malware scan on your node_modules folder.",
-        "link": "https://thehackernews.com/2026/05/malicious-npm-package-stole-files-from.html"
-      },
-      {
-        "id": 11,
-        "title": "Gitea Critical Bug Exposes Private Container Images Without Auth",
-        "tag": "Critical Vulnerability / DevOps Security",
-        "desc": "Unpatched Gitea flaw (pre-1.23.x) allows anonymous access to private Docker/OCI container registries hosted on the platform.",
-        "summary": "A critical vulnerability in the self-hosted Git service Gitea (affecting versions before 1.23.x) has been disclosed. The flaw allows an unauthenticated remote attacker to bypass authentication and pull any private container images (Docker/OCI) stored in Gitea's registry. This turns Gitea instances into public data leaks for proprietary application containers, similar to the risks seen in past Gitlab registry exposures.",
-        "importance": "For your 'netops' project and 'cyberdash' deployments, if you use Gitea as a self-hosted Git/Container registry, this is a massive breach vector. Private internal services, API keys, and proprietary configurations are all at risk of exposure if your Gitea isn't patched immediately.",
-        "noteworthy": "Update Gitea to version 1.23.0+ immediately. Audit your container registry access logs for any unauthorized pulls since the flaw was introduced. If you cannot patch, disable the container registry feature or move sensitive images to a dedicated, isolated registry. Rotate all secrets that were present in the container images.",
-        "link": "https://thehackernews.com/2026/05/gitea-vulnerability-exposes-private.html"
-      },
-      {
-        "id": 12,
-        "title": "GlassWorm Malware Takedown: Developer Supply Chain War Heats Up",
-        "tag": "Threat Intelligence / Law Enforcement",
-        "desc": "Joint operation between Google, GitHub, and CISA dismantles the infrastructure behind the 'GlassWorm' malware campaign.",
-        "summary": "A coordinated takedown operation led by Google, GitHub, and CISA has disrupted the infrastructure of the 'GlassWorm' supply chain attack. The malware, which targeted AI developers via fake 'open source' Python and JavaScript packages, had successfully infected hundreds of developer environments before the takedown. The group behind GlassWorm was using it to harvest AI model weights and proprietary training datasets from compromised dev workstations.",
-        "importance": "This is a victory for the 'Good Guys,' but a stark reminder of the scale of the AI supply chain war. The fact that they were specifically targeting 'AI model weights' means that state actors are now directly targeting the 'thought processes' of organizations. Your local Ollama models and training data are now strategic assets.",
-        "noteworthy": "Check your pip/npm logs for any packages named 'open-source-ai-helpers' or similar. Rotate any credentials used on infected machines. Monitor your AI training pipelines for unauthorized data exfiltration. The GlassWorm takedown is temporary\u2014expect copycat campaigns immediately.",
-        "link": "https://thehackernews.com/2026/05/glassworm-malware-takedown-disrupts.html"
-      },
-      {
-        "id": 13,
-        "title": "MuddyWater APT Returns: DLL Side-Loading Targets 9 Countries",
-        "tag": "Threat Intel / Nation-State Operations",
-        "desc": "Iranian MuddyWater APT group resurfaces with new DLL side-loading toolkit targeting gov/military in Middle East and Asia.",
-        "summary": "The Iranian-linked MuddyWater APT group (also known as Seedworm) has launched a new campaign using a sophisticated DLL side-loading technique to target government and military entities across 9 countries in the Middle East and Asia. The group is leveraging a custom backdoor named 'MuddyC3' that uses legitimate, signed executables to load malicious DLLs, allowing it to bypass endpoint security controls that only monitor executable files.",
-        "importance": "MuddyWater's return signals that Iranian state-sponsored groups are active and evolving. As you scale your lab toward networking and security monitoring, understanding APT TTPs (Tactics, Techniques, and Procedures) like DLL side-loading is critical for building effective detection rules. Their focus on the 9-country region is a direct threat to regional stability.",
-        "noteworthy": "Deploy YARA rules for 'MuddyC3' indicators of compromise. Monitor for PowerShell execution from unexpected locations or with unusual parent processes. Implement strict DLL signing policies to prevent side-loading. Review network logs for connections to known MuddyWater C2 domains in the Middle East.",
-        "link": "https://thehackernews.com/2026/05/muddywater-uses-dll-side-loading-in.html"
-      },
-      {
-        "id": 14,
-        "title": "YouTube Mandates AI Content Labels for Creators Worldwide",
-        "tag": "AI / Content Policy",
-        "desc": "YouTube rolls out mandatory 'AI-generated' labels for all video uploads; content without labels facing de-monetization.",
-        "summary": "YouTube has announced the global enforcement of its AI content labeling policy. Creators must now explicitly tag any video containing 'significantly altered or synthetically generated' content. Failure to comply results in automatic content removal or de-monetization. The platform is also rolling out a new 'AI-Generated Content' filter that allows users to search for purely synthetic media, a move that is reshaping the creator economy.",
-        "importance": "As AI-generated content proliferates, the 'Authenticity Economy' is being formalized. For your lab, this signals that AI-content watermarking and detection will become a core security feature. Tools that can verify the provenance of media (like your lab's screenshots or data visualizations) will be critical for maintaining trust.",
-        "noteworthy": "Implement a 'Digital Provenance' pipeline for any AI-generated content from your lab. Use the new C2PA (Coalition for Content Provenance and Authenticity) standards to add metadata to your media. Monitor the 'AI-Generated Content' filter for any unauthorized use of your likeness or lab data.",
-        "link": "https://blog.youtube/news-and-events/improving-ai-labels-viewers-creators/"
-      },
-      {
-        "id": 15,
-        "title": "Anthropic & OpenAI: Product-Market Fit Achieved in 'Agentic' Era",
-        "tag": "AI / Industry Analysis",
-        "desc": "Industry analysts confirm both Anthropic and OpenAI have achieved massive 'Product-Market Fit' as AI agents hit mainstream adoption.",
-        "summary": "Simon Willison's analysis confirms that both Anthropic (Claude) and OpenAI (GPT-4o) have achieved true product-market fit in the 'Agentic' era. The shift from simple chat to complex multi-step task execution (coding, research, deployment) has created a new category of AI-native software. OpenAI is focusing on broad platform integration, while Anthropic is leading in developer ergonomics (post-Stainless acquisition) and safety-focused features.",
-        "importance": "As Hieu builds 'netops' and 'cyberdash,' this confirms that 'Agentic AI' is the defining software category of 2026. The 'Agentic' paradigm means your software stack must be designed to handle LLM-driven orchestration natively. The winners will be those who build the best tools for AI agents to interact with, not just for humans.",
-        "noteworthy": "Design your 'netops' APIs to be 'AI-friendly' (structured output, clear error messages). Consider integrating with Anthropic's Claude API for complex multi-step tasks in your lab. Monitor the 'Agentic' market for new frameworks like LangChain or AutoGPT that reduce the friction of building agentic systems.",
-        "link": "https://simonwillison.net/2026/May/27/product-market-fit/"
-      },
-      {
-        "id": 16,
-        "title": "Grandoreiro & BTMOB: Banking Trojans Resurge on Windows and Android",
-        "tag": "Malware / Financial Fraud",
-        "desc": "New wave of banking trojans 'Grandoreiro' and 'BTMOB' detected; target 2FA tokens and mobile banking apps.",
-        "summary": "A resurgence of sophisticated banking trojans 'Grandoreiro' (Windows) and 'BTMOB' (Android) has been detected in a coordinated campaign targeting financial institutions across Latin America and Europe. Grandoreiro uses a novel 'in-browser' injection technique that modifies web banking sessions in real-time, while BTMOB overlays legitimate banking apps to steal 2FA tokens. The campaign is linked to a financially-motivated threat group that has been operating since 2016.",
-        "importance": "Banking trojans remain the most profitable tool for financially-motivated cybercriminals. For your lab's security posture, this is a reminder that 'Defense-in-Depth' for financial transactions is essential. No single 2FA method is bulletproof if the mobile OS itself is compromised.",
-        "noteworthy": "If you manage any financial systems, deploy behavioral EDR rules for 'Grandoreiro' process injection patterns. On Android, avoid sideloading banking apps and use hardware-backed security keys for high-value transactions. Monitor for unusual overlay permissions in mobile banking apps.",
-        "link": "https://thehackernews.com/2026/05/grandoreiro-malware-and-btmob-rat.html"
-      },
-      {
-        "id": 17,
-        "title": "Mesh Networking: Meshtastic and the Future of Decentralized Communication",
-        "tag": "Hardware / Networking",
-        "desc": "New community focus on Meshtastic and Reticulum for off-grid, encrypted peer-to-peer networking independent of ISP infrastructure.",
-        "summary": "A growing community of hackers and network engineers is gravitating toward Meshtastic and Reticulum as the future of resilient, decentralized communication. Meshtastic uses cheap LoRa radios to create mesh networks that operate completely independently of the internet or cellular infrastructure. Reticulum provides a cryptographic, peer-to-peer communication layer designed for long-haul radio and wire-based networks. Together, they represent a 'Swiss Army Knife' for building resilient networks in contested environments.",
-        "importance": "As a Network Engineer, this is the 'Soul' of the profession: building networks that survive the collapse of existing infrastructure. For your home lab, Meshtastic nodes (~$30 each) are an excellent project for learning about RF propagation, routing protocols, and cryptographic key management in a real-world, geographically distributed test environment.",
-        "noteworthy": "Start with a Meshtastic device (like the LILYGO T-Beam) and set up a local test mesh with your lab. Explore the 'Reticulum' protocol for building encrypted tunnels over non-IP networks. This is also a critical skill for 'War Drums' scenarios where internet infrastructure is the first casualty of conflict.",
-        "link": "https://www.jonaharagon.com/posts/im-getting-into-mesh-networks-meshtastic-meshcore-and-reticulum/"
       }
     ]
   }
