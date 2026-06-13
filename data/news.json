@@ -1,181 +1,221 @@
 {
   "today": {
-    "date": "04/06/26",
+    "date": "13/06/26",
     "items": [
       {
         "id": 1,
-        "title": "Google Gemini Hijack: Poisoned Notifications Chain-Attack Android AI",
-        "tag": "Critical Vulnerability / AI Security",
-        "desc": "A single poisoned WhatsApp/Slack notification could hijack Google Gemini's voice assistant on Android to open apps, fake messages, and poison long-term memory.",
-        "summary": "Security researchers discovered that a single malicious notification from WhatsApp, Slack, SMS, Signal, Instagram, or Messenger could hijack Google Gemini's voice assistant on Android. The attack chain allows the adversary to open connected browser windows, forge messages from a victim's boss, push the phone into a Zoom call, or silently corrupt Gemini's long-term memory with injected instructions. No malicious app was required\u2014the vulnerability existed in how Gemini processed notification content from trusted messaging apps without proper input sanitization.",
-        "importance": "This is the first major 'AI Assistant Hijack' via a side-channel. As Gemini and Siri become the primary interface for phone operations, a notification-level injection becomes the new 'SMS phishing'\u2014but with the ability to command the entire device. For your Pixel 8a, this is a direct hit on the Gemini surface.",
-        "noteworthy": "Review Gemini notification permissions on Android. Disable 'Gemini from notification' in Android settings if available. Monitor for unusual Gemini-initiated actions (calendar events, browser tabs, phone calls) after receiving messages from unknown contacts. This is a preview of the notification-based attack surface that will expand as AI assistants gain more OS-level control.",
-        "link": "https://thehackernews.com/2026/06/whatsapp-slack-notifications-could.html"
+        "title": "Splunk Enterprise RCE: Unauthenticated Code Execution (CVE-2026-20253)",
+        "tag": "Critical Vulnerability / Enterprise Security",
+        "desc": "CVSS 9.8 flaw in Splunk Enterprise lets unauthenticated attackers create/truncate arbitrary files via PostgreSQL sidecar, leading to RCE.",
+        "summary": "Splunk has patched CVE-2026-20253, a critical 9.8 vulnerability in Splunk Enterprise versions below 10.2.4 and 10.0.7. The flaw exists in the PostgreSQL sidecar service endpoint, which lacks authentication controls entirely. Any network-reachable user can invoke file operations without credentials — create or truncate arbitrary files, then escalate to remote code execution. watchTowr Labs published technical details demonstrating full exploitation. Splunk Cloud is not affected. Versions 10.0.7 and 10.2.4 contain the fix. Version 10.4 was never vulnerable.",
+        "importance": "Splunk is the nervous system of most enterprise SOC operations. An unauthenticated RCE on the SIEM means attackers can blind the defenders before they even know there's a problem. This is a Priority 0 patch — if your Splunk is internet-adjacent, the window between disclosure and exploitation is measured in hours.",
+        "noteworthy": "Patch Splunk Enterprise to 10.0.7+ or 10.2.4+ immediately. If patching isn't possible today, restrict network access to the PostgreSQL sidecar endpoint. Audit Splunk logs for any unauthorized file operations dating back to the disclosure window.",
+        "link": "https://thehackernews.com/2026/06/critical-splunk-enterprise-flaw-lets.html"
       },
       {
         "id": 2,
-        "title": "Microsoft 365 Android: Debug Flag Lets Any App Steal Account Tokens",
-        "tag": "Critical Vulnerability / Mobile Security",
-        "desc": "Leftover debug flag in production Microsoft 365 Android apps disables token-sharing restrictions; any app can request and receive signed-in user tokens.",
-        "summary": "A development flag left enabled in production builds of Microsoft 365 Android apps disables the check that limits account-token sharing to trusted Microsoft apps. Any other app on the same phone could request the signed-in user's token and gain full access to read email, open files, browse calendars, and send messages as the victim. The flaw affects Outlook, Teams, OneDrive, and SharePoint mobile apps. Microsoft has patched the issue but the discovery raises questions about the security of the Android token-sharing model.",
-        "importance": "A debug flag in production is the oldest mistake in the book, but the blast radius here is enormous. Microsoft 365 is the backbone of enterprise productivity\u2014the token gives access to email, files, calendar, and chat. On your Pixel 8a, if you have any Microsoft 365 app installed, you were exposed.",
-        "noteworthy": "Update all Microsoft 365 Android apps immediately. Check installed apps for suspicious token requests via Android's 'App permissions' settings. This is another reason to keep work and personal profiles on separate devices if possible.",
-        "link": "https://thehackernews.com/2026/06/microsoft-365-android-apps-let-any-app.html"
+        "title": "US Orders Anthropic to Suspend Fable 5 & Mythos 5 for Foreign Nationals",
+        "tag": "AI / National Security",
+        "desc": "US government orders Anthropic to cut off foreign national access to its most advanced models, citing national security concerns over jailbreaking.",
+        "summary": "Anthropic received a US government order at 5:21 PM ET to suspend all access to Claude Fable 5 and Mythos 5 for foreign nationals, both inside and outside the US. The government cited national security concerns, claiming a method to jailbreak Fable 5 had been discovered. Anthropic pushed back, stating the demonstrated technique only identified minor, previously known vulnerabilities — and that other publicly available models could do the same without requiring a jailbreak. The company called it a misunderstanding and is working to restore access. Other Claude models are unaffected.",
+        "importance": "This is the first time the US has directly intervened to restrict AI model access on national security grounds. Whether the justification is sound or not, the precedent is set: the government can order an AI company to suspend specific models overnight. For anyone running AI infrastructure across borders, this is a new operational risk.",
+        "noteworthy": "If you're a foreign national using Claude Fable 5 or Mythos 5 via API, expect interruptions. Monitor Anthropic's status page. Consider fallback models for production workflows. This is likely the first of many export-control actions targeting frontier AI.",
+        "link": "https://thehackernews.com/2026/06/us-orders-anthropic-to-suspend-fable-5.html"
       },
       {
         "id": 3,
-        "title": "CISA KEV: Magento Cache Warmer RCE Under Active Exploitation",
-        "tag": "Critical Vulnerability / Web Security",
-        "desc": "CVE-2026-45247 in Mirasvit Cache Warmer for Magento added to CISA KEV; actively exploited for remote code execution.",
-        "summary": "CISA has added CVE-2026-45247, a critical remote code execution flaw in the Mirasvit Cache Warmer extension for Magento, to its Known Exploited Vulnerabilities catalog. The vulnerability allows unauthenticated attackers to execute arbitrary PHP code on Magento-based e-commerce servers. Active exploitation in the wild is confirmed. Magento powers approximately 0.6% of all websites but a disproportionate share of e-commerce revenue, making this a high-value target for credit card skimming and data exfiltration.",
-        "importance": "If you run any Magento-related services (even proxied through your lab), this is a Priority 0 patch. RCE on an e-commerce platform is a direct path to payment card data and customer PII. The CISA KEV listing means federal agencies must patch within 14 days, but everyone else should treat it as 48 hours.",
-        "noteworthy": "Patch Mirasvit Cache Warmer immediately or uninstall it if not critical. Audit Magento installations for unauthorized PHP files or modified core files. Implement WAF rules to detect exploitation attempts targeting the Cache Warmer endpoint specifically.",
-        "link": "https://thehackernews.com/2026/06/cisa-adds-exploited-magento-rce-flaw.html"
+        "title": "400+ Arch Linux AUR Packages Hijacked: Infostealer + eBPF Rootkit",
+        "tag": "Supply Chain Attack / Linux Security",
+        "desc": "Attackers took over 400+ AUR packages, injecting a Rust infostealer and eBPF rootkit into build scripts. No zero-day needed — just abandoned packages.",
+        "summary": "Over 400 packages in the Arch User Repository (AUR) were hijacked this week by attackers who adopted abandoned packages and rewrote their build scripts to deploy malware. The payload is a Rust binary that harvests developer credentials, and when running as root, loads an eBPF rootkit to hide itself. The attack targets the trust model, not a software flaw — the packages kept their names, histories, and reputation. Only the build instructions changed. The official Arch repositories were not affected. The list of compromised packages is still growing.",
+        "importance": "This is the AUR equivalent of the npm takeover playbook, but with a rootkit payload. eBPF rootkits are nearly undetectable by conventional means — they run in kernel space. If you built any AUR package on or after June 11, your machine may be compromised at the kernel level.",
+        "noteworthy": "Check all AUR packages installed/updated since June 11 against the affected package list. If you hit a compromised package, assume the host is fully owned — wipe and rebuild. Consider switching to only official repositories for critical systems. Audit eBPF programs on running kernels with 'bpftool prog list'.",
+        "link": "https://thehackernews.com/2026/06/over-400-arch-linux-aur-packages.html"
       },
       {
         "id": 4,
-        "title": "Fake Open-Source Tool Sites Rank High on Google, Deliver Malware via TDS",
-        "tag": "Malware / Supply Chain",
-        "desc": "Sophisticated operation clones popular open-source tools' websites; Google SEO manipulation funnels victims through Traffic Distribution Systems to malware.",
-        "summary": "Cybersecurity researchers flagged a large-scale operation that creates professional-looking fake websites mimicking popular open-source and freeware tools. These sites rank highly on Google search results and funnel users through a Traffic Distribution System (TDS) that delivers malware including Remus Stealer, AnimateClipper, and the SessionGate framework. The TDS uses fingerprinting to evade security researchers and sandbox environments, serving legitimate downloads to bots and researchers while delivering trojanized installers to real victims.",
-        "importance": "This is an evolution in SEO poisoning. The fake sites are indistinguishable from the real ones and Google is ranking them above legitimate results. For developers who frequently download tools from search results, the 'trust by default' model for Google rankings is now officially broken.",
-        "noteworthy": "Always verify download URLs against official GitHub repositories or package managers. Never download tools directly from Google search results without checking the authenticity of the domain. Use checksums/signatures when available. Bookmark the official sites for your most-used tools rather than searching each time.",
-        "link": "https://thehackernews.com/2026/06/fake-sites-mimicking-open-source-tools.html"
+        "title": "Agentjacking: AI Coding Agents Tricked Into Running Malicious Code",
+        "tag": "AI Security / Vulnerability",
+        "desc": "New attack class injects malicious instructions via Sentry error reports, which AI coding agents (Claude Code, Cursor) interpret as legitimate fixes and execute.",
+        "summary": "Tenet Security disclosed 'Agentjacking' — a new attack class that exploits the intersection of Sentry's event ingestion (which accepts arbitrary payloads from anyone with a DSN) and AI coding agents that consume Sentry data as trusted system output. An attacker injects crafted error reports into a project's Sentry instance. When an AI agent like Claude Code or Cursor encounters these errors, it interprets the injected instructions as legitimate diagnostic resolution steps and executes attacker-controlled code. This can expose environment variables, Git credentials, private repository URLs, and developer identities.",
+        "importance": "This is the first systematic attack targeting AI coding agents via their monitoring pipeline. The attack surface is enormous — any project using Sentry + an AI coding agent is vulnerable. The DSN is semi-public by design, making injection trivial. Every developer using Claude Code or Cursor with Sentry integration is potentially exposed.",
+        "noteworthy": "Audit Sentry DSN exposure. Consider whether your AI coding agent should have autonomous access to error-tracking platforms. Implement human-in-the-loop review for all code changes suggested by AI agents based on external data. Rotate any credentials that may have been processed by AI agents with Sentry access.",
+        "link": "https://thehackernews.com/2026/06/agentjacking-attack-tricks-ai-coding.html"
       },
       {
         "id": 5,
-        "title": "Stock Exchange Executive's Outlook Mailbox Spied On for Five Months",
-        "tag": "Cyber Espionage / APT",
-        "desc": "Unknown APT maintained persistent access to a senior stock exchange executive's Outlook for 5 months; exfiltrated data via Dropbox/OneDrive.",
-        "summary": "Symantec and Carbon Black's Threat Hunter Team revealed that unknown attackers spent at least five months inside the Outlook mailbox of a senior executive at a major global stock exchange. The attackers copied inbox content in small, repeated batches and routed it through Dropbox and OneDrive so the exfiltration traffic blended into normal cloud activity. The attack demonstrates a sophisticated understanding of cloud-based detection evasion, using legitimate services as the exfiltration channel to avoid triggering DLP or network monitoring alerts.",
-        "importance": "Five months of undetected access to a stock exchange executive's email is an intelligence goldmine. The attackers could have accessed M&A discussions, regulatory filing previews, and market-moving information. This is a textbook example of 'living off the land'\u2014using legitimate cloud services as C2 channels to evade every traditional network monitor.",
-        "noteworthy": "Implement cloud app anomaly detection for unusual OAuth app activity. Monitor for unexpected OneDrive/Dropbox sync patterns from executive accounts. Enforce conditional access policies requiring MFA and device compliance for all cloud storage access. Segment executive mailboxes with enhanced DLP policies.",
-        "link": "https://thehackernews.com/2026/06/hackers-spied-on-stock-exchange.html"
+        "title": "Velvet Ant: China-Linked APT Backdoored Linux Login for Nearly a Decade",
+        "tag": "Cyber Espionage / Nation-State APT",
+        "desc": "China-nexus group replaced PAM and OpenSSH binaries with backdoored versions that logged credentials and accepted master passwords. Active since 2016.",
+        "summary": "Sygnia tracks a China-nexus threat group called Velvet Ant that spent close to a decade hidden inside the Linux login system itself. Rather than dropping new malware, the attacker replaced the PAM login module and OpenSSH binaries with backdoored versions. Some let them in with a secret password; others quietly recorded real usernames and passwords as users logged in. Nine separate backdoor versions were found. The targeted network had no direct internet access — the group staged through internet-facing systems to reach it. The earliest traces date back to 2016.",
+        "importance": "A decade of undetected access via compromised login binaries is the gold standard of persistence. This isn't a vulnerability — it's a replacement of the trust foundation itself. If the login system is compromised, every credential that passed through it is assumed leaked. For Linux admins, this changes the threat model: rootkits are no longer the worst case — your authentication binaries themselves may be the adversary.",
+        "noteworthy": "Verify PAM and OpenSSH binary integrity on all Linux servers using package manager checksums (rpm -V, debsums). Check for unexpected PAM modules in /etc/pam.d/. Monitor SSH binary hashes against known-good baselines. Consider deploying AIDE or Tripwire for file integrity monitoring.",
+        "link": "https://thehackernews.com/2026/06/china-linked-hackers-backdoored-linux.html"
       },
       {
         "id": 6,
-        "title": "Anthropic: How We Contain Claude Across Products",
-        "tag": "AI / Engineering",
-        "desc": "Anthropic publishes detailed engineering post on containing Claude's blast radius in claude.ai, Claude Code, and Cowork.",
-        "summary": "Anthropic published a comprehensive engineering blog on how they contain Claude across products. As agents grow more capable, their blast radius grows. Anthropic describes a layered containment architecture: tool-level permissions, sandboxed execution environments, network egress controls, and real-time monitoring. The key insight: 'Twelve months ago we'd have rejected granting Claude access sufficient to take down an internal service. Today that level of access is routine, and developers are more productive for it.' The post details how they balance capability with risk by shrinking blast radius while expanding access.",
-        "importance": "This is required reading for anyone building agentic systems. As you operate Hermes and other agents, Anthropic's containment model is the blueprint for how to give agents power without giving them the keys to the kingdom. The 'blast radius' framing is the right mental model for your own agent deployments.",
-        "noteworthy": "Read the full post at anthropic.com/engineering/how-we-contain-claude. Apply their sandboxing and egress control patterns to your own agent deployments. Consider implementing similar layered permission models for Hermes' tool access.",
-        "link": "https://www.anthropic.com/engineering/how-we-contain-claude"
+        "title": "21 Zero-Days in FFmpeg: Autonomous Security Agent Finds Decade-Old Bugs",
+        "tag": "Vulnerability / AI Security Research",
+        "desc": "depthfirst's autonomous security agent discovered 21 zero-days in FFmpeg, some latent for 15-20 years, including a PoC RCE exploit primitive.",
+        "summary": "depthfirst's production autonomous security agent discovered 21 zero-day vulnerabilities in FFmpeg after intensive analysis. Several vulnerabilities had been sitting latent for 15 to 20 years. The agent moved beyond theoretical analysis to produce concrete, reproducible PoC inputs confirming the findings at a fraction of traditional costs ($1K vs $10K). A proof-of-concept demonstrating an RCE exploit primitive was developed. FFmpeg is one of the most widely deployed multimedia libraries in the world, present in everything from browsers to IoT devices.",
+        "importance": "This is a watershed moment for AI-powered security research. 21 zero-days found by an autonomous agent, with a working RCE PoC, at 10% of traditional cost. The offensive AI capability gap is widening fast. If you process any multimedia content, FFmpeg is in your stack somewhere — and it just got 21 new holes.",
+        "noteworthy": "Patch FFmpeg to the latest version immediately. If you can't patch, sandbox all FFmpeg processing (containers, seccomp, network isolation). Audit any system that processes user-uploaded media. This includes web servers, media pipelines, and IoT devices running FFmpeg-based transcoding.",
+        "link": "https://depthfirst.com/research/21-zero-days-in-ffmpeg"
       },
       {
         "id": 7,
-        "title": "DoJ Disrupts SE Asia Crypto Fraud: $3.8M Frozen in 'Disruption Week'",
-        "tag": "Law Enforcement / Crypto",
-        "desc": "US DoJ operation disrupts Southeast Asian crypto fraud networks; $3.8M in assets seized across multiple jurisdictions.",
-        "summary": "The US Department of Justice announced the results of 'Disruption Week,' a coordinated international operation targeting cyber-enabled cryptocurrency fraud networks operating from Southeast Asia. The operation, which began May 18, 2026, resulted in the seizure of $3.8 million in assets, multiple domain takedowns, and the disruption of several pig-butchering and investment fraud platforms. The operation involved cooperation between US, Thai, Vietnamese, and Cambodian authorities along with private sector partners including Microsoft and Google.",
-        "importance": "The $3.8M seizure is a fraction of the total fraud volume, but the domain takedowns disrupt the infrastructure these networks use to reach victims. It signals that international cooperation against SE Asian crypto fraud is operational, not just diplomatic.",
-        "noteworthy": "If you or contacts have been targeted by pig-butchering or crypto investment scams originating from SE Asia, report to IC3.gov. The seized domains list may help identify infrastructure used in past attacks. Monitor for 'rebranding' of disrupted platforms under new domains.",
-        "link": "https://thehackernews.com/2026/06/doj-disrupts-southeast-asia-crypto.html"
+        "title": "GreatXML: New BitLocker Bypass via Windows Recovery Partition",
+        "tag": "Endpoint Security / Vulnerability",
+        "desc": "Researcher releases BitLocker bypass that drops XML files into the recovery partition to spawn an unrestricted shell. Anyone who ran Defender Offline Scan is vulnerable.",
+        "summary": "Security researcher Chaotic Eclipse released GreatXML, a new Windows BitLocker bypass. The exploit copies an unattend.xml file and a recovery folder containing ReAgent.xml to the root of the recovery partition, then boots into WinRE. The result is a shell with unrestricted access to the BitLocker volume. The researcher found it by accident in 4 hours. If Windows Defender Offline Scan was ever initiated on the machine, it's automatically vulnerable. Even without the offline scan, the bypass may still be achievable through other WinRE entry points.",
+        "importance": "BitLocker is the primary full-disk encryption solution for Windows enterprise deployments. A bypass that requires only physical access and 4 hours of accidental discovery means your disk encryption is theater for any determined attacker with hands on the hardware. For enterprises relying on BitLocker for lost/stolen device protection, this changes the risk calculus.",
+        "noteworthy": "Enable BitLocker with a TPM+PIN configuration rather than TPM-only. Consider disabling WinRE on high-security endpoints. Physical access remains the hardest threat model to defend against — pair disk encryption with hardware-level security (Secure Boot, Virtualization-based Security). Monitor for unexpected WinRE boots.",
+        "link": "https://thehackernews.com/2026/06/new-greatxml-exploit-bypasses-windows.html"
       },
       {
         "id": 8,
-        "title": "Market Crash: BTC $62.4K (-6.9%), ETH $1.7K (-7%), SOL $68 (-9.4%)",
-        "tag": "Finance / Crypto Markets",
-        "desc": "Major crypto crash triggered by tariff escalation fears; BTC breaks below $63K, ETH loses $2K support, SOL hit hardest.",
-        "summary": "The cryptocurrency market suffered a significant crash with Bitcoin dropping 6.9% to $62,460, Ethereum falling 7% to $1,747, and Solana taking the hardest hit at -9.4% to $68.34. The crash was triggered by renewed 'Trade War 2.0' fears as new US tariff announcements on Asian tech imports sent shockwaves through both traditional and crypto markets. Institutional spot ETF outflows accelerated, with over $400M exiting in 48 hours. The psychological $70K floor for Bitcoin has been decisively broken, and the next support level sits at $58K.",
-        "importance": "This is no longer a 'dip'\u2014it's a structural correction. The break below $70K is the most significant technical event since the 2024 halving. For your lab's financial tracking, this is a 'Red Alert' moment. The $58K level is the next line of defense; if that breaks, we're looking at a potential 2022-style bear market.",
-        "noteworthy": "The $58K level is the next major support cluster. Set alerts at $58K and $50K for BTC. SOL is oversold at $68 but may continue to bleed if macro conditions worsen. Do not 'catch falling knives'\u2014wait for confirmation of a double-bottom or reversal pattern before scaling in.",
-        "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
+        "title": "ShinyHunters Exploits Oracle PeopleSoft Zero-Day (CVE-2026-35273)",
+        "tag": "Critical Vulnerability / Data Breach",
+        "desc": "CVSS 9.8 unauthenticated RCE in Oracle PeopleSoft exploited by ShinyHunters to breach universities. Zero-day for 2 weeks before patch.",
+        "summary": "The ShinyHunters extortion crew exploited an unpatched flaw in Oracle PeopleSoft to break into enterprise systems, primarily universities. Google's Mandiant attributes the campaign to UNC6240, active from May 27 to June 9. Oracle didn't publish its advisory until June 10 — the bug was a zero-day the entire time. CVE-2026-35273 is a 9.8 CVSS remote code execution vulnerability in PeopleSoft Enterprise PeopleTools that requires no login and no user interaction, just HTTP network access to the Environment Management Hub.",
+        "importance": "PeopleSoft runs the administrative backbone of thousands of universities and enterprises. A 9.8 unauthenticated RCE that was exploited in the wild for two weeks before a patch is a textbook zero-day scenario. If you have PeopleSoft exposed to the internet, assume compromise.",
+        "noteworthy": "Patch PeopleTools 8.61 and 8.62 immediately. Restrict access to the PSEMHUB endpoint at the network level. Audit PeopleSoft logs for unusual activity between May 27 and June 10. If the Environment Management Hub was internet-facing, conduct a full incident response.",
+        "link": "https://thehackernews.com/2026/06/shinyhunters-exploits-oracle-peoplesoft.html"
       },
       {
         "id": 9,
-        "title": "Israel-Lebanon Ceasefire Agreement Takes Effect",
-        "tag": "Geopolitics / Conflict",
-        "desc": "Israel and Lebanon agree to implement ceasefire conditional on Hezbollah halting attacks; fragile peace in effect.",
-        "summary": "Israel and Lebanon have agreed to implement a ceasefire agreement, conditional on Hezbollah ceasing its attacks on Israeli territory. The agreement, brokered through international mediators, represents the first meaningful de-escalation since the conflict reignited in late 2025. However, the situation remains volatile, with Israeli strikes continuing in Gaza and Hezbollah's compliance uncertain. Observers note that the ceasefire is fragile and dependent on both sides maintaining discipline along the border.",
-        "importance": "A ceasefire in Lebanon is a significant de-escalation for the Middle East, but the Hamas front in Gaza remains active. For your strategic planning, this reduces the risk of Hormuz disruption in the short term, but the underlying tensions are unchanged. Energy and shipping markets will likely see a temporary relief rally.",
-        "noteworthy": "Monitor shipping indices for Hormuz-related disruption risk. A Lebanon ceasefire temporarily reduces the 'War Drums' premium on energy and logistics. Watch for Hezbollah's compliance rate in the first 72 hours as the key signal for sustainability.",
-        "link": "https://www.bbc.com/news/articles/c5y01pdqvkgo"
+        "title": "The Gentlemen Ransomware: 478 Victims, Worm-Like Spread, AI-Powered",
+        "tag": "Cybercrime / Ransomware",
+        "desc": "PRODAFT analysis reveals The Gentlemen group operates independently, uses AI for ransomware development, and has claimed 478 victims.",
+        "summary": "PRODAFT's detailed analysis of The Gentlemen operation (tracked as Phantom Mantis) reveals a Russian-speaking group led by LARVA-368 that initially operated as an affiliate for LockBit, Qilin, and Medusa RaaS programs. In July 2025, they transitioned to an independent partnership program. The group relies heavily on AI for ransomware development, tool maintenance, and post-exploitation. They've claimed 478 victims to date. The ransomware can spread laterally like a worm, making containment critical once an infection begins.",
+        "importance": "AI-assisted ransomware development is now confirmed operational, not theoretical. A group that started as RaaS affiliates and graduated to independent operations with AI assistance is the blueprint for the next generation of threat actors. The worm-like spread capability means a single infection can become an enterprise-wide event.",
+        "noteworthy": "Ensure network segmentation and lateral movement controls are in place. The worm-like spread means flat networks are death traps. Disable SMB between VLANs. Verify backup integrity — The Gentlemen's double extortion means both encryption and data theft are in play.",
+        "link": "https://thehackernews.com/2026/06/the-gentlemen-ransomware-claims-478.html"
+      },
+      {
+        "id": 10,
+        "title": "LangGraph RCE Chain: SQL Injection Leads to Full Agent Takeover",
+        "tag": "Vulnerability / AI Security",
+        "desc": "Three patched flaws in LangGraph chain together for unauthenticated RCE. SQL injection → msgpack deserialization → arbitrary code execution on agent servers.",
+        "summary": "Check Point disclosed three now-patched vulnerabilities in LangGraph, LangChain's framework for building stateful multi-agent AI applications. CVE-2025-67644 (CVSS 7.3) is a SQL injection in LangGraph's SQLite checkpoint implementation via metadata filter keys. CVE-2026-28277 (CVSS 6.8) enables unsafe msgpack deserialization to trigger object reconstruction when loading attacker-modified checkpoints. Chained together, these allow full remote code execution on self-hosted LangGraph servers. The vulnerabilities affect langgraph-checkpoint-sqlite before 3.0.1 and langgraph before 0.4.1.",
+        "importance": "LangGraph is becoming the default framework for production AI agent deployments. An unauthenticated RCE chain against the agent infrastructure is a direct hit on the most sensitive layer — the AI runtime itself. If you're running self-hosted LangGraph agents, this is a must-patch.",
+        "noteworthy": "Update langgraph to 0.4.1+ and langgraph-checkpoint-sqlite to 3.0.1+. If you can't update immediately, restrict network access to LangGraph server endpoints. Validate checkpoint data integrity before loading. Consider adding authentication layers in front of LangGraph servers.",
+        "link": "https://thehackernews.com/2026/06/langgraph-flaw-chain-exposes-self.html"
+      },
+      {
+        "id": 11,
+        "title": "npm Install Scripts Disabled by Default: GitHub's Supply Chain Fix",
+        "tag": "Developer Security / Software Supply Chain",
+        "desc": "GitHub announces npm v12 will disable install scripts by default — the single largest code-execution surface in the npm ecosystem.",
+        "summary": "GitHub has announced breaking changes coming to npm version 12, the most significant being that install scripts will be disabled by default. GitHub described install-time lifecycle scripts as the 'single largest code-execution surface in the npm ecosystem.' The change targets attack techniques that abuse 'npm install' to trigger malicious code via lifecycle hooks. The move comes after years of supply chain attacks leveraging postinstall and preinstall scripts. npm 12 is scheduled for release next month.",
+        "importance": "This is the most impactful supply chain security improvement npm has ever made. Install scripts have been the primary vector for npm-based supply chain attacks for years. Disabling them by default closes the largest code-execution surface in the JavaScript ecosystem. It will break things — but it will also save things.",
+        "noteworthy": "Prepare for npm 12 by auditing your projects' install script dependencies. Check package.json for scripts that depend on postinstall/preinstall hooks. Test with '--ignore-scripts' flag now to identify breakage before the mandatory change lands.",
+        "link": "https://thehackernews.com/2026/06/github-to-disable-npm-install-scripts.html"
+      },
+      {
+        "id": 12,
+        "title": "Market: BTC $64.3K (+1%). ETH $1.68K. SOL $68.5.",
+        "tag": "Finance / Crypto Markets",
+        "desc": "Markets stabilize slightly after last week's crash. BTC holds $64K. ETH and SOL flat. SBF loses appeal.",
+        "summary": "Crypto markets showed marginal recovery with BTC at $64,269 (+1% 24h), ETH at $1,681 (+1.1%), and SOL at $68.55 (+2%). The recovery follows last week's sharp correction that broke the $70K floor. Institutional sentiment remains cautious. Sam Bankman-Fried lost his appeal to overturn his 25-year fraud conviction. Anthropic's Fable 5/Mythos 5 restrictions added uncertainty to AI-adjacent markets. BTC market cap stands at $1.29T.",
+        "importance": "The $70K floor is gone. Current support sits around $58K. The market is in a wait-and-see pattern — no clear catalyst for reversal. SBF's failed appeal removes one overhang, but the Anthropic export control story introduces new regulatory risk for AI-crypto intersections.",
+        "noteworthy": "Set alerts at $58K and $50K for BTC. No new positions until a clear reversal pattern forms. SOL at $68 is holding but fragile — watch for decoupling from BTC. The macro environment (tariffs, AI regulation) remains the dominant driver.",
+        "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
+      },
+      {
+        "id": 13,
+        "title": "OceanLotus Targets Vietnam Investors with SPECTRALVIPER via FireAnt Supply Chain",
+        "tag": "Cyber Espionage / Supply Chain",
+        "desc": "Vietnam-aligned OceanLotus deploys SPECTRALVIPER backdoor via FireAnt Metakit supply chain attack targeting stock investors.",
+        "summary": "OceanLotus, a Vietnam-aligned threat actor, has been attributed to two campaigns: a prolonged cyber espionage operation against a Vietnamese infrastructure and transport construction corporation (mid-2024 to February 2026), and a supply chain attack targeting stock investors via the FireAnt Metakit platform (October 2025 to March 2026). The campaigns deploy the SPECTRALVIPER backdoor, which provides persistent access, credential harvesting, and data exfiltration capabilities.",
+        "importance": "This is a local supply chain attack hitting your region directly. OceanLotus is Vietnam-aligned and targeting Vietnamese entities — including the stock investor community. If you or contacts use Vietnamese stock trading platforms, especially FireAnt, this is a direct threat.",
+        "noteworthy": "Audit any FireAnt or Metakit installations. Check for SPECTRALVIPER indicators of compromise. Vietnamese stock investors are specifically targeted — warn contacts who use domestic trading platforms. Monitor for unusual network activity from financial applications.",
+        "link": "https://thehackernews.com/2026/06/oceanlotus-hits-vietnam-investors-with.html"
       }
     ]
   },
   "yesterday": {
-    "date": "01/06/26",
+    "date": "04/06/26",
     "items": [
       {
-        "id": 10,
-        "title": "PAN-OS GlobalProtect Auth Bypass (CVE-2026-0257): Active Exploitation",
-        "tag": "Critical Vulnerability / Network Security",
-        "desc": "Palo Alto PAN-OS GlobalProtect gateway flaw allows unauthenticated access; under active exploitation.",
-        "summary": "CVE-2026-0257 in Palo Alto Networks PAN-OS GlobalProtect gateway allows remote attackers to bypass authentication and access internal networks. The flaw affects multiple PAN-OS versions and is being actively exploited in the wild, targeting enterprise VPN infrastructure globally.",
-        "importance": "PAN-OS GlobalProtect is a primary enterprise VPN for remote access. A bypass here means anyone on the internet can walk into your network perimeter.",
-        "noteworthy": "Patch PAN-OS to 10.2.14-h3/11.1.6/12.1.3. Disable GlobalProtect if not strictly required. Audit VPN logs for anomalous auth patterns.",
-        "link": "https://thehackernews.com/2026/05/pan-os-globalprotect-authentication.html"
-      },
-      {
-        "id": 11,
-        "title": "Dutch Botnet Takedown: 17M Infected Devices Neutralized",
-        "tag": "Cybercrime / Law Enforcement",
-        "desc": "Authorities dismantled a massive IoT botnet; highlights the scale of compromised consumer hardware.",
-        "summary": "Dutch police and international partners have dismantled a botnet responsible for compromising 17 million devices globally. The botnet was primarily used for DDoS attacks and credential stuffing.",
-        "importance": "17M devices is a wake-up call. Your IoT VLAN isolation isn't paranoia\u2014it's basic hygiene.",
-        "noteworthy": "Check your Pi-hole and router for unusual outbound traffic. Rotate all credentials on devices that haven't been patched in 6+ months.",
-        "link": "https://thehackernews.com/2026/05/dutch-authorities-dismantle-botnet.html"
-      },
-      {
-        "id": 12,
-        "title": "ChatGPhish: ChatGPT Web Summaries Weaponized for Phishing",
-        "tag": "Vulnerability / AI Security",
-        "desc": "New attack uses LLM web summarization as a phishing vector; tricks users into visiting malicious links.",
-        "summary": "Researchers found that ChatGPT's web content summarization feature can be manipulated to display fake URLs. Attackers embed malicious links in web pages that, when summarized, appear legitimate.",
-        "importance": "LLMs are now a phishing delivery mechanism. As you integrate AI into workflows, the 'trust the AI output' assumption is a liability.",
-        "noteworthy": "Never click URLs from LLM-summarized content without verifying. Use Pali's URL preview before trusting AI-generated links.",
-        "link": "https://thehackernews.com/2026/05/chatgphish-vulnerability-turns-chatgpt.html"
-      },
-      {
-        "id": 13,
-        "title": "LLM Agents Used for Post-Exploitation After Marimo RCE",
-        "tag": "Threat Intel / AI-Powered Attacks",
-        "desc": "Attackers chain Marimo CVE-2026-39987 RCE with autonomous LLM agents for post-exploitation.",
-        "summary": "A new attack chain uses the Marimo CVE-2026-39987 RCE exploit to gain initial access, then deploys an LLM agent to autonomously search for valuable files, API keys, and credentials on the compromised system.",
-        "importance": "AI is now being used OFFENSIVELY. Attackers are automating post-exploitation with AI agents. The asymmetry is growing.",
-        "noteworthy": "Patch Marimo immediately. Monitor for anomalous LLM API calls from internal hosts. Use network egress filtering to prevent unauthorized AI API usage.",
-        "link": "https://thehackernews.com/2026/05/attackers-use-llm-agent-for-post.html"
-      },
-      {
         "id": 14,
-        "title": "Kimsuky Deploys HTTPSpy, Expands with HelloDoor & VS Code Tunnels",
-        "tag": "Threat Intel / Nation-State APT",
-        "desc": "North Korean Kimsuky APT adds new tools; uses VS Code Tunnels as a covert C2 channel.",
-        "summary": "Kimsuky has introduced HTTPSpy (a custom backdoor) and is leveraging VS Code's remote tunnels feature as a novel C2 channel that bypasses traditional network monitoring.",
-        "importance": "VS Code Tunnels is a new C2 vector. It's inside your allowed software list. The 'living off the land' playbook is evolving.",
-        "noteworthy": "Disable VS Code's remote tunnel feature in enterprise environments. Audit VS Code extensions. Block *.service.twilio.com and *.tunnel.dev inside the perimeter.",
-        "link": "https://thehackernews.com/2026/05/kimsuky-deploys-httpspy-expands-arsenal.html"
+        "title": "Google Gemini Hijack: Poisoned Notifications Chain-Attack Android AI",
+        "tag": "Critical Vulnerability / AI Security",
+        "desc": "A single poisoned WhatsApp/Slack notification could hijack Google Gemini's voice assistant on Android to open apps, fake messages, and poison long-term memory.",
+        "summary": "Security researchers discovered that a single malicious notification from WhatsApp, Slack, SMS, Signal, Instagram, or Messenger could hijack Google Gemini's voice assistant on Android. The attack chain allows the adversary to open connected browser windows, forge messages from a victim's boss, push the phone into a Zoom call, or silently corrupt Gemini's long-term memory with injected instructions.",
+        "importance": "First major 'AI Assistant Hijack' via a side-channel. Notification-level injection becomes the new 'SMS phishing' — but with the ability to command the entire device.",
+        "noteworthy": "Review Gemini notification permissions on Android. Disable 'Gemini from notification' in settings. Monitor for unusual Gemini-initiated actions after receiving messages from unknown contacts.",
+        "link": "https://thehackernews.com/2026/06/whatsapp-slack-notifications-could.html"
       },
       {
         "id": 15,
-        "title": "Malicious NuGet Package Steals Banking Credentials",
-        "tag": "Malware / Supply Chain",
-        "desc": "Sicoob malware targets .NET developers via poisoned NuGet packages; harvests banking credentials.",
-        "summary": "A malicious NuGet package is stealing developer credentials and environment variables. It specifically targets .NET applications used in the Brazilian banking sector.",
-        "importance": "NuGet is the next NPM. The same attack patterns are migrating to the .NET ecosystem.",
-        "noteworthy": "Audit NuGet package sources. Pin NuGet versions. Monitor .env files for unauthorized access.",
-        "link": "https://thehackernews.com/2026/05/malicious-sicoob-nuget-steals-banking.html"
+        "title": "Microsoft 365 Android: Debug Flag Lets Any App Steal Account Tokens",
+        "tag": "Critical Vulnerability / Mobile Security",
+        "desc": "Leftover debug flag in production Microsoft 365 Android apps disables token-sharing restrictions; any app can request and receive signed-in user tokens.",
+        "summary": "A development flag left enabled in production builds of Microsoft 365 Android apps disables the check that limits account-token sharing to trusted Microsoft apps. Any other app on the same phone could request the signed-in user's token and gain full access to email, files, calendars, and messages.",
+        "importance": "A debug flag in production is the oldest mistake in the book. The blast radius is enormous — full Microsoft 365 account access from any app on the device.",
+        "noteworthy": "Update all Microsoft 365 Android apps immediately. Check installed apps for suspicious token requests via Android's 'App permissions' settings.",
+        "link": "https://thehackernews.com/2026/06/microsoft-365-android-apps-let-any-app.html"
       },
       {
         "id": 16,
-        "title": "Market: BTC $73,786. Market Still Bleeding.",
-        "tag": "Finance / Crypto Markets",
-        "desc": "BTC $73,786 (-0.36%). ETH $2,010 (-1%). SOL $82.63 (-0.56%). All red.",
-        "summary": "Crypto markets remain in a risk-off rotation. No clear catalyst for reversal. ETF inflows flat.",
-        "importance": "The bear market is testing patience. Hold cash. Watch $70K floor.",
-        "noteworthy": "No new positions. Monitor $70K BTC support. SOL losing relative strength.",
-        "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
+        "title": "CISA KEV: Magento Cache Warmer RCE Under Active Exploitation",
+        "tag": "Critical Vulnerability / Web Security",
+        "desc": "CVE-2026-45247 in Mirasvit Cache Warmer for Magento added to CISA KEV; actively exploited for remote code execution.",
+        "summary": "CISA added CVE-2026-45247, a critical RCE in Mirasvit Cache Warmer for Magento, to its Known Exploited Vulnerabilities catalog. Active exploitation confirmed.",
+        "importance": "RCE on an e-commerce platform is a direct path to payment card data and customer PII. Priority 0 patch.",
+        "noteworthy": "Patch Mirasvit Cache Warmer immediately or uninstall. Audit Magento installations for unauthorized PHP files.",
+        "link": "https://thehackernews.com/2026/06/cisa-adds-exploited-magento-rce-flaw.html"
       },
       {
         "id": 17,
-        "title": "GREYVIBE: Russia-Linked APT Targets Ukraine with AI-Powered Attacks",
-        "tag": "Geopolitics / Cyber War",
-        "desc": "New Russian APT 'GREYVIBE' uses AI for spear-phishing and social engineering against Ukrainian targets.",
-        "summary": "Russian state-sponsored actors are using AI to automate highly targeted spear-phishing campaigns against Ukrainian government and critical infrastructure.",
-        "importance": "State actors are fully weaponizing AI. The 'Cyber War' playbook is being rewritten in real-time.",
-        "noteworthy": "If you monitor regional threats, deploy AI-aware email filtering. Watch for AI-generated spear-phish that bypasses traditional detection.",
-        "link": "https://thehackernews.com/2026/05/new-russian-linked-greyvibe-targets.html"
+        "title": "Fake Open-Source Tool Sites Rank High on Google, Deliver Malware via TDS",
+        "tag": "Malware / Supply Chain",
+        "desc": "Sophisticated operation clones popular open-source tool websites; Google SEO manipulation funnels victims through TDS to malware.",
+        "summary": "Large-scale operation creates professional-looking fake websites mimicking popular open-source tools. These rank highly on Google search results and funnel users through a TDS that delivers malware including Remus Stealer and AnimateClipper.",
+        "importance": "SEO poisoning is now sophisticated enough to rank above legitimate sites. 'Trust by default' for Google rankings is officially broken.",
+        "noteworthy": "Always verify download URLs against official GitHub repos. Bookmark official sites for frequently used tools.",
+        "link": "https://thehackernews.com/2026/06/fake-sites-mimicking-open-source-tools.html"
+      },
+      {
+        "id": 18,
+        "title": "Stock Exchange Executive's Outlook Mailbox Spied On for Five Months",
+        "tag": "Cyber Espionage / APT",
+        "desc": "Unknown APT maintained persistent access to a senior stock exchange executive's Outlook for 5 months; exfiltrated data via Dropbox/OneDrive.",
+        "summary": "Attackers spent five months inside a senior stock exchange executive's Outlook mailbox, copying inbox content in small batches routed through Dropbox and OneDrive to evade DLP monitoring.",
+        "importance": "Five months of undetected access to a stock exchange executive's email. 'Living off the land' using legitimate cloud services as C2 channels.",
+        "noteworthy": "Implement cloud app anomaly detection for unusual OAuth activity. Monitor for unexpected OneDrive/Dropbox sync patterns from executive accounts.",
+        "link": "https://thehackernews.com/2026/06/hackers-spied-on-stock-exchange.html"
+      },
+      {
+        "id": 19,
+        "title": "Anthropic Containment Post: How to Contain Claude Across Products",
+        "tag": "AI / Engineering",
+        "desc": "Anthropic publishes detailed engineering post on containing Claude's blast radius in claude.ai, Claude Code, and Cowork.",
+        "summary": "Anthropic published a comprehensive engineering blog on layered containment for AI agents: tool-level permissions, sandboxed execution, network egress controls, and real-time monitoring.",
+        "importance": "Required reading for anyone building agentic systems. The 'blast radius' framing is the right mental model.",
+        "noteworthy": "Read the full post. Apply their sandboxing and egress control patterns to your own agent deployments.",
+        "link": "https://www.anthropic.com/engineering/how-we-contain-claude"
+      },
+      {
+        "id": 20,
+        "title": "DoJ Disrupts SE Asia Crypto Fraud: $3.8M Frozen",
+        "tag": "Law Enforcement / Crypto",
+        "desc": "US DoJ operation disrupts Southeast Asian crypto fraud networks; $3.8M in assets seized across multiple jurisdictions.",
+        "summary": "US DoJ 'Disruption Week' resulted in $3.8M seized, multiple domain takedowns, and disruption of pig-butchering platforms. Cooperation between US, Thai, Vietnamese, and Cambodian authorities.",
+        "importance": "International cooperation against SE Asian crypto fraud is operational, not just diplomatic.",
+        "noteworthy": "Report SE Asian crypto scams to IC3.gov. Monitor for rebranding of disrupted platforms under new domains.",
+        "link": "https://thehackernews.com/2026/06/doj-disrupts-southeast-asian-crypto.html"
+      },
+      {
+        "id": 21,
+        "title": "Market Crash: BTC $62.4K (-6.9%), ETH $1.7K, SOL $68",
+        "tag": "Finance / Crypto Markets",
+        "desc": "Major crypto crash triggered by tariff escalation fears; BTC breaks below $63K.",
+        "summary": "BTC dropped 6.9% to $62,460, ETH fell 7% to $1,747, SOL -9.4% to $68.34. Institutional spot ETF outflows exceeded $400M in 48 hours.",
+        "importance": "Structural correction. The $70K floor is broken. Next support: $58K.",
+        "noteworthy": "Set alerts at $58K and $50K for BTC. Wait for confirmation before scaling in.",
+        "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
       }
     ]
   }
