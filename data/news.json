@@ -1,221 +1,261 @@
 {
   "today": {
-    "date": "13/06/26",
+    "date": "15/06/26",
     "items": [
       {
         "id": 1,
-        "title": "Splunk Enterprise RCE: Unauthenticated Code Execution (CVE-2026-20253)",
-        "tag": "Critical Vulnerability / Enterprise Security",
-        "desc": "CVSS 9.8 flaw in Splunk Enterprise lets unauthenticated attackers create/truncate arbitrary files via PostgreSQL sidecar, leading to RCE.",
-        "summary": "Splunk has patched CVE-2026-20253, a critical 9.8 vulnerability in Splunk Enterprise versions below 10.2.4 and 10.0.7. The flaw exists in the PostgreSQL sidecar service endpoint, which lacks authentication controls entirely. Any network-reachable user can invoke file operations without credentials — create or truncate arbitrary files, then escalate to remote code execution. watchTowr Labs published technical details demonstrating full exploitation. Splunk Cloud is not affected. Versions 10.0.7 and 10.2.4 contain the fix. Version 10.4 was never vulnerable.",
-        "importance": "Splunk is the nervous system of most enterprise SOC operations. An unauthenticated RCE on the SIEM means attackers can blind the defenders before they even know there's a problem. This is a Priority 0 patch — if your Splunk is internet-adjacent, the window between disclosure and exploitation is measured in hours.",
-        "noteworthy": "Patch Splunk Enterprise to 10.0.7+ or 10.2.4+ immediately. If patching isn't possible today, restrict network access to the PostgreSQL sidecar endpoint. Audit Splunk logs for any unauthorized file operations dating back to the disclosure window.",
-        "link": "https://thehackernews.com/2026/06/critical-splunk-enterprise-flaw-lets.html"
+        "title": "Chrome V8 Zero-Day CVE-2026-11645 Exploited in the Wild",
+        "tag": "Critical Vulnerability / Browser Security",
+        "desc": "CVSS 8.8 out-of-bounds memory access in V8 actively exploited. Patch Chrome 149.0.7827.103 now.",
+        "summary": "Google patched 74 Chrome vulnerabilities including CVE-2026-11645 (CVSS 8.8), an out-of-bounds read/write in V8 that allows arbitrary code execution inside the sandbox via a crafted HTML page. Active exploitation in the wild confirmed. This is the 5th Chrome zero-day exploited in 2026. Researcher '303f06e3' credited with discovery.",
+        "importance": "Chrome is the most targeted browser. An actively exploited V8 zero-day means every unpatched Chrome user is a potential victim. The sandbox escape is the critical question — if paired with a sandbox escape, this is full system compromise from a single webpage visit.",
+        "noteworthy": "Update Chrome to 149.0.7827.103+ immediately. Check Chromium-based browsers (Edge, Brave, Opera) for their own patches. Enable auto-updates. Consider using a separate browser profile for high-risk browsing.",
+        "link": "https://thehackernews.com/2026/06/chrome-v8-zero-day-cve-2026-11645.html"
       },
       {
         "id": 2,
-        "title": "US Orders Anthropic to Suspend Fable 5 & Mythos 5 for Foreign Nationals",
-        "tag": "AI / National Security",
-        "desc": "US government orders Anthropic to cut off foreign national access to its most advanced models, citing national security concerns over jailbreaking.",
-        "summary": "Anthropic received a US government order at 5:21 PM ET to suspend all access to Claude Fable 5 and Mythos 5 for foreign nationals, both inside and outside the US. The government cited national security concerns, claiming a method to jailbreak Fable 5 had been discovered. Anthropic pushed back, stating the demonstrated technique only identified minor, previously known vulnerabilities — and that other publicly available models could do the same without requiring a jailbreak. The company called it a misunderstanding and is working to restore access. Other Claude models are unaffected.",
-        "importance": "This is the first time the US has directly intervened to restrict AI model access on national security grounds. Whether the justification is sound or not, the precedent is set: the government can order an AI company to suspend specific models overnight. For anyone running AI infrastructure across borders, this is a new operational risk.",
-        "noteworthy": "If you're a foreign national using Claude Fable 5 or Mythos 5 via API, expect interruptions. Monitor Anthropic's status page. Consider fallback models for production workflows. This is likely the first of many export-control actions targeting frontier AI.",
-        "link": "https://thehackernews.com/2026/06/us-orders-anthropic-to-suspend-fable-5.html"
+        "title": "Miasma Worm Hits 73 Microsoft GitHub Repos — Supply Chain Attack",
+        "tag": "Supply Chain Attack / Malware",
+        "desc": "Self-replicating worm compromised 73 Microsoft repos across Azure, Microsoft, MicrosoftDocs, and Azure-Samples. GitHub disabled access.",
+        "summary": "The Miasma self-replicating supply chain worm hit 73 Microsoft GitHub repositories across four organizations: Azure, Azure-Samples, Microsoft, and MicrosoftDocs. GitHub disabled access to affected repos. Miasma is a variant of the Mini Shai-Hulud worm publicly released in mid-May 2026. Microsoft has since restored some repos while keeping others offline as the investigation continues. The worm injects an information stealer into code.",
+        "importance": "Microsoft's own GitHub repos being compromised by a self-replicating worm is a watershed moment for supply chain security. If Microsoft can't protect its own open-source infrastructure, the trust model for all GitHub-hosted software is called into question. The worm's self-replicating nature means it spreads autonomously.",
+        "noteworthy": "Audit any dependencies pulled from Microsoft GitHub repos in the last 30 days. Pin dependency versions. Enable GitHub Dependabot alerts. Monitor for Miasma indicators of compromise. Consider mirroring critical dependencies to private registries.",
+        "link": "https://thehackernews.com/2026/06/miasma-worm-hits-73-microsoft-github.html"
       },
       {
         "id": 3,
-        "title": "400+ Arch Linux AUR Packages Hijacked: Infostealer + eBPF Rootkit",
-        "tag": "Supply Chain Attack / Linux Security",
-        "desc": "Attackers took over 400+ AUR packages, injecting a Rust infostealer and eBPF rootkit into build scripts. No zero-day needed — just abandoned packages.",
-        "summary": "Over 400 packages in the Arch User Repository (AUR) were hijacked this week by attackers who adopted abandoned packages and rewrote their build scripts to deploy malware. The payload is a Rust binary that harvests developer credentials, and when running as root, loads an eBPF rootkit to hide itself. The attack targets the trust model, not a software flaw — the packages kept their names, histories, and reputation. Only the build instructions changed. The official Arch repositories were not affected. The list of compromised packages is still growing.",
-        "importance": "This is the AUR equivalent of the npm takeover playbook, but with a rootkit payload. eBPF rootkits are nearly undetectable by conventional means — they run in kernel space. If you built any AUR package on or after June 11, your machine may be compromised at the kernel level.",
-        "noteworthy": "Check all AUR packages installed/updated since June 11 against the affected package list. If you hit a compromised package, assume the host is fully owned — wipe and rebuild. Consider switching to only official repositories for critical systems. Audit eBPF programs on running kernels with 'bpftool prog list'.",
-        "link": "https://thehackernews.com/2026/06/over-400-arch-linux-aur-packages.html"
+        "title": "IronWorm + Miasma Variant Hit npm: 50+ Packages Compromised",
+        "tag": "Supply Chain Attack / Malware",
+        "desc": "Two supply chain worms hit npm simultaneously — IronWorm and a Miasma variant — distributing Rust-based infostealer across 50+ packages.",
+        "summary": "JFrog reported multiple supply chain attacks hitting npm, with threat actors using malicious and poisoned versions of over 50 legitimate packages to distribute a Rust-based information stealer and a self-spreading worm. The Miasma worm variant targets npm packages, while IronWorm is a separate campaign. Both scrape developer secrets: environment variables, SSH keys, cloud tokens, and API credentials.",
+        "importance": "npm is the largest package registry in the world. Two concurrent worm campaigns targeting it means the ecosystem is under active, automated attack. The self-replicating nature of these worms means they spread faster than manual takedowns can contain them.",
+        "noteworthy": "Audit npm dependencies for any packages matching Miasma/IronWorm indicators. Pin all dependency versions. Consider using npm audit and Socket.dev for real-time supply chain monitoring. Rotate any credentials that may have been exposed.",
+        "link": "https://thehackernews.com/2026/06/ironworm-and-new-miasma-worm-variant.html"
       },
       {
         "id": 4,
-        "title": "Agentjacking: AI Coding Agents Tricked Into Running Malicious Code",
-        "tag": "AI Security / Vulnerability",
-        "desc": "New attack class injects malicious instructions via Sentry error reports, which AI coding agents (Claude Code, Cursor) interpret as legitimate fixes and execute.",
-        "summary": "Tenet Security disclosed 'Agentjacking' — a new attack class that exploits the intersection of Sentry's event ingestion (which accepts arbitrary payloads from anyone with a DSN) and AI coding agents that consume Sentry data as trusted system output. An attacker injects crafted error reports into a project's Sentry instance. When an AI agent like Claude Code or Cursor encounters these errors, it interprets the injected instructions as legitimate diagnostic resolution steps and executes attacker-controlled code. This can expose environment variables, Git credentials, private repository URLs, and developer identities.",
-        "importance": "This is the first systematic attack targeting AI coding agents via their monitoring pipeline. The attack surface is enormous — any project using Sentry + an AI coding agent is vulnerable. The DSN is semi-public by design, making injection trivial. Every developer using Claude Code or Cursor with Sentry integration is potentially exposed.",
-        "noteworthy": "Audit Sentry DSN exposure. Consider whether your AI coding agent should have autonomous access to error-tracking platforms. Implement human-in-the-loop review for all code changes suggested by AI agents based on external data. Rotate any credentials that may have been processed by AI agents with Sentry access.",
-        "link": "https://thehackernews.com/2026/06/agentjacking-attack-tricks-ai-coding.html"
+        "title": "One-Character Linux Kernel Flaw: Local Root + Container Escape (CVE-2026-23111)",
+        "tag": "Critical Vulnerability / Linux Security",
+        "desc": "Use-after-free in nf_tables lets unprivileged users escalate to root and break out of containers. Working exploit published.",
+        "summary": "Exodus Intelligence published a working exploit for CVE-2026-23111, a use-after-free in the Linux kernel's nf_tables packet-filtering code. A single-character bug lets an unprivileged local user escalate to root and break out of containers. The flaw was patched upstream on February 5, 2026, but many distros may not have deployed the fix. Working exploit code is now public.",
+        "importance": "Local root + container escape from a single-character bug is the kind of vulnerability that powers privilege escalation chains. If you run multi-tenant containers or have untrusted users on Linux systems, this is a direct threat. The public exploit means script kiddies can weaponize it.",
+        "noteworthy": "Verify your kernel is patched beyond February 5, 2026. Check distro kernel versions against the fix commit. For container hosts, ensure seccomp profiles and AppArmor/SELinux are enforced. The exploit requires local access — harden SSH and user authentication.",
+        "link": "https://thehackernews.com/2026/06/one-character-linux-kernel-flaw-enables.html"
       },
       {
         "id": 5,
-        "title": "Velvet Ant: China-Linked APT Backdoored Linux Login for Nearly a Decade",
-        "tag": "Cyber Espionage / Nation-State APT",
-        "desc": "China-nexus group replaced PAM and OpenSSH binaries with backdoored versions that logged credentials and accepted master passwords. Active since 2016.",
-        "summary": "Sygnia tracks a China-nexus threat group called Velvet Ant that spent close to a decade hidden inside the Linux login system itself. Rather than dropping new malware, the attacker replaced the PAM login module and OpenSSH binaries with backdoored versions. Some let them in with a secret password; others quietly recorded real usernames and passwords as users logged in. Nine separate backdoor versions were found. The targeted network had no direct internet access — the group staged through internet-facing systems to reach it. The earliest traces date back to 2016.",
-        "importance": "A decade of undetected access via compromised login binaries is the gold standard of persistence. This isn't a vulnerability — it's a replacement of the trust foundation itself. If the login system is compromised, every credential that passed through it is assumed leaked. For Linux admins, this changes the threat model: rootkits are no longer the worst case — your authentication binaries themselves may be the adversary.",
-        "noteworthy": "Verify PAM and OpenSSH binary integrity on all Linux servers using package manager checksums (rpm -V, debsums). Check for unexpected PAM modules in /etc/pam.d/. Monitor SSH binary hashes against known-good baselines. Consider deploying AIDE or Tripwire for file integrity monitoring.",
-        "link": "https://thehackernews.com/2026/06/china-linked-hackers-backdoored-linux.html"
+        "title": "FROST Attack: Websites Track Your Apps via SSD Timing — No Permissions Needed",
+        "tag": "Privacy / Browser Security",
+        "desc": "Novel side-channel attack uses JavaScript + OPFS SSD timing to identify which websites and apps you use at 88.95% F1 accuracy.",
+        "summary": "Researchers disclosed FROST, a novel side-channel attack that uses JavaScript and the Origin Private File System (OPFS) to time SSD operations. By measuring drive contention, a malicious website can determine which other sites and apps you have open — with 88.95% F1 accuracy. No native code, no extensions, and no permission prompts required. The attack works across browsers because it exploits the SSD's physical characteristics, not a browser bug.",
+        "importance": "This is a fundamental privacy leak that no browser setting can fix. It exploits the physics of SSDs, not a software bug. Every modern browser supports OPFS, making this a cross-browser tracking vector that ad blockers and privacy extensions cannot mitigate.",
+        "noteworthy": "No patch available — this is a hardware-level side channel. Mitigations include disabling OPFS in browser flags (may break web apps), using RAM-backed temp storage, or switching to a system without SSDs. For sensitive work, consider separate physical machines.",
+        "link": "https://thehackernews.com/2026/06/new-frost-attack-lets-websites-track.html"
       },
       {
         "id": 6,
-        "title": "21 Zero-Days in FFmpeg: Autonomous Security Agent Finds Decade-Old Bugs",
+        "title": "AI Agent Uncovers 21 Zero-Days in FFmpeg; Chrome Patches Record 429 Bugs",
         "tag": "Vulnerability / AI Security Research",
-        "desc": "depthfirst's autonomous security agent discovered 21 zero-days in FFmpeg, some latent for 15-20 years, including a PoC RCE exploit primitive.",
-        "summary": "depthfirst's production autonomous security agent discovered 21 zero-day vulnerabilities in FFmpeg after intensive analysis. Several vulnerabilities had been sitting latent for 15 to 20 years. The agent moved beyond theoretical analysis to produce concrete, reproducible PoC inputs confirming the findings at a fraction of traditional costs ($1K vs $10K). A proof-of-concept demonstrating an RCE exploit primitive was developed. FFmpeg is one of the most widely deployed multimedia libraries in the world, present in everything from browsers to IoT devices.",
-        "importance": "This is a watershed moment for AI-powered security research. 21 zero-days found by an autonomous agent, with a working RCE PoC, at 10% of traditional cost. The offensive AI capability gap is widening fast. If you process any multimedia content, FFmpeg is in your stack somewhere — and it just got 21 new holes.",
-        "noteworthy": "Patch FFmpeg to the latest version immediately. If you can't patch, sandbox all FFmpeg processing (containers, seccomp, network isolation). Audit any system that processes user-uploaded media. This includes web servers, media pipelines, and IoT devices running FFmpeg-based transcoding.",
-        "link": "https://depthfirst.com/research/21-zero-days-in-ffmpeg"
+        "desc": "Autonomous AI agent finds 21 zero-days in FFmpeg. Same week, Chrome ships record 429 patches in a single release.",
+        "summary": "Two events within days: depthfirst's autonomous AI agent discovered 21 previously unknown vulnerabilities in FFmpeg, the media library used in almost everything that touches video. The same week, Google shipped Chrome 149 with patches for 429 security bugs — the most ever in a single Chrome release. The FFmpeg findings include bugs latent for 15-20 years, with a working RCE PoC developed. Chrome's 429 patches span V8, GPU, networking, and extensions.",
+        "importance": "AI-powered vulnerability discovery is no longer theoretical — it's producing results at scale. 21 zero-days in a single library, found autonomously, at 10% of traditional cost. Chrome's 429-bug release signals that the vulnerability surface is expanding faster than manual review can keep up.",
+        "noteworthy": "Patch FFmpeg to latest version. Sandbox all media processing. Update Chrome to 149.0.7827.103+. The AI vulnerability discovery trend means more CVEs are coming — prepare for increased patch velocity.",
+        "link": "https://thehackernews.com/2026/06/ai-agent-uncovers-21-zero-days-in.html"
       },
       {
         "id": 7,
-        "title": "GreatXML: New BitLocker Bypass via Windows Recovery Partition",
-        "tag": "Endpoint Security / Vulnerability",
-        "desc": "Researcher releases BitLocker bypass that drops XML files into the recovery partition to spawn an unrestricted shell. Anyone who ran Defender Offline Scan is vulnerable.",
-        "summary": "Security researcher Chaotic Eclipse released GreatXML, a new Windows BitLocker bypass. The exploit copies an unattend.xml file and a recovery folder containing ReAgent.xml to the root of the recovery partition, then boots into WinRE. The result is a shell with unrestricted access to the BitLocker volume. The researcher found it by accident in 4 hours. If Windows Defender Offline Scan was ever initiated on the machine, it's automatically vulnerable. Even without the offline scan, the bypass may still be achievable through other WinRE entry points.",
-        "importance": "BitLocker is the primary full-disk encryption solution for Windows enterprise deployments. A bypass that requires only physical access and 4 hours of accidental discovery means your disk encryption is theater for any determined attacker with hands on the hardware. For enterprises relying on BitLocker for lost/stolen device protection, this changes the risk calculus.",
-        "noteworthy": "Enable BitLocker with a TPM+PIN configuration rather than TPM-only. Consider disabling WinRE on high-security endpoints. Physical access remains the hardest threat model to defend against — pair disk encryption with hardware-level security (Secure Boot, Virtualization-based Security). Monitor for unexpected WinRE boots.",
-        "link": "https://thehackernews.com/2026/06/new-greatxml-exploit-bypasses-windows.html"
+        "title": "ChatGPT Lockdown Mode: OpenAI's Answer to Prompt Injection Data Theft",
+        "tag": "AI Security / Product",
+        "desc": "OpenAI rolls out Lockdown Mode for ChatGPT personal accounts, restricting tools that could enable data exfiltration via prompt injection.",
+        "summary": "OpenAI began rolling out Lockdown Mode to ChatGPT for eligible personal accounts. The feature restricts tools that could be used for data exfiltration via prompt injection attacks — limiting code interpreter, file uploads, and web browsing capabilities when sensitive data is present. OpenAI acknowledges Lockdown Mode does not prevent all prompt injection effects — a malicious instruction hidden in an uploaded file could still affect ChatGPT's behavior and cause incorrect answers.",
+        "importance": "This is the first major platform-level response to prompt injection as a data exfiltration vector. For anyone handling sensitive data through AI assistants, Lockdown Mode is a necessary but insufficient mitigation. The admission that it doesn't fully prevent prompt injection effects is honest but concerning.",
+        "noteworthy": "Enable Lockdown Mode in ChatGPT settings if handling sensitive data. Continue to avoid uploading sensitive documents to AI assistants. Treat AI-generated output as untrusted. This is a mitigation, not a solution — the underlying prompt injection problem remains unsolved.",
+        "link": "https://thehackernews.com/2026/06/new-chatgpt-lockdown-mode-limits-tools.html"
       },
       {
         "id": 8,
-        "title": "ShinyHunters Exploits Oracle PeopleSoft Zero-Day (CVE-2026-35273)",
-        "tag": "Critical Vulnerability / Data Breach",
-        "desc": "CVSS 9.8 unauthenticated RCE in Oracle PeopleSoft exploited by ShinyHunters to breach universities. Zero-day for 2 weeks before patch.",
-        "summary": "The ShinyHunters extortion crew exploited an unpatched flaw in Oracle PeopleSoft to break into enterprise systems, primarily universities. Google's Mandiant attributes the campaign to UNC6240, active from May 27 to June 9. Oracle didn't publish its advisory until June 10 — the bug was a zero-day the entire time. CVE-2026-35273 is a 9.8 CVSS remote code execution vulnerability in PeopleSoft Enterprise PeopleTools that requires no login and no user interaction, just HTTP network access to the Environment Management Hub.",
-        "importance": "PeopleSoft runs the administrative backbone of thousands of universities and enterprises. A 9.8 unauthenticated RCE that was exploited in the wild for two weeks before a patch is a textbook zero-day scenario. If you have PeopleSoft exposed to the internet, assume compromise.",
-        "noteworthy": "Patch PeopleTools 8.61 and 8.62 immediately. Restrict access to the PSEMHUB endpoint at the network level. Audit PeopleSoft logs for unusual activity between May 27 and June 10. If the Environment Management Hub was internet-facing, conduct a full incident response.",
-        "link": "https://thehackernews.com/2026/06/shinyhunters-exploits-oracle-peoplesoft.html"
+        "title": "Cisco Unified CM RCE (CVE-2026-20230): Exploit Code Goes Public",
+        "tag": "Critical Vulnerability / Network Security",
+        "desc": "Unauthenticated attacker can write files and escalate to root on Cisco Unified Communications Manager. PoC exploit code now public.",
+        "summary": "Cisco patched CVE-2026-20230 in Unified Communications Manager, which lets an unauthenticated attacker on the network write files to the box and escalate to root. Proof-of-concept exploit code is already public. The vulnerability affects Cisco Unified CM and Unified CM SME. CISA has added it to the KEV catalog alongside Chrome and Arista flaws.",
+        "importance": "Unified CM is the phone system backbone for thousands of enterprises. An unauthenticated file write + root escalation with public exploit code means every unpatched Unified CM is a ticking bomb. Voice infrastructure is often overlooked in patch management.",
+        "noteworthy": "Patch Cisco Unified CM immediately. If patching isn't possible, restrict network access to Unified CM management interfaces. Audit for signs of compromise. CISA KEV listing means federal contractors have 14 days to patch.",
+        "link": "https://thehackernews.com/2026/06/cisco-patches-cve-2026-20230-in-unified.html"
       },
       {
         "id": 9,
-        "title": "The Gentlemen Ransomware: 478 Victims, Worm-Like Spread, AI-Powered",
-        "tag": "Cybercrime / Ransomware",
-        "desc": "PRODAFT analysis reveals The Gentlemen group operates independently, uses AI for ransomware development, and has claimed 478 victims.",
-        "summary": "PRODAFT's detailed analysis of The Gentlemen operation (tracked as Phantom Mantis) reveals a Russian-speaking group led by LARVA-368 that initially operated as an affiliate for LockBit, Qilin, and Medusa RaaS programs. In July 2025, they transitioned to an independent partnership program. The group relies heavily on AI for ransomware development, tool maintenance, and post-exploitation. They've claimed 478 victims to date. The ransomware can spread laterally like a worm, making containment critical once an infection begins.",
-        "importance": "AI-assisted ransomware development is now confirmed operational, not theoretical. A group that started as RaaS affiliates and graduated to independent operations with AI assistance is the blueprint for the next generation of threat actors. The worm-like spread capability means a single infection can become an enterprise-wide event.",
-        "noteworthy": "Ensure network segmentation and lateral movement controls are in place. The worm-like spread means flat networks are death traps. Disable SMB between VLANs. Verify backup integrity — The Gentlemen's double extortion means both encryption and data theft are in play.",
-        "link": "https://thehackernews.com/2026/06/the-gentlemen-ransomware-claims-478.html"
+        "title": "CISA Adds Cisco, Chrome, and Arista Flaws to KEV Catalog",
+        "tag": "Vulnerability / CISA KEV",
+        "desc": "Three new vulnerabilities added to CISA's Known Exploited Vulnerabilities catalog: Cisco Unified CM, Chrome V8, and Arista EOS.",
+        "summary": "CISA added three vulnerabilities to its KEV catalog: CVE-2026-20230 (Cisco Unified CM RCE), CVE-2026-11645 (Chrome V8 zero-day), and an Arista EOS flaw. All are under active exploitation. The KEV listing requires federal agencies to patch within 14 days and serves as a priority signal for all organizations.",
+        "importance": "CISA KEV is the de facto priority list for enterprise patch management. Three additions in one batch signals that attackers are actively targeting these vectors. The Arista EOS inclusion is notable — network infrastructure is increasingly in the crosshairs.",
+        "noteworthy": "Check your environment for all three products. Prioritize patching in KEV order. The 14-day federal mandate is a good benchmark for all organizations.",
+        "link": "https://thehackernews.com/2026/06/cisa-adds-cisco-chrome-and-arista-flaws.html"
       },
       {
         "id": 10,
-        "title": "LangGraph RCE Chain: SQL Injection Leads to Full Agent Takeover",
-        "tag": "Vulnerability / AI Security",
-        "desc": "Three patched flaws in LangGraph chain together for unauthenticated RCE. SQL injection → msgpack deserialization → arbitrary code execution on agent servers.",
-        "summary": "Check Point disclosed three now-patched vulnerabilities in LangGraph, LangChain's framework for building stateful multi-agent AI applications. CVE-2025-67644 (CVSS 7.3) is a SQL injection in LangGraph's SQLite checkpoint implementation via metadata filter keys. CVE-2026-28277 (CVSS 6.8) enables unsafe msgpack deserialization to trigger object reconstruction when loading attacker-modified checkpoints. Chained together, these allow full remote code execution on self-hosted LangGraph servers. The vulnerabilities affect langgraph-checkpoint-sqlite before 3.0.1 and langgraph before 0.4.1.",
-        "importance": "LangGraph is becoming the default framework for production AI agent deployments. An unauthenticated RCE chain against the agent infrastructure is a direct hit on the most sensitive layer — the AI runtime itself. If you're running self-hosted LangGraph agents, this is a must-patch.",
-        "noteworthy": "Update langgraph to 0.4.1+ and langgraph-checkpoint-sqlite to 3.0.1+. If you can't update immediately, restrict network access to LangGraph server endpoints. Validate checkpoint data integrity before loading. Consider adding authentication layers in front of LangGraph servers.",
-        "link": "https://thehackernews.com/2026/06/langgraph-flaw-chain-exposes-self.html"
+        "title": "Smart TVs Turned Into Web-Scraping Proxies for AI via Free Apps",
+        "tag": "Privacy / IoT Security",
+        "desc": "Researcher reverse-engineers Bright Data's iOS SDK embedded in free apps, turning smart TVs into residential proxies for AI web scraping.",
+        "summary": "A researcher reverse-engineered the iOS SDK that Bright Data embeds in consumer apps, documenting how it turns devices — including smart TVs — into residential proxies for web scraping. Free apps on smart TVs quietly route traffic through the device, using the home's IP address to scrape websites for AI training data. The device owner is unaware their bandwidth and IP are being used as a proxy node.",
+        "importance": "Your smart TV is now a proxy server for AI companies. This is the next evolution of the 'free app monetization' model — instead of ads, your device's IP address is the product. For home lab operators, this means your home IP could be flagged for scraping activity you didn't initiate.",
+        "noteworthy": "Audit smart TV apps. Remove any free apps that don't need network access. Monitor your home IP for unusual outbound traffic patterns. Consider using a VPN at the router level to prevent IP-based tracking. Block unknown outbound connections from IoT VLAN.",
+        "link": "https://thehackernews.com/2026/06/free-apps-are-quietly-turning-smart-tvs.html"
       },
       {
         "id": 11,
-        "title": "npm Install Scripts Disabled by Default: GitHub's Supply Chain Fix",
-        "tag": "Developer Security / Software Supply Chain",
-        "desc": "GitHub announces npm v12 will disable install scripts by default — the single largest code-execution surface in the npm ecosystem.",
-        "summary": "GitHub has announced breaking changes coming to npm version 12, the most significant being that install scripts will be disabled by default. GitHub described install-time lifecycle scripts as the 'single largest code-execution surface in the npm ecosystem.' The change targets attack techniques that abuse 'npm install' to trigger malicious code via lifecycle hooks. The move comes after years of supply chain attacks leveraging postinstall and preinstall scripts. npm 12 is scheduled for release next month.",
-        "importance": "This is the most impactful supply chain security improvement npm has ever made. Install scripts have been the primary vector for npm-based supply chain attacks for years. Disabling them by default closes the largest code-execution surface in the JavaScript ecosystem. It will break things — but it will also save things.",
-        "noteworthy": "Prepare for npm 12 by auditing your projects' install script dependencies. Check package.json for scripts that depend on postinstall/preinstall hooks. Test with '--ignore-scripts' flag now to identify breakage before the mandatory change lands.",
-        "link": "https://thehackernews.com/2026/06/github-to-disable-npm-install-scripts.html"
+        "title": "Unpatched Windows Search URI Leaks NTLMv2 Hashes",
+        "tag": "Vulnerability / Windows Security",
+        "desc": "Windows Search URI handler can be abused to leak NTLMv2 hashes to remote attackers. No patch available.",
+        "summary": "Researchers disclosed an unpatched issue in Windows Search URI handling that can be exploited to disclose a user's NTLMv2 hashes. An attacker can trigger the leak by getting a user to click a specially crafted link, which causes Windows to authenticate to a remote SMB share, sending the user's NTLMv2 hash. The hash can then be cracked offline or used in relay attacks. No patch is currently available from Microsoft.",
+        "importance": "NTLMv2 hash theft is a classic attack vector that keeps resurfacing. The hash can be cracked offline or relayed to authenticate as the user. With no patch available, the only mitigation is blocking outbound SMB traffic and educating users about suspicious links.",
+        "noteworthy": "Block outbound SMB (port 445) at the firewall. Disable NTLM authentication where possible via Group Policy. Educate users not to click suspicious links. Monitor for unexpected SMB outbound connections. This is unpatched — assume all Windows versions are vulnerable.",
+        "link": "https://thehackernews.com/2026/06/unpatched-windows-search-uri.html"
       },
       {
         "id": 12,
-        "title": "Market: BTC $64.3K (+1%). ETH $1.68K. SOL $68.5.",
-        "tag": "Finance / Crypto Markets",
-        "desc": "Markets stabilize slightly after last week's crash. BTC holds $64K. ETH and SOL flat. SBF loses appeal.",
-        "summary": "Crypto markets showed marginal recovery with BTC at $64,269 (+1% 24h), ETH at $1,681 (+1.1%), and SOL at $68.55 (+2%). The recovery follows last week's sharp correction that broke the $70K floor. Institutional sentiment remains cautious. Sam Bankman-Fried lost his appeal to overturn his 25-year fraud conviction. Anthropic's Fable 5/Mythos 5 restrictions added uncertainty to AI-adjacent markets. BTC market cap stands at $1.29T.",
-        "importance": "The $70K floor is gone. Current support sits around $58K. The market is in a wait-and-see pattern — no clear catalyst for reversal. SBF's failed appeal removes one overhang, but the Anthropic export control story introduces new regulatory risk for AI-crypto intersections.",
-        "noteworthy": "Set alerts at $58K and $50K for BTC. No new positions until a clear reversal pattern forms. SOL at $68 is holding but fragile — watch for decoupling from BTC. The macro environment (tariffs, AI regulation) remains the dominant driver.",
-        "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
+        "title": "HTTP/2 Bomb: Remote DoS on NGINX, Apache, IIS, Envoy & Cloudflare",
+        "tag": "Vulnerability / Server Security",
+        "desc": "New HTTP/2 vulnerability enables remote denial-of-service across major web servers and reverse proxies.",
+        "summary": "Researchers discovered a remote denial-of-service exploit affecting multiple HTTP/2 implementations including NGINX, Apache HTTP Server, IIS, Envoy, and Cloudflare. The 'HTTP/2 Bomb' exploits how different servers handle HTTP/2 stream multiplexing, causing resource exhaustion with minimal bandwidth. The attack can take down servers with a single connection.",
+        "importance": "HTTP/2 is the backbone of modern web traffic. A DoS that works across every major web server and CDN is a systemic vulnerability. For anyone running web infrastructure, this is a must-patch across the entire stack.",
+        "noteworthy": "Update NGINX, Apache, IIS, and Envoy to latest versions. Check Cloudflare status for their mitigation. Implement rate limiting and connection limits as defense-in-depth. Monitor for unusual HTTP/2 connection patterns.",
+        "link": "https://thehackernews.com/2026/06/new-http2-bomb-vulnerability-allows.html"
       },
       {
         "id": 13,
-        "title": "OceanLotus Targets Vietnam Investors with SPECTRALVIPER via FireAnt Supply Chain",
-        "tag": "Cyber Espionage / Supply Chain",
-        "desc": "Vietnam-aligned OceanLotus deploys SPECTRALVIPER backdoor via FireAnt Metakit supply chain attack targeting stock investors.",
-        "summary": "OceanLotus, a Vietnam-aligned threat actor, has been attributed to two campaigns: a prolonged cyber espionage operation against a Vietnamese infrastructure and transport construction corporation (mid-2024 to February 2026), and a supply chain attack targeting stock investors via the FireAnt Metakit platform (October 2025 to March 2026). The campaigns deploy the SPECTRALVIPER backdoor, which provides persistent access, credential harvesting, and data exfiltration capabilities.",
-        "importance": "This is a local supply chain attack hitting your region directly. OceanLotus is Vietnam-aligned and targeting Vietnamese entities — including the stock investor community. If you or contacts use Vietnamese stock trading platforms, especially FireAnt, this is a direct threat.",
-        "noteworthy": "Audit any FireAnt or Metakit installations. Check for SPECTRALVIPER indicators of compromise. Vietnamese stock investors are specifically targeted — warn contacts who use domestic trading platforms. Monitor for unusual network activity from financial applications.",
-        "link": "https://thehackernews.com/2026/06/oceanlotus-hits-vietnam-investors-with.html"
+        "title": "Market: BTC $65.7K (+1.9%). ETH $1,718. SOL $71.1.",
+        "tag": "Finance / Crypto Markets",
+        "desc": "Crypto markets show modest recovery. BTC holds above $65K. SOL leads with +3.2%.",
+        "summary": "Crypto markets showed a modest recovery with BTC at $65,690 (+1.9% 24h), ETH at $1,718 (+2.2%), and SOL at $71.13 (+3.2%). The recovery follows last week's stabilization above $64K. BTC market cap stands at $1.29T. The $70K floor remains broken but $65K is holding as a new support level. SOL is showing relative strength, decoupling from BTC's trajectory.",
+        "importance": "The market is in a consolidation phase after the structural correction. $65K is holding as support but $70K remains the key resistance. SOL's outperformance suggests capital rotation within crypto. The macro environment (tariffs, AI regulation) remains the dominant driver.",
+        "noteworthy": "Watch $65K BTC support — a break below signals retest of $58K. SOL at $71 is showing strength but still below pre-crash levels. No clear reversal signal yet. Hold cash, wait for confirmation.",
+        "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
       }
     ]
   },
   "yesterday": {
-    "date": "04/06/26",
+    "date": "13/06/26",
     "items": [
       {
         "id": 14,
-        "title": "Google Gemini Hijack: Poisoned Notifications Chain-Attack Android AI",
-        "tag": "Critical Vulnerability / AI Security",
-        "desc": "A single poisoned WhatsApp/Slack notification could hijack Google Gemini's voice assistant on Android to open apps, fake messages, and poison long-term memory.",
-        "summary": "Security researchers discovered that a single malicious notification from WhatsApp, Slack, SMS, Signal, Instagram, or Messenger could hijack Google Gemini's voice assistant on Android. The attack chain allows the adversary to open connected browser windows, forge messages from a victim's boss, push the phone into a Zoom call, or silently corrupt Gemini's long-term memory with injected instructions.",
-        "importance": "First major 'AI Assistant Hijack' via a side-channel. Notification-level injection becomes the new 'SMS phishing' — but with the ability to command the entire device.",
-        "noteworthy": "Review Gemini notification permissions on Android. Disable 'Gemini from notification' in settings. Monitor for unusual Gemini-initiated actions after receiving messages from unknown contacts.",
-        "link": "https://thehackernews.com/2026/06/whatsapp-slack-notifications-could.html"
+        "title": "Splunk Enterprise RCE: Unauthenticated Code Execution (CVE-2026-20253)",
+        "tag": "Critical Vulnerability / Enterprise Security",
+        "desc": "CVSS 9.8 flaw in Splunk Enterprise lets unauthenticated attackers create/truncate arbitrary files via PostgreSQL sidecar, leading to RCE.",
+        "summary": "Splunk patched CVE-2026-20253, a critical 9.8 vulnerability in Splunk Enterprise below 10.2.4 and 10.0.7. The PostgreSQL sidecar service endpoint lacks authentication controls entirely. watchTowr Labs published full exploitation details.",
+        "importance": "Splunk is the nervous system of most enterprise SOC operations. An unauthenticated RCE on the SIEM means attackers can blind defenders before they know there's a problem.",
+        "noteworthy": "Patch Splunk Enterprise to 10.0.7+ or 10.2.4+. Restrict network access to PostgreSQL sidecar endpoint. Audit Splunk logs for unauthorized file operations.",
+        "link": "https://thehackernews.com/2026/06/critical-splunk-enterprise-flaw-lets.html"
       },
       {
         "id": 15,
-        "title": "Microsoft 365 Android: Debug Flag Lets Any App Steal Account Tokens",
-        "tag": "Critical Vulnerability / Mobile Security",
-        "desc": "Leftover debug flag in production Microsoft 365 Android apps disables token-sharing restrictions; any app can request and receive signed-in user tokens.",
-        "summary": "A development flag left enabled in production builds of Microsoft 365 Android apps disables the check that limits account-token sharing to trusted Microsoft apps. Any other app on the same phone could request the signed-in user's token and gain full access to email, files, calendars, and messages.",
-        "importance": "A debug flag in production is the oldest mistake in the book. The blast radius is enormous — full Microsoft 365 account access from any app on the device.",
-        "noteworthy": "Update all Microsoft 365 Android apps immediately. Check installed apps for suspicious token requests via Android's 'App permissions' settings.",
-        "link": "https://thehackernews.com/2026/06/microsoft-365-android-apps-let-any-app.html"
+        "title": "US Orders Anthropic to Suspend Fable 5 & Mythos 5 for Foreign Nationals",
+        "tag": "AI / National Security",
+        "desc": "US government orders Anthropic to cut off foreign national access to its most advanced models, citing national security concerns over jailbreaking.",
+        "summary": "Anthropic received a US government order to suspend all access to Claude Fable 5 and Mythos 5 for foreign nationals. The government claimed a jailbreak method was discovered. Anthropic called it a misunderstanding and is working to restore access.",
+        "importance": "First time the US has directly intervened to restrict AI model access on national security grounds. Precedent is set: government can order an AI company to suspend specific models overnight.",
+        "noteworthy": "If using Claude Fable 5 or Mythos 5 via API, expect interruptions. Consider fallback models. This is likely the first of many export-control actions targeting frontier AI.",
+        "link": "https://thehackernews.com/2026/06/us-orders-anthropic-to-suspend-fable-5.html"
       },
       {
         "id": 16,
-        "title": "CISA KEV: Magento Cache Warmer RCE Under Active Exploitation",
-        "tag": "Critical Vulnerability / Web Security",
-        "desc": "CVE-2026-45247 in Mirasvit Cache Warmer for Magento added to CISA KEV; actively exploited for remote code execution.",
-        "summary": "CISA added CVE-2026-45247, a critical RCE in Mirasvit Cache Warmer for Magento, to its Known Exploited Vulnerabilities catalog. Active exploitation confirmed.",
-        "importance": "RCE on an e-commerce platform is a direct path to payment card data and customer PII. Priority 0 patch.",
-        "noteworthy": "Patch Mirasvit Cache Warmer immediately or uninstall. Audit Magento installations for unauthorized PHP files.",
-        "link": "https://thehackernews.com/2026/06/cisa-adds-exploited-magento-rce-flaw.html"
+        "title": "400+ Arch Linux AUR Packages Hijacked: Infostealer + eBPF Rootkit",
+        "tag": "Supply Chain Attack / Linux Security",
+        "desc": "Attackers took over 400+ AUR packages, injecting a Rust infostealer and eBPF rootkit into build scripts.",
+        "summary": "Over 400 AUR packages hijacked by attackers who adopted abandoned packages and rewrote build scripts. Payload: Rust infostealer + eBPF rootkit. Official Arch repos not affected.",
+        "importance": "eBPF rootkits are nearly undetectable by conventional means. If you built any AUR package since June 11, assume compromise.",
+        "noteworthy": "Check all AUR packages installed/updated since June 11. If compromised, wipe and rebuild. Consider switching to official repos only for critical systems.",
+        "link": "https://thehackernews.com/2026/06/over-400-arch-linux-aur-packages.html"
       },
       {
         "id": 17,
-        "title": "Fake Open-Source Tool Sites Rank High on Google, Deliver Malware via TDS",
-        "tag": "Malware / Supply Chain",
-        "desc": "Sophisticated operation clones popular open-source tool websites; Google SEO manipulation funnels victims through TDS to malware.",
-        "summary": "Large-scale operation creates professional-looking fake websites mimicking popular open-source tools. These rank highly on Google search results and funnel users through a TDS that delivers malware including Remus Stealer and AnimateClipper.",
-        "importance": "SEO poisoning is now sophisticated enough to rank above legitimate sites. 'Trust by default' for Google rankings is officially broken.",
-        "noteworthy": "Always verify download URLs against official GitHub repos. Bookmark official sites for frequently used tools.",
-        "link": "https://thehackernews.com/2026/06/fake-sites-mimicking-open-source-tools.html"
+        "title": "Agentjacking: AI Coding Agents Tricked Into Running Malicious Code",
+        "tag": "AI Security / Vulnerability",
+        "desc": "New attack class injects malicious instructions via Sentry error reports, which AI coding agents interpret as legitimate fixes and execute.",
+        "summary": "Tenet Security disclosed Agentjacking — exploiting Sentry's event ingestion (accepts arbitrary payloads) and AI coding agents that consume Sentry data as trusted system output. Affects Claude Code, Cursor, and similar agents.",
+        "importance": "First systematic attack targeting AI coding agents via their monitoring pipeline. Every developer using Claude Code or Cursor with Sentry integration is potentially exposed.",
+        "noteworthy": "Audit Sentry DSN exposure. Implement human-in-the-loop review for AI-suggested code changes based on external data. Rotate credentials processed by AI agents with Sentry access.",
+        "link": "https://thehackernews.com/2026/06/agentjacking-attack-tricks-ai-coding.html"
       },
       {
         "id": 18,
-        "title": "Stock Exchange Executive's Outlook Mailbox Spied On for Five Months",
-        "tag": "Cyber Espionage / APT",
-        "desc": "Unknown APT maintained persistent access to a senior stock exchange executive's Outlook for 5 months; exfiltrated data via Dropbox/OneDrive.",
-        "summary": "Attackers spent five months inside a senior stock exchange executive's Outlook mailbox, copying inbox content in small batches routed through Dropbox and OneDrive to evade DLP monitoring.",
-        "importance": "Five months of undetected access to a stock exchange executive's email. 'Living off the land' using legitimate cloud services as C2 channels.",
-        "noteworthy": "Implement cloud app anomaly detection for unusual OAuth activity. Monitor for unexpected OneDrive/Dropbox sync patterns from executive accounts.",
-        "link": "https://thehackernews.com/2026/06/hackers-spied-on-stock-exchange.html"
+        "title": "Velvet Ant: China-Linked APT Backdoored Linux Login for Nearly a Decade",
+        "tag": "Cyber Espionage / Nation-State APT",
+        "desc": "China-nexus group replaced PAM and OpenSSH binaries with backdoored versions. Active since 2016.",
+        "summary": "Sygnia tracks Velvet Ant, a China-nexus group that spent close to a decade hidden inside the Linux login system. Replaced PAM and OpenSSH with backdoored versions that logged credentials and accepted master passwords. Nine backdoor versions found.",
+        "importance": "A decade of undetected access via compromised login binaries. If the login system is compromised, every credential that passed through it is assumed leaked.",
+        "noteworthy": "Verify PAM and OpenSSH binary integrity using package manager checksums. Check for unexpected PAM modules. Consider deploying AIDE or Tripwire for file integrity monitoring.",
+        "link": "https://thehackernews.com/2026/06/china-linked-hackers-backdoored-linux.html"
       },
       {
         "id": 19,
-        "title": "Anthropic Containment Post: How to Contain Claude Across Products",
-        "tag": "AI / Engineering",
-        "desc": "Anthropic publishes detailed engineering post on containing Claude's blast radius in claude.ai, Claude Code, and Cowork.",
-        "summary": "Anthropic published a comprehensive engineering blog on layered containment for AI agents: tool-level permissions, sandboxed execution, network egress controls, and real-time monitoring.",
-        "importance": "Required reading for anyone building agentic systems. The 'blast radius' framing is the right mental model.",
-        "noteworthy": "Read the full post. Apply their sandboxing and egress control patterns to your own agent deployments.",
-        "link": "https://www.anthropic.com/engineering/how-we-contain-claude"
+        "title": "21 Zero-Days in FFmpeg: Autonomous Security Agent Finds Decade-Old Bugs",
+        "tag": "Vulnerability / AI Security Research",
+        "desc": "depthfirst's autonomous security agent discovered 21 zero-days in FFmpeg, some latent for 15-20 years, including RCE PoC.",
+        "summary": "depthfirst's autonomous security agent discovered 21 zero-day vulnerabilities in FFmpeg. Several latent for 15-20 years. Working RCE PoC developed. Cost: $1K vs traditional $10K.",
+        "importance": "Watershed moment for AI-powered security research. 21 zero-days found autonomously at 10% of traditional cost. If you process multimedia, FFmpeg is in your stack.",
+        "noteworthy": "Patch FFmpeg immediately. Sandbox all FFmpeg processing. Audit any system processing user-uploaded media.",
+        "link": "https://depthfirst.com/research/21-zero-days-in-ffmpeg"
       },
       {
         "id": 20,
-        "title": "DoJ Disrupts SE Asia Crypto Fraud: $3.8M Frozen",
-        "tag": "Law Enforcement / Crypto",
-        "desc": "US DoJ operation disrupts Southeast Asian crypto fraud networks; $3.8M in assets seized across multiple jurisdictions.",
-        "summary": "US DoJ 'Disruption Week' resulted in $3.8M seized, multiple domain takedowns, and disruption of pig-butchering platforms. Cooperation between US, Thai, Vietnamese, and Cambodian authorities.",
-        "importance": "International cooperation against SE Asian crypto fraud is operational, not just diplomatic.",
-        "noteworthy": "Report SE Asian crypto scams to IC3.gov. Monitor for rebranding of disrupted platforms under new domains.",
-        "link": "https://thehackernews.com/2026/06/doj-disrupts-southeast-asian-crypto.html"
+        "title": "GreatXML: New BitLocker Bypass via Windows Recovery Partition",
+        "tag": "Endpoint Security / Vulnerability",
+        "desc": "Researcher releases BitLocker bypass that drops XML files into the recovery partition to spawn an unrestricted shell.",
+        "summary": "GreatXML bypass discovered accidentally in 4 hours. Copies XML files to recovery partition, boots WinRE, spawns unrestricted shell. Anyone who ran Defender Offline Scan is automatically vulnerable.",
+        "importance": "BitLocker is theater for any attacker with physical access. 4-hour accidental discovery means your disk encryption is not the protection you think it is.",
+        "noteworthy": "Enable BitLocker with TPM+PIN. Consider disabling WinRE on high-security endpoints. Pair disk encryption with hardware-level security.",
+        "link": "https://thehackernews.com/2026/06/new-greatxml-exploit-bypasses-windows.html"
       },
       {
         "id": 21,
-        "title": "Market Crash: BTC $62.4K (-6.9%), ETH $1.7K, SOL $68",
-        "tag": "Finance / Crypto Markets",
-        "desc": "Major crypto crash triggered by tariff escalation fears; BTC breaks below $63K.",
-        "summary": "BTC dropped 6.9% to $62,460, ETH fell 7% to $1,747, SOL -9.4% to $68.34. Institutional spot ETF outflows exceeded $400M in 48 hours.",
-        "importance": "Structural correction. The $70K floor is broken. Next support: $58K.",
-        "noteworthy": "Set alerts at $58K and $50K for BTC. Wait for confirmation before scaling in.",
-        "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
+        "title": "ShinyHunters Exploits Oracle PeopleSoft Zero-Day (CVE-2026-35273)",
+        "tag": "Critical Vulnerability / Data Breach",
+        "desc": "CVSS 9.8 unauthenticated RCE in Oracle PeopleSoft exploited by ShinyHunters to breach universities. Zero-day for 2 weeks.",
+        "summary": "ShinyHunters exploited CVE-2026-35273 (CVSS 9.8) in Oracle PeopleSoft Enterprise PeopleTools. Active May 27-June 9. Oracle patched June 10. No login or interaction required.",
+        "importance": "PeopleSoft runs the administrative backbone of thousands of universities. 9.8 unauthenticated RCE exploited for 2 weeks before patch. If exposed to internet, assume compromise.",
+        "noteworthy": "Patch PeopleTools 8.61 and 8.62. Restrict PSEMHUB endpoint access. Audit PeopleSoft logs for unusual activity May 27-June 10.",
+        "link": "https://thehackernews.com/2026/06/shinyhunters-exploits-oracle-peoplesoft.html"
+      },
+      {
+        "id": 22,
+        "title": "The Gentlemen Ransomware: 478 Victims, Worm-Like Spread, AI-Powered",
+        "tag": "Cybercrime / Ransomware",
+        "desc": "PRODAFT analysis reveals The Gentlemen group operates independently, uses AI for ransomware development, 478 victims.",
+        "summary": "Russian-speaking group led by LARVA-368. Started as LockBit/Qilin/Medusa affiliate, transitioned to independent in July 2025. Uses AI for ransomware dev and post-exploitation. Worm-like lateral spread.",
+        "importance": "AI-assisted ransomware development is confirmed operational. Worm-like spread means flat networks are death traps.",
+        "noteworthy": "Ensure network segmentation. Disable SMB between VLANs. Verify backup integrity — double extortion means encryption + data theft.",
+        "link": "https://thehackernews.com/2026/06/the-gentlemen-ransomware-claims-478.html"
+      },
+      {
+        "id": 23,
+        "title": "LangGraph RCE Chain: SQL Injection Leads to Full Agent Takeover",
+        "tag": "Vulnerability / AI Security",
+        "desc": "Three patched flaws in LangGraph chain together for unauthenticated RCE on self-hosted AI agent servers.",
+        "summary": "Check Point disclosed three LangGraph vulnerabilities: CVE-2025-67644 (SQL injection in SQLite checkpoint), CVE-2026-28277 (unsafe msgpack deserialization). Chained for full RCE on agent servers.",
+        "importance": "LangGraph is the default framework for production AI agent deployments. RCE against agent infrastructure is a direct hit on the most sensitive layer.",
+        "noteworthy": "Update langgraph to 0.4.1+ and langgraph-checkpoint-sqlite to 3.0.1+. Restrict network access to LangGraph servers.",
+        "link": "https://thehackernews.com/2026/06/langgraph-flaw-chain-exposes-self.html"
+      },
+      {
+        "id": 24,
+        "title": "npm Install Scripts Disabled by Default: GitHub's Supply Chain Fix",
+        "tag": "Developer Security / Software Supply Chain",
+        "desc": "GitHub announces npm v12 will disable install scripts by default — the single largest code-execution surface in the npm ecosystem.",
+        "summary": "npm 12 disables install scripts by default. GitHub calls install-time lifecycle scripts the 'single largest code-execution surface in the npm ecosystem.' Release scheduled next month.",
+        "importance": "Most impactful supply chain security improvement npm has ever made. Install scripts have been the primary vector for npm-based supply chain attacks for years.",
+        "noteworthy": "Audit projects for postinstall/preinstall script dependencies. Test with '--ignore-scripts' flag now to identify breakage before npm 12 lands.",
+        "link": "https://thehackernews.com/2026/06/github-to-disable-npm-install-scripts.html"
+      },
+      {
+        "id": 25,
+        "title": "OceanLotus Targets Vietnam Investors with SPECTRALVIPER via FireAnt",
+        "tag": "Cyber Espionage / Supply Chain",
+        "desc": "Vietnam-aligned OceanLotus deploys SPECTRALVIPER backdoor via FireAnt Metakit supply chain attack targeting stock investors.",
+        "summary": "OceanLotus attributed to two campaigns: espionage against Vietnamese infrastructure firm (mid-2024 to Feb 2026) and supply chain attack on FireAnt Metakit targeting stock investors (Oct 2025 to Mar 2026). SPECTRALVIPER backdoor deployed.",
+        "importance": "Local supply chain attack hitting your region directly. Vietnamese stock investors are specifically targeted.",
+        "noteworthy": "Audit FireAnt/Metakit installations. Check for SPECTRALVIPER IoCs. Warn contacts using domestic trading platforms.",
+        "link": "https://thehackernews.com/2026/06/oceanlotus-hits-vietnam-investors-with.html"
       }
     ]
   }
