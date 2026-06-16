@@ -1,9 +1,144 @@
 {
   "today": {
-    "date": "15/06/26",
+    "date": "16/06/26",
     "items": [
       {
         "id": 1,
+        "title": "Palo Alto PAN-OS VPN Flaw CVE-2026-0257 Actively Exploited in the Wild",
+        "tag": "Critical Vulnerability / VPN Security",
+        "desc": "Active exploitation of PAN-OS GlobalProtect auth bypass since May 17. Limited VPN sessions established.",
+        "summary": "Palo Alto Networks confirmed active exploitation of CVE-2026-0257 (CVSS 7.8), an authentication bypass in PAN-OS GlobalProtect portal and gateway components. Attackers can bypass security controls and initiate VPN connections. Limited attacks observed since May 17. CISA added it to the KEV catalog with a June 1 patch deadline. IoCs and hard-coded PoC client configuration values published.",
+        "importance": "GlobalProtect is the VPN backbone for thousands of enterprises. An auth bypass with active exploitation means unpatched firewalls are one step from full network access. The CISA KEV listing confirms real-world threat.",
+        "noteworthy": "Patch PAN-OS immediately. Search GlobalProtect logs for gateway-connected events matching PoC indicators (endpoint_os_version: 'Microsoft Windows 10 Pro 64-bit', empty source_user_info.domain). Block known IoC IPs. Enforce MFA on VPN.",
+        "link": "https://thehackernews.com/2026/06/palo-alto-warns-of-active-exploitation.html"
+      },
+      {
+        "id": 2,
+        "title": "Chinese Hackers Hijacked Google Workspace Rules to Steal Research Emails",
+        "tag": "Cyber Espionage / Email Security",
+        "desc": "UNC6508 spent 2+ years inside North American research networks, using Google Workspace forwarding rules for exfiltration.",
+        "summary": "Google's Threat Intelligence Group attributed a campaign to UNC6508 (China-linked) that compromised REDCap research servers across US and Canadian medical, academic, and military institutions since September 2023. The group deployed INFINITERED custom malware that trojanizes REDCap system files, harvests credentials, and persists through upgrades. They then rewired victims' Google Workspace email rules to auto-forward matching messages to attacker-controlled inboxes.",
+        "importance": "Using the victim's own Google Workspace rules for exfiltration is a sophisticated technique that bypasses DLP and email monitoring. Over two years of undetected access to defense and medical research is a massive intelligence breach.",
+        "noteworthy": "Audit Google Workspace forwarding rules for unauthorized entries. Check REDCap servers for INFINITERED indicators. Review external-facing research platforms for compromise. Implement conditional access policies for email rule changes.",
+        "link": "https://thehackernews.com/2026/06/chinese-hackers-abused-google-workspace.html"
+      },
+      {
+        "id": 3,
+        "title": "M365 Copilot SearchLeak: One Click Exfiltrates Emails, Files, and MFA Codes",
+        "tag": "Critical Vulnerability / AI Security",
+        "desc": "Three chained bugs in Copilot Enterprise Search enable one-click data exfiltration via trusted microsoft.com links. CVE-2026-42824.",
+        "summary": "Varonis Threat Labs disclosed SearchLeak, a one-click exfiltration attack against Microsoft 365 Copilot Enterprise Search (CVE-2026-42824, CVSS 6.5 Microsoft / 7.5 NVD). Three bugs chained: parameter-to-prompt injection in Copilot's q parameter, a race condition in response rendering that bypasses code-block sanitization, and CSP bypass via Bing's allowlisted domain. A single click on a real microsoft.com link could exfiltrate emails, calendar details, and MFA codes. Microsoft mitigated server-side.",
+        "importance": "Copilot has access to every document, email, and MFA code in a tenant. A one-click attack via a trusted domain that bypasses all anti-phishing and URL filtering is devastating. This is the first serious Copilot-specific vulnerability chain.",
+        "noteworthy": "Microsoft has patched this server-side — no customer action required. However, review Copilot Enterprise Search access policies. Consider restricting Copilot's data scope. Monitor for similar prompt injection patterns in AI tools.",
+        "link": "https://thehackernews.com/2026/06/one-click-microsoft-365-copilot-flaw.html"
+      },
+      {
+        "id": 4,
+        "title": "LiteLLM 3-CVE Chain: Low-Privilege User to Full AI Gateway Takeover (CVSS 9.9)",
+        "tag": "Critical Vulnerability / AI Infrastructure",
+        "desc": "Default low-privilege account chains to full admin + code execution on LiteLLM proxy servers. Exposes all provider API keys.",
+        "summary": "Obsidian Security disclosed a three-CVE chain in LiteLLM (AI gateway for 100+ model providers) rated CVSS 9.9. CVE-2026-47101 allows authorization bypass via allowed_routes wildcard, CVE-2026-47102 enables privilege escalation to proxy_admin via self-update, and CVE-2026-40217 is a sandbox escape in Custom Code Guardrails. A default internal_user can chain all three to take over the server, exposing every provider API key and all prompt/response data. Fixed in LiteLLM v1.83.14-stable (May 2).",
+        "importance": "LiteLLM is the default open-source AI gateway. A full server takeover exposes every LLM provider key, all stored credentials, and every prompt/response pair. Any deployment still on pre-v1.83.14 is critically vulnerable.",
+        "noteworthy": "Upgrade LiteLLM to v1.83.14-stable or later immediately. Rotate all provider API keys if the proxy was exposed. Restrict network access to LiteLLM admin endpoints. Audit logs for unauthorized key generation.",
+        "link": "https://thehackernews.com/2026/06/litellm-vulnerability-chain-lets-low.html"
+      },
+      {
+        "id": 5,
+        "title": "WordPress Plugin Supply Chain Attack: 1.2M Sites Targeted via PushEngage, OptinMonster",
+        "tag": "Supply Chain Attack / Web Security",
+        "desc": "Trusted JS files for three Awesome Motive plugins tampered to create admin backdoors when loaded by logged-in administrators.",
+        "summary": "An attacker tampered with JavaScript files served by PushEngage, OptinMonster, and TrustPulse (all Awesome Motive properties, collectively reaching 1.2M+ sites). The poisoned script only activated when a logged-in WordPress admin loaded it — creating a rogue admin account and installing a hidden persistence plugin. OptinMonster and TrustPulse were exposed for ~25 minutes on June 12; PushEngage's window lasted hours. Only PushEngage has issued guidance; OptinMonster and TrustPulse have not responded.",
+        "importance": "Three of the most popular WordPress plugins simultaneously compromised in a targeted supply chain attack. The admin-only trigger means automated scanners won't detect the backdoor. 1.2M sites potentially exposed.",
+        "noteworthy": "If running any of these plugins, check admin user lists for unknown accounts. Audit installed plugins for hidden entries. PushEngage users should rotate CDN-served scripts. Consider switching from CDN-loaded to self-hosted plugin scripts.",
+        "link": "https://thehackernews.com/2026/06/popular-wordpress-plugin-scripts.html"
+      },
+      {
+        "id": 6,
+        "title": "NK Hackers Weaponize VS Code Auto-Run to Deliver Cross-Platform Malware",
+        "tag": "Cyber Espionage / Supply Chain Attack",
+        "desc": "Contagious Interview group uses VS Code 'runOn: folderOpen' to auto-execute malware when devs open cloned repos. 100 orgs targeted.",
+        "summary": "Proofpoint attributed two campaigns (codenamed UNK_DeadDrop) to North Korea's Contagious Interview group. Over 250 emails targeted ~100 organizations across finance, crypto, education, and tech. The attack chain: phishing with GitHub repo links → victim clones and opens in VS Code/Cursor → 'runOn: folderOpen' triggers OS-specific malware loaders (Overlord Go framework) without user interaction. Targets span macOS, Linux, and Windows.",
+        "importance": "VS Code auto-execution on folder open means opening a project is now a potential compromise vector. This is a supply chain attack on the developer workflow itself — no clicking, no running, just opening a folder in your IDE.",
+        "noteworthy": "Audit VS Code/Cursor settings for suspicious 'runOn: folderOpen' entries. Disable automatic task execution in editor settings. Verify all cloned repositories before opening. Treat unsolicited GitHub repos as untrusted.",
+        "link": "https://thehackernews.com/2026/06/north-korean-hackers-are-turning.html"
+      },
+      {
+        "id": 7,
+        "title": "152 Chrome Wallpaper Extensions: 105K Installs, Adware and Fake Traffic Network",
+        "tag": "Browser Security / Privacy",
+        "desc": "Network of 152 extensions across 38 publisher accounts harvesting IP, ISP, click data and routing traffic through ad fraud.",
+        "summary": "Researchers discovered 152 Chrome new-tab wallpaper extensions across 38 publisher accounts and three backend domains (tabplugins.com, yowgames.com, chromewallpaper.com). 105,000 installs total. Extensions claim no data collection in store listings but privacy policies admit logging IPs, ISPs, click counts, and sharing with Google AdSense and DoubleClick. Extensions also manipulate new-tab pages for fake traffic monetization.",
+        "importance": "105K users running adware masquerading as wallpaper extensions. The deceptive privacy policy vs store listing disconnect is a systemic Chrome Web Store enforcement failure.",
+        "noteworthy": "Audit installed Chrome extensions for wallpaper/new-tab add-ons from unknown publishers. Remove any matching the three backend domains. Use uBlock Origin. Chrome Web Store enforcement remains insufficient — extensions are still a primary attack vector.",
+        "link": "https://thehackernews.com/2026/06/152-chrome-wallpaper-extensions-with.html"
+      },
+      {
+        "id": 8,
+        "title": "Rust vs C/C++ Memory Safety CVEs: Why the Numbers Mislead",
+        "tag": "Security Research / Software Engineering",
+        "desc": "Analysis shows Rust CVEs flagged for potential unsafety in unsafe blocks, while C/C++ CVEs reflect exploitable memory corruption. The comparison is misleading.",
+        "summary": "A detailed analysis by Jakub Beránek demonstrates that comparing raw CVE counts between Rust and C/C++ is misleading. Rust CVEs related to memory safety are almost always in unsafe blocks and reported proactively as potential issues before exploitation. C/C++ CVEs typically reflect actual exploitable memory corruption. The post uses curl's libcurl as a case study — showing how a simple function call in C can cause memory unsafety without the developer realizing it, while Rust's ownership system catches similar issues at compile time.",
+        "importance": "This is the definitive response to 'Rust has CVEs too' arguments. Rust memory safety CVEs are categorically different: they're pre-emptive reports about unsafe blocks, not post-exploitation disclosures of memory corruption. The distinction matters for language adoption decisions.",
+        "noteworthy": "Use this analysis when evaluating language safety trade-offs. Rust's CVE count reflects a different — and more secure — disclosure culture. If your org is considering Rust adoption, this provides concrete evidence that Rust CVEs are less severe in practice.",
+        "link": "https://kobzol.github.io/rust/2026/06/15/how-memory-safety-cves-differ-between-rust-and-c-cpp.html"
+      },
+      {
+        "id": 9,
+        "title": "Nvidia Raises $20B in Bonds for AI Infrastructure Push",
+        "tag": "Hardware / Semiconductors",
+        "desc": "Nvidia's first debt offering in 5 years. $20B bond sale funds AI data center buildout. BTC miners pivoting to same infrastructure.",
+        "summary": "Nvidia announced a $20 billion multi-part bond offering — its first debt issuance in five years — to finance AI infrastructure investments and refinance existing obligations. The offering underscores the relentless demand for AI compute. Simultaneously, Bitcoin miners are pivoting to AI and HPC services, with over $70 billion in contracts announced across the sector, leveraging their existing power infrastructure for GPU compute.",
+        "importance": "Nvidia's $20B raise signals that the AI infrastructure buildout is accelerating, not slowing. The Bitcoin mining → AI pivot means GPU compute capacity is consolidating. This affects GPU availability, energy markets, and crypto mining economics.",
+        "noteworthy": "Watch for GPU supply chain impacts. BTC miners pivoting to AI compute may reduce mining hash rate. The convergence of AI and crypto infrastructure creates new investment opportunities in HPC data centers.",
+        "link": "https://cointelegraph.com/news/nvidia-20-billion-debt-boom-reinforces-bitocin-minings-ai-pivot"
+      },
+      {
+        "id": 10,
+        "title": "US-Iran Peace Deal: Strait of Hormuz Reopening",
+        "tag": "Geopolitics / World",
+        "desc": "Trump announces complete US-Iran peace deal. Strait of Hormuz to reopen. Formal signing June 19 in Switzerland.",
+        "summary": "President Trump announced that a peace deal between the US and Iran is 'complete,' ending months of conflict that began with joint US-Israeli strikes on Iran in February 2026. Pakistan mediated the agreement. The Strait of Hormuz is set to reopen upon signing, with a formal ceremony scheduled for June 19 in Switzerland. The framework deal marks the biggest breakthrough toward resolving the wider regional conflict that escalated after the initial strikes.",
+        "importance": "The Hormuz reopening directly impacts global oil supply and shipping routes. Oil prices will react sharply. Crypto markets may see volatility as geopolitical risk premium unwinds. This is the most significant geopolitical development since the conflict began in February.",
+        "noteworthy": "Expect oil price drops and shipping cost normalization. Monitor BTC correlation with oil — the Iran conflict premium has been supporting risk-off flows. Cyber threat landscape may shift — Iranian APT groups may pivot based on political directives.",
+        "link": "https://www.reuters.com/world/iran-war-live-trump-says-us-tehran-have-reached-peace-deal-2026-06-15/"
+      },
+      {
+        "id": 11,
+        "title": "Strategy Buys 1,587 BTC for $100M, Holdings Hit 846,842 BTC",
+        "tag": "Finance / Crypto Markets",
+        "desc": "Saylor's Strategy resumes accumulation. Total holdings: 846,842 BTC worth ~$56B. ~4% of Bitcoin's total supply.",
+        "summary": "Strategy (formerly MicroStrategy) acquired 1,587 BTC for approximately $100 million between June 8-14, 2026, at an average price of ~$62,933 per BTC. Total holdings now stand at 846,842 BTC with a cumulative cost basis of $64.07 billion. The purchase comes just two weeks after Strategy's first BTC sale in four years, reaffirming its long-term accumulation strategy. Strategy now controls roughly 4% of Bitcoin's 21 million fixed supply.",
+        "importance": "Strategy's purchase signals institutional confidence after a brief sell. At 846,842 BTC, they're the largest corporate holder by far. The resumption of buying after a brief dip into selling removes a bearish signal.",
+        "noteworthy": "Watch for continued accumulation. Strategy's USD reserve also grew to $1.1B. The 4% supply concentration in a single entity is an ongoing systemic risk for Bitcoin's liquidity.",
+        "link": "https://cointelegraph.com/news/strategy-michael-saylor-1587-btc-buy-100-million"
+      },
+      {
+        "id": 12,
+        "title": "Kraken Launches CFTC-Regulated Perpetual Futures for US Traders",
+        "tag": "Finance / Crypto Regulation",
+        "desc": "First CFTC-regulated crypto perpetuals venue for US traders. Perps alongside spot, margin, and CME futures on Kraken Pro.",
+        "summary": "Kraken launched CFTC-regulated perpetual futures for eligible US traders through its Bitnomial subsidiary. This is the first fully regulated crypto perps product available to US retail and institutional traders. Perpetuals now sit alongside spot, margin, and CME-listed futures on Kraken Pro. The launch brings a product onshore that US traders previously accessed through offshore exchanges.",
+        "importance": "US traders finally have regulated access to the most popular crypto derivatives product. This legitimizes perps trading, brings it under CFTC oversight, and could shift significant volume from Binance/Bybit to regulated venues.",
+        "noteworthy": "US-based traders can now access perps through Kraken Pro with regulatory protection. Monitor for volume migration from offshore exchanges. CFTC oversight means consumer protections that don't exist on offshore platforms.",
+        "link": "https://cointelegraph.com/news/kraken-launches-perpetual-futures-for-us-traders-through-cftc-regulated-venue"
+      },
+      {
+        "id": 13,
+        "title": "Market: BTC $66.3K (+1.1%). ETH $1,792 (+4.2%). SOL $73.7 (+3.6%).",
+        "tag": "Finance / Crypto Markets",
+        "desc": "Markets rally on US-Iran peace deal. ETH and SOL outperform BTC. Strategy buys 1,587 BTC.",
+        "summary": "Crypto markets rallied on the US-Iran peace deal announcement. BTC at $66,302 (+1.07%), ETH at $1,792 (+4.22%), SOL at $73.74 (+3.60%). BTC market cap stands at $1.33T. ETH and SOL significantly outperforming BTC suggests risk-on rotation within crypto. The Hormuz reopening and oil price decline are removing geopolitical risk premium. Strategy's continued BTC accumulation provides a structural bid.",
+        "importance": "Peace deal removes the biggest geopolitical overhang since February. ETH and SOL outperformance signals alt-season conditions emerging. BTC holding above $66K with declining geopolitical risk is constructive for a push toward $70K.",
+        "noteworthy": "Watch $70K resistance — a break above confirms the bullish thesis. ETH at $1,792 is testing key resistance. The geopolitical de-escalation reduces tail risk for all risk assets. Strategy's $100M weekly buys provide structural support.",
+        "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
+      }
+    ]
+  },
+  "yesterday": {
+    "date": "15/06/26",
+    "items": [
+      {
+        "id": 14,
         "title": "Chrome V8 Zero-Day CVE-2026-11645 Exploited in the Wild",
         "tag": "Critical Vulnerability / Browser Security",
         "desc": "CVSS 8.8 out-of-bounds memory access in V8 actively exploited. Patch Chrome 149.0.7827.103 now.",
@@ -13,7 +148,7 @@
         "link": "https://thehackernews.com/2026/06/chrome-v8-zero-day-cve-2026-11645.html"
       },
       {
-        "id": 2,
+        "id": 15,
         "title": "Miasma Worm Hits 73 Microsoft GitHub Repos — Supply Chain Attack",
         "tag": "Supply Chain Attack / Malware",
         "desc": "Self-replicating worm compromised 73 Microsoft repos across Azure, Microsoft, MicrosoftDocs, and Azure-Samples. GitHub disabled access.",
@@ -23,7 +158,7 @@
         "link": "https://thehackernews.com/2026/06/miasma-worm-hits-73-microsoft-github.html"
       },
       {
-        "id": 3,
+        "id": 16,
         "title": "IronWorm + Miasma Variant Hit npm: 50+ Packages Compromised",
         "tag": "Supply Chain Attack / Malware",
         "desc": "Two supply chain worms hit npm simultaneously — IronWorm and a Miasma variant — distributing Rust-based infostealer across 50+ packages.",
@@ -33,7 +168,7 @@
         "link": "https://thehackernews.com/2026/06/ironworm-and-new-miasma-worm-variant.html"
       },
       {
-        "id": 4,
+        "id": 17,
         "title": "One-Character Linux Kernel Flaw: Local Root + Container Escape (CVE-2026-23111)",
         "tag": "Critical Vulnerability / Linux Security",
         "desc": "Use-after-free in nf_tables lets unprivileged users escalate to root and break out of containers. Working exploit published.",
@@ -43,7 +178,7 @@
         "link": "https://thehackernews.com/2026/06/one-character-linux-kernel-flaw-enables.html"
       },
       {
-        "id": 5,
+        "id": 18,
         "title": "FROST Attack: Websites Track Your Apps via SSD Timing — No Permissions Needed",
         "tag": "Privacy / Browser Security",
         "desc": "Novel side-channel attack uses JavaScript + OPFS SSD timing to identify which websites and apps you use at 88.95% F1 accuracy.",
@@ -53,7 +188,7 @@
         "link": "https://thehackernews.com/2026/06/new-frost-attack-lets-websites-track.html"
       },
       {
-        "id": 6,
+        "id": 19,
         "title": "AI Agent Uncovers 21 Zero-Days in FFmpeg; Chrome Patches Record 429 Bugs",
         "tag": "Vulnerability / AI Security Research",
         "desc": "Autonomous AI agent finds 21 zero-days in FFmpeg. Same week, Chrome ships record 429 patches in a single release.",
@@ -63,7 +198,7 @@
         "link": "https://thehackernews.com/2026/06/ai-agent-uncovers-21-zero-days-in.html"
       },
       {
-        "id": 7,
+        "id": 20,
         "title": "ChatGPT Lockdown Mode: OpenAI's Answer to Prompt Injection Data Theft",
         "tag": "AI Security / Product",
         "desc": "OpenAI rolls out Lockdown Mode for ChatGPT personal accounts, restricting tools that could enable data exfiltration via prompt injection.",
@@ -73,7 +208,7 @@
         "link": "https://thehackernews.com/2026/06/new-chatgpt-lockdown-mode-limits-tools.html"
       },
       {
-        "id": 8,
+        "id": 21,
         "title": "Cisco Unified CM RCE (CVE-2026-20230): Exploit Code Goes Public",
         "tag": "Critical Vulnerability / Network Security",
         "desc": "Unauthenticated attacker can write files and escalate to root on Cisco Unified Communications Manager. PoC exploit code now public.",
@@ -83,7 +218,7 @@
         "link": "https://thehackernews.com/2026/06/cisco-patches-cve-2026-20230-in-unified.html"
       },
       {
-        "id": 9,
+        "id": 22,
         "title": "CISA Adds Cisco, Chrome, and Arista Flaws to KEV Catalog",
         "tag": "Vulnerability / CISA KEV",
         "desc": "Three new vulnerabilities added to CISA's Known Exploited Vulnerabilities catalog: Cisco Unified CM, Chrome V8, and Arista EOS.",
@@ -93,7 +228,7 @@
         "link": "https://thehackernews.com/2026/06/cisa-adds-cisco-chrome-and-arista-flaws.html"
       },
       {
-        "id": 10,
+        "id": 23,
         "title": "Smart TVs Turned Into Web-Scraping Proxies for AI via Free Apps",
         "tag": "Privacy / IoT Security",
         "desc": "Researcher reverse-engineers Bright Data's iOS SDK embedded in free apps, turning smart TVs into residential proxies for AI web scraping.",
@@ -103,17 +238,7 @@
         "link": "https://thehackernews.com/2026/06/free-apps-are-quietly-turning-smart-tvs.html"
       },
       {
-        "id": 11,
-        "title": "Unpatched Windows Search URI Leaks NTLMv2 Hashes",
-        "tag": "Vulnerability / Windows Security",
-        "desc": "Windows Search URI handler can be abused to leak NTLMv2 hashes to remote attackers. No patch available.",
-        "summary": "Researchers disclosed an unpatched issue in Windows Search URI handling that can be exploited to disclose a user's NTLMv2 hashes. An attacker can trigger the leak by getting a user to click a specially crafted link, which causes Windows to authenticate to a remote SMB share, sending the user's NTLMv2 hash. The hash can then be cracked offline or used in relay attacks. No patch is currently available from Microsoft.",
-        "importance": "NTLMv2 hash theft is a classic attack vector that keeps resurfacing. The hash can be cracked offline or relayed to authenticate as the user. With no patch available, the only mitigation is blocking outbound SMB traffic and educating users about suspicious links.",
-        "noteworthy": "Block outbound SMB (port 445) at the firewall. Disable NTLM authentication where possible via Group Policy. Educate users not to click suspicious links. Monitor for unexpected SMB outbound connections. This is unpatched — assume all Windows versions are vulnerable.",
-        "link": "https://thehackernews.com/2026/06/unpatched-windows-search-uri.html"
-      },
-      {
-        "id": 12,
+        "id": 24,
         "title": "HTTP/2 Bomb: Remote DoS on NGINX, Apache, IIS, Envoy & Cloudflare",
         "tag": "Vulnerability / Server Security",
         "desc": "New HTTP/2 vulnerability enables remote denial-of-service across major web servers and reverse proxies.",
@@ -123,139 +248,14 @@
         "link": "https://thehackernews.com/2026/06/new-http2-bomb-vulnerability-allows.html"
       },
       {
-        "id": 13,
-        "title": "Market: BTC $65.7K (+1.9%). ETH $1,718. SOL $71.1.",
-        "tag": "Finance / Crypto Markets",
-        "desc": "Crypto markets show modest recovery. BTC holds above $65K. SOL leads with +3.2%.",
-        "summary": "Crypto markets showed a modest recovery with BTC at $65,690 (+1.9% 24h), ETH at $1,718 (+2.2%), and SOL at $71.13 (+3.2%). The recovery follows last week's stabilization above $64K. BTC market cap stands at $1.29T. The $70K floor remains broken but $65K is holding as a new support level. SOL is showing relative strength, decoupling from BTC's trajectory.",
-        "importance": "The market is in a consolidation phase after the structural correction. $65K is holding as support but $70K remains the key resistance. SOL's outperformance suggests capital rotation within crypto. The macro environment (tariffs, AI regulation) remains the dominant driver.",
-        "noteworthy": "Watch $65K BTC support — a break below signals retest of $58K. SOL at $71 is showing strength but still below pre-crash levels. No clear reversal signal yet. Hold cash, wait for confirmation.",
-        "link": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
-      }
-    ]
-  },
-  "yesterday": {
-    "date": "13/06/26",
-    "items": [
-      {
-        "id": 14,
-        "title": "Splunk Enterprise RCE: Unauthenticated Code Execution (CVE-2026-20253)",
-        "tag": "Critical Vulnerability / Enterprise Security",
-        "desc": "CVSS 9.8 flaw in Splunk Enterprise lets unauthenticated attackers create/truncate arbitrary files via PostgreSQL sidecar, leading to RCE.",
-        "summary": "Splunk patched CVE-2026-20253, a critical 9.8 vulnerability in Splunk Enterprise below 10.2.4 and 10.0.7. The PostgreSQL sidecar service endpoint lacks authentication controls entirely. watchTowr Labs published full exploitation details.",
-        "importance": "Splunk is the nervous system of most enterprise SOC operations. An unauthenticated RCE on the SIEM means attackers can blind defenders before they know there's a problem.",
-        "noteworthy": "Patch Splunk Enterprise to 10.0.7+ or 10.2.4+. Restrict network access to PostgreSQL sidecar endpoint. Audit Splunk logs for unauthorized file operations.",
-        "link": "https://thehackernews.com/2026/06/critical-splunk-enterprise-flaw-lets.html"
-      },
-      {
-        "id": 15,
-        "title": "US Orders Anthropic to Suspend Fable 5 & Mythos 5 for Foreign Nationals",
-        "tag": "AI / National Security",
-        "desc": "US government orders Anthropic to cut off foreign national access to its most advanced models, citing national security concerns over jailbreaking.",
-        "summary": "Anthropic received a US government order to suspend all access to Claude Fable 5 and Mythos 5 for foreign nationals. The government claimed a jailbreak method was discovered. Anthropic called it a misunderstanding and is working to restore access.",
-        "importance": "First time the US has directly intervened to restrict AI model access on national security grounds. Precedent is set: government can order an AI company to suspend specific models overnight.",
-        "noteworthy": "If using Claude Fable 5 or Mythos 5 via API, expect interruptions. Consider fallback models. This is likely the first of many export-control actions targeting frontier AI.",
-        "link": "https://thehackernews.com/2026/06/us-orders-anthropic-to-suspend-fable-5.html"
-      },
-      {
-        "id": 16,
-        "title": "400+ Arch Linux AUR Packages Hijacked: Infostealer + eBPF Rootkit",
-        "tag": "Supply Chain Attack / Linux Security",
-        "desc": "Attackers took over 400+ AUR packages, injecting a Rust infostealer and eBPF rootkit into build scripts.",
-        "summary": "Over 400 AUR packages hijacked by attackers who adopted abandoned packages and rewrote build scripts. Payload: Rust infostealer + eBPF rootkit. Official Arch repos not affected.",
-        "importance": "eBPF rootkits are nearly undetectable by conventional means. If you built any AUR package since June 11, assume compromise.",
-        "noteworthy": "Check all AUR packages installed/updated since June 11. If compromised, wipe and rebuild. Consider switching to official repos only for critical systems.",
-        "link": "https://thehackernews.com/2026/06/over-400-arch-linux-aur-packages.html"
-      },
-      {
-        "id": 17,
-        "title": "Agentjacking: AI Coding Agents Tricked Into Running Malicious Code",
-        "tag": "AI Security / Vulnerability",
-        "desc": "New attack class injects malicious instructions via Sentry error reports, which AI coding agents interpret as legitimate fixes and execute.",
-        "summary": "Tenet Security disclosed Agentjacking — exploiting Sentry's event ingestion (accepts arbitrary payloads) and AI coding agents that consume Sentry data as trusted system output. Affects Claude Code, Cursor, and similar agents.",
-        "importance": "First systematic attack targeting AI coding agents via their monitoring pipeline. Every developer using Claude Code or Cursor with Sentry integration is potentially exposed.",
-        "noteworthy": "Audit Sentry DSN exposure. Implement human-in-the-loop review for AI-suggested code changes based on external data. Rotate credentials processed by AI agents with Sentry access.",
-        "link": "https://thehackernews.com/2026/06/agentjacking-attack-tricks-ai-coding.html"
-      },
-      {
-        "id": 18,
-        "title": "Velvet Ant: China-Linked APT Backdoored Linux Login for Nearly a Decade",
-        "tag": "Cyber Espionage / Nation-State APT",
-        "desc": "China-nexus group replaced PAM and OpenSSH binaries with backdoored versions. Active since 2016.",
-        "summary": "Sygnia tracks Velvet Ant, a China-nexus group that spent close to a decade hidden inside the Linux login system. Replaced PAM and OpenSSH with backdoored versions that logged credentials and accepted master passwords. Nine backdoor versions found.",
-        "importance": "A decade of undetected access via compromised login binaries. If the login system is compromised, every credential that passed through it is assumed leaked.",
-        "noteworthy": "Verify PAM and OpenSSH binary integrity using package manager checksums. Check for unexpected PAM modules. Consider deploying AIDE or Tripwire for file integrity monitoring.",
-        "link": "https://thehackernews.com/2026/06/china-linked-hackers-backdoored-linux.html"
-      },
-      {
-        "id": 19,
-        "title": "21 Zero-Days in FFmpeg: Autonomous Security Agent Finds Decade-Old Bugs",
-        "tag": "Vulnerability / AI Security Research",
-        "desc": "depthfirst's autonomous security agent discovered 21 zero-days in FFmpeg, some latent for 15-20 years, including RCE PoC.",
-        "summary": "depthfirst's autonomous security agent discovered 21 zero-day vulnerabilities in FFmpeg. Several latent for 15-20 years. Working RCE PoC developed. Cost: $1K vs traditional $10K.",
-        "importance": "Watershed moment for AI-powered security research. 21 zero-days found autonomously at 10% of traditional cost. If you process multimedia, FFmpeg is in your stack.",
-        "noteworthy": "Patch FFmpeg immediately. Sandbox all FFmpeg processing. Audit any system processing user-uploaded media.",
-        "link": "https://depthfirst.com/research/21-zero-days-in-ffmpeg"
-      },
-      {
-        "id": 20,
-        "title": "GreatXML: New BitLocker Bypass via Windows Recovery Partition",
-        "tag": "Endpoint Security / Vulnerability",
-        "desc": "Researcher releases BitLocker bypass that drops XML files into the recovery partition to spawn an unrestricted shell.",
-        "summary": "GreatXML bypass discovered accidentally in 4 hours. Copies XML files to recovery partition, boots WinRE, spawns unrestricted shell. Anyone who ran Defender Offline Scan is automatically vulnerable.",
-        "importance": "BitLocker is theater for any attacker with physical access. 4-hour accidental discovery means your disk encryption is not the protection you think it is.",
-        "noteworthy": "Enable BitLocker with TPM+PIN. Consider disabling WinRE on high-security endpoints. Pair disk encryption with hardware-level security.",
-        "link": "https://thehackernews.com/2026/06/new-greatxml-exploit-bypasses-windows.html"
-      },
-      {
-        "id": 21,
-        "title": "ShinyHunters Exploits Oracle PeopleSoft Zero-Day (CVE-2026-35273)",
-        "tag": "Critical Vulnerability / Data Breach",
-        "desc": "CVSS 9.8 unauthenticated RCE in Oracle PeopleSoft exploited by ShinyHunters to breach universities. Zero-day for 2 weeks.",
-        "summary": "ShinyHunters exploited CVE-2026-35273 (CVSS 9.8) in Oracle PeopleSoft Enterprise PeopleTools. Active May 27-June 9. Oracle patched June 10. No login or interaction required.",
-        "importance": "PeopleSoft runs the administrative backbone of thousands of universities. 9.8 unauthenticated RCE exploited for 2 weeks before patch. If exposed to internet, assume compromise.",
-        "noteworthy": "Patch PeopleTools 8.61 and 8.62. Restrict PSEMHUB endpoint access. Audit PeopleSoft logs for unusual activity May 27-June 10.",
-        "link": "https://thehackernews.com/2026/06/shinyhunters-exploits-oracle-peoplesoft.html"
-      },
-      {
-        "id": 22,
-        "title": "The Gentlemen Ransomware: 478 Victims, Worm-Like Spread, AI-Powered",
-        "tag": "Cybercrime / Ransomware",
-        "desc": "PRODAFT analysis reveals The Gentlemen group operates independently, uses AI for ransomware development, 478 victims.",
-        "summary": "Russian-speaking group led by LARVA-368. Started as LockBit/Qilin/Medusa affiliate, transitioned to independent in July 2025. Uses AI for ransomware dev and post-exploitation. Worm-like lateral spread.",
-        "importance": "AI-assisted ransomware development is confirmed operational. Worm-like spread means flat networks are death traps.",
-        "noteworthy": "Ensure network segmentation. Disable SMB between VLANs. Verify backup integrity — double extortion means encryption + data theft.",
-        "link": "https://thehackernews.com/2026/06/the-gentlemen-ransomware-claims-478.html"
-      },
-      {
-        "id": 23,
-        "title": "LangGraph RCE Chain: SQL Injection Leads to Full Agent Takeover",
-        "tag": "Vulnerability / AI Security",
-        "desc": "Three patched flaws in LangGraph chain together for unauthenticated RCE on self-hosted AI agent servers.",
-        "summary": "Check Point disclosed three LangGraph vulnerabilities: CVE-2025-67644 (SQL injection in SQLite checkpoint), CVE-2026-28277 (unsafe msgpack deserialization). Chained for full RCE on agent servers.",
-        "importance": "LangGraph is the default framework for production AI agent deployments. RCE against agent infrastructure is a direct hit on the most sensitive layer.",
-        "noteworthy": "Update langgraph to 0.4.1+ and langgraph-checkpoint-sqlite to 3.0.1+. Restrict network access to LangGraph servers.",
-        "link": "https://thehackernews.com/2026/06/langgraph-flaw-chain-exposes-self.html"
-      },
-      {
-        "id": 24,
-        "title": "npm Install Scripts Disabled by Default: GitHub's Supply Chain Fix",
-        "tag": "Developer Security / Software Supply Chain",
-        "desc": "GitHub announces npm v12 will disable install scripts by default — the single largest code-execution surface in the npm ecosystem.",
-        "summary": "npm 12 disables install scripts by default. GitHub calls install-time lifecycle scripts the 'single largest code-execution surface in the npm ecosystem.' Release scheduled next month.",
-        "importance": "Most impactful supply chain security improvement npm has ever made. Install scripts have been the primary vector for npm-based supply chain attacks for years.",
-        "noteworthy": "Audit projects for postinstall/preinstall script dependencies. Test with '--ignore-scripts' flag now to identify breakage before npm 12 lands.",
-        "link": "https://thehackernews.com/2026/06/github-to-disable-npm-install-scripts.html"
-      },
-      {
         "id": 25,
-        "title": "OceanLotus Targets Vietnam Investors with SPECTRALVIPER via FireAnt",
-        "tag": "Cyber Espionage / Supply Chain",
-        "desc": "Vietnam-aligned OceanLotus deploys SPECTRALVIPER backdoor via FireAnt Metakit supply chain attack targeting stock investors.",
-        "summary": "OceanLotus attributed to two campaigns: espionage against Vietnamese infrastructure firm (mid-2024 to Feb 2026) and supply chain attack on FireAnt Metakit targeting stock investors (Oct 2025 to Mar 2026). SPECTRALVIPER backdoor deployed.",
-        "importance": "Local supply chain attack hitting your region directly. Vietnamese stock investors are specifically targeted.",
-        "noteworthy": "Audit FireAnt/Metakit installations. Check for SPECTRALVIPER IoCs. Warn contacts using domestic trading platforms.",
-        "link": "https://thehackernews.com/2026/06/oceanlotus-hits-vietnam-investors-with.html"
+        "title": "Unpatched Windows Search URI Leaks NTLMv2 Hashes",
+        "tag": "Vulnerability / Windows Security",
+        "desc": "Windows Search URI handler can be abused to leak NTLMv2 hashes to remote attackers. No patch available.",
+        "summary": "Researchers disclosed an unpatched issue in Windows Search URI handling that can be exploited to disclose a user's NTLMv2 hashes. An attacker can trigger the leak by getting a user to click a specially crafted link, which causes Windows to authenticate to a remote SMB share, sending the user's NTLMv2 hash. The hash can then be cracked offline or used in relay attacks. No patch is currently available from Microsoft.",
+        "importance": "NTLMv2 hash theft is a classic attack vector that keeps resurfacing. The hash can be cracked offline or relayed to authenticate as the user. With no patch available, the only mitigation is blocking outbound SMB traffic and educating users about suspicious links.",
+        "noteworthy": "Block outbound SMB (port 445) at the firewall. Disable NTLM authentication where possible via Group Policy. Educate users not to click suspicious links. Monitor for unexpected SMB outbound connections. This is unpatched — assume all Windows versions are vulnerable.",
+        "link": "https://thehackernews.com/2026/06/unpatched-windows-search-uri.html"
       }
     ]
   }
