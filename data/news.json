@@ -1,39 +1,164 @@
 {
   "today": {
-    "date": "23/06/26",
+    "date": "25/06/26",
     "items": [
       {
         "id": 1,
+        "title": "OpenAI Unveils Jalape\u00f1o \u2014 First Custom Inference Chip With Broadcom",
+        "tag": "Hardware / AI Chips",
+        "desc": "OpenAI's first custom silicon, designed with Broadcom, targets LLM inference at scale. Deployment by end of 2026.",
+        "summary": "OpenAI unveiled Jalape\u00f1o, its first custom-built inference processor, designed and manufactured with Broadcom and Celestica. The chip is an LLM-optimized intelligence processor for initial deployment by end of 2026, with multi-generation roadmap. Jalape\u00f1o combines OpenAI-designed accelerators with Broadcom silicon implementation and networking. The move reduces OpenAI's dependence on NVIDIA GPUs for inference.",
+        "importance": "Custom silicon is the endgame for AI hyperscalers. OpenAI joining Google (TPU), Amazon (Trainium/Inferentia), and Microsoft (Maia) means the GPU monopoly on inference is fracturing. For the rest of us, this accelerates the commoditization of inference hardware.",
+        "noteworthy": "Watch for Jalape\u00f1o performance benchmarks vs NVIDIA B200/B300. If OpenAI offers inference-as-a-service on its own silicon, pricing could undercut GPU-based providers. For homelab, this doesn't change anything yet \u2014 but the trend is clear.",
+        "link": "https://openai.com/index/openai-broadcom-jalapeno-inference-chip/"
+      },
+      {
+        "id": 2,
+        "title": "Qualcomm Acquires Modular for $4B to Challenge NVIDIA CUDA Dominance",
+        "tag": "Hardware / AI Chips",
+        "desc": "Qualcomm buys AI compiler startup Modular (Mojo/Max) in $4B stock deal to build a CUDA-competitive software stack for its AI chips.",
+        "summary": "Qualcomm agreed to acquire Modular, the AI infrastructure startup behind the Mojo programming language and Max inference engine, for approximately $4 billion in stock. The deal positions Qualcomm to offer a unified software platform across its Snapdragon, AI Engine, and datacenter chips, directly competing with NVIDIA's CUDA ecosystem. The transaction is expected to close in H2 2026.",
+        "importance": "CUDA's moat is software, not hardware. Qualcomm buying Modular is the most credible attempt yet to build an alternative AI compute stack. If Mojo/Max get Qualcomm's distribution, the AI hardware market could see real competition at the software layer for the first time.",
+        "noteworthy": "Watch if Qualcomm opensources Mojo post-acquisition. For local AI inference, Qualcomm's NPUs + Modular's compiler could be a compelling alternative to NVIDIA for edge and mobile workloads.",
+        "link": "https://techcrunch.com/2026/06/24/qualcomm-agrees-to-acquire-ai-startup-modular-for-4-billion/"
+      },
+      {
+        "id": 3,
+        "title": "GLM-5.2: The Step Change for Open-Source AI Agents",
+        "tag": "AI / Open Models",
+        "desc": "Open-weight GLM-5.2 sustains ~1,700 autonomous agent steps per session, rivaling proprietary frontier models for agentic tasks.",
+        "summary": "GLM-5.2, released June 16, 2026 by Z.AI (formerly Tsinghua AI), represents a capability leap for open-weight models in agentic tasks. It sustains roughly 1,700 autonomous agent steps in a single session \u2014 up from an industry baseline of ~20 steps a year earlier. The model runs 'plan, execute, test, fix, optimize' loops autonomously and is MIT-licensed. Nathan Lambert called it the 'DeepSeek moment for agents.'",
+        "importance": "Open models crossing the agentic capability threshold changes the AI landscape. If GLM-5.2 can match proprietary models on agent tasks while being MIT-licensed, the argument for closed-source frontier models weakens significantly.",
+        "noteworthy": "Test GLM-5.2 on your agent workflows. It's available on Ollama Cloud and HuggingFace. For autonomous coding, research, and multi-step tasks, this may outperform larger proprietary models at a fraction of the cost.",
+        "link": "https://www.interconnects.ai/p/glm-52-is-the-step-change-for-open"
+      },
+      {
+        "id": 4,
+        "title": "Krea 2 Goes Open Source: 12B DiT Model Generates 2K Images in 2 Seconds",
+        "tag": "AI / Image Generation",
+        "desc": "Krea released open weights for Krea 2 Raw and Turbo \u2014 a 12B parameter dense DiT model with 2-second 2K generation.",
+        "summary": "Krea published open weights for Krea 2 on Hugging Face on June 24, 2026. The model uses a Qwen Image VAE, 12B dense DiT backbone, and Qwen3-VL text encoder. Two checkpoints ship: Krea 2 Raw (quality-focused) and Krea 2 Turbo (speed-optimized). The model generates 2K resolution images in approximately 2 seconds on consumer GPUs. This is a direct open-source competitor to Midjourney and DALL-E.",
+        "importance": "A 12B open-weight image model that runs on consumer hardware and generates 2K in 2 seconds is a milestone. For local AI image generation, this is the first credible alternative to proprietary services at this quality level.",
+        "noteworthy": "Download and test Krea 2 on your local GPU. Compare quality vs Flux, SD3.5, and Midjourney. The Turbo variant is particularly interesting for real-time generation workflows.",
+        "link": "https://www.krea.ai/krea-2-open-source"
+      },
+      {
+        "id": 5,
+        "title": "NVIDIA Unveils 45\u00b0C Liquid Cooling \u2014 Near-Zero Water Use for AI Data Centers",
+        "tag": "Hardware / Infrastructure",
+        "desc": "New closed-loop cooling architecture runs at 45\u00b0C, cutting data center water consumption to near zero and reducing power costs.",
+        "summary": "NVIDIA detailed a new liquid cooling architecture for next-generation AI infrastructure that operates at 45\u00b0C coolant temperature. The closed-loop design claims up to 100% reduction in water consumption compared to traditional evaporative cooling, and lower power costs through higher operating temperatures. The design is aimed at the next generation of AI factories running GB300 and future GPU clusters.",
+        "importance": "Data center water usage is becoming a regulatory and PR liability for AI companies. NVIDIA's 45\u00b0C design addresses both the environmental angle and operational costs. For homelab, the trickle-down to liquid cooling for consumer/workstation GPUs is worth watching.",
+        "noteworthy": "If you're planning a homelab liquid cooling setup, monitor NVIDIA's 45\u00b0C spec \u2014 lower temperature delta requirements mean simpler, cheaper cooling loops. For data center operators, this is a direct operational cost reduction.",
+        "link": "https://blogs.nvidia.com/blog/liquid-cooling-ai-factories/"
+      },
+      {
+        "id": 6,
+        "title": "Gemini 3.5 Flash Gets Native Computer Use \u2014 Agentic AI Built Into the Model",
+        "tag": "AI / Agents",
+        "desc": "Google integrates computer use as a native tool in Gemini 3.5 Flash, replacing the standalone Gemini 2.5 Computer Use model.",
+        "summary": "Google announced that computer use is now a built-in tool in Gemini 3.5 Flash, delivering its best performance yet for agentic computer use tasks. Previously only available as a standalone Gemini 2.5 model, computer use is now natively integrated into the main Flash model alongside Search and Maps grounding. This enables the model to interact with web pages, Android apps, and desktop interfaces directly.",
+        "importance": "Native computer use in a mainstream model signals that agentic AI is becoming a standard capability, not a separate product. For developers, this means fewer integration layers between the model and the action.",
+        "noteworthy": "Test Gemini 3.5 Flash computer use for automation tasks. Compare against Claude's computer use and OpenAI's operator. For homelab automation, this could replace brittle Selenium/Playwright scripts.",
+        "link": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-computer-use-gemini-3-5-flash/"
+      },
+      {
+        "id": 7,
+        "title": "Cordyceps: CI/CD Flaws Expose 300+ GitHub Repos to Supply-Chain Attacks",
+        "tag": "Security / Supply Chain",
+        "desc": "Novee Security finds critical exploitable CI/CD pattern affecting Microsoft, Google, Apache, and 300+ high-impact repos.",
+        "summary": "Novee Security disclosed Cordyceps, a class of CI/CD workflow weakness that allows attackers to hijack workflows and compromise open-source supply chains. A scan of ~30,000 high-impact repositories found 300+ fully exploitable, enabling attacker-controlled code execution, credential theft, and supply chain compromise. Affected organizations include Microsoft, Google, and Apache. The pattern involves insecure use of GitHub Actions workflow triggers and artifact handling.",
+        "importance": "CI/CD pipelines are the soft underbelly of open-source. Cordyceps shows that even major orgs have exploitable workflow patterns. If you maintain or depend on open-source, this is a direct supply chain risk.",
+        "noteworthy": "Audit your GitHub Actions workflows for Cordyceps patterns. Review workflow trigger configurations, artifact passing, and pull request approval flows. Update actions/checkout to latest version which blocks common attack patterns.",
+        "link": "https://thehackernews.com/2026/06/cordyceps-cicd-flaws-expose-300-github.html"
+      },
+      {
+        "id": 8,
+        "title": "CISA Warns: Lantronix EDS5000 CVE-2025-67038 Actively Exploited",
+        "tag": "Security / IoT",
+        "desc": "Critical code injection flaw (CVSS 9.8) in Lantronix EDS5000 series devices is being actively exploited. CISA orders fixes by June 26.",
+        "summary": "CISA warned of active exploitation of CVE-2025-67038 (CVSS 9.8), a code injection vulnerability in Lantronix EDS5000 Series devices. The flaw could allow unauthenticated remote code execution. FCEB agencies must apply fixes by June 26, 2026. Lantronix EDS5000 devices are serial-to-Ethernet converters widely used in industrial, energy, and critical infrastructure environments.",
+        "importance": "OT/IoT devices with network connectivity are a growing attack surface. A CVSS 9.8 in widely deployed industrial serial servers means attackers can pivot from IT to OT networks through these devices.",
+        "noteworthy": "Identify and patch Lantronix EDS5000 devices immediately. If you have these in your homelab or lab environment, check firmware versions and apply updates. Segment OT devices from general network access.",
+        "link": "https://thehackernews.com/2026/06/cisa-warns-critical-lantronix-eds5000.html"
+      },
+      {
+        "id": 9,
+        "title": "Fake AI Agent Skill Passed Security Scans, Reached 26,000 Agents",
+        "tag": "AI Security / Supply Chain",
+        "desc": "Malicious AI agent skill bypassed security review and was installed on 26,000 agent platforms before detection.",
+        "summary": "A fake AI agent skill disguised as a legitimate tool passed security scans and was deployed to approximately 26,000 AI agent instances before being discovered. The malicious skill appeared to perform a benign function but contained code that exfiltrated conversation data, API keys, and environment variables. The incident highlights the lack of vetting in AI agent marketplaces and the supply chain risk of third-party agent skills.",
+        "importance": "AI agent marketplaces are repeating the app store security mistakes of the past decade. If agents are executing skills with access to your data and credentials, a malicious skill is a direct compromise vector.",
+        "noteworthy": "Audit installed AI agent skills and plugins. Review permissions granted to third-party agent extensions. Treat agent skills with the same scrutiny as browser extensions or npm packages.",
+        "link": "https://thehackernews.com/2026/06/fake-ai-agent-skill-passed-security.html"
+      },
+      {
+        "id": 10,
+        "title": "Bunny DNS Goes Free \u2014 Up to 500 Domains Per Account",
+        "tag": "Networking / DNS",
+        "desc": "Bunny.net drops DNS query charges entirely, offering free DNS hosting for up to 500 domains. No catch.",
+        "summary": "Bunny.net announced Bunny DNS is now completely free. The service no longer charges for DNS queries and includes free DNS hosting for up to 500 domains per account. Bunny positions DNS as the core glue of their CDN platform and says the move is strategic \u2014 driving adoption of their broader edge services. The announcement hit #1 on Hacker News with 851 points.",
+        "importance": "Free, reliable DNS with no query limits is a big deal for homelab operators and small projects. Bunny's global anycast network means low-latency resolution worldwide. For multi-domain setups, 500 domains per account is generous.",
+        "noteworthy": "Migrate your homelab domains to Bunny DNS. Compare latency vs Cloudflare, Route53, and your current provider. For self-hosted services, Bunny's free tier eliminates a recurring cost.",
+        "link": "https://bunny.net/blog/were-making-bunny-dns-free/"
+      },
+      {
+        "id": 11,
+        "title": "Trump Order Sets 2030 Deadline for Federal Post-Quantum Crypto Migration",
+        "tag": "Policy / Cryptography",
+        "desc": "Executive order mandates federal agencies migrate high-value systems to post-quantum cryptography by December 31, 2030.",
+        "summary": "President Trump signed an executive order on June 22, 2026, setting hard deadlines for federal agencies to migrate to post-quantum cryptography. Key establishment must move by December 31, 2030; digital signatures by December 31, 2031. The order covers high-value assets and high-impact systems across all federal civilian agencies. Cloudflare, NIST, and industry groups praised the timeline as aggressive but achievable.",
+        "importance": "PQC migration is the largest cryptographic transition in history. This EO sets a regulatory clock ticking for every organization that does business with the US federal government. For everyone else, it's a forcing function to start planning.",
+        "noteworthy": "Start auditing your cryptographic inventory now. Identify systems using RSA, ECDSA, and ECDH that will need PQC upgrades. Test hybrid PQC schemes (X25519Kyber, etc.) in your infrastructure. The 2030 deadline will arrive faster than it seems.",
+        "link": "https://thehackernews.com/2026/06/trump-order-sets-2030-deadline-for.html"
+      },
+      {
+        "id": 12,
+        "title": "Market Snapshot: BTC $60,777 | ETH $1,618 | SOL $67.61",
+        "tag": "Crypto / Markets",
+        "desc": "Crypto market takes a 3.5% dip. BTC below $61K, ETH below $1,650, SOL below $70. Broad sell-off.",
+        "summary": "CoinGecko data on June 25, 2026 shows Bitcoin at $60,777 (-3.51% 24h, market cap $1.22T), Ethereum at $1,618 (-3.42%), and Solana at $67.61 (-3.69%). All three major assets saw coordinated selling pressure, breaking below recent support levels. BTC lost the $62K level that had held for the past week. No single catalyst identified \u2014 likely macro positioning ahead of end-of-quarter rebalancing.",
+        "importance": "BTC losing $62K support is bearish in the short term. The next support level is $58K. If this is end-of-quarter institutional rebalancing, the dip may be temporary. If it's macro-driven (rates, liquidity), the correction could deepen.",
+        "noteworthy": "Watch $58K support on BTC. If it breaks, $52K is next. For ETH, $1,500 is the key level. Consider setting limit orders at support levels if you're looking to accumulate. Monitor macro catalysts this week.",
+        "link": "https://www.coingecko.com/"
+      }
+    ]
+  },
+  "yesterday": {
+    "date": "23/06/26",
+    "items": [
+      {
+        "id": 13,
         "title": "OpenAI 'Patch the Planet' Hunts Open-Source Bugs With GPT-5.5-Cyber",
         "tag": "AI / Cybersecurity",
         "desc": "OpenAI launches a Daybreak initiative with Trail of Bits to find and patch vulnerabilities in critical open-source software using its cyber-capable models.",
         "summary": "OpenAI announced 'Patch the Planet,' a Daybreak initiative built with Trail of Bits, HackerOne, and Calif. It pairs GPT-5.5-Cyber and expert human review to identify and patch vulnerabilities in widely used open-source projects. Early results include Linux kernel pointer-leak PoCs, local privilege escalation exploits, and Safari vulnerabilities. The move positions OpenAI as a defender-focused counterpoint to Anthropic's Mythos cyber model line.",
-        "importance": "AI's offensive cyber capabilities get all the headlines, but defender applications may be more consequential. If AI-assisted patching scales, it could meaningfully reduce the open-source vulnerability backlog — or at least shift the arms race toward maintainers.",
+        "importance": "AI's offensive cyber capabilities get all the headlines, but defender applications may be more consequential. If AI-assisted patching scales, it could meaningfully reduce the open-source vulnerability backlog \u2014 or at least shift the arms race toward maintainers.",
         "noteworthy": "Watch which projects Patch the Planet targets first. If you're an open-source maintainer, expect AI-generated patch submissions and review them carefully. The quality of human review in the loop will determine whether this helps or floods maintainers.",
         "link": "https://openai.com/index/patch-the-planet/"
       },
       {
-        "id": 2,
+        "id": 14,
         "title": "SpaceX Signs $6.3B Compute Deal With Reflection AI for Colossus GB300 Capacity",
         "tag": "AI / Infrastructure",
         "desc": "Reflection AI will pay SpaceX $150M/month through 2029 for access to Nvidia GB300 chips at the Colossus 2 data center.",
         "summary": "SpaceX signed a computing power agreement with open-source AI startup Reflection worth up to $6.3 billion. Reflection gets immediate access to Nvidia GB300 chips at Elon Musk's Colossus 2 data center, paying $150 million per month starting July 1, 2026, through 2029. The deal is cancellable with 90 days notice after the first three months. SpaceX has already struck similar deals with Anthropic, Google, and Cursor, turning Colossus into a commercial AI compute platform.",
-        "importance": "Musk is converting SpaceX's AI infrastructure build-out into a cloud compute business. For open-source AI, this is a massive capacity injection — and a reminder that physical GPU clusters are the real scarce resource in the AI race.",
+        "importance": "Musk is converting SpaceX's AI infrastructure build-out into a cloud compute business. For open-source AI, this is a massive capacity injection \u2014 and a reminder that physical GPU clusters are the real scarce resource in the AI race.",
         "noteworthy": "Reflection is an open-source lab valued at $25B. Watch if this deal pressures closed-model pricing. For your own infra, the story is simple: compute scarcity drives consolidation into a few physical clusters.",
         "link": "https://www.cnbc.com/2026/06/22/spacex-ai-colossus-data-center-reflection.html"
       },
       {
-        "id": 3,
+        "id": 15,
         "title": "Squidbleed: 29-Year-Old Squid Proxy Bug Leaks HTTP Requests and Credentials",
         "tag": "Security / Networking",
         "desc": "Heartbleed-style heap over-read in Squid Proxy since 1997 can leak other users' cleartext HTTP requests, including auth headers and cookies.",
-        "summary": "Researchers disclosed 'Squidbleed' (CVE-2026-47729), a heap buffer over-read in Squid Proxy's FTP directory-listing parser that traces back to a January 1997 commit. The bug is present in default configurations and can leak internal memory — including other users' HTTP Authorization headers, cookies, and session tokens — to anyone who can get the proxy to fetch an FTP directory listing. The vulnerability was reportedly found with assistance from Anthropic's Claude Mythos Preview.",
+        "summary": "Researchers disclosed 'Squidbleed' (CVE-2026-47729), a heap buffer over-read in Squid Proxy's FTP directory-listing parser that traces back to a January 1997 commit. The bug is present in default configurations and can leak internal memory \u2014 including other users' HTTP Authorization headers, cookies, and session tokens \u2014 to anyone who can get the proxy to fetch an FTP directory listing. The vulnerability was reportedly found with assistance from Anthropic's Claude Mythos Preview.",
         "importance": "Legacy code in network infrastructure keeps producing critical bugs decades later. Any shared proxy or caching layer is a high-value target, and this flaw turns a benign-looking FTP request into a memory disclosure weapon.",
         "noteworthy": "Audit Squid deployments and disable FTP gateway features if not needed. Update to a patched version immediately. Review what traffic passes through shared proxies and whether it carries credentials or tokens.",
         "link": "https://blog.calif.io/p/squidbleed-cve-2026-47729"
       },
       {
-        "id": 4,
+        "id": 16,
         "title": "DifyTap: Cross-Tenant Bugs Expose Private AI Chats in Dify",
         "tag": "AI Security / SaaS",
         "desc": "Four vulnerabilities in popular open-source agentic platform Dify allow attackers to read AI conversations and files across tenants.",
@@ -43,7 +168,7 @@
         "link": "https://thehackernews.com/2026/06/researchers-detail-difytap-flaws-in.html"
       },
       {
-        "id": 5,
+        "id": 17,
         "title": "ShapedPlugin WordPress Pro Plugins Backdoored in Supply Chain Attack",
         "tag": "Security / Supply Chain",
         "desc": "Attackers compromised ShapedPlugin's build and distribution pipeline to inject backdoor code into official plugin releases.",
@@ -53,47 +178,47 @@
         "link": "https://thehackernews.com/2026/06/shapedplugin-wordpress-pro-plugins.html"
       },
       {
-        "id": 6,
+        "id": 18,
         "title": "AryStinger Malware Infects 4,300 Legacy Routers for Reconnaissance Proxy Network",
         "tag": "Security / IoT",
         "desc": "New malware family turns forgotten home routers into a distributed reconnaissance and proxy network, not the usual DDoS botnet.",
         "summary": "QiAnXin's XLab discovered a new malware family called AryStinger that has infected at least 4,300 legacy routers and counting. Unlike typical IoT malware that joins DDoS botnets, AryStinger uses compromised routers for target scanning, traffic tunneling, and remote command execution. The network appears designed for reconnaissance and proxy access rather than volumetric attacks.",
-        "importance": "Old routers are the forgotten edge of every network. AryStinger shows that even non-DDoS attackers see value in them — as persistent proxies and reconnaissance nodes. E-waste routers stay online longer than they stay patched.",
+        "importance": "Old routers are the forgotten edge of every network. AryStinger shows that even non-DDoS attackers see value in them \u2014 as persistent proxies and reconnaissance nodes. E-waste routers stay online longer than they stay patched.",
         "noteworthy": "Inventory and retire unsupported routers. Change default credentials and disable remote management. Monitor router traffic for unexpected outbound connections or scanning behavior.",
         "link": "https://thehackernews.com/2026/06/arystinger-malware-infects-4300-legacy.html"
       },
       {
-        "id": 7,
+        "id": 19,
         "title": "Canada's Spy Agency Gets First-of-Its-Kind Warrant to Clean Botnet-Infected Devices",
         "tag": "Security / Policy",
         "desc": "CSIS used threat-reduction warrant powers to alter, degrade, and destroy botnet data on infected Canadian devices.",
         "summary": "The Federal Court released a public ruling showing the Canadian Security Intelligence Service (CSIS) used threat-reduction warrant powers for the first time to neutralize two foreign-run botnets. The warrant, issued in spring 2024, allowed CSIS to alter, degrade, and destroy data on infected machines in Canada and cut them loose from the botnet networks. The public ruling was released on June 15, 2026.",
         "importance": "This is a legal precedent for active defense at scale. Governments are formalizing the authority to reach into private devices to clean up foreign botnets. The privacy/security balance here will be cited in future debates everywhere.",
-        "noteworthy": "Monitor policy developments around active cyber defense. For enterprise, this doesn't change much operationally — but it signals that governments may step in more aggressively on widespread infections.",
+        "noteworthy": "Monitor policy developments around active cyber defense. For enterprise, this doesn't change much operationally \u2014 but it signals that governments may step in more aggressively on widespread infections.",
         "link": "https://thehackernews.com/2026/06/canadas-spy-agency-used-first-of-its.html"
       },
       {
-        "id": 8,
+        "id": 20,
         "title": "AMD Confirms Zen 6 'Mustang Peak' Threadripper With PCIe 6.0",
         "tag": "Hardware / CPU",
         "desc": "Next-gen Threadripper CPUs get new TR6 socket, DDR5, and PCIe 6.0 connectivity. Core counts may reach 144.",
         "summary": "AMD documentation officially confirmed its next-generation Threadripper Pro CPUs, codenamed 'Mustang Peak,' will use the new TR6 platform. The chips will use 2nm Zen 6 cores, support DDR5 memory, and feature PCIe 6.0 connectivity. Leaks suggest Threadripper Pro core counts could rise to 144. The new socket and I/O capabilities represent a major platform overhaul for workstation and HPC markets.",
-        "importance": "PCIe 6.0 in a workstation platform is a big deal for high-speed storage, networking, and GPU connectivity. For homelab and HPC users, this sets the next upgrade horizon — though TR6 will require new boards, coolers, and likely expensive memory.",
+        "importance": "PCIe 6.0 in a workstation platform is a big deal for high-speed storage, networking, and GPU connectivity. For homelab and HPC users, this sets the next upgrade horizon \u2014 though TR6 will require new boards, coolers, and likely expensive memory.",
         "noteworthy": "If you're planning a Threadripper build, wait for Mustang Peak if you need maximum I/O bandwidth. Otherwise, current Zen 5 Threadripper platforms may offer better value for the next 12-18 months.",
         "link": "https://www.tomshardware.com/pc-components/cpus/first-official-details-of-amds-next-gen-mustang-peak-threadripper-cpus-come-into-view-chips-feature-ddr5-pcie-6-0-and-a-new-socket"
       },
       {
-        "id": 9,
+        "id": 21,
         "title": "NVIDIA RTX 50 'Super' Refresh Back on Track, RTX 5060 12GB Rumored",
         "tag": "Hardware / GPU",
-        "desc": "Leaks suggest NVIDIA's delayed Blackwell refresh will launch, with a 12GB RTX 5060 Super joining higher-endVRAM upgrades.",
+        "desc": "Leaks suggest NVIDIA's delayed Blackwell refresh will launch, with a 12GB RTX 5060 Super joining higher-end VRAM upgrades.",
         "summary": "Multiple leakers now claim NVIDIA's RTX 50 Super refresh is back in active development for 2026/early 2027. The rumored lineup includes a 12GB RTX 5060 Super, an 18GB RTX 5070 Super, and 24GB variants of the RTX 5070 Ti Super and RTX 5080 Super. VRAM capacity is the headline improvement, addressing the biggest criticism of the initial 50-series cards.",
         "importance": "VRAM is the bottleneck for local AI inference and high-resolution workloads. A 12GB 5060 Super at the low end and 24GB 5070 Ti/5080 Super up top would make the refresh genuinely relevant for budget AI and homelab GPU users.",
-        "noteworthy": "Don't buy a current 50-series card until Super pricing is clear. For local LLMs, 24GB at a mid-high tier is a sweet spot. Watch power draw and pricing — NVIDIA may offset VRAM gains with higher MSRP.",
+        "noteworthy": "Don't buy a current 50-series card until Super pricing is clear. For local LLMs, 24GB at a mid-high tier is a sweet spot. Watch power draw and pricing \u2014 NVIDIA may offset VRAM gains with higher MSRP.",
         "link": "https://www.techtimes.com/articles/318772/20260621/nvidia-rtx-50-gpu-shortage-supply-cut-20-prices-climbing-no-desktop-refresh-confirmed.htm"
       },
       {
-        "id": 10,
+        "id": 22,
         "title": "Apple Patches Beats Studio Buds Wiretap Flaw (CVE-2025-20701)",
         "tag": "Security / IoT",
         "desc": "Firmware update 1B211 fixes a Bluetooth vulnerability that let nearby attackers eavesdrop through the earbuds' microphone.",
@@ -103,7 +228,7 @@
         "link": "https://www.malwarebytes.com/blog/bugs/2026/06/apple-patches-beats-studio-buds-flaw-that-could-turn-earbuds-into-a-wiretap"
       },
       {
-        "id": 11,
+        "id": 23,
         "title": "Google to Block Unverified Android App Installs in Brazil, Indonesia, Singapore, Thailand",
         "tag": "Privacy / Mobile",
         "desc": "Starting Sept. 30, 2026, certified Android devices in four countries will block normal installs from developers without verified identity.",
@@ -113,138 +238,13 @@
         "link": "https://thehackernews.com/2026/06/google-sets-sept-30-deadline-for.html"
       },
       {
-        "id": 12,
+        "id": 24,
         "title": "Market Snapshot: BTC $64,085 | ETH $1,750 | SOL $72.87",
         "tag": "Crypto / Markets",
         "desc": "Bitcoin flat near $64K, Ethereum and Solana little changed. Range-bound consolidation continues.",
         "summary": "CoinGecko and market data on June 23, 2026, show Bitcoin near $64,085 with roughly flat to slightly positive 24-hour movement and market cap around $1.28T. Ethereum trades near $1,750 and Solana near $72.87. The market remains range-bound with no decisive breakout, while institutional ETF developments continue in the background.",
         "importance": "$64K continues to act as equilibrium. Without a macro catalyst, crypto is likely to stay range-bound. The real action is in institutional product fee competition and regulatory positioning, not price.",
         "noteworthy": "Watch $66K resistance and $62K support. Morgan Stanley's 0.14% fee on upcoming ETH/SOL ETFs is worth tracking for flows. No major directional catalyst until next week.",
-        "link": "https://www.coingecko.com/"
-      }
-    ]
-  },
-  "yesterday": {
-    "date": "19/06/26",
-    "items": [
-      {
-        "id": 13,
-        "title": "AutoJack: One Malicious Web Page Can RCE the Host Running Your AI Agent",
-        "tag": "AI Security / Agents",
-        "desc": "Microsoft's AutoJack turns an AI browsing agent into a host RCE vector by reaching privileged local MCP services from a webpage.",
-        "summary": "Microsoft researchers disclosed AutoJack, an exploit chain where a malicious webpage loaded by an AI browsing agent can pivot to local MCP services and execute code on the host. The attack works through AutoGen Studio's MCP WebSocket in pre-release builds, requiring no credentials or user interaction beyond getting the agent to open the page.",
-        "importance": "This matters because AI agents are becoming the default interface between users and local tools. AutoJack proves that a prompt injection or malicious link isn't just a chatbot jailbreak — it can become code execution on your machine.",
-        "noteworthy": "Segment AI agents from privileged local services. Disable unnecessary MCP servers. Run agents in restricted environments, not your primary workstation.",
-        "link": "https://www.microsoft.com/en-us/security/blog/2026/06/18/autojack-single-page-rce-host-running-ai-agent/"
-      },
-      {
-        "id": 14,
-        "title": "FortiBleed Campaign Compromises 86,644 FortiGate Devices in 194 Countries",
-        "tag": "Security / Perimeter",
-        "desc": "CISA warns Fortinet customers as Russian-speaking actors mass-harvest FortiGate and VPN credentials. 86,644 devices confirmed hit.",
-        "summary": "CISA issued guidance after a campaign dubbed FortiBleed exposed credentials for 86,644 FortiGate and Fortinet VPN devices across 194 countries. SOCRadar data shows generic admin accounts (35%) and built-in Fortinet system accounts (28.3%) make up most compromised credentials.",
-        "importance": "FortiGate appliances sit on the network perimeter of thousands of organizations. Valid admin credentials give attackers VPN access, lateral movement, and long-term persistence.",
-        "noteworthy": "Rotate all FortiGate/FortiVPN admin and service account credentials immediately. Audit user accounts against SOCRadar's leak data. Enforce MFA on VPN and admin access.",
-        "link": "https://thehackernews.com/2026/06/cisa-warns-fortinet-customers-as.html"
-      },
-      {
-        "id": 15,
-        "title": "usbliter8: Unpatchable Apple A12/A13 SecureROM Exploit Breaks Boot Chain",
-        "tag": "Security / Hardware",
-        "desc": "Paradigm Shift published a working exploit for Apple's A12 and A13 SecureROM. Burned into silicon — no patch possible.",
-        "summary": "Paradigm Shift released usbliter8, an exploit that achieves arbitrary code execution inside the SecureROM of Apple's A12 and A13 chips. The vulnerable code is burned into read-only memory at manufacture, making it unpatchable. Affected devices include iPhone XS through 11 series.",
-        "importance": "BootROM exploits are permanent. They jailbreak the root of trust and enable unpatchable forensics, jailbreaks, and potentially malicious device imaging.",
-        "noteworthy": "Treat A12/A13 devices as physically insecure. Use strong device encryption with a complex passphrase. Enforce remote wipe and device tracking.",
-        "link": "https://ps.tc/pages/blog-usbliter8.html"
-      },
-      {
-        "id": 16,
-        "title": "Apertus: Fully Open Foundation Model for Sovereign AI",
-        "tag": "AI / Open Source",
-        "desc": "Swiss AI Initiative releases Apertus — open weights, open data, open training code, EU AI Act compliant.",
-        "summary": "The Swiss AI Initiative launched Apertus, a fully open foundation model developed by EPFL, ETH Zurich, and CSCS. It releases training data, code, weights, methods, and alignment principles. Models ship at 8B and 70B scales and are multilingual from day one across 1000+ languages.",
-        "importance": "Sovereign AI is becoming a geopolitical necessity. Apertus is the most transparent major open model effort to date and directly counters proprietary centralization.",
-        "noteworthy": "Watch for Apertus quantized releases on HuggingFace and Ollama. Evaluate it for sensitive workloads where data sovereignty matters.",
-        "link": "https://apertvs.ai/"
-      },
-      {
-        "id": 17,
-        "title": "Sakana Fugu: Multi-Agent System Delivered as a Single Model API",
-        "tag": "AI / Agents",
-        "desc": "Sakana AI's Fugu dynamically orchestrates multiple frontier models through one API, claiming top-tier performance without vendor lock-in.",
-        "summary": "Sakana AI announced Fugu, a multi-agent system packaged as a single model API. Fugu learns to dynamically assemble agents from a pool of diverse models and coordinate them through emergent collaboration patterns rather than prescribed roles.",
-        "importance": "The routing/orchestration layer may become more valuable than any single model. Fugu is betting that a coordinator model can beat monolithic giants by combining specialized models.",
-        "noteworthy": "Compare Fugu against your current Ollama Cloud setup for complex multi-step tasks. Monitor pricing vs single-model APIs. EU availability is pending.",
-        "link": "https://sakana.ai/fugu/"
-      },
-      {
-        "id": 18,
-        "title": "Anthropic Now Requires Identity Verification for Claude",
-        "tag": "AI / Policy",
-        "desc": "Anthropic is rolling out government ID verification for Claude, handled by Persona, to access certain capabilities.",
-        "summary": "Anthropic is rolling out identity verification for Claude users, requiring a government-issued photo ID and optional live selfie via partner Persona. The company says verification is needed to prevent abuse, enforce usage policies, and comply with legal obligations.",
-        "importance": "Identity verification in frontier AI is becoming standard. For privacy-conscious users and pseudonymous work, this is a regression.",
-        "noteworthy": "Evaluate whether Claude remains viable for anonymous or pseudonymous workflows. Consider local/open alternatives for sensitive tasks.",
-        "link": "https://support.anthropic.com/en/articles/14328960-identity-verification-on-claude"
-      },
-      {
-        "id": 19,
-        "title": "Google Hits 50% IPv6 Adoption",
-        "tag": "Networking / Internet",
-        "desc": "Google's public stats show IPv6 traffic crossing the 50% mark globally, a milestone after decades of migration.",
-        "summary": "APNIC reported that Google has reached 50% IPv6 adoption across its services, based on Google's public IPv6 statistics. The milestone reflects gradual ISP, mobile carrier, and enterprise upgrades.",
-        "importance": "The IPv4 exhaustion era is effectively ending for major services. Network engineers and homelab operators should ensure IPv6 is enabled and understood in their stacks.",
-        "noteworthy": "Verify your Proxmox, router, and Tailscale setups support IPv6. Review firewall rules for IPv6.",
-        "link": "https://blog.apnic.net/2026/04/28/google-hits-50-ipv6/"
-      },
-      {
-        "id": 20,
-        "title": "MiniPCs.zip Maps the Pareto Frontier of Mini PCs",
-        "tag": "Hardware / Homelab",
-        "desc": "Show HN project scans thousands of Mini PCs from Amazon and eBay twice daily and plots price vs performance.",
-        "summary": "MiniPCs.zip is a new Show HN project that performs twice-daily scans of thousands of Mini PCs from Amazon and eBay and plots them on interactive charts. Users can compare price against CPU performance, graphics capability, memory, storage, and other dimensions.",
-        "importance": "Mini PCs are the default homelab edge node for Proxmox, Ollama, or networking experiments. A living price/performance index removes guesswork from buying.",
-        "noteworthy": "Use MiniPCs.zip before your next homelab purchase. Compare recent N100/N305/AMD 7840U boxes. Watch for refurbished enterprise thin clients.",
-        "link": "https://minipcs.zip"
-      },
-      {
-        "id": 21,
-        "title": "Running MicroVMs in Proxmox VE the Easy Way",
-        "tag": "Homelab / Virtualization",
-        "desc": "New pve-microvm package brings Firecracker-style QEMU microVMs into Proxmox VE with web UI integration.",
-        "summary": "A project called pve-microvm adds QEMU's microvm machine type as a first-class guest in Proxmox VE. It ships a custom kernel and patches Proxmox's Perl internals to integrate with the web UI. The package supports 21 guest OS types, from Debian to NetBSD to Plan 9.",
-        "importance": "MicroVMs fill the gap between containers and full VMs — fast boot, small footprint, hardware isolation. For homelab agent sandboxes, untrusted workloads, or ephemeral compute, this is a big upgrade over LXC.",
-        "noteworthy": "Evaluate pve-microvm for your Proxmox cluster if you run untrusted code, AI agent sandboxes, or ephemeral services.",
-        "link": "https://taoofmac.com/space/blog/2026/06/18/1845"
-      },
-      {
-        "id": 22,
-        "title": "GLM-5.2 Hallucinates Far Less Than GPT-5.5 and DeepSeek V4 Pro",
-        "tag": "AI / Models",
-        "desc": "Analysis argues open-weight GLM-5.2 shows smaller models trained on factual data can beat giant models on hallucination and honesty.",
-        "summary": "A recent analysis claims DeepSeek V4 Pro has a 94% hallucination rate on the AA-Omniscience benchmark. GPT-5.5 is described as hallucinating roughly 3x more than MIT-licensed GLM-5.2. The argument is that scaling parameters without improving data quality produces confidently wrong answers.",
-        "importance": "Hallucination rate matters as much as benchmark scores for production use. If this analysis holds, GLM-5.2 may be more trustworthy for factual tasks than larger proprietary models.",
-        "noteworthy": "Test GLM-5.2 against your current models on factual QA tasks where admitting ignorance is acceptable. Monitor independent hallucination benchmarks rather than headline leaderboard scores.",
-        "link": "https://arrowtsx.dev/bigger-models/"
-      },
-      {
-        "id": 23,
-        "title": "Two Qwen3 Models on One DGX Spark via vLLM",
-        "tag": "AI / Local Inference",
-        "desc": "Blog details using vLLM's PagedAttention and gpu_memory_utilization to run two Qwen3 models side-by-side on a single DGX Spark.",
-        "summary": "A developer documented running two Qwen3 models simultaneously on one DGX Spark by switching from Ollama to vLLM. PagedAttention and explicit gpu_memory_utilization settings allow coresident heavy and fast models, which Ollama's llama.cpp backend doesn't support cleanly.",
-        "importance": "This is directly relevant to your setup. If you want multiple models on one GPU, Ollama's single-model-at-a-time model is limiting. vLLM unlocks concurrent model serving and better KV cache management.",
-        "noteworthy": "Experiment with vLLM on your DGX Spark or GPU node if you serve multiple models. Compare throughput and memory efficiency against Ollama.",
-        "link": "https://www.devashish.me/p/two-qwen3-models-on-one-dgx-spark"
-      },
-      {
-        "id": 24,
-        "title": "Market Snapshot: BTC $64,186 | ETH $1,737 | SOL $73.91",
-        "tag": "Crypto / Markets",
-        "desc": "Bitcoin flat near $64K, Ethereum and Solana little changed. Range-bound consolidation continues.",
-        "summary": "CoinGecko data on June 19, 2026, showed Bitcoin at $64,186 (+0.08%), Ethereum at $1,736.80 (+0.28%), and Solana at $73.91 (+1.22%). The market was consolidating near the $64K-$66K range with no strong directional breakout.",
-        "importance": "$64K remained the key level. Failure to break higher kept the market in a holding pattern, with altcoins showing mixed performance.",
-        "noteworthy": "Watch $66K resistance and $62K support. Solana outperforming suggested some alt rotation. No major macro catalyst visible until next week.",
         "link": "https://www.coingecko.com/"
       }
     ]
