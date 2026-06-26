@@ -1,19 +1,144 @@
 {
   "today": {
-    "date": "25/06/26",
+    "date": "26/06/26",
     "items": [
       {
         "id": 1,
-        "title": "OpenAI Unveils Jalape\u00f1o \u2014 First Custom Inference Chip With Broadcom",
-        "tag": "Hardware / AI Chips",
-        "desc": "OpenAI's first custom silicon, designed with Broadcom, targets LLM inference at scale. Deployment by end of 2026.",
-        "summary": "OpenAI unveiled Jalape\u00f1o, its first custom-built inference processor, designed and manufactured with Broadcom and Celestica. The chip is an LLM-optimized intelligence processor for initial deployment by end of 2026, with multi-generation roadmap. Jalape\u00f1o combines OpenAI-designed accelerators with Broadcom silicon implementation and networking. The move reduces OpenAI's dependence on NVIDIA GPUs for inference.",
-        "importance": "Custom silicon is the endgame for AI hyperscalers. OpenAI joining Google (TPU), Amazon (Trainium/Inferentia), and Microsoft (Maia) means the GPU monopoly on inference is fracturing. For the rest of us, this accelerates the commoditization of inference hardware.",
-        "noteworthy": "Watch for Jalape\u00f1o performance benchmarks vs NVIDIA B200/B300. If OpenAI offers inference-as-a-service on its own silicon, pricing could undercut GPU-based providers. For homelab, this doesn't change anything yet \u2014 but the trend is clear.",
-        "link": "https://openai.com/index/openai-broadcom-jalapeno-inference-chip/"
+        "title": "Chrome Ad Blocker with 10M+ Installs Has Dormant Script Injection",
+        "tag": "Security / Browser",
+        "desc": "Adblock for YouTube extension can execute arbitrary JS on any site via server-side config change — no update, no review needed.",
+        "summary": "Island Security found that Adblock for YouTube (10M+ installs, Chrome Web Store Featured) contains architecture for arbitrary JavaScript execution on any website. A single server-side config change enables it without extension update, store review, or user-visible change. Could read pages, steal data, act as the user.",
+        "importance": "A Featured extension with 10M installs having dormant code execution capability is a supply chain time bomb. If the server-side switch flips maliciously, every install becomes a potential data exfiltration vector.",
+        "noteworthy": "Audit your Chrome extensions. Remove Adblock for YouTube if installed. Prefer uBlock Origin. Monitor for extension behavior changes — server-side switches leave no client-side trace.",
+        "link": "https://thehackernews.com/2026/06/chrome-ad-blocker-with-10m-installs.html"
       },
       {
         "id": 2,
+        "title": "Gaslight macOS Malware Uses Prompt Injection to Blind AI Analysis",
+        "tag": "Security / Malware",
+        "desc": "North Korea-aligned Rust implant embeds fake system-failure messages to trick LLM-assisted malware triage into aborting analysis.",
+        "summary": "SentinelOne discovered Gaslight, a Rust-based macOS backdoor linked to North Korea. Its novel evasion: embedded prompt injection payloads that fabricate system-failure messages, designed to make LLM-assisted triage agents doubt their session and abort analysis. Uses Telegram bot API for C2 with interactive shell capabilities.",
+        "importance": "First known malware targeting AI analysis tools directly. As SOCs adopt LLM-assisted triage, attackers will increasingly weaponize prompt injection against the analysts' tools rather than evading sandboxes.",
+        "noteworthy": "Update macOS XProtect definitions. Monitor for Telegram bot API traffic on macOS endpoints. Review AI-assisted malware analysis pipelines for prompt injection vulnerabilities in the toolchain.",
+        "link": "https://thehackernews.com/2026/06/new-gaslight-macos-malware-uses-prompt.html"
+      },
+      {
+        "id": 3,
+        "title": "Cisco SD-WAN Zero-Day CVE-2026-20245 Exploited for Root Access",
+        "tag": "Security / Vulnerability",
+        "desc": "Mandiant confirms CVE-2026-20245 (CVSS 7.8) was exploited as zero-day for 2+ months before disclosure. Attacker used anti-forensic techniques.",
+        "summary": "Mandiant reported that CVE-2026-20245 in Cisco Catalyst SD-WAN was exploited as a zero-day at least two months before public disclosure. The authenticated local attacker can execute arbitrary commands with elevated privileges via crafted file upload. The threat actor consistently employed anti-forensic techniques, selectively deleting and restoring system config files during the intrusion.",
+        "importance": "SD-WAN is the backbone of modern enterprise networking. A zero-day with anti-forensic capabilities in a widely deployed Cisco product means network segmentation assumptions may be compromised.",
+        "noteworthy": "Patch Cisco Catalyst SD-WAN immediately. Audit for signs of compromise — check for unexpected config file modifications. Review netadmin access controls since exploitation requires authenticated access.",
+        "link": "https://thehackernews.com/2026/06/cisco-catalyst-sd-wan-zero-day-cve-2026.html"
+      },
+      {
+        "id": 4,
+        "title": "Amadey & StealC Malware Network Disrupted, 27M Credentials Recovered",
+        "tag": "Security / Law Enforcement",
+        "desc": "Europol-led operation takes down criminal infrastructure, seizes $47M in crypto, dismantles 326 servers and 142 domains.",
+        "summary": "A coordinated law enforcement operation with Bitdefender, Bitsight, ESET, and Microsoft disrupted the Amadey and StealC malware distribution network. The two-week action recovered 27 million stolen login credentials, identified $47M+ in criminal crypto assets, and dismantled 326 servers and 142 domains. Follows similar SocGholish takedown that cleaned 15,000 infected WordPress sites.",
+        "importance": "These takedowns target the 'assembly lines' of cybercrime — the infrastructure that enables ransomware, fraud, and attacks on critical infrastructure. Disrupting distribution networks has cascading effects on downstream attacks.",
+        "noteworthy": "Check if any of your credentials appear in the 27M recovered. Use HaveIBeenPwned or similar. The infrastructure takedown will temporarily reduce StealC/Amadey-driven attacks — patch windows are favorable.",
+        "link": "https://thehackernews.com/2026/06/amadey-and-stealc-malware-network.html"
+      },
+      {
+        "id": 5,
+        "title": "IBM Debuts World's First Sub-1nm Chip Technology",
+        "tag": "Hardware / Semiconductors",
+        "desc": "0.7nm node with 3D nanostack architecture packs ~100B transistors on a fingernail-sized chip. 50% more performance or 70% less power vs 2nm.",
+        "summary": "IBM unveiled the world's first sub-1nm chip technology at the 0.7nm (7 angstrom) node. The revolutionary 3D nanostack architecture packs nearly 100 billion transistors on a chip the size of a fingernail — nearly double the density of IBM's 2nm chip from 2021. Projected 50% more performance or 70% greater energy efficiency than 2nm. Published technical results confirm the breakthrough.",
+        "importance": "This extends Moore's Law into atomic-scale dimensions when the industry thought physical limits were near. For AI hardware, higher transistor density directly translates to more compute per watt. For everyone, this sets the roadmap for the next decade of chips.",
+        "noteworthy": "Sub-1nm is 3-5 years from production. Watch for TSMC and Samsung foundry roadmaps to respond. For homelab, this means future CPUs/GPUs will be dramatically more efficient — but not before 2029+.",
+        "link": "https://newsroom.ibm.com/2026-06-25-ibm-debuts-worlds-first-sub-1-nanometer-chip-technology"
+      },
+      {
+        "id": 6,
+        "title": "Apple to Skip High-End M6, Focus on AI-Focused M7 Chip Line",
+        "tag": "Hardware / AI Chips",
+        "desc": "Bloomberg reports Apple is canceling high-end M6 Pro/Max/Ultra in favor of M7 Pro/Max/Ultra with dedicated AI acceleration.",
+        "summary": "Apple is reportedly skipping high-end M6 Mac chips (M6 Pro, Max, Ultra) to accelerate development of the M7 line, which will feature dedicated AI acceleration hardware. The M7 Pro, Max, and Ultra are designed with AI inference as a primary workload, moving beyond the general-purpose CPU/GPU approach of current Apple Silicon. The M6 standard chip is still expected for lower-end Macs.",
+        "importance": "Apple doubling down on dedicated AI silicon signals that on-device AI inference is a strategic priority. For the Mac ecosystem, this means local AI capabilities could leapfrog competitors. For homelab, Apple Silicon Macs may become viable local inference nodes.",
+        "noteworthy": "Delay high-end Mac purchases if you need maximum AI performance — M7 will be the real upgrade. M6 standard chips still coming for MacBook Air and entry-level Pro. Watch for M7 benchmarks vs NVIDIA and AMD.",
+        "link": "https://www.bloomberg.com/news/articles/2026-06-25/apple-to-skip-high-end-m6-mac-chips-to-launch-m7-pro-m7-max-m7-ultra-instead"
+      },
+      {
+        "id": 7,
+        "title": "Apple Raises MacBook, iPad Prices as Memory Costs Skyrocket",
+        "tag": "Hardware / Pricing",
+        "desc": "Apple hikes prices across MacBook and iPad lineups globally, citing soaring DRAM and NAND costs. Some models up 15-20%.",
+        "summary": "Apple raised prices on MacBooks and iPads globally, with some configurations seeing 15-20% increases. The price hike is attributed to skyrocketing memory costs — DRAM and NAND prices have surged due to AI-driven demand consuming fab capacity. The increase affects both new purchases and custom configurations across the lineup.",
+        "importance": "AI demand for HBM and DDR5 is crowding out consumer memory production, driving up costs for everyone. This is the first major consumer price hike directly attributable to AI infrastructure demand. For homelab builders, expect RAM and SSD prices to stay elevated.",
+        "noteworthy": "If you need a MacBook or iPad, buy before further increases. Consider refurbished or previous-gen models. For homelab, stock up on RAM and SSDs now — prices likely to rise further as AI demand intensifies.",
+        "link": "https://www.reuters.com/world/asia-pacific/apple-raises-prices-macbooks-ipads-memory-costs-skyrocket-2026-06-25/"
+      },
+      {
+        "id": 8,
+        "title": "Framework's 10G Ethernet Module Exposes USB-C's Bandwidth Complexity",
+        "tag": "Networking / Homelab",
+        "desc": "WisdPi 10G card for Framework laptops hits USB-C bottlenecks — real-world throughput varies wildly by port and platform.",
+        "summary": "Jeff Geerling tested the WisdPi 10G Ethernet Expansion Card for Framework laptops. The Realtek RTL8159 controller requires USB 3.2 Gen 2x2 (20 Gbps) for full 10 Gbps speeds, but many Framework ports deliver less. On Framework 13 (AMD), real-world max was 9.4 Gbps on Windows, worse on Linux. On Framework 12 (Intel), Linux only achieved 7 Gbps despite the port reporting 20 Gbps capability. The Realtek Linux driver failed to compile on Ubuntu 26.04's 7.x kernel.",
+        "importance": "10GbE for laptops is finally here, but USB-C's fragmented bandwidth capabilities make it a compatibility minefield. For homelab, this means 10G USB adapters need careful platform matching — not all USB-C ports are equal.",
+        "noteworthy": "Before buying USB 10G adapters, verify your laptop's USB-C port supports USB 3.2 Gen 2x2 (20 Gbps). Framework users: check port documentation. Linux users: verify Realtek RTL8159 driver support for your kernel version.",
+        "link": "https://www.jeffgeerling.com/blog/2026/framework-10g-ethernet-module-usb-c-complexity/"
+      },
+      {
+        "id": 9,
+        "title": "OpenKnowledge: Open-Source AI-First Knowledge Management",
+        "tag": "AI / Tools",
+        "desc": "Open-source alternative to Obsidian/Notion with AI-native features hits #1 on HN. Built with local-first architecture.",
+        "summary": "OpenKnowledge is an open-source, AI-first knowledge management platform that serves as an alternative to Obsidian and Notion. It features local-first architecture, AI-powered search and organization, and integrates with local LLMs for privacy. The project hit 225 points on Hacker News and is available on GitHub under an open-source license.",
+        "importance": "AI-native knowledge management is a rapidly growing category. An open-source option with local-first design means your notes and AI processing stay on your hardware — no data sent to cloud APIs. For privacy-conscious users, this is the Obsidian alternative worth watching.",
+        "noteworthy": "Try OpenKnowledge for local AI-powered note-taking. Self-host with your own LLM for full privacy. Compare against Obsidian's AI plugins and Notion AI for feature parity.",
+        "link": "https://github.com/inkeep/open-knowledge"
+      },
+      {
+        "id": 10,
+        "title": "Political Bias in AI: Where the Models Stand",
+        "tag": "AI / Policy",
+        "desc": "Trakkr publishes comprehensive analysis of political bias across major AI models. Results show significant variation by model and topic.",
+        "summary": "Trakkr analyzed political bias across major AI models including GPT, Claude, Gemini, Llama, and DeepSeek. The study found significant variation in how models handle politically charged topics, with some showing measurable left-leaning bias on certain issues while others lean conservative. The analysis covers economic policy, social issues, and geopolitical topics across 20+ models.",
+        "importance": "As AI models become embedded in search, education, and decision-making, their political biases become systemic. Understanding which models lean which way is critical for anyone relying on AI for research, content generation, or analysis.",
+        "noteworthy": "Test your preferred models on politically sensitive queries. Consider using multiple models for balanced perspectives. For developers, be aware that model bias can propagate into your applications.",
+        "link": "https://trakkr.ai/bias"
+      },
+      {
+        "id": 11,
+        "title": "Bitcoin Bounces Off Yearly Lows at $59,945",
+        "tag": "Crypto / Markets",
+        "desc": "BTC hit $58K — lowest since Sept 2024 — then bounced. $1B in liquidations. ETF outflows and options expiry driving sell pressure.",
+        "summary": "Bitcoin hit its lowest level since September 2024 at $58,000, triggering over $1 billion in liquidations across bullish leveraged positions. BTC recovered to $59,945 as of June 26. The sell-off was driven by surging spot Bitcoin ETF outflows, a put-heavy monthly options expiry, and Strategy's unrealized losses widening the gap with AI-connected stock returns. ETH at $1,557, SOL at $68.17.",
+        "importance": "BTC losing the $62K support level and testing $58K is a significant technical breakdown. The $10.6B June options expiry with 80% out of the money adds further pressure. If $58K breaks, $52K is the next support.",
+        "noteworthy": "Watch $58K support — if it holds, the bounce could be a relief rally. Monitor spot ETF flows for institutional sentiment. Set limit orders at $55-58K if accumulating. Options expiry June 26 is the immediate catalyst.",
+        "link": "https://cointelegraph.com/markets/bitcoin-bounces-off-new-2026-price-lows-will-us-stock-weakness-push-btc-lower"
+      },
+      {
+        "id": 12,
+        "title": "StablecoinX Merges with TLGY, Debuts on Nasdaq",
+        "tag": "Crypto / DeFi",
+        "desc": "Ethena ecosystem bet goes public via SPAC merger. USDe supply down 70% from $14B October peak.",
+        "summary": "StablecoinX, a company betting on the Ethena ecosystem, merged with TLGY and began trading on Nasdaq on June 26. The move brings institutional exposure to the Ethena/USDe ecosystem. Meanwhile, USDe circulating supply has shrunk by 70% since the October 2024 bull market peak when it topped $14 billion, reflecting reduced demand for yield-bearing stablecoin strategies.",
+        "importance": "A Nasdaq listing for an Ethena-focused entity brings institutional capital to the synthetic dollar space. But USDe's 70% supply collapse signals that the yield-driven demand that fueled its growth has evaporated in the current low-yield environment.",
+        "noteworthy": "Monitor USDe supply trends as a proxy for DeFi yield demand. The Nasdaq listing could bring new institutional flows. For DeFi users, Ethena's sustainability depends on funding rate regimes recovering.",
+        "link": "https://cointelegraph.com/news/stablecoinx-merges-with-tlgy-and-begins-trading-on-nasdaq-friday"
+      }
+    ]
+  },
+  "yesterday": {
+    "date": "25/06/26",
+    "items": [
+      {
+        "id": 13,
+        "title": "OpenAI Unveils Jalapeño — First Custom Inference Chip With Broadcom",
+        "tag": "Hardware / AI Chips",
+        "desc": "OpenAI's first custom silicon, designed with Broadcom, targets LLM inference at scale. Deployment by end of 2026.",
+        "summary": "OpenAI unveiled Jalapeño, its first custom-built inference processor, designed and manufactured with Broadcom and Celestica. The chip is an LLM-optimized intelligence processor for initial deployment by end of 2026, with multi-generation roadmap. Jalapeño combines OpenAI-designed accelerators with Broadcom silicon implementation and networking. The move reduces OpenAI's dependence on NVIDIA GPUs for inference.",
+        "importance": "Custom silicon is the endgame for AI hyperscalers. OpenAI joining Google (TPU), Amazon (Trainium/Inferentia), and Microsoft (Maia) means the GPU monopoly on inference is fracturing. For the rest of us, this accelerates the commoditization of inference hardware.",
+        "noteworthy": "Watch for Jalapeño performance benchmarks vs NVIDIA B200/B300. If OpenAI offers inference-as-a-service on its own silicon, pricing could undercut GPU-based providers. For homelab, this doesn't change anything yet — but the trend is clear.",
+        "link": "https://openai.com/index/openai-broadcom-jalapeno-inference-chip/"
+      },
+      {
+        "id": 14,
         "title": "Qualcomm Acquires Modular for $4B to Challenge NVIDIA CUDA Dominance",
         "tag": "Hardware / AI Chips",
         "desc": "Qualcomm buys AI compiler startup Modular (Mojo/Max) in $4B stock deal to build a CUDA-competitive software stack for its AI chips.",
@@ -23,38 +148,38 @@
         "link": "https://techcrunch.com/2026/06/24/qualcomm-agrees-to-acquire-ai-startup-modular-for-4-billion/"
       },
       {
-        "id": 3,
+        "id": 15,
         "title": "GLM-5.2: The Step Change for Open-Source AI Agents",
         "tag": "AI / Open Models",
         "desc": "Open-weight GLM-5.2 sustains ~1,700 autonomous agent steps per session, rivaling proprietary frontier models for agentic tasks.",
-        "summary": "GLM-5.2, released June 16, 2026 by Z.AI (formerly Tsinghua AI), represents a capability leap for open-weight models in agentic tasks. It sustains roughly 1,700 autonomous agent steps in a single session \u2014 up from an industry baseline of ~20 steps a year earlier. The model runs 'plan, execute, test, fix, optimize' loops autonomously and is MIT-licensed. Nathan Lambert called it the 'DeepSeek moment for agents.'",
+        "summary": "GLM-5.2, released June 16, 2026 by Z.AI (formerly Tsinghua AI), represents a capability leap for open-weight models in agentic tasks. It sustains roughly 1,700 autonomous agent steps in a single session — up from an industry baseline of ~20 steps a year earlier. The model runs 'plan, execute, test, fix, optimize' loops autonomously and is MIT-licensed. Nathan Lambert called it the 'DeepSeek moment for agents.'",
         "importance": "Open models crossing the agentic capability threshold changes the AI landscape. If GLM-5.2 can match proprietary models on agent tasks while being MIT-licensed, the argument for closed-source frontier models weakens significantly.",
         "noteworthy": "Test GLM-5.2 on your agent workflows. It's available on Ollama Cloud and HuggingFace. For autonomous coding, research, and multi-step tasks, this may outperform larger proprietary models at a fraction of the cost.",
         "link": "https://www.interconnects.ai/p/glm-52-is-the-step-change-for-open"
       },
       {
-        "id": 4,
+        "id": 16,
         "title": "Krea 2 Goes Open Source: 12B DiT Model Generates 2K Images in 2 Seconds",
         "tag": "AI / Image Generation",
-        "desc": "Krea released open weights for Krea 2 Raw and Turbo \u2014 a 12B parameter dense DiT model with 2-second 2K generation.",
+        "desc": "Krea released open weights for Krea 2 Raw and Turbo — a 12B parameter dense DiT model with 2-second 2K generation.",
         "summary": "Krea published open weights for Krea 2 on Hugging Face on June 24, 2026. The model uses a Qwen Image VAE, 12B dense DiT backbone, and Qwen3-VL text encoder. Two checkpoints ship: Krea 2 Raw (quality-focused) and Krea 2 Turbo (speed-optimized). The model generates 2K resolution images in approximately 2 seconds on consumer GPUs. This is a direct open-source competitor to Midjourney and DALL-E.",
         "importance": "A 12B open-weight image model that runs on consumer hardware and generates 2K in 2 seconds is a milestone. For local AI image generation, this is the first credible alternative to proprietary services at this quality level.",
         "noteworthy": "Download and test Krea 2 on your local GPU. Compare quality vs Flux, SD3.5, and Midjourney. The Turbo variant is particularly interesting for real-time generation workflows.",
         "link": "https://www.krea.ai/krea-2-open-source"
       },
       {
-        "id": 5,
-        "title": "NVIDIA Unveils 45\u00b0C Liquid Cooling \u2014 Near-Zero Water Use for AI Data Centers",
+        "id": 17,
+        "title": "NVIDIA Unveils 45°C Liquid Cooling — Near-Zero Water Use for AI Data Centers",
         "tag": "Hardware / Infrastructure",
-        "desc": "New closed-loop cooling architecture runs at 45\u00b0C, cutting data center water consumption to near zero and reducing power costs.",
-        "summary": "NVIDIA detailed a new liquid cooling architecture for next-generation AI infrastructure that operates at 45\u00b0C coolant temperature. The closed-loop design claims up to 100% reduction in water consumption compared to traditional evaporative cooling, and lower power costs through higher operating temperatures. The design is aimed at the next generation of AI factories running GB300 and future GPU clusters.",
-        "importance": "Data center water usage is becoming a regulatory and PR liability for AI companies. NVIDIA's 45\u00b0C design addresses both the environmental angle and operational costs. For homelab, the trickle-down to liquid cooling for consumer/workstation GPUs is worth watching.",
-        "noteworthy": "If you're planning a homelab liquid cooling setup, monitor NVIDIA's 45\u00b0C spec \u2014 lower temperature delta requirements mean simpler, cheaper cooling loops. For data center operators, this is a direct operational cost reduction.",
+        "desc": "New closed-loop cooling architecture runs at 45°C, cutting data center water consumption to near zero and reducing power costs.",
+        "summary": "NVIDIA detailed a new liquid cooling architecture for next-generation AI infrastructure that operates at 45°C coolant temperature. The closed-loop design claims up to 100% reduction in water consumption compared to traditional evaporative cooling, and lower power costs through higher operating temperatures. The design is aimed at the next generation of AI factories running GB300 and future GPU clusters.",
+        "importance": "Data center water usage is becoming a regulatory and PR liability for AI companies. NVIDIA's 45°C design addresses both the environmental angle and operational costs. For homelab, the trickle-down to liquid cooling for consumer/workstation GPUs is worth watching.",
+        "noteworthy": "If you're planning a homelab liquid cooling setup, monitor NVIDIA's 45°C spec — lower temperature delta requirements mean simpler, cheaper cooling loops. For data center operators, this is a direct operational cost reduction.",
         "link": "https://blogs.nvidia.com/blog/liquid-cooling-ai-factories/"
       },
       {
-        "id": 6,
-        "title": "Gemini 3.5 Flash Gets Native Computer Use \u2014 Agentic AI Built Into the Model",
+        "id": 18,
+        "title": "Gemini 3.5 Flash Gets Native Computer Use — Agentic AI Built Into the Model",
         "tag": "AI / Agents",
         "desc": "Google integrates computer use as a native tool in Gemini 3.5 Flash, replacing the standalone Gemini 2.5 Computer Use model.",
         "summary": "Google announced that computer use is now a built-in tool in Gemini 3.5 Flash, delivering its best performance yet for agentic computer use tasks. Previously only available as a standalone Gemini 2.5 model, computer use is now natively integrated into the main Flash model alongside Search and Maps grounding. This enables the model to interact with web pages, Android apps, and desktop interfaces directly.",
@@ -63,7 +188,7 @@
         "link": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-computer-use-gemini-3-5-flash/"
       },
       {
-        "id": 7,
+        "id": 19,
         "title": "Cordyceps: CI/CD Flaws Expose 300+ GitHub Repos to Supply-Chain Attacks",
         "tag": "Security / Supply Chain",
         "desc": "Novee Security finds critical exploitable CI/CD pattern affecting Microsoft, Google, Apache, and 300+ high-impact repos.",
@@ -73,7 +198,7 @@
         "link": "https://thehackernews.com/2026/06/cordyceps-cicd-flaws-expose-300-github.html"
       },
       {
-        "id": 8,
+        "id": 20,
         "title": "CISA Warns: Lantronix EDS5000 CVE-2025-67038 Actively Exploited",
         "tag": "Security / IoT",
         "desc": "Critical code injection flaw (CVSS 9.8) in Lantronix EDS5000 series devices is being actively exploited. CISA orders fixes by June 26.",
@@ -83,7 +208,7 @@
         "link": "https://thehackernews.com/2026/06/cisa-warns-critical-lantronix-eds5000.html"
       },
       {
-        "id": 9,
+        "id": 21,
         "title": "Fake AI Agent Skill Passed Security Scans, Reached 26,000 Agents",
         "tag": "AI Security / Supply Chain",
         "desc": "Malicious AI agent skill bypassed security review and was installed on 26,000 agent platforms before detection.",
@@ -93,17 +218,17 @@
         "link": "https://thehackernews.com/2026/06/fake-ai-agent-skill-passed-security.html"
       },
       {
-        "id": 10,
-        "title": "Bunny DNS Goes Free \u2014 Up to 500 Domains Per Account",
+        "id": 22,
+        "title": "Bunny DNS Goes Free — Up to 500 Domains Per Account",
         "tag": "Networking / DNS",
         "desc": "Bunny.net drops DNS query charges entirely, offering free DNS hosting for up to 500 domains. No catch.",
-        "summary": "Bunny.net announced Bunny DNS is now completely free. The service no longer charges for DNS queries and includes free DNS hosting for up to 500 domains per account. Bunny positions DNS as the core glue of their CDN platform and says the move is strategic \u2014 driving adoption of their broader edge services. The announcement hit #1 on Hacker News with 851 points.",
+        "summary": "Bunny.net announced Bunny DNS is now completely free. The service no longer charges for DNS queries and includes free DNS hosting for up to 500 domains per account. Bunny positions DNS as the core glue of their CDN platform and says the move is strategic — driving adoption of their broader edge services. The announcement hit #1 on Hacker News with 851 points.",
         "importance": "Free, reliable DNS with no query limits is a big deal for homelab operators and small projects. Bunny's global anycast network means low-latency resolution worldwide. For multi-domain setups, 500 domains per account is generous.",
         "noteworthy": "Migrate your homelab domains to Bunny DNS. Compare latency vs Cloudflare, Route53, and your current provider. For self-hosted services, Bunny's free tier eliminates a recurring cost.",
         "link": "https://bunny.net/blog/were-making-bunny-dns-free/"
       },
       {
-        "id": 11,
+        "id": 23,
         "title": "Trump Order Sets 2030 Deadline for Federal Post-Quantum Crypto Migration",
         "tag": "Policy / Cryptography",
         "desc": "Executive order mandates federal agencies migrate high-value systems to post-quantum cryptography by December 31, 2030.",
@@ -113,138 +238,13 @@
         "link": "https://thehackernews.com/2026/06/trump-order-sets-2030-deadline-for.html"
       },
       {
-        "id": 12,
+        "id": 24,
         "title": "Market Snapshot: BTC $60,777 | ETH $1,618 | SOL $67.61",
         "tag": "Crypto / Markets",
         "desc": "Crypto market takes a 3.5% dip. BTC below $61K, ETH below $1,650, SOL below $70. Broad sell-off.",
-        "summary": "CoinGecko data on June 25, 2026 shows Bitcoin at $60,777 (-3.51% 24h, market cap $1.22T), Ethereum at $1,618 (-3.42%), and Solana at $67.61 (-3.69%). All three major assets saw coordinated selling pressure, breaking below recent support levels. BTC lost the $62K level that had held for the past week. No single catalyst identified \u2014 likely macro positioning ahead of end-of-quarter rebalancing.",
+        "summary": "CoinGecko data on June 25, 2026 shows Bitcoin at $60,777 (-3.51% 24h, market cap $1.22T), Ethereum at $1,618 (-3.42%), and Solana at $67.61 (-3.69%). All three major assets saw coordinated selling pressure, breaking below recent support levels. BTC lost the $62K level that had held for the past week. No single catalyst identified — likely macro positioning ahead of end-of-quarter rebalancing.",
         "importance": "BTC losing $62K support is bearish in the short term. The next support level is $58K. If this is end-of-quarter institutional rebalancing, the dip may be temporary. If it's macro-driven (rates, liquidity), the correction could deepen.",
         "noteworthy": "Watch $58K support on BTC. If it breaks, $52K is next. For ETH, $1,500 is the key level. Consider setting limit orders at support levels if you're looking to accumulate. Monitor macro catalysts this week.",
-        "link": "https://www.coingecko.com/"
-      }
-    ]
-  },
-  "yesterday": {
-    "date": "23/06/26",
-    "items": [
-      {
-        "id": 13,
-        "title": "OpenAI 'Patch the Planet' Hunts Open-Source Bugs With GPT-5.5-Cyber",
-        "tag": "AI / Cybersecurity",
-        "desc": "OpenAI launches a Daybreak initiative with Trail of Bits to find and patch vulnerabilities in critical open-source software using its cyber-capable models.",
-        "summary": "OpenAI announced 'Patch the Planet,' a Daybreak initiative built with Trail of Bits, HackerOne, and Calif. It pairs GPT-5.5-Cyber and expert human review to identify and patch vulnerabilities in widely used open-source projects. Early results include Linux kernel pointer-leak PoCs, local privilege escalation exploits, and Safari vulnerabilities. The move positions OpenAI as a defender-focused counterpoint to Anthropic's Mythos cyber model line.",
-        "importance": "AI's offensive cyber capabilities get all the headlines, but defender applications may be more consequential. If AI-assisted patching scales, it could meaningfully reduce the open-source vulnerability backlog \u2014 or at least shift the arms race toward maintainers.",
-        "noteworthy": "Watch which projects Patch the Planet targets first. If you're an open-source maintainer, expect AI-generated patch submissions and review them carefully. The quality of human review in the loop will determine whether this helps or floods maintainers.",
-        "link": "https://openai.com/index/patch-the-planet/"
-      },
-      {
-        "id": 14,
-        "title": "SpaceX Signs $6.3B Compute Deal With Reflection AI for Colossus GB300 Capacity",
-        "tag": "AI / Infrastructure",
-        "desc": "Reflection AI will pay SpaceX $150M/month through 2029 for access to Nvidia GB300 chips at the Colossus 2 data center.",
-        "summary": "SpaceX signed a computing power agreement with open-source AI startup Reflection worth up to $6.3 billion. Reflection gets immediate access to Nvidia GB300 chips at Elon Musk's Colossus 2 data center, paying $150 million per month starting July 1, 2026, through 2029. The deal is cancellable with 90 days notice after the first three months. SpaceX has already struck similar deals with Anthropic, Google, and Cursor, turning Colossus into a commercial AI compute platform.",
-        "importance": "Musk is converting SpaceX's AI infrastructure build-out into a cloud compute business. For open-source AI, this is a massive capacity injection \u2014 and a reminder that physical GPU clusters are the real scarce resource in the AI race.",
-        "noteworthy": "Reflection is an open-source lab valued at $25B. Watch if this deal pressures closed-model pricing. For your own infra, the story is simple: compute scarcity drives consolidation into a few physical clusters.",
-        "link": "https://www.cnbc.com/2026/06/22/spacex-ai-colossus-data-center-reflection.html"
-      },
-      {
-        "id": 15,
-        "title": "Squidbleed: 29-Year-Old Squid Proxy Bug Leaks HTTP Requests and Credentials",
-        "tag": "Security / Networking",
-        "desc": "Heartbleed-style heap over-read in Squid Proxy since 1997 can leak other users' cleartext HTTP requests, including auth headers and cookies.",
-        "summary": "Researchers disclosed 'Squidbleed' (CVE-2026-47729), a heap buffer over-read in Squid Proxy's FTP directory-listing parser that traces back to a January 1997 commit. The bug is present in default configurations and can leak internal memory \u2014 including other users' HTTP Authorization headers, cookies, and session tokens \u2014 to anyone who can get the proxy to fetch an FTP directory listing. The vulnerability was reportedly found with assistance from Anthropic's Claude Mythos Preview.",
-        "importance": "Legacy code in network infrastructure keeps producing critical bugs decades later. Any shared proxy or caching layer is a high-value target, and this flaw turns a benign-looking FTP request into a memory disclosure weapon.",
-        "noteworthy": "Audit Squid deployments and disable FTP gateway features if not needed. Update to a patched version immediately. Review what traffic passes through shared proxies and whether it carries credentials or tokens.",
-        "link": "https://blog.calif.io/p/squidbleed-cve-2026-47729"
-      },
-      {
-        "id": 16,
-        "title": "DifyTap: Cross-Tenant Bugs Expose Private AI Chats in Dify",
-        "tag": "AI Security / SaaS",
-        "desc": "Four vulnerabilities in popular open-source agentic platform Dify allow attackers to read AI conversations and files across tenants.",
-        "summary": "Researchers disclosed four DifyTap vulnerabilities in Dify, an open-source agentic workflow platform with over 146,000 GitHub stars. Three of the flaws are fixed in Dify 1.14.2. The bugs could allow attackers to stealthily read AI chat conversations and files from other tenants' applications, in some cases without authentication. This follows earlier Imperva research that also found cross-tenant sensitive information disclosure and one-click account takeover in Dify.",
-        "importance": "Dify is a go-to platform for building AI agents. Multi-tenant isolation failures there are supply-chain risks for everyone deploying agentic workflows on top of it. SaaS tenant boundaries are becoming as critical as OS sandboxing.",
-        "noteworthy": "Upgrade to Dify 1.14.2+ immediately. If you run Dify in your lab or production, audit tenant isolation and access controls. Treat agent platform infrastructure as part of your attack surface.",
-        "link": "https://thehackernews.com/2026/06/researchers-detail-difytap-flaws-in.html"
-      },
-      {
-        "id": 17,
-        "title": "ShapedPlugin WordPress Pro Plugins Backdoored in Supply Chain Attack",
-        "tag": "Security / Supply Chain",
-        "desc": "Attackers compromised ShapedPlugin's build and distribution pipeline to inject backdoor code into official plugin releases.",
-        "summary": "Multiple ShapedPlugin WordPress Pro plugins were compromised in a supply chain attack. Threat actors tampered with the vendor's official release channels and pushed backdoor code through plugin updates. The incident was disclosed by Wordfence on June 11, 2026, after suspicious activity was reported by site owners. The automated build pipeline was reportedly breached around May 21, 2026.",
-        "importance": "WordPress plugin supply chains remain a reliable attack vector. A compromised vendor update pipeline bypasses site-level security and reaches thousands of sites automatically. If you manage WordPress, you are only as secure as your least-trusted plugin vendor.",
-        "noteworthy": "Audit installed ShapedPlugin products immediately. Roll back to known-clean versions or remove them until the vendor confirms remediation. Review all plugin auto-update settings and consider code-signing verification.",
-        "link": "https://thehackernews.com/2026/06/shapedplugin-wordpress-pro-plugins.html"
-      },
-      {
-        "id": 18,
-        "title": "AryStinger Malware Infects 4,300 Legacy Routers for Reconnaissance Proxy Network",
-        "tag": "Security / IoT",
-        "desc": "New malware family turns forgotten home routers into a distributed reconnaissance and proxy network, not the usual DDoS botnet.",
-        "summary": "QiAnXin's XLab discovered a new malware family called AryStinger that has infected at least 4,300 legacy routers and counting. Unlike typical IoT malware that joins DDoS botnets, AryStinger uses compromised routers for target scanning, traffic tunneling, and remote command execution. The network appears designed for reconnaissance and proxy access rather than volumetric attacks.",
-        "importance": "Old routers are the forgotten edge of every network. AryStinger shows that even non-DDoS attackers see value in them \u2014 as persistent proxies and reconnaissance nodes. E-waste routers stay online longer than they stay patched.",
-        "noteworthy": "Inventory and retire unsupported routers. Change default credentials and disable remote management. Monitor router traffic for unexpected outbound connections or scanning behavior.",
-        "link": "https://thehackernews.com/2026/06/arystinger-malware-infects-4300-legacy.html"
-      },
-      {
-        "id": 19,
-        "title": "Canada's Spy Agency Gets First-of-Its-Kind Warrant to Clean Botnet-Infected Devices",
-        "tag": "Security / Policy",
-        "desc": "CSIS used threat-reduction warrant powers to alter, degrade, and destroy botnet data on infected Canadian devices.",
-        "summary": "The Federal Court released a public ruling showing the Canadian Security Intelligence Service (CSIS) used threat-reduction warrant powers for the first time to neutralize two foreign-run botnets. The warrant, issued in spring 2024, allowed CSIS to alter, degrade, and destroy data on infected machines in Canada and cut them loose from the botnet networks. The public ruling was released on June 15, 2026.",
-        "importance": "This is a legal precedent for active defense at scale. Governments are formalizing the authority to reach into private devices to clean up foreign botnets. The privacy/security balance here will be cited in future debates everywhere.",
-        "noteworthy": "Monitor policy developments around active cyber defense. For enterprise, this doesn't change much operationally \u2014 but it signals that governments may step in more aggressively on widespread infections.",
-        "link": "https://thehackernews.com/2026/06/canadas-spy-agency-used-first-of-its.html"
-      },
-      {
-        "id": 20,
-        "title": "AMD Confirms Zen 6 'Mustang Peak' Threadripper With PCIe 6.0",
-        "tag": "Hardware / CPU",
-        "desc": "Next-gen Threadripper CPUs get new TR6 socket, DDR5, and PCIe 6.0 connectivity. Core counts may reach 144.",
-        "summary": "AMD documentation officially confirmed its next-generation Threadripper Pro CPUs, codenamed 'Mustang Peak,' will use the new TR6 platform. The chips will use 2nm Zen 6 cores, support DDR5 memory, and feature PCIe 6.0 connectivity. Leaks suggest Threadripper Pro core counts could rise to 144. The new socket and I/O capabilities represent a major platform overhaul for workstation and HPC markets.",
-        "importance": "PCIe 6.0 in a workstation platform is a big deal for high-speed storage, networking, and GPU connectivity. For homelab and HPC users, this sets the next upgrade horizon \u2014 though TR6 will require new boards, coolers, and likely expensive memory.",
-        "noteworthy": "If you're planning a Threadripper build, wait for Mustang Peak if you need maximum I/O bandwidth. Otherwise, current Zen 5 Threadripper platforms may offer better value for the next 12-18 months.",
-        "link": "https://www.tomshardware.com/pc-components/cpus/first-official-details-of-amds-next-gen-mustang-peak-threadripper-cpus-come-into-view-chips-feature-ddr5-pcie-6-0-and-a-new-socket"
-      },
-      {
-        "id": 21,
-        "title": "NVIDIA RTX 50 'Super' Refresh Back on Track, RTX 5060 12GB Rumored",
-        "tag": "Hardware / GPU",
-        "desc": "Leaks suggest NVIDIA's delayed Blackwell refresh will launch, with a 12GB RTX 5060 Super joining higher-end VRAM upgrades.",
-        "summary": "Multiple leakers now claim NVIDIA's RTX 50 Super refresh is back in active development for 2026/early 2027. The rumored lineup includes a 12GB RTX 5060 Super, an 18GB RTX 5070 Super, and 24GB variants of the RTX 5070 Ti Super and RTX 5080 Super. VRAM capacity is the headline improvement, addressing the biggest criticism of the initial 50-series cards.",
-        "importance": "VRAM is the bottleneck for local AI inference and high-resolution workloads. A 12GB 5060 Super at the low end and 24GB 5070 Ti/5080 Super up top would make the refresh genuinely relevant for budget AI and homelab GPU users.",
-        "noteworthy": "Don't buy a current 50-series card until Super pricing is clear. For local LLMs, 24GB at a mid-high tier is a sweet spot. Watch power draw and pricing \u2014 NVIDIA may offset VRAM gains with higher MSRP.",
-        "link": "https://www.techtimes.com/articles/318772/20260621/nvidia-rtx-50-gpu-shortage-supply-cut-20-prices-climbing-no-desktop-refresh-confirmed.htm"
-      },
-      {
-        "id": 22,
-        "title": "Apple Patches Beats Studio Buds Wiretap Flaw (CVE-2025-20701)",
-        "tag": "Security / IoT",
-        "desc": "Firmware update 1B211 fixes a Bluetooth vulnerability that let nearby attackers eavesdrop through the earbuds' microphone.",
-        "summary": "Apple released Beats Firmware Update 1B211 to patch a high-severity Bluetooth flaw in Beats Studio Buds, tracked as CVE-2025-20701. A nearby attacker could impersonate a previously paired device and listen through the earbuds' microphone before pairing was established. The update became available on June 16, 2026.",
-        "importance": "Wearables are increasingly part of the attack surface. This flaw turned earbuds into a physical-proximity wiretap. It's a reminder that Bluetooth pairing logic needs the same scrutiny as network services.",
-        "noteworthy": "Update Beats Studio Buds firmware immediately. Review other Bluetooth wearables for pending updates. Be cautious using wireless earbuds in sensitive conversations in public spaces.",
-        "link": "https://www.malwarebytes.com/blog/bugs/2026/06/apple-patches-beats-studio-buds-flaw-that-could-turn-earbuds-into-a-wiretap"
-      },
-      {
-        "id": 23,
-        "title": "Google to Block Unverified Android App Installs in Brazil, Indonesia, Singapore, Thailand",
-        "tag": "Privacy / Mobile",
-        "desc": "Starting Sept. 30, 2026, certified Android devices in four countries will block normal installs from developers without verified identity.",
-        "summary": "Google set September 30, 2026, as the enforcement deadline for Android developer verification in Brazil, Indonesia, Singapore, and Thailand. Certified Android phones in those countries will block normal installs of apps whose developers have not registered a verified identity with Google. The requirement applies regardless of distribution channel, not just the Play Store.",
-        "importance": "This expands the identity-linked app economy. It may reduce malware from anonymous developers but also creates a de-anonymization barrier for indie and open-source app distribution. Expect expansion to more countries if the pilot succeeds.",
-        "noteworthy": "If you develop or sideload Android apps, prepare identity verification. For users, this reduces sketchy app installs but may complicate access to unverified open-source tools. Monitor for regional expansion.",
-        "link": "https://thehackernews.com/2026/06/google-sets-sept-30-deadline-for.html"
-      },
-      {
-        "id": 24,
-        "title": "Market Snapshot: BTC $64,085 | ETH $1,750 | SOL $72.87",
-        "tag": "Crypto / Markets",
-        "desc": "Bitcoin flat near $64K, Ethereum and Solana little changed. Range-bound consolidation continues.",
-        "summary": "CoinGecko and market data on June 23, 2026, show Bitcoin near $64,085 with roughly flat to slightly positive 24-hour movement and market cap around $1.28T. Ethereum trades near $1,750 and Solana near $72.87. The market remains range-bound with no decisive breakout, while institutional ETF developments continue in the background.",
-        "importance": "$64K continues to act as equilibrium. Without a macro catalyst, crypto is likely to stay range-bound. The real action is in institutional product fee competition and regulatory positioning, not price.",
-        "noteworthy": "Watch $66K resistance and $62K support. Morgan Stanley's 0.14% fee on upcoming ETH/SOL ETFs is worth tracking for flows. No major directional catalyst until next week.",
         "link": "https://www.coingecko.com/"
       }
     ]
