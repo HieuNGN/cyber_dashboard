@@ -1,9 +1,154 @@
 {
   "today": {
+    "date": "28/06/26",
+    "items": [
+      {
+        "title": "DirtyClone: Fourth Linux Kernel LPE in Six Weeks Hits Root Silently",
+        "tag": "Security / Vulnerability",
+        "desc": "CVE-2026-43503 (CVSS 8.8) lets unprivileged users gain root by poisoning cached setuid binaries via cloned packets in XFRM/IPsec.",
+        "summary": "JFrog Security Research published a working exploit for DirtyClone on June 25, 2026. The flaw in Linux skb packet cloning drops the COW flag on file-backed memory, letting an unprivileged user corrupt cached privileged binaries like /usr/bin/su in RAM. It leaves no kernel logs or on-disk changes. The patch landed in mainline v7.1-rc5 on May 21.",
+        "importance": "Silent page-cache poisoning bypasses file-integrity monitoring. It is the fourth Linux kernel LPE in six weeks and shows the DirtyFrag family of bugs has more attack surfaces than initially patched.",
+        "noteworthy": "Patch to kernel 7.1-rc5 or apply distro backports. Set kernel.unprivileged_userns_clone=0 until patched and audit systems that allow unprivileged user namespaces.",
+        "link": "https://research.jfrog.com/post/dissecting-and-exploiting-linux-lpe-variant-dirtyclone-cve-2026-43503/",
+        "id": 1
+      },
+      {
+        "title": "CISA Adds Cisco VoIP SSRF and PTC Windchill RCE to KEV",
+        "tag": "Security / Vulnerability",
+        "desc": "CVE-2026-20230 and CVE-2026-12569 are actively exploited; federal agencies must patch by June 28.",
+        "summary": "On June 25, 2026, CISA added two critical flaws to its KEV catalog. Cisco Unified Communications Manager (CVE-2026-20230, CVSS 8.6) has an unauthenticated SSRF in WebDialer that writes arbitrary files and yields root. PTC Windchill PDMLink/FlexPLM (CVE-2026-12569, CVSS 9.3) allows unauthenticated RCE via unsafe deserialization; attackers are deploying JSP web shells. Both have a BOD 26-04 deadline of June 28.",
+        "importance": "Enterprise VoIP and product-lifecycle platforms are being hit simultaneously. Compromised Unified CM means eavesdropping and toll fraud; compromised PLM threatens defense, aerospace, and automotive IP.",
+        "noteworthy": "If you run Unified CM, disable WebDialer if unused and patch immediately. For Windchill/FlexPLM, hunt for 16-hex-character JSP files and POSTs to /Windchill/login/*.jsp. Block known C2 IP 5.180.41.35.",
+        "link": "https://securityaffairs.com/194290/security/u-s-cisa-adds-cisco-and-ptc-windchill-and-flexplm-flaws-to-its-known-exploited-vulnerabilities-catalog.html",
+        "id": 2
+      },
+      {
+        "title": "Amazon Q Developer Flaw Lets Malicious Repos Run Cloud Code",
+        "tag": "AI Security / Supply Chain",
+        "desc": "CVE-2026-12957 (CVSS 8.5): a repo's .amazonq/mcp.json can make Amazon Q launch MCP servers with the developer's AWS credentials.",
+        "summary": "Wiz Research disclosed a high-severity flaw in Amazon Q Developer on June 26, 2026. When a developer opens and trusts a workspace, Amazon Q reads .amazonq/mcp.json and launches Model Context Protocol (MCP) servers defined there. Those processes inherit the developer's environment, including AWS credentials, allowing command execution and cloud takeover from a clean-looking repository.",
+        "importance": "AI coding agents extend the trust boundary of a cloned repo to the developer's cloud account. This is the second agentic-coding supply-chain vector in days and shows MCP's power is also its exploit path.",
+        "noteworthy": "Audit AI agent workspace trust behavior. Run agents in restricted sandboxes, review agent transcripts, and do not blindly allow MCP server configs from third-party repos.",
+        "link": "https://thehackernews.com/2026/06/amazon-q-developer-flaw-could-let.html",
+        "id": 3
+      },
+      {
+        "title": "Russian APTs Now Steal Signal Backup Recovery Keys",
+        "tag": "Security / Social Engineering",
+        "desc": "FBI/CISA update: RIS actors phish Signal users for Backup Recovery Keys, then restore full chat history and take over accounts.",
+        "summary": "On June 26, 2026, the FBI and CISA warned that Russian intelligence services are targeting Signal users' Backup Recovery Keys. Victims receive fake support messages and hand over the key, letting attackers restore backups, read private and group chats, and take over the account. Creating a new account on the same number does not invalidate the old key unless the user regenerates it.",
+        "importance": "Signal's end-to-end encryption is intact; the attack bypasses it by stealing the recovery key. High-value users — officials, journalists, military personnel — are now prime targets for messaging-account phishing at scale.",
+        "noteworthy": "Regenerate your Signal Backup Recovery Key immediately, review linked devices, and never share recovery keys or verification codes with anyone claiming to be support.",
+        "link": "https://www.bleepingcomputer.com/news/security/fbi-russian-hackers-now-target-signal-backup-recovery-keys/",
+        "id": 4
+      },
+      {
+        "title": "AMD Strix Halo RDMA Cluster Guide: Two Laptops as One 256GB GPU",
+        "tag": "Hardware / Homelab",
+        "desc": "New guide shows how to link two AMD Strix Halo laptops via Intel E810 RoCE v2 for vLLM tensor parallelism.",
+        "summary": "A GitHub project published an RDMA cluster setup guide for AMD Ryzen AI Max 'Strix Halo' systems. Using Intel E810 NICs and RoCE v2, two nodes can run vLLM with Tensor Parallelism=2, effectively pooling up to 256 GB of unified memory. A custom ROCm/RCCL build enables native RDMA support on gfx1151.",
+        "importance": "Affordable local AI clusters just became practical. Two consumer-class laptops with 128 GB RAM each can now act like a single high-memory GPU for local inference, undercutting rack-scale hardware costs.",
+        "noteworthy": "Requires Fedora 43, passwordless SSH, static 192.168.100.x links, MTU 9000, and iommu=pt kernel params. For homelab, check the Strix Halo AI Toolbox site for host configuration and benchmarked models.",
+        "link": "https://github.com/kyuz0/amd-strix-halo-vllm-toolboxes/blob/main/rdma_cluster/setup_guide.md",
+        "id": 5
+      },
+      {
+        "title": "NVIDIA Announces Vera CPU and Record 35 European AI Supercomputers",
+        "tag": "Hardware / AI Infrastructure",
+        "desc": "ISC 2026: 35 new systems across 23 countries, plus a Vera CPU-powered supercomputer at Los Alamos.",
+        "summary": "At ISC High Performance 2026 in Hamburg (June 22), NVIDIA announced 35 new AI HPC supercomputers across Europe, covering 23 countries and 3 million researchers. The company also unveiled the Vera CPU for scientific AI and said it is powering more than 90% of Europe's AI-factory build-out. NVIDIA projects $1 trillion in AI infrastructure demand by 2027.",
+        "importance": "NVIDIA is cementing its lock on both European scientific compute and the CPU layer. The Vera CPU entering production supercomputers gives NVIDIA an x86/Arm alternative for data-center AI.",
+        "noteworthy": "Watch for Vera CPU benchmarks against AMD EPYC and Intel Xeon. For homelab, CUDA-X and agentic scientific software may trickle down into workstation tooling.",
+        "link": "https://nvidianews.nvidia.com/news/europe-unveils-a-record-35-new-nvidia-ai-supercomputers",
+        "id": 6
+      },
+      {
+        "title": "AI Learns the 'Dark Art' of Radio Chip Design",
+        "tag": "Hardware / Semiconductors",
+        "desc": "Princeton researchers use reinforcement learning and inverse design to create RFICs humans could not imagine, in far less time.",
+        "summary": "An IEEE Spectrum feature (June 24, 2026) reports that Princeton engineers are using reinforcement learning and diffusion models to design radio-frequency integrated circuits. The AI-generated layouts are unintelligible to human engineers but meet or exceed performance targets for 5G, autonomous vehicles, and satellite communications, while shrinking design time dramatically.",
+        "importance": "RFIC design has been a hand-tuned bottleneck for 5G, 6G, and satellite systems. Automating it with AI could accelerate next-generation wireless hardware and reshape the semiconductor workforce.",
+        "noteworthy": "This is early-stage research. For the industry, it points toward AI-assisted EDA tools and the need for shared RF design datasets to train generalizable models.",
+        "link": "https://spectrum.ieee.org/ai-radio-chip-design",
+        "id": 7
+      },
+      {
+        "title": "OpenAI Previews GPT-5.6 Sol With Government-Vetted Access",
+        "tag": "AI / Policy",
+        "desc": "Sol, Terra, and Luna are released as a limited preview after the White House asked OpenAI to restrict the rollout.",
+        "summary": "On June 27, 2026, OpenAI previewed GPT-5.6 Sol, Terra, and Luna. Sol is the flagship and is billed as OpenAI's most capable model yet for cybersecurity. On ExploitBench, GPT-5.6 Sol is competitive with Anthropic Mythos Preview using roughly one-third of the output tokens. The White House requested the restricted rollout.",
+        "importance": "This creates a de-facto government licensing gate for frontier US AI releases. It also escalates the OpenAI-Anthropic race for cyber-capable models under direct national-security oversight.",
+        "noteworthy": "Broader public release is expected if safeguards satisfy regulators. Watch how Anthropic Mythos/Fable and Chinese labs respond to the new US gating model.",
+        "link": "https://thehackernews.com/2026/06/openai-limits-gpt-56-rollout-as-sol.html",
+        "id": 8
+      },
+      {
+        "title": "Asian Startups Launch Mythos-Class Models as Anthropic Export Ban Drags On",
+        "tag": "AI / Geopolitics",
+        "desc": "Sakana Fugu and 360 Tulongfeng aim to fill the gap left by the US freeze on Anthropic Mythos and Fable 5.",
+        "summary": "On June 27, 2026, TechCrunch reported that Sakana AI launched Fugu, a frontier 'orchestration model' for Japanese businesses and government agencies, and that Chinese cybersecurity firm 360 unveiled Tulongfeng. Both are positioned as alternatives to Anthropic's Mythos after the US Commerce Department restricted global access to Mythos and Fable 5.",
+        "importance": "Export controls are fragmenting the frontier AI market. Asian enterprises are now being offered sovereign-capable models that sidestep US gating, accelerating regional AI independence.",
+        "noteworthy": "Sakana says Fugu is designed to coordinate agent usage among many models. If you serve Asian enterprise or government users, evaluate sovereign model options carefully for capability and compliance.",
+        "link": "https://techcrunch.com/2026/06/27/asian-ai-startups-launch-mythos-like-models-as-anthropics-export-ban-drags-on/",
+        "id": 9
+      },
+      {
+        "title": "Ford Rehires Hundreds After AI-Driven Layoffs Backfire",
+        "tag": "AI / Industry",
+        "desc": "Aggressive AI adoption cost billions, left Ford as the most recalled US automaker in H1 2026, and forced rehiring of veteran engineers.",
+        "summary": "The Independent reported on June 26, 2026, that Ford has rehired hundreds of senior engineers after replacing them with AI systems backfired. The company is now the most recalled automaker in the US, with 51 recalls covering over 11 million vehicles in the first half of 2026 alone. A Ford executive admitted the firm did not pay enough attention to the experience of its most knowledgeable engineers.",
+        "importance": "It is a high-profile reality check on AI replacing expert labor. The costs — recalls, liability, and brand damage — exceeded any savings, showing that AI augmentation without human oversight can fail catastrophically in safety-critical industries.",
+        "noteworthy": "For engineering orgs, the lesson is to treat AI as a copilot, not a replacement. Domain expertise remains the safety net for complex design and validation workflows.",
+        "link": "https://www.the-independent.com/tech/ford-ai-automation-human-workers-b3003787.html",
+        "id": 10
+      },
+      {
+        "title": "Wayfinder Router: Deterministic Local-or-Cloud LLM Routing",
+        "tag": "Networking / AI Tools",
+        "desc": "New open-source CLI routes prompts between local and hosted LLMs offline, using prompt structure instead of another model call.",
+        "summary": "Wayfinder Router is an open-source Python CLI that scores a prompt's structure and wording in microseconds, then recommends whether to send it to a small local model or a larger cloud model. It runs fully offline, requires no API key to decide, and is designed to cut cloud costs by keeping easy prompts local.",
+        "importance": "Most LLM routers call another model or hosted classifier to make a routing decision, adding latency and cost. Wayfinder's deterministic, self-hosted approach is a privacy-friendly alternative for hybrid local/cloud inference stacks.",
+        "noteworthy": "Install via pip (wayfinder-router) and calibrate on your own data. Good fit for homelab LLM stacks that mix local Ollama/LM Studio with occasional OpenAI/Anthropic calls.",
+        "link": "https://github.com/itsthelore/wayfinder-router",
+        "id": 11
+      },
+      {
+        "title": "Armadillo: A DNS Server in Gleam for Homelab Use",
+        "tag": "Networking / Homelab",
+        "desc": "Lightweight DNS server built in the Gleam language targets self-hosters and homelab tinkerers.",
+        "summary": "Armadillo is a new open-source DNS server written in Gleam, a statically typed functional language on the BEAM VM. It is explicitly built for homelab use, offering a small, readable codebase for users who want to self-host DNS without running a full BIND or CoreDNS stack.",
+        "importance": "Homelab DNS options are consolidating around CoreDNS, AdGuard, and Pi-hole. A purpose-built lightweight alternative in a modern language gives tinkerers more options and a smaller attack surface.",
+        "noteworthy": "Evaluate for internal DNS resolution and ad-blocking at the DNS layer. Pair with your router's DHCP option to push local clients to Armadillo.",
+        "link": "https://github.com/vshakitskiy/armadillo",
+        "id": 12
+      },
+      {
+        "title": "Bitcoin Tests $60K as Short-Term Holders Capitulate",
+        "tag": "Crypto / Markets",
+        "desc": "Roughly 50K BTC moved to exchanges at a loss; STH market cap hit a two-year low near $237.7B.",
+        "summary": "On June 27, 2026, Bitcoin hovered around $60,000 after briefly trading below that level. CryptoQuant analyst Amr Taha reported that short-term holder market capitalization fell to $237.7 billion, the lowest since October 2024, as roughly 50,000 BTC was sent to exchanges at a loss. ETH traded near $1,580 and SOL near $71.50.",
+        "importance": "$60K has flipped from support to resistance. Sustained loss-driven selling from recent buyers signals weak conviction and opens the next support zone around $52K-$55K.",
+        "noteworthy": "Watch whether $60K reclaims as support. If accumulating, set limit orders around $55K-$58K. Monitor spot ETF flows and the quarterly options expiry for volatility catalysts.",
+        "link": "https://cointelegraph.com/markets/bitcoin-faces-fresh-capitulation-risk-as-50k-btc-moves-at-a-loss",
+        "id": 13
+      },
+      {
+        "title": "Base Blames Sequencer Bug for Back-to-Back Outages",
+        "tag": "Crypto / DeFi",
+        "desc": "A stale journal-state bug caused two mainnet outages totaling 136 minutes; single sequencer architecture again under scrutiny.",
+        "summary": "Coinbase's Base layer-2 network suffered two mainnet outages on June 25 and 26, 2026, lasting 116 minutes and 20 minutes. A post-mortem identified a sequencer block-building bug that failed to clear 'stale journal state' after an invalid transaction. Base runs a single sequencer, so the bug halted all new L2 blocks until patched.",
+        "importance": "Single-sequencer L2s remain a centralization risk. A single bug can freeze an entire chain, highlighting why decentralization of sequencing and better state-management testing matter.",
+        "noteworthy": "If you operate on Base, factor sequencer downtime into transaction timing and UI design. Watch Coinbase's roadmap for sequencing decentralization.",
+        "link": "https://cointelegraph.com/news/base-post-mortem-reveals-sequencer-bug-behind-back-to-back-outages",
+        "id": 14
+      }
+    ]
+  },
+  "yesterday": {
     "date": "27/06/26",
     "items": [
       {
-        "id": 1,
+        "id": 15,
         "title": "OpenAI GPT-5.6 Preview Locked to Government-Vetted Partners",
         "tag": "AI / Policy",
         "desc": "OpenAI releases Sol/Terra/Luna as a limited preview after the White House asks it to restrict rollout to trusted US partners.",
@@ -13,17 +158,17 @@
         "link": "https://openai.com/index/previewing-gpt-5-6-sol/"
       },
       {
-        "id": 2,
+        "id": 16,
         "title": "Anthropic Mythos 5 Cleared for 100+ Trusted US Organizations",
         "tag": "AI / Policy",
         "desc": "Commerce Dept lifts its block on Claude Mythos 5, allowing access to select US companies and government agencies.",
-        "summary": "On June 26, 2026, the US government allowed Anthropic to redeploy Claude Mythos 5 \u2014 its strongest cybersecurity model \u2014 to more than 100 US institutions, including major corporations and government agencies. The Commerce Secretary letter cited progress on safeguards. The earlier June 12 export block that shut down Mythos and Fable 5 remains partially in effect for Fable 5.",
+        "summary": "On June 26, 2026, the US government allowed Anthropic to redeploy Claude Mythos 5 — its strongest cybersecurity model — to more than 100 US institutions, including major corporations and government agencies. The Commerce Secretary letter cited progress on safeguards. The earlier June 12 export block that shut down Mythos and Fable 5 remains partially in effect for Fable 5.",
         "importance": "The reversal shows the administration is iterating quickly on AI controls rather than imposing blanket bans. It also confirms that frontier AI release policy is now a live bargaining process between labs and the Commerce Department.",
         "noteworthy": "Monitor whether Fable 5 (consumer version) returns next. For defenders, Mythos access returning is a signal that high-capability cyber models are being prioritized for US infrastructure providers.",
         "link": "https://www.wired.com/story/anthropic-restores-access-to-mythos/"
       },
       {
-        "id": 3,
+        "id": 17,
         "title": "DeepSeek Open-Sources DSpark Speculative Decoding Framework",
         "tag": "AI / Open Source",
         "desc": "New semi-parallel speculative decoding method boosts DeepSeek-V4 throughput 51-400% and latency up to ~80%, with open training code.",
@@ -33,7 +178,7 @@
         "link": "https://github.com/deepseek-ai/DeepSpec"
       },
       {
-        "id": 4,
+        "id": 18,
         "title": "NVIDIA Rolls Out Record 35 AI Supercomputers Across Europe",
         "tag": "Hardware / AI Infrastructure",
         "desc": "Europe's largest AI HPC build-out: 35 systems across 23 countries, powering 3M+ researchers on NVIDIA AI infrastructure.",
@@ -43,7 +188,7 @@
         "link": "https://nvidianews.nvidia.com/news/europe-unveils-a-record-35-new-nvidia-ai-supercomputers"
       },
       {
-        "id": 5,
+        "id": 19,
         "title": "Micron Smashes Records: $41.5B Q3 Revenue, $100B in AI Contracts",
         "tag": "Hardware / Semiconductors",
         "desc": "AI memory demand drives 4x YoY revenue jump; HBM4 in high-volume shipments, Q4 guided at $50B.",
@@ -53,7 +198,7 @@
         "link": "https://www.techpowerup.com/350262/micron-technology-inc-reports-record-results-for-the-third-quarter-of-fiscal-2026"
       },
       {
-        "id": 6,
+        "id": 20,
         "title": "Samsung Crosses $1B in HBM4 Revenue, Plans $647B Decade Bet",
         "tag": "Hardware / Memory",
         "desc": "Sixth-gen HBM4 reaches $1B revenue milestone; Samsung reportedly plans 90 trillion won investment over the next 10 years.",
@@ -63,7 +208,7 @@
         "link": "https://www.distillintelligence.com/briefings/semiconductors-ai-chips-2026-06-26"
       },
       {
-        "id": 7,
+        "id": 21,
         "title": "DirtyClone: New Linux Kernel LPE Poisons Cached Binaries for Root",
         "tag": "Security / Vulnerability",
         "desc": "CVE-2026-43503 (CVSS 8.8) lets local users escalate via cloned packets in the XFRM/IPsec path; working exploit published.",
@@ -73,7 +218,7 @@
         "link": "https://research.jfrog.com/post/dissecting-and-exploiting-linux-lpe-variant-dirtyclone-cve-2026-43503/"
       },
       {
-        "id": 8,
+        "id": 22,
         "title": "CISA Adds PTC Windchill RCE to KEV as Web Shell Attacks Spread",
         "tag": "Security / Vulnerability",
         "desc": "CVE-2026-12569 (CVSS 9.3) actively exploited in defense/aerospace PLM systems; attackers deploy JSP web shells.",
@@ -83,17 +228,17 @@
         "link": "https://www.csoonline.com/article/4190154/hackers-exploit-critical-ptc-windchill-plm-software-flaw.html"
       },
       {
-        "id": 9,
+        "id": 23,
         "title": "FBI: Russian APTs Now Steal Signal Backup Recovery Keys",
         "tag": "Security / Social Engineering",
         "desc": "UNC5792/UNC4221 coax high-value targets into handing over Signal Backup Recovery Keys, unlocking full message history.",
         "summary": "The FBI and CISA updated their March 2026 advisory on June 26, 2026: Russian intelligence services (RIS) actors now target Signal users' Backup Recovery Keys. Handing over the key lets attackers restore backups, read private and group chat history, and take over the account. Even creating a new account on the same phone number does not invalidate the old key unless the user regenerates it.",
-        "importance": "Signal's end-to-end encryption remains intact; the attack bypasses it by stealing the recovery key. High-value users \u2014 officials, journalists, military personnel \u2014 are now on the front line of messaging-account phishing at scale.",
+        "importance": "Signal's end-to-end encryption remains intact; the attack bypasses it by stealing the recovery key. High-value users — officials, journalists, military personnel — are now on the front line of messaging-account phishing at scale.",
         "noteworthy": "Regenerate your Signal Backup Recovery Key immediately. Review linked devices for anything unknown. Never share recovery keys, PINs, or verification codes in response to 'support' messages.",
         "link": "https://www.bleepingcomputer.com/news/security/fbi-russian-hackers-now-target-signal-backup-recovery-keys/"
       },
       {
-        "id": 10,
+        "id": 24,
         "title": "Mozilla 0DIN: Clean GitHub Repos Can Trick AI Coding Agents",
         "tag": "AI Security / Supply Chain",
         "desc": "Indirect prompt injection in setup instructions makes Claude Code run a hidden payload with no malicious code in the repo.",
@@ -103,7 +248,7 @@
         "link": "https://www.bleepingcomputer.com/news/security/clean-github-repo-tricks-ai-coding-agents-into-running-malware/"
       },
       {
-        "id": 11,
+        "id": 25,
         "title": "Bitcoin Closes Below $60K for First Time Since Sept 2024",
         "tag": "Crypto / Markets",
         "desc": "BTC fell to $58,500-$60,500 range amid tech-stock selloff and $1B+ liquidations; $60K now key resistance.",
@@ -113,7 +258,7 @@
         "link": "https://cointelegraph.com/markets/bitcoin-sees-first-close-below-60k-since-q3-2024-with-tech-stocks-in-deep-bear-market-zone"
       },
       {
-        "id": 12,
+        "id": 26,
         "title": "EU Lawmakers Vote to Review DeFi, Staking and NFT Rules",
         "tag": "Crypto / Regulation",
         "desc": "ECON committee urges Commission to assess MiCA-style rules for DeFi, staking, lending and NFTs; euro stablecoins welcomed.",
@@ -121,131 +266,6 @@
         "importance": "MiCA currently leaves DeFi, staking, and NFTs largely unregulated. A formal Parliament push to bring them under MiCA would reshape on-chain activities in the EU and create compliance headwinds for DeFi protocols serving EU users.",
         "noteworthy": "If you operate DeFi/staking services in the EU, start mapping regulatory gaps. The July 7 plenary vote will set Parliament's official position and influence Commission next steps.",
         "link": "https://cointelegraph.com/news/eu-lawmakers-assessing-defi-staking-nft-regulation"
-      }
-    ]
-  },
-  "yesterday": {
-    "date": "26/06/26",
-    "items": [
-      {
-        "id": 13,
-        "title": "Chrome Ad Blocker with 10M+ Installs Has Dormant Script Injection",
-        "tag": "Security / Browser",
-        "desc": "Adblock for YouTube extension can execute arbitrary JS on any site via server-side config change \u2014 no update, no review needed.",
-        "summary": "Island Security found that Adblock for YouTube (10M+ installs, Chrome Web Store Featured) contains architecture for arbitrary JavaScript execution on any website. A single server-side config change enables it without extension update, store review, or user-visible change. Could read pages, steal data, act as the user.",
-        "importance": "A Featured extension with 10M installs having dormant code execution capability is a supply chain time bomb. If the server-side switch flips maliciously, every install becomes a potential data exfiltration vector.",
-        "noteworthy": "Audit your Chrome extensions. Remove Adblock for YouTube if installed. Prefer uBlock Origin. Monitor for extension behavior changes \u2014 server-side switches leave no client-side trace.",
-        "link": "https://thehackernews.com/2026/06/chrome-ad-blocker-with-10m-installs.html"
-      },
-      {
-        "id": 14,
-        "title": "Gaslight macOS Malware Uses Prompt Injection to Blind AI Analysis",
-        "tag": "Security / Malware",
-        "desc": "North Korea-aligned Rust implant embeds fake system-failure messages to trick LLM-assisted malware triage into aborting analysis.",
-        "summary": "SentinelOne discovered Gaslight, a Rust-based macOS backdoor linked to North Korea. Its novel evasion: embedded prompt injection payloads that fabricate system-failure messages, designed to make LLM-assisted triage agents doubt their session and abort analysis. Uses Telegram bot API for C2 with interactive shell capabilities.",
-        "importance": "First known malware targeting AI analysis tools directly. As SOCs adopt LLM-assisted triage, attackers will increasingly weaponize prompt injection against the analysts' tools rather than evading sandboxes.",
-        "noteworthy": "Update macOS XProtect definitions. Monitor for Telegram bot API traffic on macOS endpoints. Review AI-assisted malware analysis pipelines for prompt injection vulnerabilities in the toolchain.",
-        "link": "https://thehackernews.com/2026/06/new-gaslight-macos-malware-uses-prompt.html"
-      },
-      {
-        "id": 15,
-        "title": "Cisco SD-WAN Zero-Day CVE-2026-20245 Exploited for Root Access",
-        "tag": "Security / Vulnerability",
-        "desc": "Mandiant confirms CVE-2026-20245 (CVSS 7.8) was exploited as zero-day for 2+ months before disclosure. Attacker used anti-forensic techniques.",
-        "summary": "Mandiant reported that CVE-2026-20245 in Cisco Catalyst SD-WAN was exploited as a zero-day at least two months before public disclosure. The authenticated local attacker can execute arbitrary commands with elevated privileges via crafted file upload. The threat actor consistently employed anti-forensic techniques, selectively deleting and restoring system config files during the intrusion.",
-        "importance": "SD-WAN is the backbone of modern enterprise networking. A zero-day with anti-forensic capabilities in a widely deployed Cisco product means network segmentation assumptions may be compromised.",
-        "noteworthy": "Patch Cisco Catalyst SD-WAN immediately. Audit for signs of compromise \u2014 check for unexpected config file modifications. Review netadmin access controls since exploitation requires authenticated access.",
-        "link": "https://thehackernews.com/2026/06/cisco-catalyst-sd-wan-zero-day-cve-2026.html"
-      },
-      {
-        "id": 16,
-        "title": "Amadey & StealC Malware Network Disrupted, 27M Credentials Recovered",
-        "tag": "Security / Law Enforcement",
-        "desc": "Europol-led operation takes down criminal infrastructure, seizes $47M in crypto, dismantles 326 servers and 142 domains.",
-        "summary": "A coordinated law enforcement operation with Bitdefender, Bitsight, ESET, and Microsoft disrupted the Amadey and StealC malware distribution network. The two-week action recovered 27 million stolen login credentials, identified $47M+ in criminal crypto assets, and dismantled 326 servers and 142 domains. Follows similar SocGholish takedown that cleaned 15,000 infected WordPress sites.",
-        "importance": "These takedowns target the 'assembly lines' of cybercrime \u2014 the infrastructure that enables ransomware, fraud, and attacks on critical infrastructure. Disrupting distribution networks has cascading effects on downstream attacks.",
-        "noteworthy": "Check if any of your credentials appear in the 27M recovered. Use HaveIBeenPwned or similar. The infrastructure takedown will temporarily reduce StealC/Amadey-driven attacks \u2014 patch windows are favorable.",
-        "link": "https://thehackernews.com/2026/06/amadey-and-stealc-malware-network.html"
-      },
-      {
-        "id": 17,
-        "title": "IBM Debuts World's First Sub-1nm Chip Technology",
-        "tag": "Hardware / Semiconductors",
-        "desc": "0.7nm node with 3D nanostack architecture packs ~100B transistors on a fingernail-sized chip. 50% more performance or 70% less power vs 2nm.",
-        "summary": "IBM unveiled the world's first sub-1nm chip technology at the 0.7nm (7 angstrom) node. The revolutionary 3D nanostack architecture packs nearly 100 billion transistors on a chip the size of a fingernail \u2014 nearly double the density of IBM's 2nm chip from 2021. Projected 50% more performance or 70% greater energy efficiency than 2nm. Published technical results confirm the breakthrough.",
-        "importance": "This extends Moore's Law into atomic-scale dimensions when the industry thought physical limits were near. For AI hardware, higher transistor density directly translates to more compute per watt. For everyone, this sets the roadmap for the next decade of chips.",
-        "noteworthy": "Sub-1nm is 3-5 years from production. Watch for TSMC and Samsung foundry roadmaps to respond. For homelab, this means future CPUs/GPUs will be dramatically more efficient \u2014 but not before 2029+.",
-        "link": "https://newsroom.ibm.com/2026-06-25-ibm-debuts-worlds-first-sub-1-nanometer-chip-technology"
-      },
-      {
-        "id": 18,
-        "title": "Apple to Skip High-End M6, Focus on AI-Focused M7 Chip Line",
-        "tag": "Hardware / AI Chips",
-        "desc": "Bloomberg reports Apple is canceling high-end M6 Pro/Max/Ultra in favor of M7 Pro/Max/Ultra with dedicated AI acceleration.",
-        "summary": "Apple is reportedly skipping high-end M6 Mac chips (M6 Pro, Max, Ultra) to accelerate development of the M7 line, which will feature dedicated AI acceleration hardware. The M7 Pro, Max, and Ultra are designed with AI inference as a primary workload, moving beyond the general-purpose CPU/GPU approach of current Apple Silicon. The M6 standard chip is still expected for lower-end Macs.",
-        "importance": "Apple doubling down on dedicated AI silicon signals that on-device AI inference is a strategic priority. For the Mac ecosystem, this means local AI capabilities could leapfrog competitors. For homelab, Apple Silicon Macs may become viable local inference nodes.",
-        "noteworthy": "Delay high-end Mac purchases if you need maximum AI performance \u2014 M7 will be the real upgrade. M6 standard chips still coming for MacBook Air and entry-level Pro. Watch for M7 benchmarks vs NVIDIA and AMD.",
-        "link": "https://www.bloomberg.com/news/articles/2026-06-25/apple-to-skip-high-end-m6-mac-chips-to-launch-m7-pro-m7-max-m7-ultra-instead"
-      },
-      {
-        "id": 19,
-        "title": "Apple Raises MacBook, iPad Prices as Memory Costs Skyrocket",
-        "tag": "Hardware / Pricing",
-        "desc": "Apple hikes prices across MacBook and iPad lineups globally, citing soaring DRAM and NAND costs. Some models up 15-20%.",
-        "summary": "Apple raised prices on MacBooks and iPads globally, with some configurations seeing 15-20% increases. The price hike is attributed to skyrocketing memory costs \u2014 DRAM and NAND prices have surged due to AI-driven demand consuming fab capacity. The increase affects both new purchases and custom configurations across the lineup.",
-        "importance": "AI demand for HBM and DDR5 is crowding out consumer memory production, driving up costs for everyone. This is the first major consumer price hike directly attributable to AI infrastructure demand. For homelab builders, expect RAM and SSD prices to stay elevated.",
-        "noteworthy": "If you need a MacBook or iPad, buy before further increases. Consider refurbished or previous-gen models. For homelab, stock up on RAM and SSDs now \u2014 prices likely to rise further as AI demand intensifies.",
-        "link": "https://www.reuters.com/world/asia-pacific/apple-raises-prices-macbooks-ipads-memory-costs-skyrocket-2026-06-25/"
-      },
-      {
-        "id": 20,
-        "title": "Framework's 10G Ethernet Module Exposes USB-C's Bandwidth Complexity",
-        "tag": "Networking / Homelab",
-        "desc": "WisdPi 10G card for Framework laptops hits USB-C bottlenecks \u2014 real-world throughput varies wildly by port and platform.",
-        "summary": "Jeff Geerling tested the WisdPi 10G Ethernet Expansion Card for Framework laptops. The Realtek RTL8159 controller requires USB 3.2 Gen 2x2 (20 Gbps) for full 10 Gbps speeds, but many Framework ports deliver less. On Framework 13 (AMD), real-world max was 9.4 Gbps on Windows, worse on Linux. On Framework 12 (Intel), Linux only achieved 7 Gbps despite the port reporting 20 Gbps capability. The Realtek Linux driver failed to compile on Ubuntu 26.04's 7.x kernel.",
-        "importance": "10GbE for laptops is finally here, but USB-C's fragmented bandwidth capabilities make it a compatibility minefield. For homelab, this means 10G USB adapters need careful platform matching \u2014 not all USB-C ports are equal.",
-        "noteworthy": "Before buying USB 10G adapters, verify your laptop's USB-C port supports USB 3.2 Gen 2x2 (20 Gbps). Framework users: check port documentation. Linux users: verify Realtek RTL8159 driver support for your kernel version.",
-        "link": "https://www.jeffgeerling.com/blog/2026/framework-10g-ethernet-module-usb-c-complexity/"
-      },
-      {
-        "id": 21,
-        "title": "OpenKnowledge: Open-Source AI-First Knowledge Management",
-        "tag": "AI / Tools",
-        "desc": "Open-source alternative to Obsidian/Notion with AI-native features hits #1 on HN. Built with local-first architecture.",
-        "summary": "OpenKnowledge is an open-source, AI-first knowledge management platform that serves as an alternative to Obsidian and Notion. It features local-first architecture, AI-powered search and organization, and integrates with local LLMs for privacy. The project hit 225 points on Hacker News and is available on GitHub under an open-source license.",
-        "importance": "AI-native knowledge management is a rapidly growing category. An open-source option with local-first design means your notes and AI processing stay on your hardware \u2014 no data sent to cloud APIs. For privacy-conscious users, this is the Obsidian alternative worth watching.",
-        "noteworthy": "Try OpenKnowledge for local AI-powered note-taking. Self-host with your own LLM for full privacy. Compare against Obsidian's AI plugins and Notion AI for feature parity.",
-        "link": "https://github.com/inkeep/open-knowledge"
-      },
-      {
-        "id": 22,
-        "title": "Political Bias in AI: Where the Models Stand",
-        "tag": "AI / Policy",
-        "desc": "Trakkr publishes comprehensive analysis of political bias across major AI models. Results show significant variation by model and topic.",
-        "summary": "Trakkr analyzed political bias across major AI models including GPT, Claude, Gemini, Llama, and DeepSeek. The study found significant variation in how models handle politically charged topics, with some showing measurable left-leaning bias on certain issues while others lean conservative. The analysis covers economic policy, social issues, and geopolitical topics across 20+ models.",
-        "importance": "As AI models become embedded in search, education, and decision-making, their political biases become systemic. Understanding which models lean which way is critical for anyone relying on AI for research, content generation, or analysis.",
-        "noteworthy": "Test your preferred models on politically sensitive queries. Consider using multiple models for balanced perspectives. For developers, be aware that model bias can propagate into your applications.",
-        "link": "https://trakkr.ai/bias"
-      },
-      {
-        "id": 23,
-        "title": "Bitcoin Bounces Off Yearly Lows at $59,945",
-        "tag": "Crypto / Markets",
-        "desc": "BTC hit $58K \u2014 lowest since Sept 2024 \u2014 then bounced. $1B in liquidations. ETF outflows and options expiry driving sell pressure.",
-        "summary": "Bitcoin hit its lowest level since September 2024 at $58,000, triggering over $1 billion in liquidations across bullish leveraged positions. BTC recovered to $59,945 as of June 26. The sell-off was driven by surging spot Bitcoin ETF outflows, a put-heavy monthly options expiry, and Strategy's unrealized losses widening the gap with AI-connected stock returns. ETH at $1,557, SOL at $68.17.",
-        "importance": "BTC losing the $62K support level and testing $58K is a significant technical breakdown. The $10.6B June options expiry with 80% out of the money adds further pressure. If $58K breaks, $52K is the next support.",
-        "noteworthy": "Watch $58K support \u2014 if it holds, the bounce could be a relief rally. Monitor spot ETF flows for institutional sentiment. Set limit orders at $55-58K if accumulating. Options expiry June 26 is the immediate catalyst.",
-        "link": "https://cointelegraph.com/markets/bitcoin-bounces-off-new-2026-price-lows-will-us-stock-weakness-push-btc-lower"
-      },
-      {
-        "id": 24,
-        "title": "StablecoinX Merges with TLGY, Debuts on Nasdaq",
-        "tag": "Crypto / DeFi",
-        "desc": "Ethena ecosystem bet goes public via SPAC merger. USDe supply down 70% from $14B October peak.",
-        "summary": "StablecoinX, a company betting on the Ethena ecosystem, merged with TLGY and began trading on Nasdaq on June 26. The move brings institutional exposure to the Ethena/USDe ecosystem. Meanwhile, USDe circulating supply has shrunk by 70% since the October 2024 bull market peak when it topped $14 billion, reflecting reduced demand for yield-bearing stablecoin strategies.",
-        "importance": "A Nasdaq listing for an Ethena-focused entity brings institutional capital to the synthetic dollar space. But USDe's 70% supply collapse signals that the yield-driven demand that fueled its growth has evaporated in the current low-yield environment.",
-        "noteworthy": "Monitor USDe supply trends as a proxy for DeFi yield demand. The Nasdaq listing could bring new institutional flows. For DeFi users, Ethena's sustainability depends on funding rate regimes recovering.",
-        "link": "https://cointelegraph.com/news/stablecoinx-merges-with-tlgy-and-begins-trading-on-nasdaq-friday"
       }
     ]
   }
