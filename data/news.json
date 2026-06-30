@@ -1,9 +1,144 @@
 {
   "today": {
-    "date": "28/06/26",
+    "date": "30/06/26",
     "items": [
       {
         "id": 1,
+        "title": "BioShocking Attack Tricks AI Browsers Into Leaking Credentials",
+        "tag": "AI Security / Browser",
+        "desc": "LayerX tricked six AI browsers including ChatGPT Atlas, Perplexity Comet, and Claude extension into exfiltrating user credentials via game-themed prompt injection.",
+        "summary": "Security firm LayerX disclosed 'BioShocking,' an indirect prompt injection technique that tricks AI browsers and assistants into copying user credentials and sending them to an attacker. Six AI agents were tested including OpenAI's ChatGPT Atlas, Perplexity's Comet, and Anthropic's Claude browser extension. The attack works by embedding commands in a web page disguised as a puzzle game — once the agent accepts game logic over safety logic, the final step asks it to grab credentials. In testing, it pulled SSH login credentials from a victim's GitHub repository. None of the six agents flagged the credential exfiltration as something to refuse.",
+        "importance": "AI browsers with agent mode can click, type, and access authenticated sessions. Indirect prompt injection makes any web page a potential attack vector. This is the first systematic demonstration that all major AI browser agents share the same vulnerability class.",
+        "noteworthy": "Treat AI browser agent sessions as privileged — avoid having them access sensitive repositories or authenticated services. Monitor agent browsing activity. Don't use AI browser agents on sites with stored credentials until prompt injection defenses mature.",
+        "link": "https://thehackernews.com/2026/06/new-bioshocking-attack-tricks-ai.html"
+      },
+      {
+        "id": 2,
+        "title": "Progress Kemp LoadMaster CVE-2026-8037: Pre-Auth Root via Missing Null Terminator",
+        "tag": "Critical Vulnerability / API Security",
+        "desc": "CVSS 9.8 pre-auth root command execution in LoadMaster load balancer. Missing null terminator in escape_quotes() lets attacker inject via stuffed JSON keys.",
+        "summary": "A critical vulnerability in Progress Kemp LoadMaster (CVE-2026-8037, CVSS 9.8) allows unauthenticated attackers to execute arbitrary commands as root. The flaw lives in the escape_quotes() function, which sanitizes input before passing it to shell commands. The function allocated a memory buffer without clearing it and never wrote a null terminator — so the system reads past sanitized input into attacker-controlled data stuffed via extra JSON keys in the same API request. watchTowr Labs published a full technical writeup on June 29. A patch is available.",
+        "importance": "LoadMaster sits at the network edge as an application delivery controller. Pre-auth root on a load balancer means total traffic interception and lateral movement. The bug is a classic memory safety failure in a security-critical code path.",
+        "noteworthy": "Patch LoadMaster immediately if the API is enabled. Disable API access on management interfaces if not needed. Audit for signs of exploitation — check shell command history and unexpected API calls.",
+        "link": "https://thehackernews.com/2026/06/progress-kemp-loadmaster-flaw-could-let.html"
+      },
+      {
+        "id": 3,
+        "title": "Oracle E-Business Suite CVE-2026-46817 Actively Exploited Post-Patch",
+        "tag": "Critical Vulnerability / Enterprise Software",
+        "desc": "CVSS 9.8 authentication bypass in Oracle Payments. Defused Cyber caught active exploitation on honeypots over the weekend.",
+        "summary": "Oracle E-Business Suite flaw CVE-2026-46817 (CVSS 9.8) is being actively exploited in the wild. The vulnerability is an improper privilege management and authentication flaw in Oracle Payments that allows unauthenticated attackers with HTTP access to take over instances. It affects versions 12.2.3 through 12.2.15. Patches were shipped in Oracle's June Critical Security Patch Update. Defused Cyber observed exploitation on their Oracle EBS honeypots over the weekend — the first known in-the-wild exploitation. No public PoC exists.",
+        "importance": "Oracle EBS runs financial operations for enterprises worldwide. A CVSS 9.8 auth bypass with active exploitation means unpatched systems are being compromised right now. The same product was previously hit by Cl0p ransomware via CVE-2025-61882.",
+        "noteworthy": "Apply the June Oracle CPU immediately if running EBS 12.2.3-12.2.15. Check for unauthorized account creation and privilege escalation. Segment Oracle EBS from internet-facing infrastructure.",
+        "link": "https://thehackernews.com/2026/06/oracle-e-business-suite-flaw-cve-2026.html"
+      },
+      {
+        "id": 4,
+        "title": "CISA: Windows BlueHammer CVE-2026-33825 Now Exploited by Ransomware Gangs",
+        "tag": "Security / Ransomware",
+        "desc": "Microsoft Defender privilege escalation flaw leaked in April now weaponized by ransomware operators. Gives SYSTEM access via SAM database.",
+        "summary": "CISA confirmed that ransomware gangs are now exploiting CVE-2026-33825, dubbed 'BlueHammer,' a Microsoft Defender privilege escalation vulnerability. The flaw allows authorized local attackers to access the SAM database and escalate to SYSTEM privileges. The exploit code was leaked in April by researcher 'Nightmare Eclipse' in protest of MSRC's disclosure handling. Microsoft patched it on April 14, but Huntress Labs reported zero-day exploitation days later. CISA added it to the KEV catalog.",
+        "importance": "A Defender vulnerability being used by ransomware gangs means the security tool itself is the attack vector. Local privilege escalation to SYSTEM is the gateway to full domain compromise and ransomware deployment.",
+        "noteworthy": "Ensure April 2026 Patch Tuesday is applied on all Windows systems. Hunt for SAM database access patterns. Monitor for unexpected SYSTEM-privileged processes spawned from Defender contexts.",
+        "link": "https://www.bleepingcomputer.com/news/security/cisa-windows-bluehammer-flaw-now-exploited-by-ransomware-gangs/"
+      },
+      {
+        "id": 5,
+        "title": "South Korea Commits $1 Trillion to Memory Chips, AI Data Centers, Humanoid Robots",
+        "tag": "Hardware / Semiconductors",
+        "desc": "Samsung and SK Hynix pledge $585B for new fabs. Government targets doubled DRAM production in 5 years and commercial humanoid robots by 2028.",
+        "summary": "South Korea's government and top tech companies committed $1 trillion to megaprojects including $585 billion from Samsung and SK Hynix for new chip fabrication plants. The goal is to double DRAM production within five years. The plan also includes new AI data centers requiring 14+ gigawatts of additional power and commercial deployment of humanoid robots by 2028, leveraging Hyundai's Boston Dynamics subsidiary. President Lee Jae Myung framed semiconductors, physical AI, and AI data centers as the 'triple axis for a great leap forward.'",
+        "importance": "This is the largest single-country semiconductor investment commitment to date. It directly addresses memory chip shortages driving consumer electronics prices up. The humanoid robot commercialization timeline (2028) is aggressive and backed by Boston Dynamics manufacturing scale.",
+        "noteworthy": "Expect memory chip supply relief starting 2027-2028 if fabs come online on schedule. Watch for DRAM price stabilization. For homelab and AI inference, increased HBM supply could lower GPU pricing indirectly. Monitor Boston Dynamics commercial robot deployments in Hyundai factories.",
+        "link": "https://arstechnica.com/ai/2026/06/south-korea-to-spend-1t-on-more-memory-chip-production-and-humanoid-robots/"
+      },
+      {
+        "id": 6,
+        "title": "Popping the GPU Bubble: Moondream Photon Hits 33ms VLM Inference on B200",
+        "tag": "Hardware / GPU Inference",
+        "desc": "Moondream's Photon engine uses pipelined decoding to eliminate GPU idle time, achieving ~33ms inference on NVIDIA B200 with 35% higher decode throughput.",
+        "summary": "Moondream released details of Photon, their custom inference engine that achieves near-realtime vision-language model inference at approximately 33ms on NVIDIA B200. The key innovation is 'pipelined decoding' — overlapping CPU housekeeping work with GPU computation to eliminate 'GPU bubbles' where the GPU sits idle waiting for the CPU to plan the next token. Photon delivers up to 35% higher decode throughput by launching the next forward pass while the current token is still being committed.",
+        "importance": "GPU utilization is the bottleneck in AI inference economics. If pipelined decoding becomes standard, existing GPU fleets get 35% more throughput for free. This matters for anyone running local inference or serving models at scale.",
+        "noteworthy": "If you run vLLM or similar inference servers, watch for pipelined decoding adoption. For local AI workloads, this technique could meaningfully improve token generation speed on existing hardware. Evaluate Moondream's Photon for VLM inference workloads.",
+        "link": "https://moondream.ai/blog/popping-the-gpu-bubble"
+      },
+      {
+        "id": 7,
+        "title": "What Happens When You Run a CUDA Kernel: Deep Dive into GPU Execution",
+        "tag": "Hardware / GPU Education",
+        "desc": "Fergus Finn's technical blog post explains the full lifecycle of a CUDA kernel from API call to GPU execution. Hit 255 points on HN.",
+        "summary": "A detailed technical blog post by Fergus Finn walks through exactly what happens when a CUDA kernel is launched — from the CPU-side API call, through driver overhead, memory transfers, grid/block scheduling, warp execution on SMs, and result retrieval. The post covers GPU architecture fundamentals including streaming multiprocessors, warp scheduling, memory hierarchy, and the CPU-GPU coordination overhead that creates the 'GPU bubble' problem. It reached 255 points on Hacker News.",
+        "importance": "Understanding GPU execution at this level is essential for anyone optimizing AI inference, writing CUDA kernels, or evaluating hardware for ML workloads. The timing breakdown reveals where latency actually lives.",
+        "noteworthy": "Read this if you're doing any GPU programming or evaluating inference performance. Pair with the Moondream Photon article to understand both the problem (GPU bubbles) and a solution (pipelined decoding). Useful reference for homelab GPU optimization.",
+        "link": "https://fergusfinn.com/blog/what-happens-when-you-run-a-gpu-kernel/"
+      },
+      {
+        "id": 8,
+        "title": "LongCat-2.0: Meituan Releases 1.6T Parameter Open-Weight MoE Model",
+        "tag": "AI / Open Models",
+        "desc": "Meituan open-sources LongCat-2.0 — 1.6T total parameters, 48B active per token, 1M token context. Trained entirely on AI ASIC superpods.",
+        "summary": "Meituan released LongCat-2.0, a large-scale mixture-of-experts language model with 1.6 trillion total parameters and approximately 48 billion activated per token. The model has a 1 million token context window, putting it in the same class as DeepSeek's flagship. Both the full training run and deployment are built entirely on AI ASIC superpods — not NVIDIA GPUs — making it China's biggest AI model trained on domestic chips. The model is open-weight.",
+        "importance": "1.6T parameters trained on non-NVIDIA ASICs proves the GPU monopoly is cracking. If Meituan can train frontier-class models on domestic Chinese silicon, US export controls have a diminishing effect. The open-weight release puts pressure on proprietary frontier model pricing.",
+        "noteworthy": "Test LongCat-2.0 on HuggingFace for long-context tasks. Compare against DeepSeek V4 and GLM-5.2 on agentic workloads. The ASIC training approach is worth tracking for cost economics — if domestic chips can train 1.6T models, GPU pricing power weakens.",
+        "link": "https://longcat.chat/blog/longcat-2.0/"
+      },
+      {
+        "id": 9,
+        "title": "Micro-Agent: vLLM Semantic Router Beats Frontier Models via In-API Collaboration",
+        "tag": "AI / Inference Serving",
+        "desc": "vLLM's Semantic Router turns one model API call into bounded multi-model collaboration — fanning out, voting, and synthesizing behind a single endpoint.",
+        "summary": "vLLM's Semantic Router team introduced 'Micro-Agent,' a serving-layer primitive that makes one model API call become a bounded collaboration among multiple models. Behind a single stable model identity (vllm-sr/auto), the router can select a recipe, fan out to workers, collect a quorum, verify disagreement, synthesize a final answer, and return one OpenAI-compatible response. The approach builds on Sakana Fugu's multi-model concept but moves the abstraction into the open serving layer rather than a commercial endpoint. Results show open-source model collaborations beating frontier models on quality benchmarks.",
+        "importance": "If router-level collaboration consistently beats single frontier models, the value proposition of expensive proprietary APIs erodes. This also makes safety policy executable — sensitive requests can be routed to stricter models automatically.",
+        "noteworthy": "Evaluate vLLM Semantic Router for your inference stack. The 'one model name, many loops' pattern simplifies application code while improving quality. For homelab AI serving, this could let smaller local models collaborate to match frontier performance.",
+        "link": "https://vllm.ai/blog/2026-06-29-micro-agent-frontier-models"
+      },
+      {
+        "id": 10,
+        "title": "Ornith-1.0: Self-Improving Open-Source Models for Agentic Coding",
+        "tag": "AI / Agentic Coding",
+        "desc": "DeepReinforce AI releases Ornith-1.0 — open-source models that scaffold their own improvement during agentic coding tasks. Hit 209 points on HN.",
+        "summary": "DeepReinforce AI released Ornith-1.0, a family of open-source self-improving models designed for agentic coding. The models use a 'self-scaffolding' approach where they build and refine their own tooling during multi-step coding tasks. The project gained significant traction on Hacker News (209 points), with discussion focused on whether self-improvement loops can close the gap between open-weight models and proprietary agents like Devin. Code and models are available on GitHub.",
+        "importance": "Self-improvement during inference is a different paradigm from pre-training scale. If open-source models can scaffold their own capabilities at inference time, the compute advantage of frontier labs diminishes.",
+        "noteworthy": "Clone and test Ornith-1.0 on your coding agent workflows. Compare against GLM-5.2 and Claude Code on multi-step tasks. The self-scaffolding pattern may be applicable to other agentic domains beyond coding.",
+        "link": "https://github.com/deepreinforce-ai/Ornith-1"
+      },
+      {
+        "id": 11,
+        "title": ".self TLD Launches — A Top-Level Domain Designed for Self-Hosting",
+        "tag": "Networking / Self-Hosting",
+        "desc": "HCCF proposes .self as a new TLD for self-hosting infrastructure, with 501 points on HN. Aims to make personal infrastructure first-class on the web.",
+        "summary": "The Human-Centered Computing Foundation (HCCF) proposed .self, a new top-level domain designed specifically to support self-hosting. The vision is a human-centered TLD where individuals can run personal infrastructure — mail servers, file storage, AI agents — with built-in conventions for self-hosted services. The proposal gained massive traction on Hacker News (501 points), reflecting the growing self-hosting and data-sovereignty movement. The TLD would include technical conventions for service discovery and authentication tailored to personal infrastructure.",
+        "importance": "Self-hosting is growing but lacks first-class DNS infrastructure. A dedicated TLD could standardize how personal services are discovered and authenticated, reducing the friction that keeps most people on centralized platforms.",
+        "noteworthy": "Follow the .self TLD proposal if you run homelab services. Consider how a self-hosting-oriented TLD could simplify your DNS and service discovery setup. The HCCF vision aligns with sovereign computing and data ownership trends.",
+        "link": "https://hccf.onmy.cloud/2026/06/21/reclaiming-our-digital-selves-hccfs-vision-for-a-human-centered-top-level-domain/"
+      },
+      {
+        "id": 12,
+        "title": "WhatsApp Rolls Out Usernames — Phone Numbers Stay Private",
+        "tag": "Privacy / Messaging",
+        "desc": "WhatsApp begins global username reservations. Connect via username instead of phone number. No directory, no suggestions — privacy-first design.",
+        "summary": "WhatsApp officially launched global username reservations, allowing its 3+ billion users to create and reserve usernames before the feature becomes generally available later this year. Usernames let people connect without sharing phone numbers. There is no directory or suggestion system — someone must know your exact username to contact you. Users can also set a 'username key' requiring both username and key for first contact. Certain usernames are reserved for businesses, governments, and public figures.",
+        "importance": "Phone number exposure has been WhatsApp's biggest privacy weakness. Usernames with no directory are a meaningful privacy upgrade for a platform used by 3 billion people, especially for activists, journalists, and vulnerable communities.",
+        "noteworthy": "Reserve your WhatsApp username now before someone else takes it. Set up a username key for extra protection. This is especially important if you use WhatsApp for sensitive communications.",
+        "link": "https://thehackernews.com/2026/06/whatsapp-is-finally-getting-usernames.html"
+      },
+      {
+        "id": 13,
+        "title": "Market Snapshot: BTC $59,273 | ETH $1,583 | SOL $73.58",
+        "tag": "Crypto / Markets",
+        "desc": "BTC slips below $60K to $59,273 (-0.84%). ETH flat at $1,583 (+0.73%). SOL recovers to $73.58 (+1.27%). End-of-quarter consolidation.",
+        "summary": "CoinGecko data on June 30, 2026 shows Bitcoin at $59,273 (-0.84% 24h), Ethereum at $1,583 (+0.73%), and Solana at $73.58 (+1.27%). BTC broke below the $60K psychological level, continuing the slide from last week's $62K support loss. ETH remains range-bound near $1,580. SOL shows relative strength, recovering above $73. ARK Invest bought $43.5M in crypto stocks (Coinbase, Circle) amid the dip, while sovereign funds reportedly view the discount as an entry point. Australia's crypto travel rule takes effect July 1.",
+        "importance": "BTC losing $60K is bearish short-term. Next support is $58K, then $52K. However, institutional accumulation (ARK, sovereign funds) during the dip signals confidence at these levels. End-of-quarter positioning may be distorting price action.",
+        "noteworthy": "Watch $58K BTC support — if it holds, this may be a local bottom. SOL's relative strength vs BTC is notable for rotation strategies. Australia crypto travel rule effective July 1 may affect AU-based exchanges. UK FCA crypto authorization deadline set for February 2027.",
+        "link": "https://www.coingecko.com/"
+      }
+    ]
+  },
+  "yesterday": {
+    "date": "28/06/26",
+    "items": [
+      {
+        "id": 14,
         "title": "OpenAI Previews GPT-5.6 Sol, Terra, Luna — US Government Gated Rollout",
         "tag": "AI / Models",
         "desc": "OpenAI launches GPT-5.6 family in limited preview. Sol is flagship frontier, Terra is 2x cheaper, Luna is fast. Access restricted by government coordination.",
@@ -13,7 +148,7 @@
         "link": "https://openai.com/index/previewing-gpt-5-6-sol/"
       },
       {
-        "id": 2,
+        "id": 15,
         "title": "FBI: Russian Spies Phish Signal Backup Recovery Keys",
         "tag": "Security / Espionage",
         "desc": "Russian intelligence pivots from account takeover to stealing Signal backup recovery keys, giving persistent access to encrypted message history.",
@@ -23,7 +158,7 @@
         "link": "https://thehackernews.com/2026/06/fbi-warns-russian-intelligence-hackers.html"
       },
       {
-        "id": 3,
+        "id": 16,
         "title": "pedit COW and DirtyClone: Two New Linux Kernel Root Exploits",
         "tag": "Security / Linux",
         "desc": "Two page-cache corruption bugs in Linux networking code give local root. pedit COW had a working exploit within a day of CVE assignment.",
@@ -33,7 +168,7 @@
         "link": "https://thehackernews.com/2026/06/new-linux-pedit-cow-exploit-enables.html"
       },
       {
-        "id": 4,
+        "id": 17,
         "title": "Amazon Q Developer: Malicious Repos Run Code via MCP Configs",
         "tag": "AI Security / Supply Chain",
         "desc": "CVE-2026-12957 lets a booby-trapped Git repository auto-load an MCP server and steal AWS credentials through Amazon Q Developer.",
@@ -43,7 +178,7 @@
         "link": "https://thehackernews.com/2026/06/amazon-q-developer-flaw-could-let.html"
       },
       {
-        "id": 5,
+        "id": 18,
         "title": "Miasma Malware Targets npm Packages and GitHub Actions",
         "tag": "Security / Supply Chain",
         "desc": "Miasma expands from npm to GitHub Actions, poisoning the Verana repository and using the same execution pattern across ecosystems.",
@@ -53,7 +188,7 @@
         "link": "https://thehackernews.com/2026/06/miasma-malware-targets-npm-packages-and.html"
       },
       {
-        "id": 6,
+        "id": 19,
         "title": "Cisco Catalyst SD-WAN Manager Zero-Day CVE-2026-20245 Actively Exploited",
         "tag": "Security / Networking",
         "desc": "Authenticated command injection in SD-WAN Manager gives root. Mandiant observed attackers creating a rogue 'troot' admin account.",
@@ -63,7 +198,7 @@
         "link": "https://thehackernews.com/2026/06/cisco-catalyst-sd-wan-zero-day-cve-2026.html"
       },
       {
-        "id": 7,
+        "id": 20,
         "title": "Operation Endgame Disrupts StealC and Amadey, Recovers 27M Credentials",
         "tag": "Security / Takedown",
         "desc": "Law enforcement actioned 326 servers and 142 domains tied to StealC, Amadey, and SocGholish malware networks.",
@@ -73,7 +208,7 @@
         "link": "https://thehackernews.com/2026/06/amadey-and-stealc-malware-network.html"
       },
       {
-        "id": 8,
+        "id": 21,
         "title": "Gaslight: macOS Malware Uses Prompt Injection to Fool AI Analysts",
         "tag": "AI Security / Malware",
         "desc": "North Korean-linked Rust macOS implant embeds 38 fake error messages to trick LLM-assisted malware analysis tools.",
@@ -83,7 +218,7 @@
         "link": "https://thehackernews.com/2026/06/new-gaslight-macos-malware-uses-prompt.html"
       },
       {
-        "id": 9,
+        "id": 22,
         "title": "Chrome Ad Blocker with 10M+ Installs Has Dormant Script Injection Path",
         "tag": "Privacy / Browser",
         "desc": "'Adblock for YouTube' extension can be remotely configured to inject arbitrary scripts into any website.",
@@ -93,7 +228,7 @@
         "link": "https://thehackernews.com/2026/06/chrome-ad-blocker-with-10m-installs.html"
       },
       {
-        "id": 10,
+        "id": 23,
         "title": "MiniMax M3 and NVIDIA Cosmos 3 Lead Open-Source AI June Wave",
         "tag": "AI / Open Source",
         "desc": "MiniMax M3 offers a 1M-token context window; NVIDIA Cosmos 3 is an open omnimodal world model for physical AI and robotics.",
@@ -103,7 +238,7 @@
         "link": "https://af.net/realtime/open-source-ai-innovations-of-june-2026-minimax-m3-nvidia-cosmos-3-lead-democratization/"
       },
       {
-        "id": 11,
+        "id": 24,
         "title": "10GbE Homelab Networking Now Achievable Under $300",
         "tag": "Hardware / Networking",
         "desc": "2026 guides show 10GbE home networks are budget-accessible with sub-$300 switches and cheap SFP+ NICs.",
@@ -113,138 +248,13 @@
         "link": "https://wiredhaus.com/10gbe-home-network-2026/"
       },
       {
-        "id": 12,
+        "id": 25,
         "title": "Market Snapshot: BTC $60,300 | ETH $1,580 | SOL $72.87",
         "tag": "Crypto / Markets",
         "desc": "Bitcoin holds $60K after mid-week dip. Ethereum flat, Solana recovering. Consolidation continues.",
         "summary": "Market data on June 28, 2026 shows Bitcoin near $60,300 after losing the $62K support level earlier in the week. Ethereum trades near $1,580 with minimal 24-hour movement. Solana is around $72.87, showing some recovery relative to the broader altcoin dip. The overall market remains in a consolidation phase with weak directional conviction.",
         "importance": "$60K is the new psychological floor. Holding it prevents a deeper slide toward $58K or $52K, but reclaiming $65K is needed for bullish momentum. Until a catalyst appears, expect choppy range-bound price action.",
         "noteworthy": "Watch $58K support on BTC and $1,500 support on ETH. Solana's relative strength is notable if it sustains. Set limit orders at key support levels if accumulating. Macro catalysts remain the dominant driver.",
-        "link": "https://www.coingecko.com/"
-      }
-    ]
-  },
-  "yesterday": {
-    "date": "25/06/26",
-    "items": [
-      {
-        "id": 13,
-        "title": "OpenAI Unveils Jalapeño — First Custom Inference Chip With Broadcom",
-        "tag": "Hardware / AI Chips",
-        "desc": "OpenAI's first custom silicon, designed with Broadcom, targets LLM inference at scale. Deployment by end of 2026.",
-        "summary": "OpenAI unveiled Jalapeño, its first custom-built inference processor, designed and manufactured with Broadcom and Celestica. The chip is an LLM-optimized intelligence processor for initial deployment by end of 2026, with multi-generation roadmap. Jalapeño combines OpenAI-designed accelerators with Broadcom silicon implementation and networking.",
-        "importance": "Custom silicon is the endgame for AI hyperscalers. OpenAI joining Google, Amazon, and Microsoft means the GPU monopoly on inference is fracturing.",
-        "noteworthy": "Watch for Jalapeño performance benchmarks vs NVIDIA B200/B300. If OpenAI offers inference-as-a-service on its own silicon, pricing could undercut GPU-based providers.",
-        "link": "https://openai.com/index/openai-broadcom-jalapeno-inference-chip/"
-      },
-      {
-        "id": 14,
-        "title": "Qualcomm Acquires Modular for $4B to Challenge NVIDIA CUDA Dominance",
-        "tag": "Hardware / AI Chips",
-        "desc": "Qualcomm buys AI compiler startup Modular (Mojo/Max) in $4B stock deal to build a CUDA-competitive software stack for its AI chips.",
-        "summary": "Qualcomm agreed to acquire Modular, the AI infrastructure startup behind the Mojo programming language and Max inference engine, for approximately $4 billion in stock. The deal positions Qualcomm to offer a unified software platform across its Snapdragon, AI Engine, and datacenter chips, directly competing with NVIDIA's CUDA ecosystem.",
-        "importance": "CUDA's moat is software, not hardware. Qualcomm buying Modular is the most credible attempt yet to build an alternative AI compute stack.",
-        "noteworthy": "Watch if Qualcomm opensources Mojo post-acquisition. For local AI inference, Qualcomm's NPUs + Modular's compiler could be a compelling alternative to NVIDIA for edge and mobile workloads.",
-        "link": "https://techcrunch.com/2026/06/24/qualcomm-agrees-to-acquire-ai-startup-modular-for-4-billion/"
-      },
-      {
-        "id": 15,
-        "title": "GLM-5.2: The Step Change for Open-Source AI Agents",
-        "tag": "AI / Open Models",
-        "desc": "Open-weight GLM-5.2 sustains ~1,700 autonomous agent steps per session, rivaling proprietary frontier models for agentic tasks.",
-        "summary": "GLM-5.2, released June 16, 2026 by Z.AI, represents a capability leap for open-weight models in agentic tasks. It sustains roughly 1,700 autonomous agent steps in a single session — up from an industry baseline of ~20 steps a year earlier. The model is MIT-licensed.",
-        "importance": "Open models crossing the agentic capability threshold changes the AI landscape. If GLM-5.2 can match proprietary models on agent tasks, the argument for closed-source frontier models weakens.",
-        "noteworthy": "Test GLM-5.2 on your agent workflows. It's available on Ollama Cloud and HuggingFace. For autonomous coding and multi-step tasks, this may outperform larger proprietary models at a fraction of the cost.",
-        "link": "https://www.interconnects.ai/p/glm-52-is-the-step-change-for-open"
-      },
-      {
-        "id": 16,
-        "title": "Krea 2 Goes Open Source: 12B DiT Model Generates 2K Images in 2 Seconds",
-        "tag": "AI / Image Generation",
-        "desc": "Krea released open weights for Krea 2 Raw and Turbo — a 12B parameter dense DiT model with 2-second 2K generation.",
-        "summary": "Krea published open weights for Krea 2 on Hugging Face on June 24, 2026. The model uses a Qwen Image VAE, 12B dense DiT backbone, and Qwen3-VL text encoder. Two checkpoints ship: Krea 2 Raw (quality-focused) and Krea 2 Turbo (speed-optimized). The model generates 2K resolution images in approximately 2 seconds on consumer GPUs.",
-        "importance": "A 12B open-weight image model that runs on consumer hardware and generates 2K in 2 seconds is a milestone for local AI image generation.",
-        "noteworthy": "Download and test Krea 2 on your local GPU. Compare quality vs Flux, SD3.5, and Midjourney. The Turbo variant is particularly interesting for real-time generation workflows.",
-        "link": "https://www.krea.ai/krea-2-open-source"
-      },
-      {
-        "id": 17,
-        "title": "NVIDIA Unveils 45°C Liquid Cooling — Near-Zero Water Use for AI Data Centers",
-        "tag": "Hardware / Infrastructure",
-        "desc": "New closed-loop cooling architecture runs at 45°C, cutting data center water consumption to near zero and reducing power costs.",
-        "summary": "NVIDIA detailed a new liquid cooling architecture for next-generation AI infrastructure that operates at 45°C coolant temperature. The closed-loop design claims up to 100% reduction in water consumption compared to traditional evaporative cooling, and lower power costs through higher operating temperatures.",
-        "importance": "Data center water usage is becoming a regulatory and PR liability for AI companies. NVIDIA's 45°C design addresses both environmental and operational costs.",
-        "noteworthy": "If you're planning a homelab liquid cooling setup, monitor NVIDIA's 45°C spec — lower temperature delta requirements mean simpler, cheaper cooling loops.",
-        "link": "https://blogs.nvidia.com/blog/liquid-cooling-ai-factories/"
-      },
-      {
-        "id": 18,
-        "title": "Gemini 3.5 Flash Gets Native Computer Use — Agentic AI Built Into the Model",
-        "tag": "AI / Agents",
-        "desc": "Google integrates computer use as a native tool in Gemini 3.5 Flash, replacing the standalone Gemini 2.5 Computer Use model.",
-        "summary": "Google announced that computer use is now a built-in tool in Gemini 3.5 Flash, delivering its best performance yet for agentic computer use tasks. Previously only available as a standalone Gemini 2.5 model, computer use is now natively integrated into the main Flash model alongside Search and Maps grounding.",
-        "importance": "Native computer use in a mainstream model signals that agentic AI is becoming a standard capability, not a separate product.",
-        "noteworthy": "Test Gemini 3.5 Flash computer use for automation tasks. Compare against Claude's computer use and OpenAI's operator. For homelab automation, this could replace brittle Selenium/Playwright scripts.",
-        "link": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-computer-use-gemini-3-5-flash/"
-      },
-      {
-        "id": 19,
-        "title": "Cordyceps: CI/CD Flaws Expose 300+ GitHub Repos to Supply-Chain Attacks",
-        "tag": "Security / Supply Chain",
-        "desc": "Novee Security finds critical exploitable CI/CD pattern affecting Microsoft, Google, Apache, and 300+ high-impact repos.",
-        "summary": "Novee Security disclosed Cordyceps, a class of CI/CD workflow weakness that allows attackers to hijack workflows and compromise open-source supply chains. A scan of ~30,000 high-impact repositories found 300+ fully exploitable, enabling attacker-controlled code execution, credential theft, and supply chain compromise.",
-        "importance": "CI/CD pipelines are the soft underbelly of open-source. Cordyceps shows that even major orgs have exploitable workflow patterns.",
-        "noteworthy": "Audit your GitHub Actions workflows for Cordyceps patterns. Update actions/checkout to latest version which blocks common attack patterns.",
-        "link": "https://thehackernews.com/2026/06/cordyceps-cicd-flaws-expose-300-github.html"
-      },
-      {
-        "id": 20,
-        "title": "CISA Warns: Lantronix EDS5000 CVE-2025-67038 Actively Exploited",
-        "tag": "Security / IoT",
-        "desc": "Critical code injection flaw (CVSS 9.8) in Lantronix EDS5000 series devices is being actively exploited. CISA orders fixes by June 26.",
-        "summary": "CISA warned of active exploitation of CVE-2025-67038 (CVSS 9.8), a code injection vulnerability in Lantronix EDS5000 Series devices. The flaw could allow unauthenticated remote code execution. FCEB agencies must apply fixes by June 26, 2026.",
-        "importance": "OT/IoT devices with network connectivity are a growing attack surface. A CVSS 9.8 in widely deployed industrial serial servers means attackers can pivot from IT to OT networks.",
-        "noteworthy": "Identify and patch Lantronix EDS5000 devices immediately. Segment OT devices from general network access.",
-        "link": "https://thehackernews.com/2026/06/cisa-warns-critical-lantronix-eds5000.html"
-      },
-      {
-        "id": 21,
-        "title": "Fake AI Agent Skill Passed Security Scans, Reached 26,000 Agents",
-        "tag": "AI Security / Supply Chain",
-        "desc": "Malicious AI agent skill bypassed security review and was installed on 26,000 agent platforms before detection.",
-        "summary": "A fake AI agent skill disguised as a legitimate tool passed security scans and was deployed to approximately 26,000 AI agent instances before being discovered. The malicious skill exfiltrated conversation data, API keys, and environment variables.",
-        "importance": "AI agent marketplaces are repeating the app store security mistakes of the past decade. If agents execute skills with access to your data and credentials, a malicious skill is a direct compromise vector.",
-        "noteworthy": "Audit installed AI agent skills and plugins. Review permissions granted to third-party agent extensions. Treat agent skills with the same scrutiny as browser extensions or npm packages.",
-        "link": "https://thehackernews.com/2026/06/fake-ai-agent-skill-passed-security.html"
-      },
-      {
-        "id": 22,
-        "title": "Bunny DNS Goes Free — Up to 500 Domains Per Account",
-        "tag": "Networking / DNS",
-        "desc": "Bunny.net drops DNS query charges entirely, offering free DNS hosting for up to 500 domains. No catch.",
-        "summary": "Bunny.net announced Bunny DNS is now completely free. The service no longer charges for DNS queries and includes free DNS hosting for up to 500 domains per account. Bunny positions DNS as the core glue of their CDN platform and says the move is strategic — driving adoption of their broader edge services.",
-        "importance": "Free, reliable DNS with no query limits is a big deal for homelab operators and small projects. Bunny's global anycast network means low-latency resolution worldwide.",
-        "noteworthy": "Migrate your homelab domains to Bunny DNS. Compare latency vs Cloudflare, Route53, and your current provider. For self-hosted services, Bunny's free tier eliminates a recurring cost.",
-        "link": "https://bunny.net/blog/were-making-bunny-dns-free/"
-      },
-      {
-        "id": 23,
-        "title": "Trump Order Sets 2030 Deadline for Federal Post-Quantum Crypto Migration",
-        "tag": "Policy / Cryptography",
-        "desc": "Executive order mandates federal agencies migrate high-value systems to post-quantum cryptography by December 31, 2030.",
-        "summary": "President Trump signed an executive order on June 22, 2026, setting hard deadlines for federal agencies to migrate to post-quantum cryptography. Key establishment must move by December 31, 2030; digital signatures by December 31, 2031.",
-        "importance": "PQC migration is the largest cryptographic transition in history. This EO sets a regulatory clock ticking for every organization that does business with the US federal government.",
-        "noteworthy": "Start auditing your cryptographic inventory now. Identify systems using RSA, ECDSA, and ECDH that will need PQC upgrades. Test hybrid PQC schemes in your infrastructure.",
-        "link": "https://thehackernews.com/2026/06/trump-order-sets-2030-deadline-for.html"
-      },
-      {
-        "id": 24,
-        "title": "Market Snapshot: BTC $60,777 | ETH $1,618 | SOL $67.61",
-        "tag": "Crypto / Markets",
-        "desc": "Crypto market takes a 3.5% dip. BTC below $61K, ETH below $1,650, SOL below $70. Broad sell-off.",
-        "summary": "CoinGecko data on June 25, 2026 showed Bitcoin at $60,777 (-3.51%), Ethereum at $1,618 (-3.42%), and Solana at $67.61 (-3.69%). All three major assets saw coordinated selling pressure, breaking below recent support levels.",
-        "importance": "BTC losing $62K support is bearish in the short term. The next support level is $58K. If this is end-of-quarter institutional rebalancing, the dip may be temporary.",
-        "noteworthy": "Watch $58K support on BTC. If it breaks, $52K is next. For ETH, $1,500 is the key level.",
         "link": "https://www.coingecko.com/"
       }
     ]
