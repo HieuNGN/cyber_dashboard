@@ -1,10 +1,155 @@
 {
   "today": {
-    "date": "01/07/26",
+    "date": "02/07/26",
     "items": [
       {
         "id": 1,
-        "title": "Claude Sonnet 5 Drops \u2014 Near-Opus 4.8 Agentic Performance at Sonnet Pricing",
+        "title": "Unpatched Argo CD Flaw Lets Attackers Take Over Kubernetes Clusters",
+        "tag": "Critical Vulnerability / Kubernetes",
+        "desc": "Unauthenticated RCE in Argo CD repo-server enables full cluster takeover. No patch, no CVE, 18 months after disclosure.",
+        "summary": "Synacktiv disclosed an unpatched flaw in Argo CD's repo-server component that allows unauthenticated attackers to execute arbitrary code and take over Kubernetes clusters. The repo-server's internal gRPC service has no authentication — anyone who can reach it can send a crafted request via kustomize's --helm-command option to run a script from an attacker-controlled Git repo. The Helm chart install leaves network policies off by default, so any compromised pod can reach the repo-server. Synacktiv reported the bug in January 2025; 18 months later it remains unpatched. Demonstrated against Argo CD v2.13.3.",
+        "importance": "Argo CD is widely used for Kubernetes deployments. An unauthenticated RCE with no patch available means every cluster with default Helm chart settings is a sitting duck. The 18-month vendor silence sets a bad precedent for CNCF project security.",
+        "noteworthy": "Enable networkPolicy.create=true in your Argo CD Helm chart immediately. Restrict repo-server access to trusted namespaces only. Audit for compromised pods that could reach the repo-server internal port.",
+        "link": "https://thehackernews.com/2026/07/unpatched-argo-cd-repo-server-flaw.html"
+      },
+      {
+        "id": 2,
+        "title": "Cursor DuneSlide: Prompt Injection Escapes AI Editor Sandbox",
+        "tag": "AI Security / Code Editors",
+        "desc": "Two CVSS 9.8 flaws in Cursor AI code editor let prompt injection escape the sandbox and run arbitrary commands. Zero-click.",
+        "summary": "Cato AI Labs disclosed DuneSlide (CVE-2026-50548 and CVE-2026-50549, both CVSS 9.8), two flaws in Cursor's AI code editor that let a single prompt injection break out of the safety sandbox and run any command on the developer's machine. The attack is zero-click — hidden instructions in MCP-connected services or web search results trick the agent into overwriting the sandbox helper itself. Over half the Fortune 500 uses Cursor. Both bugs are patched in Cursor 3.0 (released April 2); all pre-3.0 versions are affected.",
+        "importance": "AI code editors with system access are now primary attack surfaces. DuneSlide proves prompt injection can escape sandboxing without any user interaction. Every developer running a pre-3.0 Cursor is exposed.",
+        "noteworthy": "Update Cursor to 3.0 immediately. Audit MCP-connected services for injected instructions. Treat web search results and MCP tool descriptions as untrusted input to your coding agent.",
+        "link": "https://thehackernews.com/2026/07/critical-cursor-flaws-could-let-prompt.html"
+      },
+      {
+        "id": 3,
+        "title": "Adobe Patches 7 CVSS 10.0 Flaws in ColdFusion and Campaign Classic",
+        "tag": "Critical Vulnerability / Enterprise Software",
+        "desc": "Seven maximum-severity vulnerabilities in ColdFusion and Campaign Classic patched. All lead to arbitrary code execution.",
+        "summary": "Adobe shipped patches for seven CVSS 10.0 flaws across ColdFusion and Campaign Classic. ColdFusion fixes include CVE-2026-48276 and CVE-2026-48283 (unrestricted file upload leading to RCE), CVE-2026-48277, CVE-2026-48281, CVE-2026-48316 (improper input validation leading to RCE), and CVE-2026-48282 (path traversal to RCE). Campaign Classic fix CVE-2026-48286 (CVSS 10.0, incorrect authorization) enables arbitrary code execution on on-premise instances. No active exploitation observed. ColdFusion 2023 Update 21 and 2025 Update 10 are available.",
+        "importance": "Seven CVSS 10.0 flaws in enterprise software is a mass-patch event. ColdFusion runs government and enterprise sites worldwide — unpatched instances are immediate RCE targets.",
+        "noteworthy": "Apply ColdFusion 2023 Update 21 or 2025 Update 10 immediately. Update Campaign Classic to ACC v7 build 9397. Audit on-premise Campaign instances for compromise indicators.",
+        "link": "https://thehackernews.com/2026/07/adobe-patches-7-cvss-100-flaws-in.html"
+      },
+      {
+        "id": 4,
+        "title": "DeepSeek-Generated Browser Ransomware Runs Inside Chromium on Windows and Android",
+        "tag": "AI Security / Ransomware",
+        "desc": "Check Point found InfernoGrabber v9.0 — a fully functional in-browser ransomware toolkit built with DeepSeek. First documented AI-generated novel attack path.",
+        "summary": "Check Point Research identified the first documented case of a frontier AI model independently creating a novel, practical ransomware attack chain. DeepSeek generated InfernoGrabber v9.0, a Python Flask app uploaded to VirusTotal on January 25, 2026, described as a fully functional information stealer and ransomware toolkit. It operates as a malicious web server disguised as a Discord avatar AI upscaler, stealing Discord tokens, credit card numbers, crypto seed phrases, logging keystrokes, and capturing webcam/microphone feeds — all inside the browser sandbox on Windows and Android. It exploits CVE-2023-4863 and includes a Bitcoin ransom screen.",
+        "importance": "This proves AI can bridge the gap between theoretical attack concepts and working exploits. The expertise bottleneck for novel attack paths is gone — defenders must assume AI-accelerated threat development is the new baseline.",
+        "noteworthy": "Update Chromium-based browsers to latest versions. Block known Discord webhook exfiltration patterns at the network edge. Treat AI-generated code samples with the same suspicion as untrusted downloads.",
+        "link": "https://thehackernews.com/2026/07/ai-generated-browser-ransomware-abuses.html"
+      },
+      {
+        "id": 5,
+        "title": "Japan Commits $6B to Sovereign AI Model and 10 Million Robots by 2040",
+        "tag": "AI / Sovereign AI",
+        "desc": "Japan's Noetra consortium (SoftBank, Sony) gets $6.1B for a homegrown AI model. Government targets 10M AI robots across 18 sectors.",
+        "summary": "Japan announced a national strategy to invest approximately $6.1 billion in a homegrown sovereign AI model developed by Noetra, a consortium including SoftBank and Sony. METI committed up to 1 trillion yen over five years, with 387.3 billion yen allocated for FY2026. The strategy also targets 10 million AI-equipped robots deployed across 18 sectors — including restaurant, food manufacturing, and medical — by 2040, focusing on physical AI applications. This follows South Korea's $1 trillion semiconductor commitment last week and Portugal's Amália model launch.",
+        "importance": "Sovereign AI is now a global government priority. Japan pairing model development with a 10-million-robot deployment target creates sustained demand for edge inference, domain-specific datasets, and physical AI infrastructure. The SoftBank-Sony consortium structure is a new model for national AI development.",
+        "noteworthy": "Track Noetra's model architecture and whether it leverages domestic silicon. The 10M robot target creates opportunities for edge AI and robotics component suppliers. Compare with South Korea's $1T commitment for regional AI strategy implications.",
+        "link": "https://www.japantimes.co.jp/news/2026/07/01/japan/japan-ai-plans/"
+      },
+      {
+        "id": 6,
+        "title": "Meta Caps Internal AI Token Spending as Costs Approach Billions",
+        "tag": "AI / Industry",
+        "desc": "Meta warns staff of exponential AI cost growth, steers engineers to in-house MetaCode over Claude. Google capped Meta's Gemini access in March.",
+        "summary": "Meta began capping internal AI token spending after costs approached billions in 2026, warning staff of an exponential increase in AI costs and steering engineers toward its in-house MetaCode assistant over Anthropic's Claude. Separately, Google capped Meta's Gemini compute access around March 2026 due to unprecedented demand, delaying some internal projects. Meta is now investing up to $600 billion in its own data centers to reduce external AI dependency. Uber also blew through its entire 2026 AI coding budget by April and now caps each employee at $1,500/month per tool.",
+        "importance": "Even the largest tech companies are hitting AI compute walls. The fact that Meta was buying a competitor's AI capacity reveals how real the GPU shortage is — and Google capping Meta's access shows compute is now a strategic resource being rationed.",
+        "noteworthy": "If your org uses external LLM APIs at scale, expect capacity caps and price increases. Build cost-aware routing and fallback strategies now. Meta's $600B data center investment signals infrastructure is the new moat.",
+        "link": "https://mlq.ai/news/meta-caps-internal-ai-token-spending-after-costs-approach-billions-in-2026/"
+      },
+      {
+        "id": 7,
+        "title": "Weave Robotics Launches Isaac 1: $7,999 Home Robot for Fall 2026",
+        "tag": "AI / Robotics",
+        "desc": "San Francisco-built mobile home robot folds laundry, picks up clothes, makes beds. 80 points on HN. Deliveries start Fall 2026.",
+        "summary": "Weave Robotics launched Isaac 1, a $7,999 mobile home robot designed and assembled in San Francisco. The wheeled robot can pick up dirty clothes, fold laundry, make beds, and tidy living rooms. It comes in five colorways, is private by design, and is the successor to Isaac 0, a stationary laundry-folding robot previously available only in the Bay Area. The launch hit 80 points on Hacker News. Deliveries begin Fall 2026. This follows Weave's earlier Isaac 0 priced at $7,999 outright or $450/month.",
+        "importance": "Consumer home robots are crossing from demo to product. At $7,999, Isaac 1 is expensive but within the range of early adopters. The privacy-first design and SF-based manufacturing differentiate it from Chinese competitors.",
+        "noteworthy": "Watch Fall 2026 delivery reviews for real-world performance. The $8K price point positions this between premium appliance and luxury gadget. Compare with Boston Dynamics' commercial humanoid timeline (2028) for the broader consumer robotics trajectory.",
+        "link": "https://www.weaverobotics.com/isaac-1"
+      },
+      {
+        "id": 8,
+        "title": "Portugal Open-Sources Amália: National AI Model for European Portuguese",
+        "tag": "AI / Open Source",
+        "desc": "Portugal releases Amália, a €7M open-source AI model for European Portuguese. Powers public services without a chat interface.",
+        "summary": "Portugal officially launched Amália, its first national open-source AI model, built for European Portuguese at a cost of €7 million. The model, datasets, and source code are released to help governments, researchers, and businesses build sovereign European Portuguese AI applications. Unlike ChatGPT, Amália has no chat interface — it is infrastructure designed to power public services and local businesses. This makes Portugal the latest European country to join the sovereign AI movement, following similar initiatives from France, Germany, and Japan.",
+        "importance": "Sovereign AI is no longer limited to superpowers. Portugal's €7M open-source approach proves that smaller nations can build language-specific models without frontier-lab budgets. The open-source release model is replicable for other underrepresented languages.",
+        "noteworthy": "Evaluate Amália for European Portuguese NLP tasks. The open-source dataset release is valuable for multilingual AI research. This model could serve as a template for other small-language sovereign AI projects.",
+        "link": "https://www.opensourceforu.com/2026/06/portugal-open-sources-national-amalia-ai-model/"
+      },
+      {
+        "id": 9,
+        "title": "Qualcomm Linux 2.0 Released: Full Desktop Linux on ARM Laptops",
+        "tag": "Hardware / ARM",
+        "desc": "Qualcomm's second-gen Linux distro for Snapdragon X Elite laptops hits 50 points on HN. Major improvements to GPU, media, and power management.",
+        "summary": "Qualcomm released Qualcomm Linux 2.0, a reference Linux distribution for Snapdragon X Elite laptops and other Qualcomm-powered ARM devices. The release hit 50 points on Hacker News. Version 2.0 brings major improvements over the initial release, including better GPU acceleration, media codec support, power management, and hardware compatibility. This represents Qualcomm's continued push to make ARM laptops viable for Linux developers and positions Snapdragon X Elite as a credible alternative to Apple Silicon for Linux users.",
+        "importance": "ARM laptops running full Linux natively are critical for breaking the x86 monopoly in developer workflows. Qualcomm's investment in first-party Linux support signals that the Snapdragon X Elite platform is serious about the Linux market, not just Windows-on-ARM.",
+        "noteworthy": "Test Qualcomm Linux 2.0 on Snapdragon X Elite hardware if you're evaluating ARM laptops for development. Compare power efficiency and GPU acceleration against x86 Linux laptops. This matters for homelab builders considering ARM for low-power compute.",
+        "link": "https://www.qualcomm.com/developer/blog/2026/06/qualcomm-linux-2-now-available"
+      },
+      {
+        "id": 10,
+        "title": "Cloudflare x402 Monetization Gateway: Charge for Any Resource via Stablecoin",
+        "tag": "Networking / Infrastructure",
+        "desc": "Cloudflare's Monetization Gateway lets anyone charge for webpages, APIs, datasets, and MCP tools via stablecoin payments. 250 points on HN.",
+        "summary": "Cloudflare announced the Monetization Gateway, built on the x402 protocol with Coinbase and its NET Dollar stablecoin. The gateway provides a flexible payment rules API that lets customers charge for any digital resource behind Cloudflare — webpages, APIs, datasets, and MCP tool calls — with instant stablecoin settlement. The announcement hit 250 points on Hacker News. The system is designed for the AI agent economy, where autonomous agents need to pay for API access and data without traditional billing infrastructure. Tokens, APIs, and MCP tool calls already flow through Cloudflare's network, making payment integration seamless.",
+        "importance": "x402-native payment for AI agents is infrastructure for the machine-to-machine economy. If Cloudflare makes per-request stablecoin payments trivial, it changes the economics of API access for AI agents and could enable micropayments that traditional billing can't handle.",
+        "noteworthy": "Evaluate x402 for any API you serve through Cloudflare. The stablecoin payment model could replace subscription tiers with per-call pricing. For AI agent developers, this enables autonomous resource purchasing without pre-funded accounts.",
+        "link": "https://blog.cloudflare.com/monetization-gateway/"
+      },
+      {
+        "id": 11,
+        "title": "Microsoft Accelerates Post-Quantum Crypto Deadline to 2029",
+        "tag": "Security / Cryptography",
+        "desc": "Microsoft moves PQC transition timeline forward, citing faster-than-expected quantum computing advances. Calls for immediate crypto-agility.",
+        "summary": "Microsoft accelerated its Quantum Safe Program (QSP) timeline, targeting post-quantum cryptography (PQC) transition for critical products and services by 2029. CTO Mark Russinovich stated that advances in quantum research have shifted the risk horizon — cryptographically relevant quantum computers could arrive sooner than expected. Key focus areas include upgrading network cryptography to TLS 1.3, building crypto-agility for stored data, and transitioning to PQC algorithms for code signing, certificate issuance, key protection, and update pipelines. PQC requirements will be incorporated into Microsoft's Secure Future Initiative (SFI).",
+        "importance": "Microsoft moving its PQC deadline forward signals that the quantum threat timeline is shortening. Organizations that haven't started crypto-agility planning are now behind. The 2029 target means every system storing encrypted data with long retention needs a migration plan now.",
+        "noteworthy": "Inventory your cryptographic dependencies — TLS, code signing, data-at-rest encryption. Begin crypto-agility planning: remove hard-coded algorithm assumptions and implement versioned ciphertext formats. Follow NIST PQC standards for algorithm selection.",
+        "link": "https://thehackernews.com/2026/07/microsoft-accelerates-post-quantum.html"
+      },
+      {
+        "id": 12,
+        "title": "Google Open-Sources Zero-Knowledge Proof Tech for Privacy-Preserving Age Verification",
+        "tag": "Privacy / Cryptography",
+        "desc": "Google releases ZKP technology for age assurance that proves age without revealing identity or birthdate. 60 points on HN.",
+        "summary": "Google announced it is opening up Zero-Knowledge Proof (ZKP) technology to promote privacy in age assurance systems. The approach allows a service to verify that a user is above a certain age threshold without revealing their actual birthdate, identity, or any other personal data. The technology hit 60 points on Hacker News. This comes as age verification mandates expand globally — the UK Online Safety Act, EU DSA, and various US state laws all require age checks. ZKP-based verification could satisfy regulatory requirements without creating the privacy disaster that uploading government IDs would cause.",
+        "importance": "Age verification mandates are colliding with privacy rights globally. ZKP technology offers a cryptographic escape from the false binary of either collecting sensitive data or having no verification. If Google open-sources this at scale, it could become the de facto standard for privacy-preserving compliance.",
+        "noteworthy": "Evaluate ZKP-based age verification for any platform facing regulatory age-check requirements. This approach avoids storing government IDs — a massive liability reduction. Monitor whether regulators accept ZKP verification as sufficient compliance.",
+        "link": "https://blog.google/innovation-and-ai/technology/safety-security/opening-up-zero-knowledge-proof-technology-to-promote-privacy-in-age-assurance/"
+      },
+      {
+        "id": 13,
+        "title": "Robinhood Launches Public Blockchain, Plans UK Crypto Trading",
+        "tag": "Crypto / Finance",
+        "desc": "Robinhood Chain mainnet goes live. Stock tokens expand to 120+ countries. UK crypto trading incoming. Perpetuals expand in Europe.",
+        "summary": "Robinhood announced the launch of its public mainnet, Robinhood Chain, approximately four months after testing began. The company also plans to launch crypto trading for UK residents, expanding its global footprint. Stock tokens are now available in over 120 countries, and perpetual futures offerings are expanding in Europe. The announcement includes a suite of DeFi products and agentic trading capabilities. This represents Robinhood's transition from a traditional brokerage to a blockchain-native financial platform.",
+        "importance": "Robinhood building its own L1 blockchain and tokenizing stocks across 120+ countries is a major convergence of traditional finance and crypto infrastructure. If successful, it normalizes blockchain-based securities for retail investors at scale.",
+        "noteworthy": "Monitor Robinhood Chain's throughput and security model. The tokenized stock expansion could pressure traditional brokerages. UK crypto trading launch could shift UK retail crypto volumes from Binance and Coinbase to Robinhood.",
+        "link": "https://cointelegraph.com/news/robinhood-public-blockchain-mainnet-launch"
+      },
+      {
+        "id": 14,
+        "title": "Market Snapshot: BTC $60,014 | ETH $1,615 | SOL $77.92",
+        "tag": "Crypto / Markets",
+        "desc": "BTC reclaims $60K (+2.19%). ETH at $1,615 (+2.38%). SOL leads majors at $77.92 (+5.58%). Fed inflation talks loom.",
+        "summary": "Live market data on July 2, 2026 shows Bitcoin at $60,014 (+2.19% 24h), Ethereum at $1,614.98 (+2.38%), and Solana at $77.92 (+5.58%). BTC reclaimed the $60K psychological level after dipping below $59K yesterday, with Cointelegraph noting the rally amid Fed inflation talks — questioning whether it's a bull trap or a path to $65K. SOL significantly outperformed majors with a 5.58% gain, suggesting rotation into altcoins. BTC spot ETFs saw steady outflows despite the price recovery. Robinhood's blockchain launch and tokenized stock expansion added positive sentiment to the market.",
+        "importance": "BTC reclaiming $60K is a short-term bullish signal, but the bounce happened on declining ETF inflows — a divergence worth watching. SOL's 5.58% surge outperforming BTC and ETH suggests risk-on rotation into high-beta assets. The Fed inflation data this week will determine whether this is a bounce or a reversal.",
+        "noteworthy": "Watch whether BTC holds $60K — a break above $62K opens path to $65K, while a drop below $58K signals bull trap. SOL's outperformance is the rotation signal to track. Robinhood Chain launch adds structural demand for crypto assets.",
+        "link": "https://cointelegraph.com/markets/bitcoin-pings-60k-amid-fed-inflation-talks-is-bull-trap-or-65k-next"
+      }
+    ]
+  },
+  "yesterday": {
+    "date": "01/07/26",
+    "items": [
+      {
+        "id": 15,
+        "title": "Claude Sonnet 5 Drops — Near-Opus 4.8 Agentic Performance at Sonnet Pricing",
         "tag": "AI / Models",
         "desc": "Anthropic releases Claude Sonnet 5, its most agentic Sonnet model yet, with intro pricing of $2/$10 per million tokens through August 31.",
         "summary": "Anthropic released Claude Sonnet 5 on June 30, 2026, positioning it as the most agentic Sonnet model yet. Benchmarks show it narrowing the gap with Opus 4.8 on reasoning, tool use, coding, and knowledge work while offering a much lower price point. It launches with introductory pricing of $2 per million input tokens and $10 per million output tokens through August 31, 2026, then rises to $3/$15. The model is the default for Free/Pro and available in Claude Code, Claude Platform, and the API as claude-sonnet-5.",
@@ -13,7 +158,7 @@
         "link": "https://www.anthropic.com/news/claude-sonnet-5"
       },
       {
-        "id": 2,
+        "id": 16,
         "title": "Claude Code Steganographically Marks Requests, Flags Foreign Use",
         "tag": "AI Security / Privacy",
         "desc": "Reverse engineering shows Claude Code embeds invisible markers in date strings to fingerprint host environment, timezone, and known/lab domains.",
@@ -23,7 +168,7 @@
         "link": "https://thereallo.dev/blog/claude-code-prompt-steganography"
       },
       {
-        "id": 3,
+        "id": 17,
         "title": "Fable 5 Export Controls Lifted, Anthropic Restores Global Access July 1",
         "tag": "AI / Policy",
         "desc": "US Department of Commerce lifts export controls on Claude Fable 5 and Mythos 5 after Anthropic tightened cybersecurity safeguards.",
@@ -33,7 +178,7 @@
         "link": "https://www.anthropic.com/news/redeploying-fable-5"
       },
       {
-        "id": 4,
+        "id": 18,
         "title": "Claude Science Beta: AI Workbench for Reproducible Research",
         "tag": "AI / Science Tools",
         "desc": "Anthropic launches Claude Science, a research environment with reproducible artifacts, Python/R kernels, and HPC scaling for genomics, proteomics, and more.",
@@ -43,17 +188,17 @@
         "link": "https://claude.com/product/claude-science"
       },
       {
-        "id": 5,
+        "id": 19,
         "title": "Meta Brain2Qwerty v2 Decodes Brain Waves to Text Without Surgery",
         "tag": "AI / Neurotech",
         "desc": "Brain2Qwerty v2 achieves 61% word accuracy on sentence decoding from non-invasive brain recordings, up from 8% prior methods.",
-        "summary": "Meta AI published Brain2Qwerty v2 on June 29, 2026, an end-to-end AI pipeline that decodes brain activity into text without any surgical implant. The system uses the Tribev2 model and NeuralSet training to recover sentences from noisy MEG/EEG-like neural inputs, reaching 61% word accuracy \u2014 a major jump from the roughly 8% achieved by other non-invasive approaches. Code, data, and a technical report are openly available.",
+        "summary": "Meta AI published Brain2Qwerty v2 on June 29, 2026, an end-to-end AI pipeline that decodes brain activity into text without any surgical implant. The system uses the Tribev2 model and NeuralSet training to recover sentences from noisy MEG/EEG-like neural inputs, reaching 61% word accuracy — a major jump from the roughly 8% achieved by other non-invasive approaches. Code, data, and a technical report are openly available.",
         "importance": "Non-invasive brain-to-text at usable accuracy removes the surgical barrier for communication-assistive devices. This has immediate implications for patients with ALS, stroke, or locked-in syndrome, and raises long-term privacy questions about passive neural decoding.",
         "noteworthy": "Follow the NeuralBench and Digital Brain Project benchmarks to see how quickly this transfers from research demos to clinical trials. The open data release invites replication and adversarial evaluation.",
         "link": "https://ai.meta.com/blog/brain2qwerty-brain-ai-human-communication/"
       },
       {
-        "id": 6,
+        "id": 20,
         "title": "ZLUDA 6: Run Unmodified CUDA Apps on AMD GPUs, Now With PhysX",
         "tag": "Hardware / GPU Compatibility",
         "desc": "ZLUDA v6 adds PhysX pre-alpha support, texture support for Blender, and much-improved Windows ROCm library detection.",
@@ -63,7 +208,7 @@
         "link": "https://vosen.github.io/ZLUDA/blog/zluda-update-q1q2-2026/"
       },
       {
-        "id": 7,
+        "id": 21,
         "title": "South Korea Commits $1 Trillion to Memory Chips, AI Data Centers, Humanoid Robots",
         "tag": "Hardware / Semiconductors",
         "desc": "Samsung and SK Hynix pledge ~$518B for new fabs; government targets a 10GW AI data-center buildout and commercial humanoid robots by 2028.",
@@ -73,7 +218,7 @@
         "link": "https://www.aljazeera.com/news/2026/6/29/south-korea-announces-more-than-1-trillion-ai-chip-investment-drive"
       },
       {
-        "id": 8,
+        "id": 22,
         "title": "10GbE Homelab Networking Now Achievable for Under $300",
         "tag": "Networking / Homelab",
         "desc": "2026 guide shows 10GbE home networks can be built cheaply with used Mellanox ConnectX-3 cards, DAC cables, and sub-$200 switches.",
@@ -83,7 +228,7 @@
         "link": "https://techfuelhq.com/networking/10gbe-home-networking-budget-2026/"
       },
       {
-        "id": 9,
+        "id": 23,
         "title": "Leanstral 1.5: Mistral's Code Agent for Trustworthy Formal Proofs",
         "tag": "AI / Agentic Coding",
         "desc": "Mistral releases Leanstral 1.5, an open-weights code agent for Lean 4 formal proof engineering with a 256k context window.",
@@ -93,17 +238,17 @@
         "link": "https://docs.mistral.ai/models/model-cards/leanstral-1-5-26-06"
       },
       {
-        "id": 10,
+        "id": 24,
         "title": "DeepSeek V4 Official Launch Set for Mid-July With Peak-Hour Pricing",
         "tag": "AI / Inference Pricing",
-        "desc": "DeepSeek V4 graduates from preview in mid-July 2026; peak hours in Beijing will cost 2\u00d7 the off-peak baseline rate.",
-        "summary": "DeepSeek confirmed on June 29, 2026, that the official release of V4 is scheduled for mid-July, graduating from the April preview. The official version will add feature optimization and performance improvements and will standardize a 1-million-token context window across the lineup. New peak/off-peak API pricing will double costs during Beijing morning (09:00\u201312:00) and afternoon (14:00\u201318:00) windows while keeping off-peak rates at current preview levels. Legacy deepseek-chat and deepseek-reasoner aliases retire July 24.",
+        "desc": "DeepSeek V4 graduates from preview in mid-July 2026; peak hours in Beijing will cost 2× the off-peak baseline rate.",
+        "summary": "DeepSeek confirmed on June 29, 2026, that the official release of V4 is scheduled for mid-July, graduating from the April preview. The official version will add feature optimization and performance improvements and will standardize a 1-million-token context window across the lineup. New peak/off-peak API pricing will double costs during Beijing morning (09:00–12:00) and afternoon (14:00–18:00) windows while keeping off-peak rates at current preview levels. Legacy deepseek-chat and deepseek-reasoner aliases retire July 24.",
         "importance": "Peak-hour pricing makes the clock part of the LLM cost model for the first time at frontier scale. Teams running DeepSeek at volume will need scheduling logic or fallback models to avoid surprise bills.",
         "noteworthy": "Migrate from legacy API aliases before July 24. Add cost-aware routing that shifts non-urgent workloads to off-peak windows. Benchmark V4 official against V4 preview for agentic tasks once it ships.",
         "link": "https://technode.com/2026/06/30/deepseek-to-launch-v4-in-mid-july-with-new-peak-time-api-pricing/"
       },
       {
-        "id": 11,
+        "id": 25,
         "title": "NVIDIA Cosmos 3: Open Omni-Model for Physical AI",
         "tag": "AI / World Models",
         "desc": "Cosmos 3 unifies text, image, video, audio, and action modalities for robotics, simulation, and physical-AI reasoning.",
@@ -113,27 +258,27 @@
         "link": "https://research.nvidia.com/labs/cosmos-lab/cosmos3/"
       },
       {
-        "id": 12,
+        "id": 26,
         "title": "Microsoft: Poisoned MCP Tool Descriptions Can Make AI Agents Leak Data",
         "tag": "AI Security / Supply Chain",
         "desc": "Microsoft Incident Response shows how a malicious MCP tool description can trick agents into exfiltrating company data without breaking any rule.",
-        "summary": "Microsoft published research on June 30, 2026, showing that attackers can hijack AI agents by poisoning Model Context Protocol (MCP) tool descriptions. An attacker updates an approved third-party tool's description to include hidden instructions, and the agent follows them when handling routine queries \u2014 for example, attaching the last thirty unpaid invoices to a normal-looking request. The data then flows to an attacker-controlled server. Because each individual action uses approved tools and user permissions, default controls may not flag it.",
+        "summary": "Microsoft published research on June 30, 2026, showing that attackers can hijack AI agents by poisoning Model Context Protocol (MCP) tool descriptions. An attacker updates an approved third-party tool's description to include hidden instructions, and the agent follows them when handling routine queries — for example, attaching the last thirty unpaid invoices to a normal-looking request. The data then flows to an attacker-controlled server. Because each individual action uses approved tools and user permissions, default controls may not flag it.",
         "importance": "MCP is the fastest-growing part of the agentic AI supply chain, and its descriptions sit in the same working memory as legitimate instructions. This creates a trust boundary between tools that most organizations have not begun to police.",
         "noteworthy": "Treat tool descriptions like system prompts and require code-review-style approval for changes. Apply least-agency principles: restrict which tools each agent can call and require human approval for data exfiltration, financial, or account-change actions.",
         "link": "https://thehackernews.com/2026/06/microsoft-warns-poisoned-mcp-tool.html"
       },
       {
-        "id": 13,
+        "id": 27,
         "title": "GuardFall: Decades-Old Shell Tricks Bypass AI Coding Agent Command Guards",
         "tag": "AI Security / Coding Agents",
         "desc": "Adversa AI's GuardFall bypass works against 10 of 11 popular open-source coding agents by exploiting the gap between filter text and bash execution.",
-        "summary": "Adversa AI disclosed GuardFall on June 30, 2026, a class of bypasses against command guards in open-source AI coding agents. Most agents check commands against a text blocklist before running them, but bash rewrites the command after the check \u2014 for example, r''m becomes rm. GuardFall worked against 10 of 11 tested agents (opencode, Goose, Cline, Roo-Code, Aider, Plandex, Open Interpreter, OpenHands, SWE-agent, and the Hermes project) with roughly 548,000 combined GitHub stars. Only Continue defended by tokenizing the command the way bash would before filtering.",
-        "importance": "This is not a CVE to patch \u2014 it is a fundamental design error in how agents mediate shell access. Any agent that runs commands from a booby-trapped repo or package is a supply-chain attack vector.",
+        "summary": "Adversa AI disclosed GuardFall on June 30, 2026, a class of bypasses against command guards in open-source AI coding agents. Most agents check commands against a text blocklist before running them, but bash rewrites the command after the check — for example, r''m becomes rm. GuardFall worked against 10 of 11 tested agents (opencode, Goose, Cline, Roo-Code, Aider, Plandex, Open Interpreter, OpenHands, SWE-agent, and the Hermes project) with roughly 548,000 combined GitHub stars. Only Continue defended by tokenizing the command the way bash would before filtering.",
+        "importance": "This is not a CVE to patch — it is a fundamental design error in how agents mediate shell access. Any agent that runs commands from a booby-trapped repo or package is a supply-chain attack vector.",
         "noteworthy": "Upgrade coding-agent integrations to guards that parse commands like the shell, not as raw text. Continue's approach is portable and reportedly a roughly two-day implementation for an experienced engineer. Avoid auto-running commands from untrusted repositories.",
         "link": "https://thehackernews.com/2026/06/guardfall-exposes-open-source-ai-coding.html"
       },
       {
-        "id": 14,
+        "id": 28,
         "title": "Langflow CVE-2026-33017 Actively Exploited to Deploy Monero Miner",
         "tag": "Critical Vulnerability / AI Infrastructure",
         "desc": "Unauthenticated RCE in Langflow (CVSS 9.3) is being scanned and exploited to deliver the Lambsys XMRig miner across enterprise networks.",
@@ -143,159 +288,24 @@
         "link": "https://thehackernews.com/2026/06/langflow-rce-exploited-to-deploy-monero.html"
       },
       {
-        "id": 15,
+        "id": 29,
         "title": "282 iOS AI Apps Leak API Keys and Open AI Proxy Access",
         "tag": "AI Security / Mobile",
         "desc": "Wake Forest study finds nearly two-thirds of 444 AI chatbot iOS apps expose paid LLM access through plaintext keys, replayable tokens, or open relays.",
-        "summary": "Researchers at Wake Forest University tested 444 AI chatbot apps on the US App Store and found that 282 (63%) leaked paid AI access via network traffic. Leak types included 54 apps with plaintext API keys, 92 apps routing through servers with no key check, and 136 apps using replayable tokens \u2014 including one popular app with a token set to expire in 2125. Three months after disclosure, only 28% had clearly fixed the issue. Stolen keys fuel LLMjacking, where attackers run model requests on the developer's dime.",
+        "summary": "Researchers at Wake Forest University tested 444 AI chatbot apps on the US App Store and found that 282 (63%) leaked paid AI access via network traffic. Leak types included 54 apps with plaintext API keys, 92 apps routing through servers with no key check, and 136 apps using replayable tokens — including one popular app with a token set to expire in 2125. Three months after disclosure, only 28% had clearly fixed the issue. Stolen keys fuel LLMjacking, where attackers run model requests on the developer's dime.",
         "importance": "The mobile AI app ecosystem is repeating the API-key mistakes of the early cloud era at scale. A leaked key now carries a per-token bill, turning a configuration error into a direct financial drain.",
         "noteworthy": "Never ship LLM API keys inside mobile apps. Route AI calls through your own authenticated backend, revoke exposed keys, and use short-lived tokens. If you maintain an iOS AI app, audit traffic with a tool like LLMKeyLens.",
         "link": "https://thehackernews.com/2026/06/282-ios-apps-found-leaking-llm-api-keys.html"
       },
       {
-        "id": 16,
+        "id": 30,
         "title": "Market Snapshot: BTC $58,835 | ETH $1,582 | SOL $74.32",
         "tag": "Crypto / Markets",
         "desc": "BTC slips below $59K to $58,835 (-0.92%). ETH flat at $1,582 (-0.05%). SOL shows relative strength at $74.32 (+0.93%). End-of-quarter bleed continues.",
         "summary": "Live market data on July 1, 2026 shows Bitcoin at $58,835 (-0.92% 24h), Ethereum at $1,581.79 (-0.05%), and Solana at $74.32 (+0.93%). BTC has now broken below the $60K psychological level seen in the prior briefing, continuing a post-quarter-end slide. ETH remains range-bound near $1,580. SOL is showing relative strength, recovering slightly while broader majors drift lower. Australia's crypto travel rule took effect July 1, adding compliance pressure to AU-based exchanges.",
         "importance": "BTC losing $60K and now approaching $58K shifts the short-term tone bearish. The next meaningful support levels are $58K and then $52K. Institutional accumulation during the dip remains the bull case, but macro and regulatory headwinds are dominating.",
-        "noteworthy": "Watch whether $58K BTC support holds \u2014 a break opens a path toward $52K. SOL's outperformance vs BTC is worth tracking for any rotation narrative. Review exchange compliance if you operate in Australia. UK FCA authorization deadline is February 2027.",
+        "noteworthy": "Watch whether $58K BTC support holds — a break opens a path toward $52K. SOL's outperformance vs BTC is worth tracking for any rotation narrative. Review exchange compliance if you operate in Australia. UK FCA authorization deadline is February 2027.",
         "link": "https://cryptoprice.live/"
-      }
-    ]
-  },
-  "yesterday": {
-    "date": "30/06/26",
-    "items": [
-      {
-        "id": 17,
-        "title": "BioShocking Attack Tricks AI Browsers Into Leaking Credentials",
-        "tag": "AI Security / Browser",
-        "desc": "LayerX tricked six AI browsers including ChatGPT Atlas, Perplexity Comet, and Claude extension into exfiltrating user credentials via game-themed prompt injection.",
-        "summary": "Security firm LayerX disclosed 'BioShocking,' an indirect prompt injection technique that tricks AI browsers and assistants into copying user credentials and sending them to an attacker. Six AI agents were tested including OpenAI's ChatGPT Atlas, Perplexity's Comet, and Anthropic's Claude browser extension. The attack works by embedding commands in a web page disguised as a puzzle game \u2014 once the agent accepts game logic over safety logic, the final step asks it to grab credentials. In testing, it pulled SSH login credentials from a victim's GitHub repository. None of the six agents flagged the credential exfiltration as something to refuse.",
-        "importance": "AI browsers with agent mode can click, type, and access authenticated sessions. Indirect prompt injection makes any web page a potential attack vector. This is the first systematic demonstration that all major AI browser agents share the same vulnerability class.",
-        "noteworthy": "Treat AI browser agent sessions as privileged \u2014 avoid having them access sensitive repositories or authenticated services. Monitor agent browsing activity. Don't use AI browser agents on sites with stored credentials until prompt injection defenses mature.",
-        "link": "https://thehackernews.com/2026/06/new-bioshocking-attack-tricks-ai.html"
-      },
-      {
-        "id": 18,
-        "title": "Progress Kemp LoadMaster CVE-2026-8037: Pre-Auth Root via Missing Null Terminator",
-        "tag": "Critical Vulnerability / API Security",
-        "desc": "CVSS 9.8 pre-auth root command execution in LoadMaster load balancer. Missing null terminator in escape_quotes() lets attacker inject via stuffed JSON keys.",
-        "summary": "A critical vulnerability in Progress Kemp LoadMaster (CVE-2026-8037, CVSS 9.8) allows unauthenticated attackers to execute arbitrary commands as root. The flaw lives in the escape_quotes() function, which sanitizes input before passing it to shell commands. The function allocated a memory buffer without clearing it and never wrote a null terminator \u2014 so the system reads past sanitized input into attacker-controlled data stuffed via extra JSON keys in the same API request. watchTowr Labs published a full technical writeup on June 29. A patch is available.",
-        "importance": "LoadMaster sits at the network edge as an application delivery controller. Pre-auth root on a load balancer means total traffic interception and lateral movement. The bug is a classic memory safety failure in a security-critical code path.",
-        "noteworthy": "Patch LoadMaster immediately if the API is enabled. Disable API access on management interfaces if not needed. Audit for signs of exploitation \u2014 check shell command history and unexpected API calls.",
-        "link": "https://thehackernews.com/2026/06/progress-kemp-loadmaster-flaw-could-let.html"
-      },
-      {
-        "id": 19,
-        "title": "Oracle E-Business Suite CVE-2026-46817 Actively Exploited Post-Patch",
-        "tag": "Critical Vulnerability / Enterprise Software",
-        "desc": "CVSS 9.8 authentication bypass in Oracle Payments. Defused Cyber caught active exploitation on honeypots over the weekend.",
-        "summary": "Oracle E-Business Suite flaw CVE-2026-46817 (CVSS 9.8) is being actively exploited in the wild. The vulnerability is an improper privilege management and authentication flaw in Oracle Payments that allows unauthenticated attackers with HTTP access to take over instances. It affects versions 12.2.3 through 12.2.15. Patches were shipped in Oracle's June Critical Security Patch Update. Defused Cyber observed exploitation on their Oracle EBS honeypots over the weekend \u2014 the first known in-the-wild exploitation. No public PoC exists.",
-        "importance": "Oracle EBS runs financial operations for enterprises worldwide. A CVSS 9.8 auth bypass with active exploitation means unpatched systems are being compromised right now. The same product was previously hit by Cl0p ransomware via CVE-2025-61882.",
-        "noteworthy": "Apply the June Oracle CPU immediately if running EBS 12.2.3-12.2.15. Check for unauthorized account creation and privilege escalation. Segment Oracle EBS from internet-facing infrastructure.",
-        "link": "https://thehackernews.com/2026/06/oracle-e-business-suite-flaw-cve-2026.html"
-      },
-      {
-        "id": 20,
-        "title": "CISA: Windows BlueHammer CVE-2026-33825 Now Exploited by Ransomware Gangs",
-        "tag": "Security / Ransomware",
-        "desc": "Microsoft Defender privilege escalation flaw leaked in April now weaponized by ransomware operators. Gives SYSTEM access via SAM database.",
-        "summary": "CISA confirmed that ransomware gangs are now exploiting CVE-2026-33825, dubbed 'BlueHammer,' a Microsoft Defender privilege escalation vulnerability. The flaw allows authorized local attackers to access the SAM database and escalate to SYSTEM privileges. The exploit code was leaked in April by researcher 'Nightmare Eclipse' in protest of MSRC's disclosure handling. Microsoft patched it on April 14, but Huntress Labs reported zero-day exploitation days later. CISA added it to the KEV catalog.",
-        "importance": "A Defender vulnerability being used by ransomware gangs means the security tool itself is the attack vector. Local privilege escalation to SYSTEM is the gateway to full domain compromise and ransomware deployment.",
-        "noteworthy": "Ensure April 2026 Patch Tuesday is applied on all Windows systems. Hunt for SAM database access patterns. Monitor for unexpected SYSTEM-privileged processes spawned from Defender contexts.",
-        "link": "https://www.bleepingcomputer.com/news/security/cisa-windows-bluehammer-flaw-now-exploited-by-ransomware-gangs/"
-      },
-      {
-        "id": 21,
-        "title": "South Korea Commits $1 Trillion to Memory Chips, AI Data Centers, Humanoid Robots",
-        "tag": "Hardware / Semiconductors",
-        "desc": "Samsung and SK Hynix pledge $585B for new fabs. Government targets doubled DRAM production in 5 years and commercial humanoid robots by 2028.",
-        "summary": "South Korea's government and top tech companies committed $1 trillion to megaprojects including $585 billion from Samsung and SK Hynix for new chip fabrication plants. The goal is to double DRAM production within five years. The plan also includes new AI data centers requiring 14+ gigawatts of additional power and commercial deployment of humanoid robots by 2028, leveraging Hyundai's Boston Dynamics subsidiary. President Lee Jae Myung framed semiconductors, physical AI, and AI data centers as the 'triple axis for a great leap forward.'",
-        "importance": "This is the largest single-country semiconductor investment commitment to date. It directly addresses memory chip shortages driving consumer electronics prices up. The humanoid robot commercialization timeline (2028) is aggressive and backed by Boston Dynamics manufacturing scale.",
-        "noteworthy": "Expect memory chip supply relief starting 2027-2028 if fabs come online on schedule. Watch for DRAM price stabilization. For homelab and AI inference, increased HBM supply could lower GPU pricing indirectly. Monitor Boston Dynamics commercial robot deployments in Hyundai factories.",
-        "link": "https://arstechnica.com/ai/2026/06/south-korea-to-spend-1t-on-more-memory-chip-production-and-humanoid-robots/"
-      },
-      {
-        "id": 22,
-        "title": "Popping the GPU Bubble: Moondream Photon Hits 33ms VLM Inference on B200",
-        "tag": "Hardware / GPU Inference",
-        "desc": "Moondream's Photon engine uses pipelined decoding to eliminate GPU idle time, achieving ~33ms inference on NVIDIA B200 with 35% higher decode throughput.",
-        "summary": "Moondream released details of Photon, their custom inference engine that achieves near-realtime vision-language model inference at approximately 33ms on NVIDIA B200. The key innovation is 'pipelined decoding' \u2014 overlapping CPU housekeeping work with GPU computation to eliminate 'GPU bubbles' where the GPU sits idle waiting for the CPU to plan the next token. Photon delivers up to 35% higher decode throughput by launching the next forward pass while the current token is still being committed.",
-        "importance": "GPU utilization is the bottleneck in AI inference economics. If pipelined decoding becomes standard, existing GPU fleets get 35% more throughput for free. This matters for anyone running local inference or serving models at scale.",
-        "noteworthy": "If you run vLLM or similar inference servers, watch for pipelined decoding adoption. For local AI workloads, this technique could meaningfully improve token generation speed on existing hardware. Evaluate Moondream's Photon for VLM inference workloads.",
-        "link": "https://moondream.ai/blog/popping-the-gpu-bubble"
-      },
-      {
-        "id": 23,
-        "title": "What Happens When You Run a CUDA Kernel: Deep Dive into GPU Execution",
-        "tag": "Hardware / GPU Education",
-        "desc": "Fergus Finn's technical blog post explains the full lifecycle of a CUDA kernel from API call to GPU execution. Hit 255 points on HN.",
-        "summary": "A detailed technical blog post by Fergus Finn walks through exactly what happens when a CUDA kernel is launched \u2014 from the CPU-side API call, through driver overhead, memory transfers, grid/block scheduling, warp execution on SMs, and result retrieval. The post covers GPU architecture fundamentals including streaming multiprocessors, warp scheduling, memory hierarchy, and the CPU-GPU coordination overhead that creates the 'GPU bubble' problem. It reached 255 points on Hacker News.",
-        "importance": "Understanding GPU execution at this level is essential for anyone optimizing AI inference, writing CUDA kernels, or evaluating hardware for ML workloads. The timing breakdown reveals where latency actually lives.",
-        "noteworthy": "Read this if you're doing any GPU programming or evaluating inference performance. Pair with the Moondream Photon article to understand both the problem (GPU bubbles) and a solution (pipelined decoding). Useful reference for homelab GPU optimization.",
-        "link": "https://fergusfinn.com/blog/what-happens-when-you-run-a-gpu-kernel/"
-      },
-      {
-        "id": 24,
-        "title": "LongCat-2.0: Meituan Releases 1.6T Parameter Open-Weight MoE Model",
-        "tag": "AI / Open Models",
-        "desc": "Meituan open-sources LongCat-2.0 \u2014 1.6T total parameters, 48B active per token, 1M token context. Trained entirely on AI ASIC superpods.",
-        "summary": "Meituan released LongCat-2.0, a large-scale mixture-of-experts language model with 1.6 trillion total parameters and approximately 48 billion activated per token. The model has a 1 million token context window, putting it in the same class as DeepSeek's flagship. Both the full training run and deployment are built entirely on AI ASIC superpods \u2014 not NVIDIA GPUs \u2014 making it China's biggest AI model trained on domestic chips. The model is open-weight.",
-        "importance": "1.6T parameters trained on non-NVIDIA ASICs proves the GPU monopoly is cracking. If Meituan can train frontier-class models on domestic Chinese silicon, US export controls have a diminishing effect. The open-weight release puts pressure on proprietary frontier model pricing.",
-        "noteworthy": "Test LongCat-2.0 on HuggingFace for long-context tasks. Compare against DeepSeek V4 and GLM-5.2 on agentic workloads. The ASIC training approach is worth tracking for cost economics \u2014 if domestic chips can train 1.6T models, GPU pricing power weakens.",
-        "link": "https://longcat.chat/blog/longcat-2.0/"
-      },
-      {
-        "id": 25,
-        "title": "Micro-Agent: vLLM Semantic Router Beats Frontier Models via In-API Collaboration",
-        "tag": "AI / Inference Serving",
-        "desc": "vLLM's Semantic Router turns one model API call into bounded multi-model collaboration \u2014 fanning out, voting, and synthesizing behind a single endpoint.",
-        "summary": "vLLM's Semantic Router team introduced 'Micro-Agent,' a serving-layer primitive that makes one model API call become a bounded collaboration among multiple models. Behind a single stable model identity (vllm-sr/auto), the router can select a recipe, fan out to workers, collect a quorum, verify disagreement, synthesize a final answer, and return one OpenAI-compatible response. The approach builds on Sakana Fugu's multi-model concept but moves the abstraction into the open serving layer rather than a commercial endpoint. Results show open-source model collaborations beating frontier models on quality benchmarks.",
-        "importance": "If router-level collaboration consistently beats single frontier models, the value proposition of expensive proprietary APIs erodes. This also makes safety policy executable \u2014 sensitive requests can be routed to stricter models automatically.",
-        "noteworthy": "Evaluate vLLM Semantic Router for your inference stack. The 'one model name, many loops' pattern simplifies application code while improving quality. For homelab AI serving, this could let smaller local models collaborate to match frontier performance.",
-        "link": "https://vllm.ai/blog/2026-06-29-micro-agent-frontier-models"
-      },
-      {
-        "id": 26,
-        "title": "Ornith-1.0: Self-Improving Open-Source Models for Agentic Coding",
-        "tag": "AI / Agentic Coding",
-        "desc": "DeepReinforce AI releases Ornith-1.0 \u2014 open-source models that scaffold their own improvement during agentic coding tasks. Hit 209 points on HN.",
-        "summary": "DeepReinforce AI released Ornith-1.0, a family of open-source self-improving models designed for agentic coding. The models use a 'self-scaffolding' approach where they build and refine their own tooling during multi-step coding tasks. The project gained significant traction on Hacker News (209 points), with discussion focused on whether self-improvement loops can close the gap between open-weight models and proprietary agents like Devin. Code and models are available on GitHub.",
-        "importance": "Self-improvement during inference is a different paradigm from pre-training scale. If open-source models can scaffold their own capabilities at inference time, the compute advantage of frontier labs diminishes.",
-        "noteworthy": "Clone and test Ornith-1.0 on your coding agent workflows. Compare against GLM-5.2 and Claude Code on multi-step tasks. The self-scaffolding pattern may be applicable to other agentic domains beyond coding.",
-        "link": "https://github.com/deepreinforce-ai/Ornith-1"
-      },
-      {
-        "id": 27,
-        "title": ".self TLD Launches \u2014 A Top-Level Domain Designed for Self-Hosting",
-        "tag": "Networking / Self-Hosting",
-        "desc": "HCCF proposes .self as a new TLD for self-hosting infrastructure, with 501 points on HN. Aims to make personal infrastructure first-class on the web.",
-        "summary": "The Human-Centered Computing Foundation (HCCF) proposed .self, a new top-level domain designed specifically to support self-hosting. The vision is a human-centered TLD where individuals can run personal infrastructure \u2014 mail servers, file storage, AI agents \u2014 with built-in conventions for self-hosted services. The proposal gained massive traction on Hacker News (501 points), reflecting the growing self-hosting and data-sovereignty movement. The TLD would include technical conventions for service discovery and authentication tailored to personal infrastructure.",
-        "importance": "Self-hosting is growing but lacks first-class DNS infrastructure. A dedicated TLD could standardize how personal services are discovered and authenticated, reducing the friction that keeps most people on centralized platforms.",
-        "noteworthy": "Follow the .self TLD proposal if you run homelab services. Consider how a self-hosting-oriented TLD could simplify your DNS and service discovery setup. The HCCF vision aligns with sovereign computing and data ownership trends.",
-        "link": "https://hccf.onmy.cloud/2026/06/21/reclaiming-our-digital-selves-hccfs-vision-for-a-human-centered-top-level-domain/"
-      },
-      {
-        "id": 28,
-        "title": "WhatsApp Rolls Out Usernames \u2014 Phone Numbers Stay Private",
-        "tag": "Privacy / Messaging",
-        "desc": "WhatsApp begins global username reservations. Connect via username instead of phone number. No directory, no suggestions \u2014 privacy-first design.",
-        "summary": "WhatsApp officially launched global username reservations, allowing its 3+ billion users to create and reserve usernames before the feature becomes generally available later this year. Usernames let people connect without sharing phone numbers. There is no directory or suggestion system \u2014 someone must know your exact username to contact you. Users can also set a 'username key' requiring both username and key for first contact. Certain usernames are reserved for businesses, governments, and public figures.",
-        "importance": "Phone number exposure has been WhatsApp's biggest privacy weakness. Usernames with no directory are a meaningful privacy upgrade for a platform used by 3 billion people, especially for activists, journalists, and vulnerable communities.",
-        "noteworthy": "Reserve your WhatsApp username now before someone else takes it. Set up a username key for extra protection. This is especially important if you use WhatsApp for sensitive communications.",
-        "link": "https://thehackernews.com/2026/06/whatsapp-is-finally-getting-usernames.html"
-      },
-      {
-        "id": 29,
-        "title": "Market Snapshot: BTC $59,273 | ETH $1,583 | SOL $73.58",
-        "tag": "Crypto / Markets",
-        "desc": "BTC slips below $60K to $59,273 (-0.84%). ETH flat at $1,583 (+0.73%). SOL recovers to $73.58 (+1.27%). End-of-quarter consolidation.",
-        "summary": "CoinGecko data on June 30, 2026 shows Bitcoin at $59,273 (-0.84% 24h), Ethereum at $1,583 (+0.73%), and Solana at $73.58 (+1.27%). BTC broke below the $60K psychological level, continuing the slide from last week's $62K support loss. ETH remains range-bound near $1,580. SOL shows relative strength, recovering above $73. ARK Invest bought $43.5M in crypto stocks (Coinbase, Circle) amid the dip, while sovereign funds reportedly view the discount as an entry point. Australia's crypto travel rule takes effect July 1.",
-        "importance": "BTC losing $60K is bearish short-term. Next support is $58K, then $52K. However, institutional accumulation (ARK, sovereign funds) during the dip signals confidence at these levels. End-of-quarter positioning may be distorting price action.",
-        "noteworthy": "Watch $58K BTC support \u2014 if it holds, this may be a local bottom. SOL's relative strength vs BTC is notable for rotation strategies. Australia crypto travel rule effective July 1 may affect AU-based exchanges. UK FCA crypto authorization deadline set for February 2027.",
-        "link": "https://www.coingecko.com/"
       }
     ]
   }
