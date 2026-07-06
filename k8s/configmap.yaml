@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dashboard-config
+  namespace: cybersec-dashboard
+data:
+  HOST: "0.0.0.0"
+  PORT: "8080"
+  DAILY_UPDATE_TIME: "07:00"
+  TIMEZONE: "Asia/Bangkok"
+  DATABASE_PATH: "/app/data/dashboard.db"
+  OBSIDIAN_VAULT_PATH: "/app/data/obsidian"
+  FETCH_HACKERNEWS: "true"
+  FETCH_BLEEPINGCOMPUTER: "true"
+  FETCH_KREBS: "true"
+  FETCH_CISA_KEV: "true"
+  FETCH_TOMSHARDWARE: "true"
+  FETCH_SERVETHEHOME: "true"
+  FETCH_WCCFTECH: "true"
+  FETCH_THEREGISTER: "true"

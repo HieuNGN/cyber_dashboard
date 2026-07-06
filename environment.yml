@@ -6,4 +6,11 @@ dependencies:
   - pip
   - pip:
     - fastapi
-    - uvicorn
+    - uvicorn[standard]
+    - httpx
+    - feedparser
+    - aiosqlite
+    - apscheduler
+    - pydantic-settings
+    - python-dateutil
+    - jinja2

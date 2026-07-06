@@ -18,3 +18,8 @@ server.log
 credentials
 secrets
 docker-compose.override.yml
+data/dashboard.db
+*.db
+.playwright-mcp/
+dashboard_*.png
+

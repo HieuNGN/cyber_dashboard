@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>News Dashboard | Tactical Workspace</title>
+<style>
+:root {
+  --bg:#050505; --card-bg:#0f0f0f; --accent:#ff0000; --text:#d1d1d1; --text-dim:#666; --border:#222;
+  --glow:rgba(255,0,0,.15); --pane-bg:#0a0a0a; --green:#00ff41; --cyan:#00d4ff; --yellow:#ffd700;
+}
+body { background:var(--bg); color:var(--text); font-family:'JetBrains Mono','Fira Code','Courier New',monospace; margin:0; display:flex; height:100vh; overflow:hidden; line-height:1.5; }
+*, *::before, *::after { scrollbar-width:none; -ms-overflow-style:none; }
+::-webkit-scrollbar { display:none; width:0; height:0; }
+body::before { content:" "; display:block; position:fixed; top:0; left:0; bottom:0; right:0; background:linear-gradient(rgba(18,16,16,0) 50%,rgba(0,0,0,.1) 50%),linear-gradient(90deg,rgba(255,0,0,.02),rgba(0,255,0,.01),rgba(0,0,255,.02)); z-index:1000; background-size:100% 4px,3px 100%; pointer-events:none; }
+.workspace { flex:1; display:flex; flex-direction:column; padding:1.5rem 2rem; overflow-y:auto; position:relative; z-index:1; min-width:0; }
+h1 { font-size:2.2rem; font-weight:800; text-transform:uppercase; letter-spacing:-1px; margin-bottom:1.5rem; border-left:8px solid var(--accent); padding-left:1.5rem; display:flex; align-items:center; justify-content:space-between; color:#fff; flex-wrap:wrap; gap:1rem; }
+.status-indicator { font-size:.9rem; color:var(--accent); display:flex; align-items:center; gap:.5rem; text-transform:uppercase; }
+.blink { width:8px; height:8px; background:var(--accent); border-radius:50%; animation:blinker 1s linear infinite; }
+@keyframes blinker{50%{opacity:0}}
+.net-stats { font-size:.7rem; color:var(--text-dim); display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:.5rem; }
+.clock { color:var(--cyan); }
+/* Controls */
+.controls { display:flex; flex-wrap:wrap; gap:.8rem; margin-bottom:1.2rem; align-items:center; }
+.search-box { flex:1; min-width:240px; background:var(--card-bg); border:1px solid var(--border); color:var(--text); padding:.6rem 1rem; font-family:inherit; outline:none; }
+.search-box:focus { border-color:var(--accent); }
+.filter-select { background:var(--card-bg); border:1px solid var(--border); color:var(--text); padding:.6rem 1rem; font-family:inherit; }
+.refresh-btn { background:var(--accent); color:#000; border:none; padding:.6rem 1.2rem; font-weight:700; cursor:pointer; font-family:inherit; text-transform:uppercase; }
+.refresh-btn:hover { background:#cc0000; }
+.refresh-btn:disabled { opacity:.5; cursor:not-allowed; }
+/* Date tabs */
+.date-tabs { display:flex; gap:.5rem; margin-bottom:1.5rem; border-bottom:1px solid var(--border); flex-wrap:wrap; }
+.date-tab { background:transparent; border:none; color:var(--text-dim); font-family:inherit; font-size:.85rem; padding:.6rem 1.2rem; cursor:pointer; text-transform:uppercase; letter-spacing:1px; border-bottom:2px solid transparent; transition:.2s; }
+.date-tab:hover { color:#fff; }
+.date-tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+/* Grid */
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.2rem; }
+.card { background:var(--card-bg); border:1px solid var(--border); border-radius:4px; cursor:pointer; transition:all .3s cubic-bezier(.4,0,.2,1); display:flex; flex-direction:column; position:relative; }
+.card:hover { border-color:var(--accent); box-shadow:0 0 20px var(--glow); transform:translateY(-4px); }
+.card.read { opacity:.65; }
+.card-header { padding:1rem; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:1rem; background:rgba(255,0,0,.03); }
+.icon-box { width:30px; height:30px; display:flex; align-items:center; justify-content:center; background:#1a1a1a; border:1px solid var(--border); color:var(--accent); font-size:.8rem; font-weight:700; }
+.card-content { padding:1.2rem; }
+.tag { font-size:.65rem; font-weight:700; text-transform:uppercase; padding:.2rem .5rem; border:1px solid var(--accent); color:var(--accent); margin-bottom:.8rem; display:inline-block; }
+.title { font-size:1.15rem; font-weight:700; margin:0 0 .4rem 0; color:#fff; }
+.description { font-size:.9rem; color:var(--text-dim); }
+.card-actions { padding:.8rem 1.2rem; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+.bookmark-btn { background:transparent; border:1px solid var(--border); color:var(--text-dim); cursor:pointer; padding:.3rem .6rem; font-family:inherit; font-size:.75rem; }
+.bookmark-btn.active { color:var(--yellow); border-color:var(--yellow); }
+.bookmark-btn:hover { border-color:var(--accent); color:var(--accent); }
+.source-label { font-size:.7rem; color:var(--text-dim); text-transform:uppercase; }
+.loading { color:var(--accent); font-size:.8rem; padding:2rem 0; text-align:center; text-transform:uppercase; }
+/* Toast */
+.toast { position:fixed; top:1rem; right:1rem; background:var(--card-bg); border:1px solid var(--accent); padding:1rem; z-index:3000; font-size:.85rem; transform:translateX(150%); transition:transform .3s; max-width:320px; }
+.toast.show { transform:translateX(0); }
+/* Modal */
+.modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.85); backdrop-filter:blur(5px); display:none; justify-content:center; align-items:center; z-index:2000; padding:2rem; }
+.modal-content { background:var(--card-bg); border:2px solid var(--accent); width:100%; max-width:900px; max-height:90vh; border-radius:8px; position:relative; overflow-y:auto; animation:modalPop .3s ease-out; }
+@keyframes modalPop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-header { padding:2rem; border-bottom:1px solid var(--border); background:rgba(255,0,0,.05); }
+.modal-body { padding:2rem; }
+.intel-section { margin-bottom:2rem; }
+.intel-label { color:var(--accent); font-weight:700; text-transform:uppercase; font-size:.8rem; margin-bottom:.5rem; display:block; border-bottom:1px solid var(--border); padding-bottom:.2rem; }
+.intel-text { color:var(--text); font-size:1rem; margin-bottom:1rem; }
+.close-btn { position:absolute; top:1rem; right:1rem; background:none; border:1px solid var(--border); color:var(--text); cursor:pointer; padding:.5rem 1rem; font-family:inherit; }
+.close-btn:hover { background:var(--accent); color:#000; }
+/* Side pane system */
+.side-pane { width:420px; background:var(--pane-bg); border-left:2px solid var(--border); display:flex; flex-direction:column; z-index:10; }
+.pane-tabs { display:flex; border-bottom:1px solid var(--border); }
+.pane-tab { flex:1; background:transparent; border:none; color:var(--text-dim); font-family:inherit; font-size:.75rem; padding:.6rem; cursor:pointer; text-transform:uppercase; letter-spacing:.5px; border-bottom:2px solid transparent; transition:.2s; }
+.pane-tab:hover { color:#fff; }
+.pane-tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+.pane-body { flex:1; overflow-y:auto; display:none; padding:1rem; }
+.pane-body.active { display:flex; flex-direction:column; }
+/* Notes */
+#notes-editor { width:100%;flex:1; background:transparent; border:1px solid var(--border); color:var(--text); padding:1rem; font-family:inherit; font-size:.85rem; resize:none; outline:none; line-height:1.6; min-height:120px; }
+.toolbar { display:flex; flex-wrap:wrap; gap:.3rem; padding:.5rem 0; }
+.tool-btn { background:#1a1a1a; border:1px solid var(--border); color:var(--text); font-size:1rem; width:34px;height:34px; display:flex;align-items:center;justify-content:center; cursor:pointer; font-family:inherit; border-radius:3px; }
+.tool-btn:hover { border-color:var(--accent); color:var(--accent); }
+.pane-footer { padding:.8rem 0 0 0; display:flex; justify-content:flex-end; }
+.export-btn { background:var(--accent); color:#000; border:none; padding:.6rem 1.2rem; font-weight:700; cursor:pointer; font-family:inherit; font-size:.75rem; text-transform:uppercase; }
+.export-btn:hover { background:#cc0000; }
+.export-msg { font-size:.7rem; color:var(--green); margin-top:.5rem; text-align:right; }
+.vault-path { width:100%; background:var(--card-bg); border:1px solid var(--border); color:var(--text); padding:.4rem; font-family:inherit; font-size:.75rem; margin-bottom:.5rem; }
+/* Sources pane */
+.source-item { display:flex; align-items:center; justify-content:space-between; padding:.7rem 0; border-bottom:1px solid var(--border); }
+.source-name { font-weight:700; color:#fff; font-size:.85rem; }
+.source-meta { font-size:.7rem; color:var(--text-dim); }
+.status-dot { width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:.4rem; }
+.status-dot.ok { background:var(--green); }
+.status-dot.error { background:var(--accent); }
+.status-dot.unknown { background:var(--text-dim); }
+/* Bookmarks pane */
+.bm-item { padding:.6rem 0; border-bottom:1px solid var(--border); cursor:pointer; }
+.bm-item:hover { color:var(--accent); }
+.bm-title { font-size:.85rem; font-weight:700; color:#fff; }
+.bm-tag { font-size:.65rem; color:var(--text-dim); text-transform:uppercase; }
+/* Modal link */
+.source-link { display:inline-block; background:var(--accent); color:#000; border:none; padding:.6rem 1.2rem; font-weight:700; text-decoration:none; font-size:.75rem; text-transform:uppercase; margin-top:1rem; }
+.footer-text { margin-top:4rem; color:#333; font-size:.75rem; text-align:center; text-transform:uppercase; letter-spacing:2px; }
+.mobile-toggle { display:none; position:fixed; bottom:1rem; right:1rem; z-index:3001; background:var(--accent); color:#000; border:none; padding:.8rem; font-family:inherit; font-weight:700; cursor:pointer; }
+@media (max-width:900px) {
+  body { flex-direction:column; }
+  .side-pane { width:auto; height:50vh; border-left:none; border-top:2px solid var(--border); display:none; }
+  .side-pane.open { display:flex; }
+  .workspace { padding:1rem; }
+  h1 { font-size:1.4rem; }
+  .mobile-toggle { display:block; }
+}
+</style>
+</head>
+<body>
+
+<div class="workspace">
+  <h1>
+    News Dashboard
+    <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+      <div class="status-indicator"><div class="blink"></div>System Live</div>
+      <div class="clock" id="clock">--:-- UTC+7</div>
+    </div>
+  </h1>
+  <div class="net-stats">
+    <span id="lastUpdated">Waiting for data…</span>
+    <span id="itemCount">0 items loaded</span>
+  </div>
+
+  <div class="controls">
+    <input type="text" class="search-box" id="searchBox" placeholder="Search intelligence...">
+    <select class="filter-select" id="tagFilter"><option value="">All Tags</option></select>
+    <select class="filter-select" id="sourceFilter"><option value="">All Sources</option></select>
+    <button class="refresh-btn" id="refreshBtn" onclick="triggerUpdate()">Refresh Now</button>
+  </div>
+
+  <div class="date-tabs" id="dateTabs">
+    <button class="date-tab active" data-day="today">Today — <span id="tabToday">…</span></button>
+    <button class="date-tab" data-day="yesterday">Yesterday — <span id="tabYesterday">…</span></button>
+    <button class="date-tab" data-day="day_before_yesterday">Two Days Ago — <span id="tabDBY">…</span></button>
+  </div>
+  <div class="grid" id="intelGrid"><div class="loading">// INITIALIZING DATA STREAM…</div></div>
+  <div class="footer-text">Project Dashboard // Node: P14s-AMD // Sector: ~/projs</div>
+</div>
+
+<div class="side-pane" id="sidePane">
+  <div class="pane-tabs">
+    <button class="pane-tab active" data-pane="notes">Obsidian Notes</button>
+    <button class="pane-tab" data-pane="sources">Sources</button>
+    <button class="pane-tab" data-pane="bookmarks">Bookmarks</button>
+  </div>
+
+  <div class="pane-body active" id="pane-notes">
+    <div class="toolbar">
+      <button class="tool-btn" onclick="insertText('**','**')" title="Bold"><b>B</b></button>
+      <button class="tool-btn" onclick="insertText('*','*')" title="Italic"><i>I</i></button>
+      <button class="tool-btn" onclick="insertText('~~','~~')" title="Strikethrough"><s>S</s></button>
+      <button class="tool-btn" onclick="insertText('`','`')" title="Inline Code">&lt;/&gt;</button>
+      <button class="tool-btn" onclick="insertText('[',']()')" title="Link">🔗</button>
+      <button class="tool-btn" onclick="insertText('\n- ','')" title="Bullet">•</button>
+      <button class="tool-btn" onclick="insertText('\n- [ ] ','')" title="Checkbox">☐</button>
+      <button class="tool-btn" onclick="insertText('\n1. ','')" title="Numbered List">#</button>
+    </div>
+    <div class="toolbar">
+      <button class="tool-btn" onclick="insertText('\n> ','')" title="Quote">❝</button>
+      <button class="tool-btn" onclick="insertText('###### ','')" title="Heading 6">H</button>
+      <button class="tool-btn" onclick="insertText('---\n','')" title="Horizontal Rule">—</button>
+      <button class="tool-btn" onclick="insertText('||','||')" title="Spoiler">||</button>
+      <button class="tool-btn" onclick="insertText('==','==')" title="Highlight">==</button>
+      <button class="tool-btn" onclick="insertText('\n```\n','\n```\n')" title="Code Block">{}</button>
+      <button class="tool-btn" onclick="insertText('~~','~~')" title="Highlight Yellow" style="color:var(--yellow)">🟡</button>
+      <button class="tool-btn" onclick="clearNotes()" title="Clear All">✕</button>
+    </div>
+    <input type="text" class="vault-path" id="vaultPath" placeholder="Obsidian vault path...">
+    <textarea id="notes-editor" placeholder="Log your analysis here…"></textarea>
+    <div class="pane-footer"><button class="export-btn" onclick="exportToObsidian()">Export .md</button></div>
+    <div id="exportMsg" class="export-msg"></div>
+  </div>
+
+  <div class="pane-body" id="pane-sources">
+    <div id="sourcesList"><div class="loading">// Loading sources…</div></div>
+  </div>
+
+  <div class="pane-body" id="pane-bookmarks">
+    <div id="bookmarksList"><div class="loading">// Loading bookmarks…</div></div>
+  </div>
+</div>
+
+<button class="mobile-toggle" onclick="togglePane()">☰</button>
+
+<div class="toast" id="toast"></div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeModal()">CLOSE [X]</button>
+    <div class="modal-header">
+      <span id="modalTag" class="tag">TAG</span>
+      <h2 id="modalTitle" style="color:#fff; margin:1rem 0 0 0; font-size:1.8rem;">TITLE</h2>
+    </div>
+    <div class="modal-body">
+      <div class="intel-section"><span class="intel-label">Summary &amp; Analysis</span><div id="modalSummary" class="intel-text"></div></div>
+      <div class="intel-section"><span class="intel-label">Engineering Importance</span><div id="modalImportance" class="intel-text"></div></div>
+      <div class="intel-section"><span class="intel-label">Noteworthy / Indicators</span><div id="modalNoteworthy" class="intel-text"></div></div>
+      <div><a id="modalLink" href="#" target="_blank" class="source-link">Source Intelligence →</a></div>
+    </div>
+  </div>
+</div>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>

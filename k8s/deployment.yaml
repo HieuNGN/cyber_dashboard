@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cybersec-dashboard
+  namespace: cybersec-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cybersec-dashboard
+  template:
+    metadata:
+      labels:
+        app: cybersec-dashboard
+    spec:
+      containers:
+        - name: dashboard
+          image: cybersec-dashboard:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: dashboard-config
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: dashboard-data
