@@ -4,8 +4,10 @@ from pathlib import Path
 
 class Settings(BaseSettings):
     # Schedule
-    daily_update_time: str = "07:00"
+    update_interval_hours: int = 12
     timezone: str = "Asia/Bangkok"
+    fetch_on_startup: bool = True
+    startup_staleness_minutes: int = 30
 
     # Server
     host: str = "127.0.0.1"

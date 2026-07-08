@@ -2,7 +2,7 @@ import asyncio
 from datetime import datetime, timezone
 from typing import Callable, List, Awaitable
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from apscheduler.triggers.cron import CronTrigger
+from apscheduler.triggers.interval import IntervalTrigger
 
 from config import settings
 from fetchers import RSSFetcher, CISAKEVFetcher
@@ -111,14 +111,13 @@ class DashboardScheduler:
         })
 
     def start(self):
-        hour, minute = settings.daily_update_time.split(":")
         self.scheduler.add_job(
             self.run_update,
-            trigger=CronTrigger(hour=int(hour), minute=int(minute)),
-            id="daily_update",
+            trigger=IntervalTrigger(hours=settings.update_interval_hours),
+            id="interval_update",
             replace_existing=True,
         )
-        # Also run on startup after a short delay if DB is empty
+        # Run a fresh fetch shortly after every startup
         self.scheduler.add_job(
             self._startup_update,
             "date",
@@ -131,12 +130,30 @@ class DashboardScheduler:
     async def _startup_update(self):
         # Wait a few seconds for app to finish starting
         await asyncio.sleep(3)
-        async with database.get_db() as db:
-            async with db.execute("SELECT COUNT(*) FROM articles") as cursor:
-                row = await cursor.fetchone()
-                count = row[0] if row else 0
-        if count == 0:
-            await self.run_update(manual=False)
+        if not settings.fetch_on_startup:
+            return
+
+        # If data exists and is fresh enough, skip startup fetch
+        if settings.startup_staleness_minutes > 0:
+            async with database.get_db() as db:
+                async with db.execute(
+                    "SELECT MAX(fetched_at) FROM articles"
+                ) as cursor:
+                    row = await cursor.fetchone()
+                    last_fetched = row[0] if row else None
+            if last_fetched:
+                from datetime import datetime
+                try:
+                    last_dt = datetime.fromisoformat(last_fetched)
+                    if last_dt.tzinfo is None:
+                        last_dt = last_dt.replace(tzinfo=timezone.utc)
+                    age_minutes = (datetime.now(timezone.utc) - last_dt).total_seconds() / 60
+                    if age_minutes < settings.startup_staleness_minutes:
+                        return
+                except Exception:
+                    pass
+
+        await self.run_update(manual=False)
 
     def shutdown(self):
         self.scheduler.shutdown()
