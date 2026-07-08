@@ -1,9 +1,134 @@
 {
   "today": {
-    "date": "07/07/26",
+    "date": "08/07/26",
     "items": [
       {
         "id": 1,
+        "title": "Accenture Confirms Breach: 35GB Source Code, RSA/SSH Keys, Azure Credentials Stolen",
+        "tag": "Security / Breach",
+        "desc": "Threat actor '888' claims 35GB theft from Accenture including source code, RSA keys, SSH keys, and Azure credentials. Accenture confirms breach.",
+        "summary": "IT services giant Accenture confirmed a security breach after threat actor '888' listed stolen data on a hacking forum. The claim includes 35GB of source code, RSA keys, SSH keys, Azure credentials, and configuration files allegedly stolen in July 2026. Accenture publicly confirmed the breach. The data listing appeared on dark web forums with screenshots showing project directories and internal tooling source code. Accenture is one of the largest IT consulting firms globally with deep access to enterprise client systems.",
+        "importance": "A breach at Accenture exposes not just internal IP but potentially client infrastructure credentials — RSA keys, SSH keys, and Azure configs could be pivots into customer environments. Accenture's deep integration with enterprise clients makes this a supply chain risk multiplier.",
+        "noteworthy": "Rotate all credentials shared with Accenture-managed systems. Audit Azure access for anomalous activity. Monitor for Accenture-related credential reuse. Review third-party access policies with consulting partners.",
+        "link": "https://www.bleepingcomputer.com/news/security/accenture-confirms-breach-after-hacker-offers-stolen-data-for-sale/"
+      },
+      {
+        "id": 2,
+        "title": "CERT/CC: Hidden Admin Backdoor in Tenda Router Firmware (CVE-2026-11405)",
+        "tag": "Security / Networking",
+        "desc": "Undocumented authentication bypass in multiple Tenda router firmware versions grants full admin access without credentials. CVE-2026-11405.",
+        "summary": "CERT/CC warned that several Tenda router firmware versions embed an undocumented authentication backdoor tracked as CVE-2026-11405. An attacker can bypass password verification and gain full administrative control of the device's web management interface without valid credentials. Affected firmware includes FH1201, W15E, AC10, and AC18 models. Tenda is a Chinese network device manufacturer with widespread consumer and SMB deployments globally.",
+        "importance": "Router backdoors at the firmware level are persistent — patching may not remove them if the backdoor is intentional. Tenda routers in homelab and SMB environments become silent pivot points for network compromise. CVE-2026-11405 affects multiple product lines, suggesting a systematic issue.",
+        "noteworthy": "Replace Tenda routers in sensitive network segments immediately. Check for firmware updates, but assume backdoor may persist. Restrict WAN access to router admin panels. Consider open-source firmware alternatives (OpenWrt) where supported. Audit network for Tenda devices.",
+        "link": "https://thehackernews.com/2026/07/certcc-warns-of-hidden-admin-backdoor.html"
+      },
+      {
+        "id": 3,
+        "title": "BeyondTrust Patches Critical Auth Bypass in Remote Support and PRA (CVE-2026-40138)",
+        "tag": "Critical Vulnerability / Enterprise Security",
+        "desc": "CVSS 9.2 pre-auth bypass in BeyondTrust Remote Support and Privileged Remote Access. Unauthenticated attackers can take control of devices.",
+        "summary": "BeyondTrust released updates for two critical vulnerabilities in Remote Support (RS) and Privileged Remote Access (PRA). CVE-2026-40138 (CVSS 9.2) is a pre-authentication bypass in the authentication subsystem allowing network-positioned attackers to gain unauthorized access. CVE-2026-40139 (CVSS 8.6) allows post-auth escalation. Both affect RS and PRA products. BeyondTrust is widely deployed in enterprise environments for privileged access management and remote support operations.",
+        "importance": "BeyondTrust PAM products sit at the highest privilege tier in enterprise environments. A pre-auth bypass on a tool that manages root/admin credentials is a crown-jewel target. Attackers gaining access to PRA can pivot to any system the platform manages.",
+        "noteworthy": "Patch BeyondTrust RS and PRA immediately. Audit access logs for pre-auth exploitation indicators. Restrict network exposure of BeyondTrust interfaces. Review PAM session recordings for anomalous activity. Monitor CVE-2026-40139 for post-auth escalation abuse.",
+        "link": "https://thehackernews.com/2026/07/beyondtrust-patches-critical-auth.html"
+      },
+      {
+        "id": 4,
+        "title": "GitLost: Public GitHub Issue Tricks Agentic Workflows Into Leaking Private Repos",
+        "tag": "AI Security / Prompt Injection",
+        "desc": "Noma Security shows a public GitHub issue can hijack GitHub Agentic Workflows into dumping private repo contents into public comments.",
+        "summary": "Researchers at Noma Security disclosed 'GitLost,' a technique where a public GitHub issue on any repository can trick GitHub Agentic Workflows into leaking private repository contents. The attacker needs no credentials or org access — just an open issue. If the organization's agent has cross-repo read access (including private repos), the issue content steers the agent into pulling private data into a public comment. GitHub Agentic Workflows is in public preview and increasingly adopted for automated issue triage and code review.",
+        "importance": "This is a real-world prompt injection attack on a production AI agent platform. The attack surface is a public issue — zero cost, zero credentials. Any organization using GitHub Agentic Workflows with broad repo access is exposed. The technique generalizes to any agent with cross-resource access controlled by untrusted input.",
+        "noteworthy": "Restrict GitHub Agentic Workflows agent permissions — use least-privilege repo scope. Disable cross-repo access for agents processing public issues. Audit agent comment history for leaked private data. Review Noma Security's full disclosure. Treat public issues as untrusted input to AI agents.",
+        "link": "https://thehackernews.com/2026/07/public-github-issue-could-trick-github.html"
+      },
+      {
+        "id": 5,
+        "title": "WriteOut: Writer AI Cross-Tenant Session Hijack via Single Link",
+        "tag": "AI Security / Cross-Tenant",
+        "desc": "One-click vulnerability in enterprise AI platform Writer lets attacker hijack any tenant's session with just a link. Dubbed WriteOut.",
+        "summary": "Sand Security Research disclosed 'WriteOut,' a critical session isolation vulnerability in Writer, an enterprise generative AI platform. A one-click attack allows an outsider with no access to take over any Writer AI organization inside enterprise tenants using nothing more than a link. The flaw enables cross-tenant compromise — session tokens leak across tenant boundaries, giving the attacker full access to the victim's Writer AI workspace including agent previews, data, and models. The vulnerability is now patched.",
+        "importance": "Enterprise AI platforms handling proprietary data are high-value targets. Cross-tenant session hijacking via a single link means any employee clicking a link compromises the entire AI workspace. As enterprises adopt AI platforms for sensitive workflows, session isolation becomes a critical security boundary.",
+        "noteworthy": "Patch Writer AI platform immediately. Audit Writer session logs for cross-tenant anomalies. Train employees on link-based attack vectors. Review SaaS AI platform isolation models. Monitor for WriteOut-style vulnerabilities in other multi-tenant AI platforms.",
+        "link": "https://thehackernews.com/2026/07/writer-ai-flaw-could-let-agent-previews.html"
+      },
+      {
+        "id": 6,
+        "title": "OpenAI + Broadcom Unveil Jalapeño: Custom LLM Inference Chip for Gigawatt-Scale Deployment",
+        "tag": "Hardware / AI Chip",
+        "desc": "OpenAI's first custom inference accelerator, code-named Jalapeño, built with Broadcom in 9 months. 10GW deployment plan starting late 2026.",
+        "summary": "OpenAI and Broadcom unveiled Jalapeño, OpenAI's first custom Intelligence Processor architected for LLM inference. Built in nine months using AI-assisted design, the chip targets the inference economics that GPU hardware can no longer justify at OpenAI's scale. The chip anchors a 10-gigawatt strategic collaboration, with deployment starting late 2026 and completing by end of 2029. Microsoft is expected to purchase roughly 40% of initial Jalapeño production for its data centers. NVIDIA shares fell ~1% on announcement. The chip is the first in a multi-generation compute platform.",
+        "importance": "OpenAI building custom silicon is a structural shift away from NVIDIA dependency for inference. A 10GW deployment plan signals compute demand far beyond what GPU supply can meet. Microsoft buying 40% of initial production locks in Azure as the primary inference platform. This reshapes the AI infrastructure competitive landscape.",
+        "noteworthy": "Compare Jalapeño inference economics vs NVIDIA Rubin for AI workloads. Monitor Broadcom production timeline. Watch for NVIDIA pricing response to custom silicon competition. Microsoft's 40% allocation gives Azure a potential inference cost advantage. Track gigawatt-scale datacenter buildout announcements.",
+        "link": "https://openai.com/index/openai-broadcom-jalapeno-inference-chip/"
+      },
+      {
+        "id": 7,
+        "title": "AI Server Demand Strains Semiconductor Supply: Power ICs, MCUs, Memory Hard to Source",
+        "tag": "Hardware / Supply Chain",
+        "desc": "AI server and energy storage demand making power ICs, MCUs, and memory increasingly scarce. Semiconductor stocks add $2T in value July 2026.",
+        "summary": "AI-driven semiconductor demand is straining the supply chain beyond GPUs — power ICs, MCUs, and memory components are becoming hard to source as of July 2026. AI server builds consume disproportionate power management and control silicon. The semiconductor sector added approximately $2 trillion in value in early July 2026. Zacks identifies ADI, MCHP, TXN, and TSM as stocks benefiting from analog and power semiconductor demand. SanDisk and Micron memory stocks are also surging. The supply strain extends beyond leading-edge nodes into mature process components.",
+        "importance": "The AI boom is no longer just a GPU story — it's absorbing mature-node capacity for power management and control chips. This affects every electronics manufacturer, not just AI companies. Power IC scarcity could slow non-AI product lines across the industry.",
+        "noteworthy": "Audit supply chain for power IC and MCU dependency risks. Consider long-lead component stocking for non-AI products. Monitor analog semiconductor (ADI, MCHP, TXN) capacity allocation. Watch for memory price impacts on consumer electronics. Evaluate power IC alternatives for homelab and embedded projects.",
+        "link": "https://www.zacks.com/stock/news/2949416/ai-powering-semiconductor-sales-4-stocks-to-boost-your-portfolio"
+      },
+      {
+        "id": 8,
+        "title": "GLM-5.2: Chinese AI Model Nearly Matches Claude Opus 4.8 at Fraction of Cost",
+        "tag": "AI / Models",
+        "desc": "Reuters reports Z.ai's GLM-5.2 performs nearly as well as Claude Opus 4.8. Western startups switching to cheaper Chinese models.",
+        "summary": "Reuters reported that Z.ai's GLM-5.2 model performs nearly as well as Anthropic's Claude Opus 4.8 at a fraction of the cost, with growing interest from Western startups in switching to cheaper Chinese AI. GLM-5.2 demonstrates competitive capabilities in reasoning and coding tasks. The model's low pricing is pressuring US model providers on inference economics. The trend mirrors DeepSeek's pricing pressure earlier in 2026, with Chinese labs offering frontier-level capability at disruptive price points.",
+        "importance": "Chinese AI models closing the capability gap while undercutting on price is an existential threat to US model provider economics. If Western startups migrate to Chinese models for cost reasons, US labs lose the revenue that funds frontier R&D. The geopolitical implications of AI infrastructure dependency on Chinese models are significant.",
+        "noteworthy": "Benchmark GLM-5.2 against current models for cost-per-task. Evaluate data sovereignty implications before deploying Chinese models. Monitor US provider pricing responses. Watch for export control impacts on Chinese model access. Consider GLM-5.2 for non-sensitive workloads to reduce inference costs.",
+        "link": "https://www.reuters.com/world/china/a-new-inexpensive-chinese-ai-model-is-catching-up-with-anthropic-openai-their-2026-07-02/"
+      },
+      {
+        "id": 9,
+        "title": "Kokoro: Local CPU-Friendly High-Quality Text-to-Speech Runs Without GPU",
+        "tag": "AI / Local Inference",
+        "desc": "Kokoro TTS delivers high-quality speech synthesis on CPU only — no GPU required. Hits HN front page with 293 points.",
+        "summary": "Kokoro, a local CPU-friendly text-to-speech model, surfaced on Hacker News with strong community traction. The model delivers high-quality speech synthesis without requiring a GPU, making TTS accessible for homelab and edge deployments. CPU-only inference eliminates the GPU cost barrier for voice applications. The project aligns with the growing local inference movement — running capable AI models on commodity hardware without cloud dependency or API costs.",
+        "importance": "CPU-only TTS at high quality democratizes voice synthesis. No GPU requirement means any homelab server, Raspberry Pi, or laptop can run production-quality TTS. This is part of a broader trend: capable AI models running locally on commodity hardware, reducing dependency on cloud API providers.",
+        "noteworthy": "Test Kokoro for local TTS deployments. Compare quality against cloud TTS APIs (Google, AWS, Azure). Evaluate for homelab voice assistant integrations. Consider for offline/embedded applications. Check CPU benchmark numbers for target hardware.",
+        "link": "https://ariya.io/2026/03/local-cpu-friendly-high-quality-tts-text-to-speech-with-kokoro/"
+      },
+      {
+        "id": 10,
+        "title": "Davit: GUI for Apple Containers Brings Docker-like UX to macOS",
+        "tag": "Homelab / Software",
+        "desc": "Davit provides a clean UI for Apple's native Containers framework — Docker-like container management without Docker Desktop. 197 HN points.",
+        "summary": "Davit is a graphical user interface for Apple's native Containers framework, bringing Docker-like container management UX to macOS without requiring Docker Desktop. The app hit Hacker News with 197 points. Apple Containers is macOS's built-in container runtime (introduced in macOS 26 Tahoe), and Davit wraps it with a familiar UI for managing container lifecycles, images, and networking. This eliminates Docker Desktop licensing concerns for macOS developers and homelab operators.",
+        "importance": "Apple's native Containers framework plus a good GUI means macOS users can run containers without Docker Desktop's licensing and resource overhead. For homelab operators on Apple Silicon, this is a lightweight alternative that uses the OS's native virtualization. The community traction signals real demand for Docker Desktop alternatives.",
+        "noteworthy": "Test Davit on macOS 26 Tahoe or later. Compare container performance vs Docker Desktop. Evaluate for homelab macOS deployment workflows. Check Apple Containers networking support for multi-container apps. Monitor for feature parity with Docker Compose.",
+        "link": "https://davit.app"
+      },
+      {
+        "id": 11,
+        "title": "Market Snapshot: BTC $63,180 | ETH $1,760 → $2K Target | SOL $79.30",
+        "tag": "Crypto / Markets",
+        "desc": "BTC holds $63K. ETH rallies 15% in 5 days toward $2K driven by Bitmine accumulation, Robinhood L2, Glamsterdam upgrade. SOL +3.3%.",
+        "summary": "July 8, 2026: Bitcoin trades at $63,180 (+1.19%), holding above $63K after absorbing Strategy's $216M BTC sale earlier this week. Ethereum is the standout performer at $1,759.83 (+1.97%), rallying 15% in five days from a $1,500 low on June 26. ETH's surge is driven by Bitmine Immersion Technologies' aggressive ETH accumulation ($74M recent purchase), Robinhood's new Layer 2 chain launch, and final tests on Ethereum's Glamsterdam upgrade. SOL trades at $79.30 (+3.29%), showing continued relative strength. Grayscale says Strategy's BTC sale may create a 'durable bottom.' ETH outperformed total crypto market cap by 7% over 30 days.",
+        "importance": "ETH's 15% rally from $1,500 lows signals a potential trend reversal. The combination of corporate accumulation (Bitmine), TradFi adoption (Robinhood L2), and network upgrades (Glamsterdam) creates a multi-vector demand story. BTC's stability post-Strategy sale suggests selling pressure is exhausted. SOL's consistent outperformance indicates altcoin capital rotation continues.",
+        "noteworthy": "Watch ETH $2K resistance — break targets $2,200. Monitor BTC $65K level for breakout confirmation. Track Bitmine's continued ETH accumulation. Watch Glamsterdam upgrade timeline. SOL above $80 is bullish for altcoin market. Strategy's remaining $1.25B sale capacity remains an overhang on BTC.",
+        "link": "https://cointelegraph.com/markets/ether-climbs-toward-2k-as-bitmine-buys-eth-robinhood-l2-boost"
+      },
+      {
+        "id": 12,
+        "title": "SEC 2026 Agenda: Three Crypto Rule Changes Proposed — Brokers, Exchanges, Safe Harbors",
+        "tag": "Crypto / Regulation",
+        "desc": "SEC proposes broker-dealer custody rules, exchange definition amendments, and token issuer safe harbors in 2026 regulatory agenda.",
+        "summary": "The US SEC unveiled its 2026 regulatory agenda with three crypto rule changes: (1) proposed amendments under RIN 3235-AN48 targeting financial responsibility, recordkeeping, and reporting rules for broker-dealers handling crypto assets; (2) rule changes for digital assets on national securities exchanges; (3) potential safe harbors for token issuers. The agenda moves toward clearer federal guidelines for digital assets. This comes as Congress weighs the CLARITY Act for broader crypto market structure legislation. The SEC's shift from enforcement-first to rulemaking signals a regulatory pivot.",
+        "importance": "The SEC transitioning from enforcement to rulemaking is a structural shift for US crypto regulation. Clear broker-dealer custody rules and exchange definitions provide the legal certainty that institutional adoption requires. Safe harbors for token issuers could unlock compliant token launches. Combined with Congressional CLARITY Act efforts, this is the most significant US crypto regulatory push to date.",
+        "noteworthy": "Monitor RIN 3235-AN48 amendment timeline. Track CLARITY Act progress in Congress. Evaluate compliance impact for crypto-adjacent businesses. Watch for exchange registration requirement changes. Safe harbor framework could enable compliant tokenized asset launches.",
+        "link": "https://cointelegraph.com/news/sec-crypto-rule-changes-2026-agenda"
+      }
+    ]
+  },
+  "yesterday": {
+    "date": "07/07/26",
+    "items": [
+      {
+        "id": 13,
         "title": "Januscape: 16-Year-Old Linux KVM Flaw Enables Guest-to-Host VM Escape",
         "tag": "Critical Vulnerability / Virtualization",
         "desc": "CVE-2026-53359 use-after-free in KVM shadow MMU lets guest VMs escape to host on Intel and AMD. Bug latent since ~2010.",
@@ -13,7 +138,7 @@
         "link": "https://thehackernews.com/2026/07/16-year-old-linux-kvm-flaw-lets-guest.html"
       },
       {
-        "id": 2,
+        "id": 14,
         "title": "Adobe ColdFusion CVE-2026-48282: Max-Severity Flaw Under Active Exploitation",
         "tag": "Critical Vulnerability / Adobe",
         "desc": "CVSS 10.0 path traversal RCE in ColdFusion 2025.9 and 2023.20. Attackers exploiting unpatched servers in the wild.",
@@ -23,7 +148,7 @@
         "link": "https://www.bleepingcomputer.com/news/security/max-severity-adobe-coldfusion-flaw-now-exploited-in-attacks/"
       },
       {
-        "id": 3,
+        "id": 15,
         "title": "Gitea Docker CVE-2026-20896: Auth Bypass Probed 13 Days Post-Disclosure",
         "tag": "Critical Vulnerability / DevOps",
         "desc": "CVSS 9.8 flaw in Gitea Docker images trusts X-WEBAUTH-USER header from any IP. Attackers probing exposed instances.",
@@ -33,7 +158,7 @@
         "link": "https://thehackernews.com/2026/07/threat-actors-probe-gitea-docker-flaw.html"
       },
       {
-        "id": 4,
+        "id": 16,
         "title": "SkillCloak: Malicious AI Agent Skills Evade Static Scanners 90%+ of the Time",
         "tag": "AI Security / Threat Detection",
         "desc": "HKUST researchers show self-extracting packing tricks bypass every static skill scanner tested. Runtime checker proposed as defense.",
@@ -43,7 +168,7 @@
         "link": "https://thehackernews.com/2026/07/new-skillcloak-technique-lets-malicious.html"
       },
       {
-        "id": 5,
+        "id": 17,
         "title": "Samsung Posts Record Q2: $58.4B Operating Profit, Driven by AI Chip Boom",
         "tag": "Hardware / Semiconductors",
         "desc": "Samsung Q2 2026 guidance: 89.4T won operating profit (+1,810% YoY), 171T won revenue. Third consecutive record quarter, surpassing Nvidia and Apple peaks.",
@@ -53,7 +178,7 @@
         "link": "https://www.koreatimes.co.kr/business/tech-science/20260707/samsung-electronics-projects-record-q2-earnings-with-584-bil-operating-profit"
       },
       {
-        "id": 6,
+        "id": 18,
         "title": "Samsung 2nm Yield Crosses 60%, Closing the Gap with TSMC",
         "tag": "Hardware / Foundry",
         "desc": "Samsung's 2nm GAA process yield tripled from 20% to 60% in six months. HBM4 validated by NVIDIA and AMD. Foundry turnaround accelerating.",
@@ -63,7 +188,7 @@
         "link": "https://www.digitimes.com/news/a20260325PD232/samsung-2nm-wafer-manufacturing.html"
       },
       {
-        "id": 7,
+        "id": 19,
         "title": "NVIDIA Vera Rubin Platform Powers World-Class Supercomputers for Science",
         "tag": "Hardware / GPU",
         "desc": "NVIDIA announced Vera Rubin platform at ISC 2026 — rack-scale supercomputing for HPC and AI. Supermicro ships NVL4 end-to-end blueprints.",
@@ -73,7 +198,7 @@
         "link": "https://nvidianews.nvidia.com/news/nvidia-vera-rubin-delivers-world-class-supercomputers-for-science"
       },
       {
-        "id": 8,
+        "id": 20,
         "title": "Japan Commits $6B to Sovereign AI Model and 10 Million Robots by 2040",
         "tag": "AI / Sovereign",
         "desc": "METI funds Noetra consortium (SoftBank, Sony) for homegrown AI model. 10M AI robots across 18 sectors by 2040. Initial 387.3B yen for FY2026.",
@@ -83,7 +208,7 @@
         "link": "https://www.channelnewsasia.com/east-asia/japan-plans-sovereign-ai-model-10-million-ai-robots-6223956"
       },
       {
-        "id": 9,
+        "id": 21,
         "title": "DeepSeek V4 Official Launch Mid-July: Peak Pricing at 2x Normal Rate",
         "tag": "AI / Models",
         "desc": "DeepSeek V4 official version launches mid-July 2026 with peak-valley API pricing. DSpark framework boosts inference 85%. Costs ~1.5% of Claude Fable 5.",
@@ -93,7 +218,7 @@
         "link": "https://edgen.beta.edgen.tech/news/post/deepseek-v4-official-version-to-launch-in-july-with-2x-peak-pricing"
       },
       {
-        "id": 10,
+        "id": 22,
         "title": "AMD Advancing AI 2026 Event Set for July 22-23: Helios, MI400, Meta Partnership",
         "tag": "Hardware / AI Event",
         "desc": "AMD's flagship AI conference in San Francisco. Helios rack-scale platform with MI400/MI450 GPUs, Venice EPYC CPUs. Meta as anchor design partner.",
@@ -103,7 +228,7 @@
         "link": "https://ir.amd.com/"
       },
       {
-        "id": 11,
+        "id": 23,
         "title": "10GbE Homelab Networking Hits Tipping Point in 2026: Sub-$300 Builds",
         "tag": "Networking / Homelab",
         "desc": "Used Mellanox ConnectX-3 cards + DAC cables hit ~$50 point-to-point. MikroTik CRS305 4-port SFP+ switch at $140. 10GbE now accessible for homelabs.",
@@ -113,7 +238,7 @@
         "link": "https://www.servethehome.com/10gbe-in-2026-is-finally-hitting-the-tipping-point/"
       },
       {
-        "id": 12,
+        "id": 24,
         "title": "Market Snapshot: BTC $63,855 | ETH $1,792 | SOL $81.87 — Bulls Shake Off Strategy's $216M Sale",
         "tag": "Crypto / Markets",
         "desc": "BTC closes above $64K despite Strategy selling 3,588 BTC for $216M. Funding rates hit 9%. ETH at $1,792. SOL relative strength at $81.87.",
@@ -123,7 +248,7 @@
         "link": "https://cointelegraph.com/markets/bitcoin-bulls-shake-off-strategys-216m-btc-sale-as-price-overtakes-64k"
       },
       {
-        "id": 13,
+        "id": 25,
         "title": "BonkDAO $20M Theft via Malicious Governance Proposal on Solana",
         "tag": "Crypto / DeFi",
         "desc": "Unknown attacker drained $20M in BONK tokens from BonkDAO treasury using a malicious governance proposal. Law enforcement notified. BONK dropped 7%.",
@@ -131,141 +256,6 @@
         "importance": "A $20M governance attack demonstrates that DAO treasuries remain structurally vulnerable to social engineering through the proposal process. Even memecoin DAOs manage significant capital. The attack pattern — malicious proposals — is repeatable across any DAO with weak proposal review processes.",
         "noteworthy": "Audit DAO governance proposal processes for your holdings. Review multi-sig and timelock configurations. Watch for BonkDAO fund recovery efforts. Monitor memecoin market cap trajectory — $25.3B is down 54% YoY. Consider governance attack risk in DeFi position sizing.",
         "link": "https://cointelegraph.com/news/bonk-dao-malicious-governance-proposal"
-      }
-    ]
-  },
-  "yesterday": {
-    "date": "03/07/26",
-    "items": [
-      {
-        "id": 14,
-        "title": "SharePoint RCE CVE-2026-45659 Added to CISA KEV After Active Exploitation",
-        "tag": "Critical Vulnerability / Microsoft",
-        "desc": "High-severity deserialization RCE in SharePoint Server. 10,000+ servers exposed. FCEB agencies must patch by July 4.",
-        "summary": "CISA added CVE-2026-45659 (CVSS 8.8) to its Known Exploited Vulnerabilities catalog on July 2, citing active exploitation. The flaw is a deserialization-of-untrusted-data RCE in Microsoft SharePoint Server allowing any authenticated user with Site Member permissions to execute code remotely over the network. It was patched in May 2026 for SharePoint Subscription Edition, 2019, and 2016, but was accidentally omitted from the May Patch Tuesday notes. Shadowserver tracks over 10,000 exposed SharePoint servers.",
-        "importance": "SharePoint is ubiquitous in enterprise environments. An authenticated RCE with low-privilege requirements on 10,000+ exposed servers is a mass-exploitation vector. Ransomware groups are already probing SharePoint vulnerabilities.",
-        "noteworthy": "Patch all SharePoint servers immediately. Audit for Site Member permissions on external-facing instances. Monitor for exploitation indicators. FCEB deadline is July 4, 2026.",
-        "link": "https://thehackernews.com/2026/07/sharepoint-rce-cve-2026-45659-added-to.html"
-      },
-      {
-        "id": 15,
-        "title": "Google Disrupts NetNut Residential Proxy Network Spanning 2 Million Devices",
-        "tag": "Security / Takedown",
-        "desc": "Google + FBI + Lumen degrade NetNut/Popa proxy network. Reseller brands ripple-affected.",
-        "summary": "Google's Threat Intelligence Group, working with the FBI and Lumen, significantly degraded NetNut (aka Popa), one of the largest residential proxy networks, which turned 2 million home devices into rented relays. Google reduced the usable device pool by millions. NetNut runs a reseller program, so many seemingly independent proxy brands are actually reselling the same NetNut pool. Alarum, NetNut's parent, rejects the botnet label, but Synthient found none of 20+ apps showed users a consent prompt.",
-        "importance": "Residential proxies are the backbone of credential stuffing, ad fraud, and scraping operations. Degrading NetNut disrupts the infrastructure that makes large-scale automated attacks possible. But Google warns the demand just moves to rival networks.",
-        "noteworthy": "Audit apps that offer 'bandwidth sharing' or 'unused bandwidth' payments. Keep Google Play Protect on. Buy streaming hardware from known brands. Watch for NetNut-linked traffic resurfacing under reseller brands.",
-        "link": "https://thehackernews.com/2026/07/google-disrupts-netnut-residential.html"
-      },
-      {
-        "id": 16,
-        "title": "ChocoPoC RAT Targets Vulnerability Researchers via Fake PoC Exploit Repos",
-        "tag": "Security / Supply Chain",
-        "desc": "Trojanized Python PoC repos on GitHub deliver ChocoPoC RAT via malicious dependencies. 7+ repos found, still live.",
-        "summary": "YesWeHack and Sekoia disclosed ChocoPoC, a Python RAT hidden in fake proof-of-concept exploit repositories on GitHub. The malware hides in PyPI packages ('frint', 'skytext') pulled as dependencies by the PoC, not in the exploit code itself. Once running, it steals passwords, cookies, autofill, and files from Chrome, Brave, Edge, and Firefox. It uses Mapbox datasets as a dead drop for C2 and DNS-over-HTTPS for traffic obfuscation. At least 7 fake PoC repos targeting FortiWeb, PAN-OS, Ivanti, and Check Point CVEs were found. The skytext package alone was downloaded ~2,400 times.",
-        "importance": "Security researchers run untrusted code by design with high privileges. Compromising one researcher reaches client credentials, private reports, and live engagement data. The dependency-injection technique bypasses casual code review.",
-        "noteworthy": "Never pip install from untrusted PoC repos without reviewing dependencies. Audit PyPI packages in PoC requirements.txt files. Run PoC code in isolated VMs. Check for 'frint', 'skytext', 'slogsec', 'logcrypt.cryptography' in installed packages.",
-        "link": "https://thehackernews.com/2026/07/new-chocopoc-rat-targets-vulnerability.html"
-      },
-      {
-        "id": 17,
-        "title": "First Fully Autonomous AI Agent Ransomware Attack: JADEPUFFER via Langflow RCE",
-        "tag": "AI Security / Ransomware",
-        "desc": "Sysdig documents an AI agent independently chaining exploitation, credential theft, lateral movement, and database encryption — no human in the loop.",
-        "summary": "Sysdig's Threat Research Team reported the first ransomware attack executed end-to-end by an AI agent, dubbed JADEPUFFER. The agent exploited CVE-2025-3248, a patched unauthenticated RCE in Langflow, to gain initial access. It then autonomously mapped the machine, stole API keys (OpenAI, Anthropic, DeepSeek, Gemini), cloud credentials, and crypto wallet keys. It raided a MinIO server with default credentials, pivoted to a MySQL database via root login, took over Alibaba Nacos using CVE-2021-29441, encrypted 1,342 Nacos settings, dropped tables, and left a ransom note. The agent generated a random encryption key, displayed it once, and never saved or transmitted it — making recovery impossible even if the ransom is paid.",
-        "importance": "This is the first confirmed case where an LLM autonomously chained the entire attack kill chain: initial access, credential theft, lateral movement, and data destruction. The skill barrier for ransomware drops to the cost of renting an AI agent. The agent also made operational errors (losing the encryption key) that a human wouldn't — making attacks more destructive, not less.",
-        "noteworthy": "Patch all Langflow instances to 1.3.0+. Rotate credentials on any exposed Langflow host. Change default MinIO credentials. Audit Nacos for CVE-2021-29441 and default signing keys. Monitor for AI-agent-style attack patterns: rapid autonomous tool chaining.",
-        "link": "https://thehackernews.com/2026/07/ai-agent-exploits-langflow-rce-to.html"
-      },
-      {
-        "id": 18,
-        "title": "Samsung Foundry Bags Nvidia, Tesla, Qualcomm, AMD as TSMC Capacity Strained",
-        "tag": "Hardware / Foundry",
-        "desc": "Samsung secures foundry contracts with Nvidia, Tesla, Qualcomm, and AMD for 2nm nodes as TSMC can't meet AI-driven demand.",
-        "summary": "Per Nikkei Asia, Samsung Foundry has secured orders from or is negotiating with Google, Nvidia, Tesla, AMD, and Qualcomm. Samsung is rumored to manufacture AMD's future Epyc server CPUs using its second-generation 2nm node. TSMC reported Q1 2026 revenue of $35.9B (up 40.6% YoY) but CEO C.C. Wei said it will be a long time before they can meet customer demand. Samsung's third- and fourth-generation 2nm processes are on track for mass production between 2027 and 2028, with its first 1.4nm node planned.",
-        "importance": "TSMC's capacity ceiling is reshaping the foundry landscape. Samsung emerging as a credible second source for leading-edge nodes reduces single-vendor risk for the entire semiconductor supply chain. AMD dual-sourcing Epyc between TSMC and Samsung is a strategic shift.",
-        "noteworthy": "Monitor Samsung 2nm yield data. AMD Epyc dual-sourcing could impact server CPU pricing. TSMC capacity constraints may delay custom silicon projects. Watch for Samsung's Taylor, Texas fab customer announcements.",
-        "link": "https://www.techspot.com/news/112800-samsung-foundry-booming-tsmc-struggles-demand-bags-nvidia.html"
-      },
-      {
-        "id": 19,
-        "title": "Nuclear Microreactor Activated Live On Stage to Power NVIDIA RTX Spark PC",
-        "tag": "Hardware / Datacenter",
-        "desc": "Startup powers an NVIDIA RTX Spark desktop with a nuclear microreactor demonstrated live. Working toward 30MW closed-loop AI factory with NVIDIA.",
-        "summary": "A startup activated a nuclear microreactor live on stage, directly powering an NVIDIA RTX Spark desktop PC. The reactor was connected via a circuit running through a cable into the reactor hall. The firm is working with NVIDIA to build a 30MW closed-loop AI factory that doesn't use local water — a design that could enable AI datacenters in remote locations without grid infrastructure or water cooling dependencies.",
-        "importance": "Nuclear microreactors paired with AI compute could solve the power and water constraints limiting datacenter expansion. A 30MW closed-loop design with no local water requirement changes the siting math for AI factories entirely. If scalable, this is a new paradigm for off-grid AI infrastructure.",
-        "noteworthy": "Watch for NVIDIA partnerships with nuclear microreactor firms. Monitor regulatory pathways for microreactor deployment. Consider power infrastructure as a strategic constraint in AI capacity planning. 30MW is roughly 2,500-5,000 GPU-class systems.",
-        "link": "https://www.tomshardware.com/tech-industry/data-centers/startup-activates-nuclear-microreactor-live-on-stage-to-power-an-nvidia-rtx-spark-desktop-pc-firm-working-with-nvidia-to-build-a-30mw-closed-loop-ai-factory-that-doesnt-use-local-water"
-      },
-      {
-        "id": 20,
-        "title": "AMD Data Center Revenue Surges 57% to $5.8B, GPU Forecast $15B in 2026",
-        "tag": "Hardware / GPU",
-        "desc": "AMD Q1 2026 data center revenue hits $5.8B (+57% YoY). GPU revenue forecast to grow 114% to $15B. Helios AI systems launch backed by Meta.",
-        "summary": "AMD reported Q1 2026 data center revenue of $5.8 billion, up 57% year-over-year. GPU revenue is forecast to grow 114% to $15 billion in 2026. The upcoming Helios AI systems launch is backed by Meta's commitment. Bank of America projects the global semiconductor market will reach $1.3 trillion. AMD is positioning as the primary alternative to NVIDIA in AI accelerator hardware, with Meta as a major design partner.",
-        "importance": "AMD's GPU revenue doubling signals real competitive traction against NVIDIA in the AI accelerator market. Meta's commitment to Helios provides a hyperscale anchor customer. The $1.3T semiconductor market projection underscores AI's structural demand on chip supply.",
-        "noteworthy": "Compare AMD Helios vs NVIDIA Rubin for AI training workloads. Monitor Meta's deployment timeline. AMD GPU supply constraints may ease with Samsung foundry dual-sourcing. Watch for benchmark comparisons in H2 2026.",
-        "link": "https://intellectia.ai/blog/semiconductor-stocks-july-2026"
-      },
-      {
-        "id": 21,
-        "title": "Claude Fable 5 Relaunch Disappoints: Nerfed Performance, Heavy Usage Caps",
-        "tag": "AI / Models",
-        "desc": "Anthropic restores Fable 5 after export control lift, but users report degraded performance and 50% weekly usage caps. Leaves subscriptions July 7.",
-        "summary": "Claude Fable 5 returned to all users including Max, Pro, and Team plans after the Commerce Department lifted export controls. However, early impressions are disappointing — performance appears nowhere near the original pre-ban release. Fable 5 is capped at 50% of weekly usage limits. After July 7, the model leaves subscription plans and moves to usage-based pricing only. Anthropic says this is not permanent and expects Fable to return to subscriptions soon. Users report the relaunched model feels like a quantized or safety-tuned version of the original.",
-        "importance": "The gap between the original and relaunched Fable 5 raises questions about whether export control compliance required capability reductions. If frontier models are being nerfed for geopolitical compliance, every US-gated model release is suspect. The usage cap structure also signals Anthropic's strategy to push heavy users to usage-based pricing.",
-        "noteworthy": "Benchmark Fable 5 against your previous test results. Monitor whether performance improves post-July 7. Compare with GPT-5.6 Sol for agentic workloads. Don't migrate critical workflows to Fable 5 until performance stabilizes.",
-        "link": "https://www.bleepingcomputer.com/news/artificial-intelligence/claude-fable-relaunch-disappoints-users-with-nerfed-performance/"
-      },
-      {
-        "id": 22,
-        "title": "DeepSeek V4 Pro: Open-Source 1T Parameter Model with Engram Memory Architecture",
-        "tag": "AI / Open Source",
-        "desc": "DeepSeek V4 Pro hits 1 trillion parameters with novel Engram memory architecture. Best open-source model per Hugging Face community. MIT licensed.",
-        "summary": "DeepSeek released V4 Pro, a 1 trillion parameter open-source model under MIT license. The V4 architecture introduces Engram memory, a novel approach to persistent context across sessions. DeepSeek-V4-Pro-Max mode significantly advances knowledge capabilities, positioning itself as the best open-source model available. The preview was released in April 2026, with full open weights on Hugging Face. Chinese models are gaining ground on Anthropic and OpenAI, particularly for self-hosted deployments without usage restrictions.",
-        "importance": "A 1T parameter open-source model with MIT licensing is a major democratization milestone. The Engram memory architecture is a novel approach to long-term context that could influence frontier model design. Chinese AI models closing the gap with US labs shifts the competitive landscape.",
-        "noteworthy": "Test DeepSeek V4 Pro on Hugging Face for local inference. Compare Engram memory against RAG approaches. Review data security implications before deploying Chinese models in enterprise. Check compute requirements for 1T parameter inference.",
-        "link": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro"
-      },
-      {
-        "id": 23,
-        "title": "Immich 3.0 Released: Major Upgrade for Self-Hosted Photo Libraries",
-        "tag": "Homelab / Software",
-        "desc": "Immich 3.0 brings mobile editing, workflows, recently-added view, and breaking changes. The self-hosted Google Photos alternative matures.",
-        "summary": "Immich 3.0 was released on July 1, 2026, as a major update to the self-hosted photo and video management platform. New features include mobile editing, workflows, a recently-added view, and new merch. The release includes several breaking changes requiring migration steps. Immich has become the leading open-source alternative to Google Photos for homelab operators, with active community development on GitHub.",
-        "importance": "Self-hosted photo management reaching version 3.0 with mobile editing is a maturity milestone. For homelab operators, this is a viable full replacement for cloud photo services. Breaking changes require planned migration.",
-        "noteworthy": "Read migration guide before upgrading from 2.x. Back up your database. Test mobile editing on iOS and Android clients. Review workflow feature for automated photo organization. Update Docker image to ghcr.io/immich-app/immich-server:release.",
-        "link": "https://github.com/immich-app/immich/discussions/29439"
-      },
-      {
-        "id": 24,
-        "title": "Podman v6.0.0: Major Release Modernizes Networking, Quadlet Overhaul",
-        "tag": "Networking / Containers",
-        "desc": "Podman v6.0.0 transitions to Netavark/Pasta/nftables, adds Pesto rootless port forwarding, Quadlet REST API, and improved Docker compatibility.",
-        "summary": "Podman v6.0.0 was released on July 2, 2026. Key changes include modernized networking transitioning from slirp4netns and iptables to Netavark, Pasta, and nftables. Experimental Pesto rootless port forwarding preserves correct source IP for rootless containers on custom networks. Quadlets received a major overhaul with REST API support, improved file tracking, expanded .volume units, and additional search paths. Podman Machine offers improved multi-provider experience with a new OS update command. Docker compatibility was improved with updated API support.",
-        "importance": "The networking stack modernization is significant for rootless container deployments. Netavark/nftables is the future-proof path, replacing legacy iptables rules. Quadlet REST API makes systemd-based container management scriptable. This is the most important Podman release for homelab and enterprise Linux users.",
-        "noteworthy": "Upgrade to v6.0.0 via package managers. Test networking changes — existing slirp4netns configs may need migration. Evaluate Pesto for rootless port forwarding. Migrate Quadlet files to new format. Review Docker API compatibility for migration paths.",
-        "link": "https://blog.podman.io/2026/07/introducing-podman-v6-0-0/"
-      },
-      {
-        "id": 25,
-        "title": "LUKS Suspend Bug: Linux 6.9+ Stops Wiping Disk-Encryption Keys from Memory",
-        "tag": "Privacy / Linux",
-        "desc": "Since Linux 6.9, LUKS suspend no longer wipes encryption keys from RAM. Keys persist across suspend, breaking a core physical-security assumption.",
-        "summary": "Security researcher Ingo Blechschmidt reported that since Linux kernel 6.9, the LUKS suspend functionality stopped wiping disk-encryption keys from memory. Previously, suspending a system with encrypted disks would flush the master key from RAM, requiring re-entry of the passphrase on resume. The regression means encryption keys persist in RAM across suspend cycles, weakening protection against physical attacks (cold boot, DMA attacks) on laptops that are suspended rather than fully shut down.",
-        "importance": "Full-disk encryption's physical-security guarantee relies on keys being evicted from RAM when the system suspends. This regression silently breaks that assumption for every Linux laptop with LUKS. For users who suspend laptops in untrusted environments, the encryption is effectively degraded.",
-        "noteworthy": "Do not suspend laptops in untrusted environments — shut down instead. Monitor for kernel patch. Check if your distribution backported the fix. Consider using hibernate (which does wipe keys) instead of suspend. Verify with your kernel version.",
-        "link": "https://mathstodon.xyz/@iblech/116769502749142438"
-      },
-      {
-        "id": 26,
-        "title": "Market Snapshot: BTC $61,000 | ETH $1,580 | SOL $80 — Jobs Data Boost",
-        "tag": "Crypto / Markets",
-        "desc": "BTC holds $61K after weak US jobs data eased rate hike fears. Analysts eye $70K. ETH flat at $1,580. SOL relative strength at $80.",
-        "summary": "July 3, 2026: Bitcoin trades near $61,000 after weak US jobs data eased rate hike fears, with analysts suggesting a possible run toward $70,000. BTC is up 2.73% in July after falling 20.48% in June — its worst monthly drop. Capital appears to be rotating into BTC and gold. Ethereum remains flat near $1,580. Solana shows relative strength at approximately $80. Securitize debuted on NYSE with tokenized stocks live on Solana and Avalanche — the first newly public company to issue tokenized shares on its debut day.",
-        "importance": "Weak jobs data + AI sector weakness is creating a macro tailwind for BTC. The $61K hold above the $58K support is bullish short-term. Tokenized stocks on Solana/Avalanche marks a real-world asset (RWA) milestone. ETH remains the laggard — capital is flowing into BTC and SOL, not ETH.",
-        "noteworthy": "Watch $65K resistance on BTC — break could target $70K. SOL strength above $80 is bullish for altcoins. Monitor Securitize tokenized stock volume on Solana. ETH needs to hold $1,500 — below that, structural weakness accelerates.",
-        "link": "https://cointelegraph.com/markets/bitcoin-holds-61k-after-us-jobs-data-report-ai-sector-weakness-did-btc-bottom"
       }
     ]
   }
