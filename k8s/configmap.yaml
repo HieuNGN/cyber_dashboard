@@ -6,10 +6,8 @@ metadata:
 data:
   HOST: "0.0.0.0"
   PORT: "8080"
-  UPDATE_INTERVAL_HOURS: "12"
+  DAILY_UPDATE_TIME: "07:00"
   TIMEZONE: "Asia/Bangkok"
-  FETCH_ON_STARTUP: "true"
-  STARTUP_STALENESS_MINUTES: "30"
   DATABASE_PATH: "/app/data/dashboard.db"
   OBSIDIAN_VAULT_PATH: "/app/data/obsidian"
   FETCH_HACKERNEWS: "true"
