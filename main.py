@@ -7,36 +7,85 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import AsyncGenerator
 
-from fastapi import FastAPI, HTTPException, Query, Request
+from fastapi import Depends, FastAPI, HTTPException, Query, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from config import settings
-import database
-from scheduler import scheduler
+from dashboard_config import settings_to_config
+from scheduler import create_scheduler
 from models import ExportRequest
+from repositories import SQLiteArticleRepository
 
 
 base_dir = Path(__file__).parent
 
+security = HTTPBearer(auto_error=False)
+
+
+def require_api_key(credentials: HTTPAuthorizationCredentials | None = Depends(security)):
+    if not config.api_key:
+        raise HTTPException(status_code=403, detail="Export is disabled: no API_KEY configured")
+    token = (credentials.credentials if credentials else "").strip()
+    if not token or token != config.api_key:
+        raise HTTPException(status_code=401, detail="Invalid or missing API key")
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await database.init_db()
-    scheduler.start()
+    if not getattr(app.state, "scheduler", None):
+        app.state.scheduler = create_scheduler()
+    await app.state.scheduler.ingestion.repository.init_db()
+    app.state.scheduler.start()
     yield
-    scheduler.shutdown()
+    app.state.scheduler.shutdown()
 
 
-app = FastAPI(title="News Dashboard", version="4.0.0", lifespan=lifespan)
+app = FastAPI(
+    title="News Dashboard",
+    version="4.0.0",
+    lifespan=lifespan,
+    docs_url=None,
+    redoc_url=None,
+    openapi_url=None,
+)
+
+config = settings_to_config(settings)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_origins_list,
+    allow_origins=config.cors_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    return JSONResponse(
+        status_code=422,
+        content={"error": "Unprocessable Entity", "detail": "Request validation failed"},
+    )
+
+
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; "
+        "script-src 'self'; "
+        "style-src 'self' 'unsafe-inline'; "
+        "img-src 'self' data:; "
+        "connect-src 'self'; "
+        "font-src 'self';"
+    )
+    return response
 
 # Static
 app.mount("/static", StaticFiles(directory=base_dir / "static"), name="static")
@@ -47,9 +96,14 @@ async def read_index():
     return FileResponse(base_dir / "static" / "index.html")
 
 
+def _get_repo():
+    return app.state.scheduler.ingestion.repository
+
+
 @app.get("/api/news")
 async def get_news():
-    digest = await database.get_daily_digest()
+    repo = _get_repo()
+    digest = await repo.build_digest()
     return JSONResponse(digest)
 
 
@@ -63,7 +117,8 @@ async def get_articles(
     limit: int = Query(200, ge=1, le=1000),
     offset: int = Query(0, ge=0),
 ):
-    articles = await database.get_articles(
+    repo = _get_repo()
+    articles = await repo.get_articles(
         tag=tag, source=source, q=q, bookmarked=bookmarked, read=read,
         limit=limit, offset=offset,
     )
@@ -72,40 +127,44 @@ async def get_articles(
 
 @app.get("/api/articles/{article_id}")
 async def get_article(article_id: int):
-    article = await database.get_article_by_id(article_id)
+    repo = _get_repo()
+    article = await repo.get_article_by_id(article_id)
     if not article:
         return JSONResponse({"error": "not found"}, status_code=404)
     return article
 
 
-@app.post("/api/articles/{article_id}/bookmark")
+@app.post("/api/articles/{article_id}/bookmark", dependencies=[Depends(require_api_key)])
 async def toggle_bookmark(article_id: int):
-    state = await database.toggle_bookmark(article_id)
+    repo = _get_repo()
+    state = await repo.toggle_bookmark(article_id)
     return {"id": article_id, "is_bookmarked": state}
 
 
-@app.post("/api/articles/{article_id}/read")
+@app.post("/api/articles/{article_id}/read", dependencies=[Depends(require_api_key)])
 async def mark_read_endpoint(article_id: int, is_read: bool = True):
-    await database.mark_read(article_id, is_read)
+    repo = _get_repo()
+    await repo.mark_read(article_id, is_read)
     return {"id": article_id, "is_read": is_read}
 
 
 @app.get("/api/bookmarks")
 async def get_bookmarks():
-    articles = await database.get_articles(bookmarked=True, limit=500)
+    repo = _get_repo()
+    articles = await repo.get_articles(bookmarked=True, limit=500)
     return articles
 
 
 @app.get("/api/sources")
 async def get_sources():
-    statuses = await database.get_source_statuses()
+    repo = _get_repo()
+    statuses = await repo.get_source_statuses()
     return statuses
 
 
-@app.post("/api/trigger-update")
+@app.post("/api/trigger-update", dependencies=[Depends(require_api_key)])
 async def trigger_update():
-    # Run in background so request doesn't hang
-    asyncio.create_task(scheduler.run_update(manual=True))
+    asyncio.create_task(app.state.scheduler.run_update(manual=True))
     return {"success": True, "message": "Update triggered"}
 
 
@@ -116,7 +175,7 @@ async def events(request: Request):
     async def callback(event: str, payload: dict):
         await queue.put((event, payload))
 
-    scheduler.register_event_callback(callback)
+    app.state.scheduler.register_event_callback(callback)
 
     async def stream() -> AsyncGenerator[str, None]:
         try:
@@ -130,24 +189,23 @@ async def events(request: Request):
                     yield f"event: ping\ndata: {json.dumps({'time': datetime.datetime.now(datetime.timezone.utc).isoformat()})}\n\n"
         finally:
             try:
-                scheduler.event_callbacks.remove(callback)
+                app.state.scheduler.event_callbacks.remove(callback)
             except ValueError:
                 pass
 
     return StreamingResponse(stream(), media_type="text/event-stream")
 
 
-@app.post("/api/export")
+@app.post("/api/export", dependencies=[Depends(require_api_key)])
 async def export_md(req: ExportRequest):
     content = req.content
     safe_content = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f]', '', content)
     today = datetime.date.today().isoformat()
     filename = f"daily-digest-{today}.md"
 
-    base = settings.resolved_obsidian_vault_path.resolve()
+    base = config.resolved_obsidian_vault_path.resolve()
     if req.vault_path:
         requested = Path(req.vault_path).expanduser()
-        # Reject absolute paths that escape base; relative paths are resolved under base
         if requested.is_absolute():
             vault_path = requested
         else:
@@ -169,8 +227,9 @@ async def export_md(req: ExportRequest):
 
 @app.get("/health")
 async def health_check():
+    repo = _get_repo()
     try:
-        statuses = await database.get_source_statuses()
+        statuses = await repo.get_source_statuses()
         db_ok = True
     except Exception as e:
         statuses = []
@@ -181,10 +240,10 @@ async def health_check():
         "engine": "FastAPI/Uvicorn",
         "database_ok": db_ok,
         "sources": len(statuses),
-        "scheduler_running": scheduler.scheduler.running,
+        "scheduler_running": app.state.scheduler.scheduler.running,
     }
 
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host=settings.host, port=settings.port)
+    uvicorn.run(app, host=config.host, port=config.port)

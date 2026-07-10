@@ -15,14 +15,6 @@ class Deduplicator:
         self.seen_titles.add(title)
         return False
 
-
-_is_duplicate_instance = Deduplicator()
-
-
-def is_duplicate(article: Dict[str, Any]) -> bool:
-    return _is_duplicate_instance.is_duplicate(article)
-
-
-def reset_dedup():
-    _is_duplicate_instance.seen_urls.clear()
-    _is_duplicate_instance.seen_titles.clear()
+    def reset(self):
+        self.seen_urls.clear()
+        self.seen_titles.clear()

@@ -1,12 +1,17 @@
 import asyncio
+from pathlib import Path
+
 import aiosqlite
+
 from config import settings
+from dashboard_config import settings_to_config
 from services.classifier import classify
 from services.enricher import enrich
 
 
 async def main():
-    async with aiosqlite.connect(settings.resolved_database_path) as db:
+    config = settings_to_config(settings)
+    async with aiosqlite.connect(config.resolved_database_path) as db:
         db.row_factory = aiosqlite.Row
         async with db.execute(
             "SELECT id, title, url, desc, summary, tag, source, importance, noteworthy FROM articles"

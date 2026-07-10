@@ -4,8 +4,10 @@ from pathlib import Path
 
 class Settings(BaseSettings):
     # Schedule
-    daily_update_time: str = "07:00"
+    update_interval_hours: int = 12
     timezone: str = "Asia/Bangkok"
+    fetch_on_startup: bool = True
+    startup_staleness_minutes: int = 30
 
     # Server
     host: str = "127.0.0.1"
@@ -25,8 +27,11 @@ class Settings(BaseSettings):
     fetch_wccftech: bool = True
     fetch_theregister: bool = True
 
-    # CORS
-    cors_origins: str = "*"
+    # CORS — comma-separated list of allowed origins. Empty or "*" enables all origins (not recommended for production).
+    cors_origins: str = ""
+
+    # Security
+    api_key: str = ""
 
     # Retention (days)
     retention_days: int = 90
@@ -41,7 +46,9 @@ class Settings(BaseSettings):
 
     @property
     def cors_origins_list(self) -> list[str]:
-        if not self.cors_origins or self.cors_origins.strip() == "*":
+        if not self.cors_origins or self.cors_origins.strip() == "":
+            return []
+        if self.cors_origins.strip() == "*":
             return ["*"]
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
 

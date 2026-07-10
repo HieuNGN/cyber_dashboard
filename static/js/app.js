@@ -25,7 +25,12 @@ async function fetchNews() {
     populateFilters();
     initGrid(currentDay);
   } catch (e) {
-    document.getElementById('intelGrid').innerHTML = '<div class="loading">// CONNECTION ERROR // CHECK API ENDPOINT</div>';
+    const grid = document.getElementById('intelGrid');
+    grid.innerHTML = '';
+    const err = document.createElement('div');
+    err.className = 'loading';
+    err.textContent = '// CONNECTION ERROR // CHECK API ENDPOINT';
+    grid.appendChild(err);
   }
 }
 
@@ -53,12 +58,23 @@ function getFilteredItems(day) {
   return items;
 }
 
+function escapeHtml(str) {
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
+function setText(el, text) {
+  el.textContent = text;
+}
+
 function initGrid(day) {
   const grid = document.getElementById('intelGrid');
   const items = getFilteredItems(day);
   grid.innerHTML = '';
   if (items.length === 0) {
-    grid.innerHTML = '<div class="loading">// NO DATA FOR THIS SECTOR</div>';
+    const empty = document.createElement('div');
+    empty.className = 'loading';
+    empty.textContent = '// NO DATA FOR THIS SECTOR';
+    grid.appendChild(empty);
     return;
   }
   items.forEach((item, idx) => {
@@ -66,22 +82,48 @@ function initGrid(day) {
     card.className = 'card' + (item.is_read ? ' read' : '');
     card.dataset.id = item.id;
     card.onclick = (e) => { if (!e.target.closest('.bookmark-btn')) openModal(day, idx); };
-    card.innerHTML = `
-      <div class="card-header">
-        <div class="icon-box">${String(idx + 1).padStart(2, '0')}</div>
-        <span style="font-weight:700; color:#fff; font-size:.75rem;">${day.toUpperCase()} — UNIT_${String(idx + 1).padStart(2, '0')}</span>
-      </div>
-      <div class="card-content">
-        <span class="tag">${item.tag || 'General / Tech'}</span>
-        <div class="title">${item.title}</div>
-        <div class="description">${item.desc || ''}</div>
-      </div>
-      <div class="card-actions">
-        <span class="source-label">${item.source || 'Unknown'}</span>
-        <button class="bookmark-btn ${item.is_bookmarked ? 'active' : ''}" onclick="toggleBookmark(${item.id}, this)">
-          ${item.is_bookmarked ? '★ Bookmarked' : '☆ Bookmark'}
-        </button>
-      </div>`;
+
+    const header = document.createElement('div');
+    header.className = 'card-header';
+    const iconBox = document.createElement('div');
+    iconBox.className = 'icon-box';
+    setText(iconBox, String(idx + 1).padStart(2, '0'));
+    const unit = document.createElement('span');
+    unit.style.cssText = 'font-weight:700; color:#fff; font-size:.75rem;';
+    setText(unit, `${day.toUpperCase()} — UNIT_${String(idx + 1).padStart(2, '0')}`);
+    header.appendChild(iconBox);
+    header.appendChild(unit);
+    card.appendChild(header);
+
+    const content = document.createElement('div');
+    content.className = 'card-content';
+    const tag = document.createElement('span');
+    tag.className = 'tag';
+    setText(tag, item.tag || 'General / Tech');
+    content.appendChild(tag);
+    const title = document.createElement('div');
+    title.className = 'title';
+    setText(title, item.title);
+    content.appendChild(title);
+    const desc = document.createElement('div');
+    desc.className = 'description';
+    setText(desc, item.desc || '');
+    content.appendChild(desc);
+    card.appendChild(content);
+
+    const actions = document.createElement('div');
+    actions.className = 'card-actions';
+    const source = document.createElement('span');
+    source.className = 'source-label';
+    setText(source, item.source || 'Unknown');
+    actions.appendChild(source);
+    const btn = document.createElement('button');
+    btn.className = 'bookmark-btn' + (item.is_bookmarked ? ' active' : '');
+    btn.onclick = () => toggleBookmark(item.id, btn);
+    setText(btn, item.is_bookmarked ? '★ Bookmarked' : '☆ Bookmark');
+    actions.appendChild(btn);
+    card.appendChild(actions);
+
     grid.appendChild(card);
   });
 }
@@ -98,6 +140,16 @@ async function toggleBookmark(id, btn) {
   } catch (e) {
     showToast('Bookmark failed');
   }
+}
+
+function setErrorDisplay(elementId, message) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
+  el.innerHTML = '';
+  const div = document.createElement('div');
+  div.className = 'loading';
+  div.textContent = message;
+  el.appendChild(div);
 }
 
 function findItemById(id) {
@@ -169,18 +221,38 @@ function populateFilters() {
   const sourceSet = new Set();
   for (const day of ['today', 'yesterday', 'day_before_yesterday']) {
     (newsData[day].items || []).forEach(i => {
-      if (i.tag) tagSet.add(i.tag);
-      if (i.source) sourceSet.add(i.source);
+      if (i.tag) tagSet.add(String(i.tag));
+      if (i.source) sourceSet.add(String(i.source));
     });
   }
   const tagSel = document.getElementById('tagFilter');
   const savedTag = tagSel.value;
-  tagSel.innerHTML = '<option value="">All Tags</option>' + Array.from(tagSet).sort().map(t => `<option value="${t}">${t}</option>`).join('');
+  tagSel.innerHTML = '';
+  const allTags = document.createElement('option');
+  allTags.value = '';
+  allTags.textContent = 'All Tags';
+  tagSel.appendChild(allTags);
+  Array.from(tagSet).sort().forEach(t => {
+    const opt = document.createElement('option');
+    opt.value = t;
+    opt.textContent = t;
+    tagSel.appendChild(opt);
+  });
   tagSel.value = savedTag;
 
   const srcSel = document.getElementById('sourceFilter');
   const savedSrc = srcSel.value;
-  srcSel.innerHTML = '<option value="">All Sources</option>' + Array.from(sourceSet).sort().map(s => `<option value="${s}">${s}</option>`).join('');
+  srcSel.innerHTML = '';
+  const allSrc = document.createElement('option');
+  allSrc.value = '';
+  allSrc.textContent = 'All Sources';
+  srcSel.appendChild(allSrc);
+  Array.from(sourceSet).sort().forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s;
+    opt.textContent = s;
+    srcSel.appendChild(opt);
+  });
   srcSel.value = savedSrc;
 }
 
@@ -190,23 +262,53 @@ async function loadSources() {
     const res = await fetch('/api/sources');
     const sources = await res.json();
     const container = document.getElementById('sourcesList');
+    container.innerHTML = '';
     if (!sources.length) {
-      container.innerHTML = '<div class="loading">// No source status yet</div>';
+      const empty = document.createElement('div');
+      empty.className = 'loading';
+      empty.textContent = '// No source status yet';
+      container.appendChild(empty);
       return;
     }
-    container.innerHTML = sources.map(s => {
+    sources.forEach(s => {
       const statusClass = s.status === 'ok' ? 'ok' : (s.status === 'error' ? 'error' : 'unknown');
       const time = s.last_fetch ? new Date(s.last_fetch).toLocaleString() : 'never';
-      return `<div class="source-item">
-        <div>
-          <div class="source-name"><span class="status-dot ${statusClass}"></span>${s.source}</div>
-          <div class="source-meta">${time} · ${s.item_count} new articles</div>
-          ${s.error_message ? `<div class="source-meta" style="color:var(--accent)">${s.error_message}</div>` : ''}
-        </div>
-      </div>`;
-    }).join('');
+
+      const item = document.createElement('div');
+      item.className = 'source-item';
+      const body = document.createElement('div');
+      const sourceName = document.createElement('div');
+      sourceName.className = 'source-name';
+      const dot = document.createElement('span');
+      dot.className = 'status-dot ' + statusClass;
+      sourceName.appendChild(dot);
+      const nameText = document.createTextNode(s.source);
+      sourceName.appendChild(nameText);
+      body.appendChild(sourceName);
+
+      const meta = document.createElement('div');
+      meta.className = 'source-meta';
+      meta.textContent = `${time} · ${s.item_count} new articles`;
+      body.appendChild(meta);
+
+      if (s.error_message) {
+        const err = document.createElement('div');
+        err.className = 'source-meta';
+        err.style.color = 'var(--accent)';
+        err.textContent = s.error_message;
+        body.appendChild(err);
+      }
+
+      item.appendChild(body);
+      container.appendChild(item);
+    });
   } catch (e) {
-    document.getElementById('sourcesList').innerHTML = '<div class="loading">// Source error</div>';
+    const container = document.getElementById('sourcesList');
+    container.innerHTML = '';
+    const err = document.createElement('div');
+    err.className = 'loading';
+    err.textContent = '// Source error';
+    container.appendChild(err);
   }
 }
 
@@ -216,18 +318,35 @@ async function loadBookmarks() {
     const res = await fetch('/api/bookmarks');
     const bookmarks = await res.json();
     const container = document.getElementById('bookmarksList');
+    container.innerHTML = '';
     if (!bookmarks.length) {
-      container.innerHTML = '<div class="loading">// No bookmarks</div>';
+      const empty = document.createElement('div');
+      empty.className = 'loading';
+      empty.textContent = '// No bookmarks';
+      container.appendChild(empty);
       return;
     }
-    container.innerHTML = bookmarks.map(b => `
-      <div class="bm-item" onclick="openBookmarkById(${b.id})">
-        <div class="bm-title">${b.title}</div>
-        <div class="bm-tag">${b.tag || 'General / Tech'} · ${b.source || 'Unknown'}</div>
-      </div>
-    `).join('');
+    bookmarks.forEach(b => {
+      const item = document.createElement('div');
+      item.className = 'bm-item';
+      item.onclick = () => openBookmarkById(b.id);
+      const title = document.createElement('div');
+      title.className = 'bm-title';
+      title.textContent = b.title;
+      const tag = document.createElement('div');
+      tag.className = 'bm-tag';
+      tag.textContent = `${b.tag || 'General / Tech'} · ${b.source || 'Unknown'}`;
+      item.appendChild(title);
+      item.appendChild(tag);
+      container.appendChild(item);
+    });
   } catch (e) {
-    document.getElementById('bookmarksList').innerHTML = '<div class="loading">// Bookmark error</div>';
+    const container = document.getElementById('bookmarksList');
+    container.innerHTML = '';
+    const err = document.createElement('div');
+    err.className = 'loading';
+    err.textContent = '// Bookmark error';
+    container.appendChild(err);
   }
 }
 
