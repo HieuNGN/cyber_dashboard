@@ -22,4 +22,4 @@ data/dashboard.db
 *.db
 .playwright-mcp/
 dashboard_*.png
-skills/
+skills
