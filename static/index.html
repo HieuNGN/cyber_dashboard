@@ -20,6 +20,8 @@ h1 { font-size:2.2rem; font-weight:800; text-transform:uppercase; letter-spacing
 @keyframes blinker{50%{opacity:0}}
 .net-stats { font-size:.7rem; color:var(--text-dim); display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:.5rem; }
 .clock { color:var(--cyan); }
+.api-key-input { background:var(--card-bg); border:1px solid var(--border); color:var(--text); padding:.3rem .5rem; font-family:inherit; font-size:.75rem; width:160px; }
+.api-key-input:focus { border-color:var(--accent); outline:none; }
 /* Controls */
 .controls { display:flex; flex-wrap:wrap; gap:.8rem; margin-bottom:1.2rem; align-items:center; }
 .search-box { flex:1; min-width:240px; background:var(--card-bg); border:1px solid var(--border); color:var(--text); padding:.6rem 1rem; font-family:inherit; outline:none; }
@@ -116,6 +118,7 @@ h1 { font-size:2.2rem; font-weight:800; text-transform:uppercase; letter-spacing
     News Dashboard
     <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
       <div class="status-indicator"><div class="blink"></div>System Live</div>
+      <input type="password" class="api-key-input" id="apiKeyInput" placeholder="API key">
       <div class="clock" id="clock">--:-- UTC+7</div>
     </div>
   </h1>
@@ -128,7 +131,7 @@ h1 { font-size:2.2rem; font-weight:800; text-transform:uppercase; letter-spacing
     <input type="text" class="search-box" id="searchBox" placeholder="Search intelligence...">
     <select class="filter-select" id="tagFilter"><option value="">All Tags</option></select>
     <select class="filter-select" id="sourceFilter"><option value="">All Sources</option></select>
-    <button class="refresh-btn" id="refreshBtn" onclick="triggerUpdate()">Refresh Now</button>
+    <button class="refresh-btn" id="refreshBtn">Refresh Now</button>
   </div>
 
   <div class="date-tabs" id="dateTabs">
@@ -149,28 +152,28 @@ h1 { font-size:2.2rem; font-weight:800; text-transform:uppercase; letter-spacing
 
   <div class="pane-body active" id="pane-notes">
     <div class="toolbar">
-      <button class="tool-btn" onclick="insertText('**','**')" title="Bold"><b>B</b></button>
-      <button class="tool-btn" onclick="insertText('*','*')" title="Italic"><i>I</i></button>
-      <button class="tool-btn" onclick="insertText('~~','~~')" title="Strikethrough"><s>S</s></button>
-      <button class="tool-btn" onclick="insertText('`','`')" title="Inline Code">&lt;/&gt;</button>
-      <button class="tool-btn" onclick="insertText('[',']()')" title="Link">🔗</button>
-      <button class="tool-btn" onclick="insertText('\n- ','')" title="Bullet">•</button>
-      <button class="tool-btn" onclick="insertText('\n- [ ] ','')" title="Checkbox">☐</button>
-      <button class="tool-btn" onclick="insertText('\n1. ','')" title="Numbered List">#</button>
+      <button class="tool-btn" data-action="bold" title="Bold"><b>B</b></button>
+      <button class="tool-btn" data-action="italic" title="Italic"><i>I</i></button>
+      <button class="tool-btn" data-action="strike" title="Strikethrough"><s>S</s></button>
+      <button class="tool-btn" data-action="code" title="Inline Code">&lt;/&gt;</button>
+      <button class="tool-btn" data-action="link" title="Link">🔗</button>
+      <button class="tool-btn" data-action="bullet" title="Bullet">•</button>
+      <button class="tool-btn" data-action="checkbox" title="Checkbox">☐</button>
+      <button class="tool-btn" data-action="numbered" title="Numbered List">#</button>
     </div>
     <div class="toolbar">
-      <button class="tool-btn" onclick="insertText('\n> ','')" title="Quote">❝</button>
-      <button class="tool-btn" onclick="insertText('###### ','')" title="Heading 6">H</button>
-      <button class="tool-btn" onclick="insertText('---\n','')" title="Horizontal Rule">—</button>
-      <button class="tool-btn" onclick="insertText('||','||')" title="Spoiler">||</button>
-      <button class="tool-btn" onclick="insertText('==','==')" title="Highlight">==</button>
-      <button class="tool-btn" onclick="insertText('\n```\n','\n```\n')" title="Code Block">{}</button>
-      <button class="tool-btn" onclick="insertText('~~','~~')" title="Highlight Yellow" style="color:var(--yellow)">🟡</button>
-      <button class="tool-btn" onclick="clearNotes()" title="Clear All">✕</button>
+      <button class="tool-btn" data-action="quote" title="Quote">❝</button>
+      <button class="tool-btn" data-action="heading" title="Heading 6">H</button>
+      <button class="tool-btn" data-action="hr" title="Horizontal Rule">—</button>
+      <button class="tool-btn" data-action="spoiler" title="Spoiler">||</button>
+      <button class="tool-btn" data-action="highlight" title="Highlight">==</button>
+      <button class="tool-btn" data-action="codeblock" title="Code Block">{}</button>
+      <button class="tool-btn" data-action="highlight-yellow" title="Highlight Yellow" style="color:var(--yellow)">🟡</button>
+      <button class="tool-btn" id="clearNotesBtn" title="Clear All">✕</button>
     </div>
     <input type="text" class="vault-path" id="vaultPath" placeholder="Obsidian vault path...">
     <textarea id="notes-editor" placeholder="Log your analysis here…"></textarea>
-    <div class="pane-footer"><button class="export-btn" onclick="exportToObsidian()">Export .md</button></div>
+    <div class="pane-footer"><button class="export-btn" id="exportBtn">Export .md</button></div>
     <div id="exportMsg" class="export-msg"></div>
   </div>
 
@@ -183,14 +186,14 @@ h1 { font-size:2.2rem; font-weight:800; text-transform:uppercase; letter-spacing
   </div>
 </div>
 
-<button class="mobile-toggle" onclick="togglePane()">☰</button>
+<button class="mobile-toggle" id="mobileToggle">☰</button>
 
 <div class="toast" id="toast"></div>
 
 <!-- Modal -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-content">
-    <button class="close-btn" onclick="closeModal()">CLOSE [X]</button>
+    <button class="close-btn" id="modalCloseBtn">CLOSE [X]</button>
     <div class="modal-header">
       <span id="modalTag" class="tag">TAG</span>
       <h2 id="modalTitle" style="color:#fff; margin:1rem 0 0 0; font-size:1.8rem;">TITLE</h2>

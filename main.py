@@ -28,7 +28,7 @@ security = HTTPBearer(auto_error=False)
 
 def require_api_key(credentials: HTTPAuthorizationCredentials | None = Depends(security)):
     if not config.api_key:
-        raise HTTPException(status_code=403, detail="Export is disabled: no API_KEY configured")
+        raise HTTPException(status_code=403, detail="State-changing endpoint disabled: no API_KEY configured")
     token = (credentials.credentials if credentials else "").strip()
     if not token or token != config.api_key:
         raise HTTPException(status_code=401, detail="Invalid or missing API key")

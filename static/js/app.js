@@ -129,8 +129,10 @@ function initGrid(day) {
 }
 
 async function toggleBookmark(id, btn) {
+  const key = getApiKey();
   try {
-    const res = await fetch(`/api/articles/${id}/bookmark`, { method: 'POST' });
+    const res = await fetch(`/api/articles/${id}/bookmark`, { method: 'POST', headers: key ? {'Authorization': `Bearer ${key}`} : {} });
+    if (!res.ok) throw new Error(`${res.status}`);
     const json = await res.json();
     btn.classList.toggle('active', json.is_bookmarked);
     btn.textContent = json.is_bookmarked ? '★ Bookmarked' : '☆ Bookmark';
@@ -138,7 +140,7 @@ async function toggleBookmark(id, btn) {
     if (item) item.is_bookmarked = json.is_bookmarked;
     loadBookmarks();
   } catch (e) {
-    showToast('Bookmark failed');
+    showToast('Bookmark failed: ' + e.message);
   }
 }
 
@@ -170,13 +172,62 @@ function openModal(day, idx) {
   document.getElementById('modalNoteworthy').textContent = item.noteworthy || 'No action items available.';
   document.getElementById('modalLink').href = item.link;
   document.getElementById('modalOverlay').style.display = 'flex';
-  fetch(`/api/articles/${item.id}/read`, { method: 'POST' }).then(() => {
+  const key = getApiKey();
+  fetch(`/api/articles/${item.id}/read`, { method: 'POST', headers: key ? {'Authorization': `Bearer ${key}`} : {} }).then(r => {
+    if (!r.ok) throw new Error(r.status);
     item.is_read = true;
     initGrid(currentDay);
-  });
+  }).catch(() => {});
 }
 
 function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
+
+function getApiKey() {
+  const input = document.getElementById('apiKeyInput');
+  return input ? input.value.trim() : '';
+}
+
+function saveApiKey() {
+  const key = getApiKey();
+  if (key) localStorage.setItem('dash_api_key', key);
+}
+
+function loadApiKey() {
+  const input = document.getElementById('apiKeyInput');
+  const saved = localStorage.getItem('dash_api_key');
+  if (input && saved) input.value = saved;
+}
+
+function bindButton(id, handler) {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('click', handler);
+}
+
+const TOOL_ACTIONS = {
+  bold: ['**', '**'],
+  italic: ['*', '*'],
+  strike: ['~~', '~~'],
+  code: ['`', '`'],
+  link: ['[', ']()'],
+  bullet: ['\n- ', ''],
+  checkbox: ['\n- [ ] ', ''],
+  numbered: ['\n1. ', ''],
+  quote: ['\n> ', ''],
+  heading: ['###### ', ''],
+  hr: ['---\n', ''],
+  spoiler: ['||', '||'],
+  highlight: ['==', '=='],
+  'highlight-yellow': ['==', '=='],
+  codeblock: ['\n```\n', '\n```\n'],
+};
+
+function bindToolbar() {
+  document.querySelectorAll('.tool-btn[data-action]').forEach(btn => {
+    const action = TOOL_ACTIONS[btn.dataset.action];
+    if (!action) return;
+    btn.addEventListener('click', () => insertText(action[0], action[1]));
+  });
+}
 
 // Date tabs
 document.getElementById('dateTabs').addEventListener('click', e => {
@@ -383,17 +434,21 @@ function insertText(before, after) {
 vaultPathInput.addEventListener('input', () => localStorage.setItem('dash_vault_path', vaultPathInput.value));
 
 async function exportToObsidian() {
+  saveApiKey();
+  const key = getApiKey();
   const text = editor.value;
   const now = new Date();
   const dateStamp = now.toISOString().split('T')[0];
   const content = `---\ndate: ${dateStamp}\ntags: [daily-digest, intelligence, dashboard]\nsource: ${window.location.origin}\n---\n\n${text}`;
   const vaultPath = vaultPathInput.value || null;
+  const headers = {'Content-Type':'application/json'};
+  if (key) headers['Authorization'] = `Bearer ${key}`;
   try {
-    const res = await fetch('/api/export', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({content, vault_path: vaultPath}) });
+    const res = await fetch('/api/export', { method:'POST', headers, body: JSON.stringify({content, vault_path: vaultPath}) });
     const json = await res.json();
     const msg = document.getElementById('exportMsg');
     if(json.success) { msg.textContent = 'Saved: ' + json.file.split('/').pop(); msg.style.color = 'var(--green)'; }
-    else { msg.textContent = 'Export failed'; msg.style.color = 'var(--accent)'; }
+    else { msg.textContent = 'Export failed: ' + (json.detail || res.status); msg.style.color = 'var(--accent)'; }
     setTimeout(() => msg.textContent = '', 5000);
   } catch(err) {
     const msg = document.getElementById('exportMsg');
@@ -416,11 +471,18 @@ async function triggerUpdate() {
   const btn = document.getElementById('refreshBtn');
   btn.disabled = true;
   btn.textContent = 'Refreshing...';
+  saveApiKey();
+  const key = getApiKey();
   try {
-    await fetch('/api/trigger-update', { method: 'POST' });
-    showToast('Update triggered');
+    const res = await fetch('/api/trigger-update', { method: 'POST', headers: key ? {'Authorization': `Bearer ${key}`} : {} });
+    if (res.ok) {
+      showToast('Update triggered');
+    } else {
+      const body = await res.json().catch(() => ({}));
+      showToast(`Trigger failed: ${res.status} ${body.detail || res.statusText}`);
+    }
   } catch (e) {
-    showToast('Trigger failed');
+    showToast('Trigger failed: ' + e.message);
   } finally {
     setTimeout(() => { btn.disabled = false; btn.textContent = 'Refresh Now'; }, 3000);
   }
@@ -459,7 +521,16 @@ window.onload = () => {
   loadSources();
   loadBookmarks();
   loadNotes();
+  loadApiKey();
+  const apiKeyInput = document.getElementById('apiKeyInput');
+  if (apiKeyInput) apiKeyInput.addEventListener('input', saveApiKey);
   editor.addEventListener('input', saveNotes);
+  bindButton('refreshBtn', triggerUpdate);
+  bindButton('modalCloseBtn', closeModal);
+  bindButton('mobileToggle', togglePane);
+  bindButton('clearNotesBtn', clearNotes);
+  bindButton('exportBtn', exportToObsidian);
+  bindToolbar();
   connectSSE();
   setInterval(() => { fetchNews(); loadSources(); }, 60000);
 };
