@@ -24,3 +24,4 @@ data/dashboard.db
 dashboard_*.png
 skills
 *.md
+docker/
