@@ -26,6 +26,6 @@ skills
 *.md
 !AGENTS.md
 !CONTEXT.md
-!.opencode.md
 !README.md
+.opencode.md
 docker/
