@@ -1,29 +1,28 @@
-import httpx
 from datetime import datetime, timezone
-from typing import List, Dict, Any
+from typing import Any, Dict, List
+
+import httpx
 
 from .base import Fetcher
 
-
 CISA_KEV_URL = "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
+USER_AGENT = "CybersecDashboard/4.0 (+https://github.com/hieu/cybersec-dashboard)"
 
 
 class CISAKEVFetcher(Fetcher):
-    def __init__(self, config=None, enabled: bool = True):
-        super().__init__("CISA KEV", enabled)
+    def __init__(self, config=None):
+        super().__init__("CISA KEV")
         self.config = config
 
     async def fetch(self) -> List[Dict[str, Any]]:
         max_articles = self.config.max_articles_per_source if self.config else 50
         max_summary = self.config.max_summary_length if self.config else 500
 
-        async with httpx.AsyncClient(timeout=30, follow_redirects=False) as client:
+        async with httpx.AsyncClient(
+            timeout=30, follow_redirects=False, headers={"User-Agent": USER_AGENT}
+        ) as client:
             resp = await client.get(CISA_KEV_URL)
-            if 300 <= resp.status_code < 400:
-                raise httpx.HTTPStatusError(
-                    f"CISA KEV feed returned redirect {resp.status_code}; refusing to follow",
-                    request=resp.request, response=resp
-                )
+            self._raise_on_redirect(resp)
             resp.raise_for_status()
             data = resp.json()
 

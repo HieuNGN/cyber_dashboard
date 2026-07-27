@@ -1,9 +1,9 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
-from fetchers.base import Fetcher
-from repositories import ArticleRepository, IngestResult, SourceResult
+from fetchers import Fetcher
+from repositories import IngestResult, SourceResult
 from services.classifier import classify
 from services.dedup import Deduplicator
 from services.enricher import enrich
@@ -20,7 +20,7 @@ class Ingestion:
     def __init__(
         self,
         fetchers: List[Fetcher],
-        repository: ArticleRepository,
+        repository,
         config=None,
     ):
         self.fetchers = fetchers
@@ -34,8 +34,6 @@ class Ingestion:
         deduplicator = Deduplicator()
 
         for fetcher in self.fetchers:
-            if not fetcher.is_enabled():
-                continue
             result = await self._ingest_source(fetcher, deduplicator)
             source_results.append(result)
             if result.status == "ok":
@@ -70,11 +68,12 @@ class Ingestion:
         new_for_source = 0
         for raw in raw_articles:
             article = normalize_article(raw)
-            if not article:
+            if article is None:
                 continue
             if deduplicator.is_duplicate(article):
                 continue
-            article["tag"] = classify(article)
+            tag = classify(article)
+            article = replace(article, tag=tag)
             article = enrich(article)
             inserted = await self.repository.insert_or_ignore_article(article)
             if inserted:

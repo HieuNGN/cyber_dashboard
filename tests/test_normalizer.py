@@ -1,5 +1,6 @@
 import pytest
 
+from services.article import Article
 from services.normalizer import normalize_article
 
 
@@ -13,14 +14,14 @@ def test_normalize_article_strips_html_from_title_and_desc():
     }
     article = normalize_article(raw)
 
-    assert article["title"] == "normal title bold"
-    assert "<" not in article["title"]
-    assert article["desc"] == "click summary"
-    assert "<" not in article["desc"]
-    assert article["source"] == "alert(3)Feed"
-    assert "<" not in article["source"]
-    assert "<script>" not in article["source"]
-    assert article["raw_tags"] == ["ok", "plain"]
+    assert article.title == "normal title bold"
+    assert "<" not in article.title
+    assert article.desc == "click summary"
+    assert "<" not in article.desc
+    assert article.source == "alert(3)Feed"
+    assert "<" not in article.source
+    assert "<script>" not in article.source
+    assert article.raw_tags == ["ok", "plain"]
 
 
 def test_normalize_article_keeps_plain_text_intact():
@@ -29,14 +30,15 @@ def test_normalize_article_keeps_plain_text_intact():
         "url": "https://example.com/article",
     }
     article = normalize_article(raw)
-    assert article["title"] == "Plain text title"
-    assert article["source"] == "unknown"
+    assert article.title == "Plain text title"
+    assert article.source == "unknown"
+    assert isinstance(article, Article)
 
 
 def test_normalize_article_rejects_missing_title_or_url():
-    assert normalize_article({"title": "", "url": "https://example.com"}) == {}
-    assert normalize_article({"title": "Title", "url": ""}) == {}
-    assert normalize_article({}) == {}
+    assert normalize_article({"title": "", "url": "https://example.com"}) is None
+    assert normalize_article({"title": "Title", "url": ""}) is None
+    assert normalize_article({}) is None
 
 
 def test_normalize_article_cleans_url_for_dedup():
@@ -45,4 +47,4 @@ def test_normalize_article_cleans_url_for_dedup():
         "url": "https://example.com/article?utm_source=x#section",
     }
     article = normalize_article(raw)
-    assert article["url"] == "https://example.com/article"
+    assert article.url == "https://example.com/article"

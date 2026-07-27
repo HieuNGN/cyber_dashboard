@@ -1,11 +1,11 @@
 import asyncio
-import os
 import re
 import json
+import secrets
 import datetime
 from contextlib import asynccontextmanager
 from pathlib import Path
-from typing import AsyncGenerator
+from typing import AsyncGenerator, List, Optional
 
 from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.exceptions import RequestValidationError
@@ -15,10 +15,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from config import settings
-from dashboard_config import settings_to_config
 from scheduler import create_scheduler
-from models import ExportRequest
-from repositories import SQLiteArticleRepository
+from models import ArticleOut, ExportRequest
 
 
 base_dir = Path(__file__).parent
@@ -30,7 +28,7 @@ def require_api_key(credentials: HTTPAuthorizationCredentials | None = Depends(s
     if not config.api_key:
         raise HTTPException(status_code=403, detail="State-changing endpoint disabled: no API_KEY configured")
     token = (credentials.credentials if credentials else "").strip()
-    if not token or token != config.api_key:
+    if not token or not secrets.compare_digest(token, config.api_key):
         raise HTTPException(status_code=401, detail="Invalid or missing API key")
 
 
@@ -38,6 +36,7 @@ def require_api_key(credentials: HTTPAuthorizationCredentials | None = Depends(s
 async def lifespan(app: FastAPI):
     if not getattr(app.state, "scheduler", None):
         app.state.scheduler = create_scheduler()
+    app.state.sse_client_count = 0  # ponytail: simple int cap, per-connection tracking if throughput matters
     await app.state.scheduler.ingestion.repository.init_db()
     app.state.scheduler.start()
     yield
@@ -53,13 +52,13 @@ app = FastAPI(
     openapi_url=None,
 )
 
-config = settings_to_config(settings)
+config = settings
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=config.cors_origins,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=config.cors_origins_list,
+    allow_methods=["GET", "POST"],
+    allow_headers=["Authorization", "Content-Type"],
 )
 
 
@@ -79,12 +78,13 @@ async def add_security_headers(request: Request, call_next):
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     response.headers["Content-Security-Policy"] = (
         "default-src 'self'; "
-        "script-src 'self'; "
+        "script-src 'self' 'unsafe-inline'; "
         "style-src 'self' 'unsafe-inline'; "
         "img-src 'self' data:; "
         "connect-src 'self'; "
         "font-src 'self';"
     )
+    response.headers["Cache-Control"] = "no-store"
     return response
 
 # Static
@@ -107,7 +107,7 @@ async def get_news():
     return JSONResponse(digest)
 
 
-@app.get("/api/articles")
+@app.get("/api/articles", response_model=List[ArticleOut])
 async def get_articles(
     tag: str = Query(None),
     source: str = Query(None),
@@ -125,7 +125,7 @@ async def get_articles(
     return articles
 
 
-@app.get("/api/articles/{article_id}")
+@app.get("/api/articles/{article_id}", response_model=Optional[ArticleOut])
 async def get_article(article_id: int):
     repo = _get_repo()
     article = await repo.get_article_by_id(article_id)
@@ -148,7 +148,7 @@ async def mark_read_endpoint(article_id: int, is_read: bool = True):
     return {"id": article_id, "is_read": is_read}
 
 
-@app.get("/api/bookmarks")
+@app.get("/api/bookmarks", response_model=List[ArticleOut])
 async def get_bookmarks():
     repo = _get_repo()
     articles = await repo.get_articles(bookmarked=True, limit=500)
@@ -170,12 +170,15 @@ async def trigger_update():
 
 @app.get("/api/events")
 async def events(request: Request):
+    if app.state.sse_client_count >= 20:
+        return JSONResponse(status_code=503, content={"error": "Too many SSE connections"})
     queue: asyncio.Queue = asyncio.Queue()
 
     async def callback(event: str, payload: dict):
         await queue.put((event, payload))
 
     app.state.scheduler.register_event_callback(callback)
+    app.state.sse_client_count += 1
 
     async def stream() -> AsyncGenerator[str, None]:
         try:
@@ -192,6 +195,7 @@ async def events(request: Request):
                 app.state.scheduler.event_callbacks.remove(callback)
             except ValueError:
                 pass
+            app.state.sse_client_count -= 1
 
     return StreamingResponse(stream(), media_type="text/event-stream")
 
@@ -231,7 +235,7 @@ async def health_check():
     try:
         statuses = await repo.get_source_statuses()
         db_ok = True
-    except Exception as e:
+    except Exception:
         statuses = []
         db_ok = False
     return {

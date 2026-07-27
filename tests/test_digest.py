@@ -1,5 +1,6 @@
 import pytest
 
+from services.article import Article
 from services.digest_formatting import local_day_bounds, to_date_label
 
 
@@ -22,12 +23,10 @@ async def test_build_digest_buckets_by_day(repo):
 
     today = datetime.now(timezone.utc).isoformat()
 
-    await repo.insert_or_ignore_article({
-        "title": "Today story",
-        "url": "https://example.com/today",
-        "source": "test",
-        "published_at": today,
-    })
+    await repo.insert_or_ignore_article(
+        Article(title="Today story", url="https://example.com/today",
+                source="test", published_at=today)
+    )
 
     digest = await repo.build_digest()
     today_items = digest["today"]["items"]
@@ -48,13 +47,11 @@ async def test_build_digest_falls_back_when_empty(repo):
 async def test_build_digest_items_shape(repo):
     from datetime import datetime, timezone
 
-    await repo.insert_or_ignore_article({
-        "title": "A",
-        "url": "https://example.com/a",
-        "source": "test",
-        "published_at": datetime.now(timezone.utc).isoformat(),
-        "tag": "Security / Vulnerability",
-    })
+    await repo.insert_or_ignore_article(
+        Article(title="A", url="https://example.com/a", source="test",
+                published_at=datetime.now(timezone.utc).isoformat(),
+                tag="Security / Vulnerability")
+    )
 
     digest = await repo.build_digest()
     item = digest["today"]["items"][0]

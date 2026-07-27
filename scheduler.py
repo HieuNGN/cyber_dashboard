@@ -2,26 +2,45 @@ import asyncio
 from datetime import datetime, timezone
 from typing import Awaitable, Callable, List
 
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from apscheduler.triggers.interval import IntervalTrigger
-
-from dashboard_config import DashboardConfig
-from fetchers import CISAKEVFetcher, RSSFetcher
-from fetchers.base import Fetcher
+from fetchers import CISAKEVFetcher, Fetcher, RSSFetcher
 from ingestion import Ingestion
-from repositories import ArticleRepository, SQLiteArticleRepository
+from repositories import SQLiteArticleRepository
 
+
+# ponytail: table replaces 8 if-blocks; same names/URLs/order as before.
+SOURCES = [
+    ("hackernews", "rss", "The Hacker News", "https://feeds.feedburner.com/TheHackersNews"),
+    ("bleepingcomputer", "rss", "BleepingComputer", "https://www.bleepingcomputer.com/feed/"),
+    ("krebs", "rss", "Krebs on Security", "https://krebsonsecurity.com/feed/"),
+    ("cisa_kev", "kev", "", ""),  # ponytail: KEV fetcher hardcodes name/url
+    ("tomshardware", "rss", "Tom's Hardware", "https://www.tomshardware.com/feeds.xml"),
+    ("servethehome", "rss", "ServeTheHome", "https://www.servethehome.com/feed/"),
+    ("wccftech", "rss", "Wccftech", "https://wccftech.com/feed/"),
+    ("theregister", "rss", "The Register", "https://www.theregister.com/headlines.atom"),
+]
 
 EventCallback = Callable[[str, dict], Awaitable[None]]
 
 
+class _SchedulerShim:
+    """ponytail: tiny stand-in exposing .running so main.py's health check stays
+    unchanged after dropping apscheduler. Only attribute main.py reads."""
+    def __init__(self):
+        self._running = False
+
+    @property
+    def running(self) -> bool:
+        return self._running
+
+
 class DashboardScheduler:
-    def __init__(self, ingestion: Ingestion, config: DashboardConfig):
-        self.scheduler = AsyncIOScheduler(timezone=config.timezone)
+    def __init__(self, ingestion: Ingestion, config):
+        self.scheduler = _SchedulerShim()
         self.event_callbacks: List[EventCallback] = []
         self.ingestion = ingestion
         self.config = config
         self._update_lock = asyncio.Lock()
+        self._tasks: List[asyncio.Task] = []
 
     def register_event_callback(self, callback: EventCallback):
         self.event_callbacks.append(callback)
@@ -34,20 +53,20 @@ class DashboardScheduler:
                 pass
 
     def start(self):
-        self.scheduler.add_job(
-            self.run_update,
-            trigger=IntervalTrigger(hours=self.config.update_interval_hours),
-            id="interval_update",
-            replace_existing=True,
-        )
-        self.scheduler.add_job(
-            self._startup_update,
-            "date",
-            run_date=datetime.now(timezone.utc),
-            id="startup_update",
-            replace_existing=True,
-        )
-        self.scheduler.start()
+        interval_seconds = self.config.update_interval_hours * 3600
+
+        async def _interval_loop():
+            # ponytail: fixed sleep-first cadence; apscheduler IntervalTrigger also
+            # sleeps before first fire. Drift not compensated. Add if SLA matters.
+            while True:
+                await asyncio.sleep(interval_seconds)
+                await self.run_update(manual=False)
+
+        self._tasks = [
+            asyncio.ensure_future(_interval_loop()),
+            asyncio.ensure_future(self._startup_update()),
+        ]
+        self.scheduler._running = True
 
     async def _startup_update(self):
         await asyncio.sleep(3)
@@ -95,38 +114,31 @@ class DashboardScheduler:
             })
 
     def shutdown(self):
-        self.scheduler.shutdown()
+        for task in self._tasks:
+            task.cancel()
+        self._tasks = []
+        self.scheduler._running = False
 
 
-def build_fetchers(config: DashboardConfig) -> List[Fetcher]:
+def build_fetchers(config) -> List[Fetcher]:
     fetchers = []
-    if config.fetch_hackernews:
-        fetchers.append(RSSFetcher("The Hacker News", "https://feeds.feedburner.com/TheHackersNews", config))
-    if config.fetch_bleepingcomputer:
-        fetchers.append(RSSFetcher("BleepingComputer", "https://www.bleepingcomputer.com/feed/", config))
-    if config.fetch_krebs:
-        fetchers.append(RSSFetcher("Krebs on Security", "https://krebsonsecurity.com/feed/", config))
-    if config.fetch_cisa_kev:
-        fetchers.append(CISAKEVFetcher(config))
-    if config.fetch_tomshardware:
-        fetchers.append(RSSFetcher("Tom's Hardware", "https://www.tomshardware.com/feeds.xml", config))
-    if config.fetch_servethehome:
-        fetchers.append(RSSFetcher("ServeTheHome", "https://www.servethehome.com/feed/", config))
-    if config.fetch_wccftech:
-        fetchers.append(RSSFetcher("Wccftech", "https://wccftech.com/feed/", config))
-    if config.fetch_theregister:
-        fetchers.append(RSSFetcher("The Register", "https://www.theregister.com/headlines.atom", config))
+    for attr, kind, name, url in SOURCES:
+        if not getattr(config, f"fetch_{attr}", False):
+            continue
+        if kind == "kev":
+            fetchers.append(CISAKEVFetcher(config))
+        else:
+            fetchers.append(RSSFetcher(name, url, config))
     return fetchers
 
 
 def create_scheduler(
-    repository: ArticleRepository = None,
-    config: DashboardConfig = None,
+    repository=None,
+    config=None,
 ) -> DashboardScheduler:
     if config is None:
         from config import settings
-        from dashboard_config import settings_to_config
-        config = settings_to_config(settings)
+        config = settings
     if repository is None:
         repository = SQLiteArticleRepository(config.resolved_database_path)
     ingestion = Ingestion(fetchers=build_fetchers(config), repository=repository, config=config)

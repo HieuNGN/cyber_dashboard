@@ -5,6 +5,8 @@ metadata:
   namespace: cybersec-dashboard
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: cybersec-dashboard
@@ -15,13 +17,15 @@ spec:
     spec:
       containers:
         - name: dashboard
-          image: cybersec-dashboard:latest
+          image: cybersec-dashboard:4.0.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
           envFrom:
             - configMapRef:
                 name: dashboard-config
+            - secretRef:
+                name: dashboard-secrets
           volumeMounts:
             - name: data
               mountPath: /app/data

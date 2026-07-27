@@ -1,10 +1,12 @@
-from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
 import aiosqlite
+
+from config import settings
+from services.article import Article
 
 
 @dataclass
@@ -22,48 +24,7 @@ class IngestResult:
     source_results: List[SourceResult] = field(default_factory=list)
 
 
-class ArticleRepository(ABC):
-    """Persistence port for articles and source status."""
-
-    @abstractmethod
-    async def insert_or_ignore_article(self, article: Dict[str, Any]) -> bool:
-        """Return True if a new row was inserted."""
-        ...
-
-    @abstractmethod
-    async def update_source_status(self, result: SourceResult) -> None:
-        ...
-
-    @abstractmethod
-    async def prune_old_articles(self, retention_days: int) -> None:
-        ...
-
-    @abstractmethod
-    async def get_articles(self, **filters) -> List[Dict[str, Any]]:
-        ...
-
-    @abstractmethod
-    async def get_article_by_id(self, article_id: int) -> Optional[Dict[str, Any]]:
-        ...
-
-    @abstractmethod
-    async def toggle_bookmark(self, article_id: int) -> bool:
-        ...
-
-    @abstractmethod
-    async def mark_read(self, article_id: int, is_read: bool = True) -> None:
-        ...
-
-    @abstractmethod
-    async def get_source_statuses(self) -> List[Dict[str, Any]]:
-        ...
-
-    @abstractmethod
-    async def build_digest(self) -> Dict[str, Any]:
-        ...
-
-
-class SQLiteArticleRepository(ArticleRepository):
+class SQLiteArticleRepository:
     """SQLite adapter for ArticleRepository."""
 
     def __init__(self, db_path: Optional[Union[str, Path]] = None):
@@ -72,19 +33,34 @@ class SQLiteArticleRepository(ArticleRepository):
     def _ensure_db_dir(self):
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
 
+    @staticmethod
+    def _row_to_article(row) -> Article:
+        # sqlite Row -> dict; raw_tags is not a column so default to [].
+        d = dict(row) if not isinstance(row, dict) else row
+        return Article(
+            id=d.get("id"),
+            title=d.get("title", ""),
+            url=d.get("url", ""),
+            source=d.get("source", "unknown"),
+            published_at=d.get("published_at"),
+            summary=d.get("summary", "") or "",
+            desc=d.get("desc", "") or "",
+            tag=d.get("tag", "General / Tech"),
+            importance=d.get("importance", "") or "",
+            noteworthy=d.get("noteworthy", "") or "",
+            raw_tags=[],
+            fetched_at=d.get("fetched_at"),
+            is_read=d.get("is_read", 0) or 0,
+            is_bookmarked=d.get("is_bookmarked", 0) or 0,
+        )
+
     async def init_db(self):
         self._ensure_db_dir()
         async with aiosqlite.connect(self.db_path) as db:
             await db.executescript(_SCHEMA)
             await db.commit()
 
-    async def _get_db(self):
-        self._ensure_db_dir()
-        db = await aiosqlite.connect(self.db_path)
-        db.row_factory = aiosqlite.Row
-        return db
-
-    async def insert_or_ignore_article(self, article: Dict[str, Any]) -> bool:
+    async def insert_or_ignore_article(self, article: Article) -> bool:
         async with aiosqlite.connect(self.db_path) as db:
             cursor = await db.execute(
                 """
@@ -93,15 +69,15 @@ class SQLiteArticleRepository(ArticleRepository):
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
-                    article["title"],
-                    article["url"],
-                    article["source"],
-                    article.get("published_at"),
-                    article.get("summary"),
-                    article.get("desc"),
-                    article.get("tag"),
-                    article.get("importance"),
-                    article.get("noteworthy"),
+                    article.title,
+                    article.url,
+                    article.source,
+                    article.published_at,
+                    article.summary,
+                    article.desc,
+                    article.tag,
+                    article.importance,
+                    article.noteworthy,
                 ),
             )
             await db.commit()
@@ -147,7 +123,7 @@ class SQLiteArticleRepository(ArticleRepository):
         read: Optional[bool] = None,
         limit: int = 200,
         offset: int = 0,
-    ) -> List[Dict[str, Any]]:
+    ) -> List[Article]:
         async with aiosqlite.connect(self.db_path) as db:
             db.row_factory = aiosqlite.Row
             query = "SELECT * FROM articles WHERE 1=1"
@@ -171,14 +147,22 @@ class SQLiteArticleRepository(ArticleRepository):
             params.extend([limit, offset])
             async with db.execute(query, params) as cursor:
                 rows = await cursor.fetchall()
-                return [dict(row) for row in rows]
+                return [self._row_to_article(row) for row in rows]
 
-    async def get_article_by_id(self, article_id: int) -> Optional[Dict[str, Any]]:
+    async def get_article_by_id(self, article_id: int) -> Optional[Article]:
         async with aiosqlite.connect(self.db_path) as db:
             db.row_factory = aiosqlite.Row
             async with db.execute("SELECT * FROM articles WHERE id = ?", (article_id,)) as cursor:
                 row = await cursor.fetchone()
-                return dict(row) if row else None
+                return self._row_to_article(row) if row else None
+
+    async def update_article_classification(self, article_id: int, tag: str, importance: str, noteworthy: str) -> None:
+        async with aiosqlite.connect(self.db_path) as db:
+            await db.execute(
+                "UPDATE articles SET tag = ?, importance = ?, noteworthy = ? WHERE id = ?",
+                (tag, importance, noteworthy, article_id),
+            )
+            await db.commit()
 
     async def toggle_bookmark(self, article_id: int) -> bool:
         async with aiosqlite.connect(self.db_path) as db:
@@ -216,8 +200,6 @@ class SQLiteArticleRepository(ArticleRepository):
         calendar buckets are empty.
         """
         from services.digest_formatting import bucket_by_recency, local_day_bounds, rows_to_items
-
-        now_utc = datetime.now(timezone.utc)
 
         boundaries = {
             "today": local_day_bounds(0, timezone_name),
@@ -260,21 +242,9 @@ class SQLiteArticleRepository(ArticleRepository):
                     rows = await cursor.fetchall()
                     result = bucket_by_recency([dict(row) for row in rows], timezone_name)
 
-            # Cache
-            await db.execute(
-                """
-                INSERT INTO daily_digest_cache (day_key, date, data_json, updated_at)
-                VALUES (?, ?, ?, ?)
-                ON CONFLICT(day_key) DO UPDATE SET date=excluded.date, data_json=excluded.data_json, updated_at=excluded.updated_at
-                """,
-                ("latest", now_utc.isoformat(), json.dumps(result), now_utc.isoformat()),
-            )
-            await db.commit()
-
         return result
 
 
-import json
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS articles (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -302,12 +272,5 @@ CREATE TABLE IF NOT EXISTS source_status (
     status TEXT,
     error_message TEXT,
     item_count INTEGER DEFAULT 0
-);
-
-CREATE TABLE IF NOT EXISTS daily_digest_cache (
-    day_key TEXT PRIMARY KEY,
-    date TEXT,
-    data_json TEXT,
-    updated_at TEXT
 );
 """

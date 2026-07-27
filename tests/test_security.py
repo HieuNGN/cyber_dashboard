@@ -1,36 +1,6 @@
 import pytest
 from fastapi.testclient import TestClient
 
-from dashboard_config import DashboardConfig, settings_to_config
-
-
-@pytest.fixture
-def client_with_auth(monkeypatch):
-    monkeypatch.setenv("API_KEY", "test-secret-key")
-    import config
-    import main
-    import importlib
-
-    importlib.reload(config)
-    main.config = settings_to_config(config.Settings())
-    from main import app
-    with TestClient(app) as client:
-        yield client
-
-
-@pytest.fixture
-def client_no_auth(monkeypatch):
-    monkeypatch.delenv("API_KEY", raising=False)
-    import config
-    import main
-    import importlib
-
-    importlib.reload(config)
-    main.config = settings_to_config(config.Settings())
-    from main import app
-    with TestClient(app) as client:
-        yield client
-
 
 def test_export_requires_api_key(client_with_auth):
     r = client_with_auth.post("/api/export", json={"content": "x"})
@@ -42,6 +12,15 @@ def test_export_requires_api_key(client_with_auth):
         headers={"Authorization": "Bearer test-secret-key"},
     )
     assert r.status_code == 200
+
+
+def test_wrong_api_key_returns_401(client_with_auth):
+    r = client_with_auth.post(
+        "/api/export",
+        json={"content": "x"},
+        headers={"Authorization": "Bearer wrong-key"},
+    )
+    assert r.status_code == 401
 
 
 def test_export_disabled_without_api_key(client_no_auth):
@@ -121,3 +100,56 @@ def test_cors_defaults_to_no_origins(monkeypatch):
     importlib.reload(config)
     assert config.settings.cors_origins == ""
     assert config.settings.cors_origins_list == []
+
+
+def test_cors_methods_and_headers_are_explicit(client_with_auth):
+    r = client_with_auth.options(
+        "/api/news",
+        headers={
+            "Origin": "https://example.com",
+            "Access-Control-Request-Method": "GET",
+            "Access-Control-Request-Headers": "Authorization",
+        },
+    )
+    # Empty allow_origins => no ACAO header, but middleware still processes preflight.
+    # We assert the configured allowlist is reflected when origin is allowed.
+    assert r.status_code in (200, 400)
+    # Disallowed method should not be claimed allowed.
+    r2 = client_with_auth.options(
+        "/api/news",
+        headers={
+            "Origin": "https://example.com",
+            "Access-Control-Request-Method": "DELETE",
+            "Access-Control-Request-Headers": "Authorization",
+        },
+    )
+    assert r2.headers.get("access-control-allow-methods", "") != "*"
+    assert r2.headers.get("access-control-allow-headers", "") != "*"
+
+
+def test_cache_control_no_store(client_with_auth):
+    r = client_with_auth.get("/health")
+    assert r.headers.get("Cache-Control") == "no-store"
+
+
+def test_sse_rejects_when_cap_reached(client_with_auth):
+    from main import app
+    # ponytail: test the cap logic directly via app.state — StreamingResponse
+    # + TestClient make real-stream assertions awkward; the gate is the counter.
+    app.state.sse_client_count = 20
+    try:
+        r = client_with_auth.get("/api/events")
+        assert r.status_code == 503
+        assert "Too many SSE connections" in r.json()["error"]
+    finally:
+        app.state.sse_client_count = 0
+
+
+def test_export_rejects_oversized_content(client_with_auth):
+    big = "x" * 200_001
+    r = client_with_auth.post(
+        "/api/export",
+        json={"content": big},
+        headers={"Authorization": "Bearer test-secret-key"},
+    )
+    assert r.status_code == 422

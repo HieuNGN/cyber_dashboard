@@ -3,6 +3,13 @@ let currentDay = 'today';
 let currentFilters = { q: '', tag: '', source: '' };
 let eventSource = null;
 
+// Derive base path from where index.html was served so /api calls follow the
+// page regardless of proxy/tunnel mount point (e.g. served at /v2).
+const BASE = (function () {
+  const p = window.location.pathname.replace(/\/index\.html$/, '').replace(/\/$/, '');
+  return p || '';
+})();
+
 // Clock (UTC+7)
 function updateClock() {
   const fmt = new Intl.DateTimeFormat('en-GB', {
@@ -18,7 +25,7 @@ updateClock();
 
 async function fetchNews() {
   try {
-    const res = await fetch('/api/news');
+    const res = await fetch(`${BASE}/api/news`);
     const json = await res.json();
     newsData = json;
     updateHeaderStats();
@@ -56,10 +63,6 @@ function getFilteredItems(day) {
     items = items.filter(i => (i.source || '').toLowerCase() === currentFilters.source.toLowerCase());
   }
   return items;
-}
-
-function escapeHtml(str) {
-  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 }
 
 function setText(el, text) {
@@ -131,7 +134,7 @@ function initGrid(day) {
 async function toggleBookmark(id, btn) {
   const key = getApiKey();
   try {
-    const res = await fetch(`/api/articles/${id}/bookmark`, { method: 'POST', headers: key ? {'Authorization': `Bearer ${key}`} : {} });
+    const res = await fetch(`${BASE}/api/articles/${id}/bookmark`, { method: 'POST', headers: key ? {'Authorization': `Bearer ${key}`} : {} });
     if (!res.ok) throw new Error(`${res.status}`);
     const json = await res.json();
     btn.classList.toggle('active', json.is_bookmarked);
@@ -142,16 +145,6 @@ async function toggleBookmark(id, btn) {
   } catch (e) {
     showToast('Bookmark failed: ' + e.message);
   }
-}
-
-function setErrorDisplay(elementId, message) {
-  const el = document.getElementById(elementId);
-  if (!el) return;
-  el.innerHTML = '';
-  const div = document.createElement('div');
-  div.className = 'loading';
-  div.textContent = message;
-  el.appendChild(div);
 }
 
 function findItemById(id) {
@@ -173,7 +166,7 @@ function openModal(day, idx) {
   document.getElementById('modalLink').href = item.link;
   document.getElementById('modalOverlay').style.display = 'flex';
   const key = getApiKey();
-  fetch(`/api/articles/${item.id}/read`, { method: 'POST', headers: key ? {'Authorization': `Bearer ${key}`} : {} }).then(r => {
+  fetch(`${BASE}/api/articles/${item.id}/read`, { method: 'POST', headers: key ? {'Authorization': `Bearer ${key}`} : {} }).then(r => {
     if (!r.ok) throw new Error(r.status);
     item.is_read = true;
     initGrid(currentDay);
@@ -310,7 +303,7 @@ function populateFilters() {
 // Sources pane
 async function loadSources() {
   try {
-    const res = await fetch('/api/sources');
+    const res = await fetch(`${BASE}/api/sources`);
     const sources = await res.json();
     const container = document.getElementById('sourcesList');
     container.innerHTML = '';
@@ -366,7 +359,7 @@ async function loadSources() {
 // Bookmarks pane
 async function loadBookmarks() {
   try {
-    const res = await fetch('/api/bookmarks');
+    const res = await fetch(`${BASE}/api/bookmarks`);
     const bookmarks = await res.json();
     const container = document.getElementById('bookmarksList');
     container.innerHTML = '';
@@ -402,7 +395,7 @@ async function loadBookmarks() {
 }
 
 function openBookmarkById(id) {
-  fetch(`/api/articles/${id}`).then(r => r.json()).then(item => {
+  fetch(`${BASE}/api/articles/${id}`).then(r => r.json()).then(item => {
     document.getElementById('modalTag').textContent = item.tag || 'General / Tech';
     document.getElementById('modalTitle').textContent = item.title;
     document.getElementById('modalSummary').textContent = item.summary || item.desc || 'No summary available.';
@@ -444,7 +437,7 @@ async function exportToObsidian() {
   const headers = {'Content-Type':'application/json'};
   if (key) headers['Authorization'] = `Bearer ${key}`;
   try {
-    const res = await fetch('/api/export', { method:'POST', headers, body: JSON.stringify({content, vault_path: vaultPath}) });
+    const res = await fetch(`${BASE}/api/export`, { method:'POST', headers, body: JSON.stringify({content, vault_path: vaultPath}) });
     const json = await res.json();
     const msg = document.getElementById('exportMsg');
     if(json.success) { msg.textContent = 'Saved: ' + json.file.split('/').pop(); msg.style.color = 'var(--green)'; }
@@ -474,7 +467,7 @@ async function triggerUpdate() {
   saveApiKey();
   const key = getApiKey();
   try {
-    const res = await fetch('/api/trigger-update', { method: 'POST', headers: key ? {'Authorization': `Bearer ${key}`} : {} });
+    const res = await fetch(`${BASE}/api/trigger-update`, { method: 'POST', headers: key ? {'Authorization': `Bearer ${key}`} : {} });
     if (res.ok) {
       showToast('Update triggered');
     } else {
@@ -491,7 +484,7 @@ async function triggerUpdate() {
 // SSE
 function connectSSE() {
   if (eventSource) eventSource.close();
-  eventSource = new EventSource('/api/events');
+  eventSource = new EventSource(`${BASE}/api/events`);
   eventSource.addEventListener('news_updated', e => {
     const data = JSON.parse(e.data);
     showToast(`${data.new_articles} new articles · ${data.errors} errors`);

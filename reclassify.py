@@ -1,51 +1,30 @@
 import asyncio
-from pathlib import Path
-
-import aiosqlite
+from dataclasses import replace
 
 from config import settings
-from dashboard_config import settings_to_config
+from repositories import SQLiteArticleRepository
 from services.classifier import classify
 from services.enricher import enrich
 
 
 async def main():
-    config = settings_to_config(settings)
-    async with aiosqlite.connect(config.resolved_database_path) as db:
-        db.row_factory = aiosqlite.Row
-        async with db.execute(
-            "SELECT id, title, url, desc, summary, tag, source, importance, noteworthy FROM articles"
-        ) as cursor:
-            rows = await cursor.fetchall()
-        updated = 0
-        for row in rows:
-            d = dict(row)
-            # Preserve imported enriched tags if they exist and aren't generic
-            if d["tag"] and d["tag"] != "General / Tech" and d["source"] == "Existing Digest":
-                continue
-            new_tag = classify({
-                "title": d["title"],
-                "desc": d["desc"],
-                "summary": d["summary"],
-                "raw_tags": [],
-            })
-            enriched = enrich({
-                "title": d["title"],
-                "url": d["url"],
-                "source": d["source"],
-                "tag": new_tag,
-                "importance": d["importance"] or "",
-                "noteworthy": d["noteworthy"] or "",
-            })
-            if (new_tag != d["tag"] or
-                enriched["importance"] != (d["importance"] or "") or
-                enriched["noteworthy"] != (d["noteworthy"] or "")):
-                await db.execute(
-                    "UPDATE articles SET tag = ?, importance = ?, noteworthy = ? WHERE id = ?",
-                    (new_tag, enriched["importance"], enriched["noteworthy"], d["id"]),
-                )
-                updated += 1
-        await db.commit()
+    config = settings
+    repo = SQLiteArticleRepository(config.resolved_database_path)
+    await repo.init_db()
+
+    articles = await repo.get_articles()
+    updated = 0
+    for a in articles:
+        # Preserve imported enriched tags for Existing Digest source.
+        if a.tag and a.tag != "General / Tech" and a.source == "Existing Digest":
+            continue
+        new_tag = classify(a)
+        enriched = enrich(replace(a, tag=new_tag))
+        if (new_tag != a.tag or
+            enriched.importance != a.importance or
+            enriched.noteworthy != a.noteworthy):
+            await repo.update_article_classification(a.id, new_tag, enriched.importance, enriched.noteworthy)
+            updated += 1
     print(f"Updated {updated} articles")
 
 

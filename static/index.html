@@ -3,6 +3,12 @@
 <head>
 <meta charset='UTF-8'>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  (function () {
+    var p = window.location.pathname.replace(/\/index\.html$/, '').replace(/\/$/, '');
+    document.write('<base href="' + p + '/">');
+  })();
+</script>
 <title>News Dashboard | Tactical Workspace</title>
 <style>
 :root {
@@ -207,6 +213,6 @@ h1 { font-size:2.2rem; font-weight:800; text-transform:uppercase; letter-spacing
   </div>
 </div>
 
-<script src="/static/js/app.js"></script>
+<script src="static/js/app.js"></script>
 </body>
 </html>

@@ -1,11 +1,11 @@
 import pytest
 
-from dashboard_config import DashboardConfig
+from config import Settings
 from scheduler import build_fetchers, create_scheduler
 
 
 def test_build_fetchers_respects_source_toggles():
-    config = DashboardConfig(
+    config = Settings(
         fetch_hackernews=True,
         fetch_bleepingcomputer=False,
         fetch_krebs=False,
@@ -21,7 +21,7 @@ def test_build_fetchers_respects_source_toggles():
 
 
 def test_build_fetchers_all_disabled():
-    config = DashboardConfig(
+    config = Settings(
         fetch_hackernews=False,
         fetch_bleepingcomputer=False,
         fetch_krebs=False,
@@ -37,13 +37,13 @@ def test_build_fetchers_all_disabled():
 
 @pytest.mark.asyncio
 async def test_scheduler_uses_injected_config(tmp_path):
-    from tests import InMemoryArticleRepository
+    from repositories import SQLiteArticleRepository
 
-    config = DashboardConfig(
+    config = Settings(
         database_path=str(tmp_path / "test.db"),
         fetch_on_startup=False,
     )
-    repo = InMemoryArticleRepository()
+    repo = SQLiteArticleRepository(str(tmp_path / "test.db"))
     scheduler = create_scheduler(repository=repo, config=config)
 
     assert scheduler.config.database_path == str(tmp_path / "test.db")

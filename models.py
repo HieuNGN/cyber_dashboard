@@ -21,19 +21,6 @@ class ArticleOut(BaseModel):
         from_attributes = True
 
 
-class SourceStatusOut(BaseModel):
-    source: str
-    last_fetch: Optional[str]
-    status: Optional[str]
-    error_message: Optional[str]
-    item_count: int
-
-
 class ExportRequest(BaseModel):
-    content: str
+    content: str = Field(..., max_length=200_000)
     vault_path: Optional[str] = None
-
-
-class MessageResponse(BaseModel):
-    success: bool
-    message: str

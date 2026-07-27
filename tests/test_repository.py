@@ -1,6 +1,12 @@
 import pytest
 
 from repositories import SQLiteArticleRepository, SourceResult
+from services.article import Article
+
+
+def _article(url="https://example.com/a", **kw):
+    return Article(title="A", url=url, source="test",
+                   published_at="2026-07-10T00:00:00+00:00", **kw)
 
 
 @pytest.mark.asyncio
@@ -9,22 +15,12 @@ async def test_insert_and_get_article(tmp_path):
     repo = SQLiteArticleRepository(str(db))
     await repo.init_db()
 
-    inserted = await repo.insert_or_ignore_article({
-        "title": "A",
-        "url": "https://example.com/a",
-        "source": "test",
-        "published_at": "2026-07-10T00:00:00+00:00",
-        "summary": "",
-        "desc": "",
-        "tag": "General / Tech",
-        "importance": "",
-        "noteworthy": "",
-    })
+    inserted = await repo.insert_or_ignore_article(_article())
     assert inserted is True
 
     articles = await repo.get_articles()
     assert len(articles) == 1
-    assert articles[0]["title"] == "A"
+    assert articles[0].title == "A"
 
 
 @pytest.mark.asyncio
@@ -33,12 +29,7 @@ async def test_insert_or_ignore_is_idempotent(tmp_path):
     repo = SQLiteArticleRepository(str(db))
     await repo.init_db()
 
-    article = {
-        "title": "A",
-        "url": "https://example.com/a",
-        "source": "test",
-        "published_at": "2026-07-10T00:00:00+00:00",
-    }
+    article = _article()
     assert await repo.insert_or_ignore_article(article) is True
     assert await repo.insert_or_ignore_article(article) is False
 
@@ -61,14 +52,9 @@ async def test_bookmark_and_read(tmp_path):
     repo = SQLiteArticleRepository(str(db))
     await repo.init_db()
 
-    await repo.insert_or_ignore_article({
-        "title": "A",
-        "url": "https://example.com/a",
-        "source": "test",
-        "published_at": "2026-07-10T00:00:00+00:00",
-    })
+    await repo.insert_or_ignore_article(_article())
     articles = await repo.get_articles()
-    article_id = articles[0]["id"]
+    article_id = articles[0].id
 
     state = await repo.toggle_bookmark(article_id)
     assert state is True
@@ -77,4 +63,4 @@ async def test_bookmark_and_read(tmp_path):
 
     await repo.mark_read(article_id)
     article = await repo.get_article_by_id(article_id)
-    assert article["is_read"] == 1
+    assert article.is_read == 1
