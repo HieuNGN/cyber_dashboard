@@ -24,8 +24,9 @@ data/dashboard.db
 dashboard_*.png
 skills
 *.md
-!AGENTS.md
-!CONTEXT.md
 !README.md
 .opencode.md
+.opencode/
+AGENTS.md
+CONTEXT.md
 docker/
