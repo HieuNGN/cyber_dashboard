@@ -49,7 +49,7 @@ cd "$REPO"
     echo "DRY_RUN=1 — skipping opencode"
   else
   "$OPENCODE" run --auto --print-logs --log-level INFO \
-    "Review this codebase and apply improvements. First run the test suite (conda run -n cyberdashboard pytest tests/ -q) and fix any failures. Then scan for over-engineering, dead code, and any bugs. Make minimal changes following the conventions in AGENTS.md, CONTEXT.md, and the ponytail skill. Do NOT commit, push, or create a branch — leave changes in the working tree for the runner script to commit. Stop when done." \
+    "Review this codebase and apply improvements. First run the test suite (conda run -n cyberdashboard pytest tests/ -q) and fix any failures. Then scan for over-engineering, dead code, and any bugs. Make minimal changes following the conventions in AGENTS.md, CONTEXT.md, and the ponytail skill. Do NOT write to Obsidian Vault, do NOT commit, push, or create a branch — leave changes in the working tree for the runner script to commit. Stop when done." \
     2>&1 || echo "opencode exited non-zero"
   fi
 
